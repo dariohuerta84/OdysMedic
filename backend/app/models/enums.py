@@ -45,3 +45,20 @@ class ReferenceType(str, Enum):
     TEXTBOOK = "textbook"
     CONSENSUS = "consensus"
 
+class StudentCompetencyLevel(str, Enum):
+    DEFICIENTE = "deficiente"
+    EN_DESARROLLO = "en_desarrollo"
+    COMPETENTE = "competente"
+    AVANZADO = "avanzado"
+
+class DeficiencyType(str, Enum):
+    CRITICA_SEGURIDAD = "critica_seguridad"
+    INTERPRETACION_DATOS = "interpretacion_datos"
+    RAZONAMIENTO_DIFERENCIAL = "razonamiento_diferencial"
+    MANEJO_TERAPEUTICO = "manejo_terapeutico"
+
+class ExerciseDifficultyTier(str, Enum):
+    NIVEL_1_FUNDACIONAL = "nivel_1_fundacional"
+    NIVEL_2_INTERMEDIO = "nivel_2_intermedio"
+    NIVEL_3_AVANZADO = "nivel_3_avanzado"
+
