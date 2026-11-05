@@ -1,0 +1,184 @@
+[
+  {
+    "book_id": "book-kdigo-aki-ahus-2024",
+    "title": "KDIGO 2024 Clinical Practice Guideline for the Management of Acute Kidney Injury and aHUS",
+    "authors_or_organization": "Kidney Disease: Improving Global Outcomes (KDIGO) Work Group",
+    "edition": "2024 Clinical Practice Guideline Update",
+    "specialty": "nefrologia",
+    "isbn_or_doi": "doi:10.1016/j.kisu.2024.01.002",
+    "excerpts": [
+      {
+        "reference_id": "ref-kdigo-ahus-001",
+        "source_title": "KDIGO 2024 Clinical Practice Guideline for the Management of Acute Kidney Injury and aHUS",
+        "organization_or_publisher": "Kidney Disease: Improving Global Outcomes (KDIGO)",
+        "year": 2024,
+        "edition_or_version": "2024 Guideline Update",
+        "section_title": "Diagnostic Evaluation and Initial Targeted Therapy of Thrombotic Microangiopathies and aHUS",
+        "page_or_doi": "doi:10.1016/j.kisu.2024.01.002",
+        "key_recommendation": "In patients presenting with microangiopathic hemolytic anemia, severe thrombocytopenia, and acute kidney injury, initiate prompt evaluation for ADAMTS13 activity and complement dysregulation. Prompt initiation of terminal complement C5 inhibition (eculizumab/ravulizumab) is strongly recommended once thrombotic thrombocytopenic purpura (TTP) is excluded.",
+        "evidence_level": "Grade 1A",
+        "associated_specialty": "nefrologia",
+        "associated_cases": [
+          "s13256-019-2334-y",
+          "s13256-022-03392-w"
+        ]
+      },
+      {
+        "reference_id": "ref-kdigo-aki-002",
+        "source_title": "KDIGO 2024 Clinical Practice Guideline for the Management of Acute Kidney Injury and aHUS",
+        "organization_or_publisher": "Kidney Disease: Improving Global Outcomes (KDIGO)",
+        "year": 2024,
+        "edition_or_version": "2024 Guideline Update",
+        "section_title": "Drug-Associated Acute Kidney Injury and Nephrotoxicity Management",
+        "page_or_doi": "doi:10.1016/j.kisu.2024.01.003",
+        "key_recommendation": "Discontinue potential nephrotoxic and renally cleared metabolic stressors immediately upon recognition of acute kidney injury or severe metabolic decompensation.",
+        "evidence_level": "Grade 1B",
+        "associated_specialty": "nefrologia",
+        "associated_cases": [
+          "s13256-022-03392-w"
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-ada-diabetes-2024",
+    "title": "ADA Standards of Care in Diabetes 2024",
+    "authors_or_organization": "American Diabetes Association (ADA)",
+    "edition": "47th Edition (Diabetes Care 2024;47(Suppl. 1))",
+    "specialty": "endocrinologia",
+    "isbn_or_doi": "doi:10.2337/dc24-S016",
+    "excerpts": [
+      {
+        "reference_id": "ref-ada-hyperglycemia-001",
+        "source_title": "ADA Standards of Care in Diabetes 2024",
+        "organization_or_publisher": "American Diabetes Association",
+        "year": 2024,
+        "edition_or_version": "Standards of Care 2024",
+        "section_title": "Hospital Care, Secondary Diabetes, and Drug-Induced Severe Hyperglycemia",
+        "page_or_doi": "doi:10.2337/dc24-S016",
+        "key_recommendation": "Patients receiving oncologic chemotherapy (such as capecitabine or checkpoint inhibitors) who develop acute symptomatic hyperglycemia and severe electrolyte derangements (hypokalemia, hypomagnesemia) require temporary drug suspension, continuous intravenous insulin titration, and vigorous potassium repletion prior to resumption.",
+        "evidence_level": "Grade A",
+        "associated_specialty": "endocrinologia",
+        "associated_cases": [
+          "s13256-022-03392-w"
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-aha-stroke-pba-2023",
+    "title": "AHA/ASA Guidelines for the Management of Stroke and Pseudobulbar Affect 2023",
+    "authors_or_organization": "American Heart Association / American Stroke Association (AHA/ASA)",
+    "edition": "2023 Practice Guideline Update",
+    "specialty": "neurologia",
+    "isbn_or_doi": "doi:10.1161/STR.0000000000000438",
+    "excerpts": [
+      {
+        "reference_id": "ref-aha-pba-001",
+        "source_title": "AHA/ASA Guidelines for the Management of Stroke and Pseudobulbar Affect 2023",
+        "organization_or_publisher": "American Heart Association / American Stroke Association",
+        "year": 2023,
+        "edition_or_version": "2023 Stroke Rehabilitation Guidelines",
+        "section_title": "Post-Stroke Emotional Incontinence and Pseudobulbar Affect (PBA)",
+        "page_or_doi": "doi:10.1161/STR.0000000000000438",
+        "key_recommendation": "Pseudobulbar affect (PBA) characterized by involuntary, uncontrollable crying or laughing disproportionate to mood after pontine, cerebellar, or hemispheric stroke should be differentiated from post-stroke depression. Treatment with dextromethorphan/quinidine or selective serotonin reuptake inhibitors (SSRIs) such as citalopram/sertraline is recommended to alleviate affective lability and improve quality of life.",
+        "evidence_level": "Class I, Level A",
+        "associated_specialty": "neurologia",
+        "associated_cases": [
+          "s13256-023-04294-1",
+          "s13256-025-05577-5"
+        ]
+      },
+      {
+        "reference_id": "ref-aha-stroke-rehab-002",
+        "source_title": "AHA/ASA Guidelines for the Management of Stroke and Pseudobulbar Affect 2023",
+        "organization_or_publisher": "American Heart Association / American Stroke Association",
+        "year": 2023,
+        "edition_or_version": "2023 Stroke Rehabilitation Guidelines",
+        "section_title": "Long-term Motor and Cognitive Rehabilitation Following Hemorrhagic Stroke",
+        "page_or_doi": "doi:10.1161/STR.0000000000000439",
+        "key_recommendation": "Long-term motor recovery and spasticity management post-hemorrhagic stroke requires multi-disciplinary physical rehabilitation, blood pressure optimization (target < 130/80 mmHg), neurocognitive training, and structured functional assessment.",
+        "evidence_level": "Class I, Level B",
+        "associated_specialty": "neurologia",
+        "associated_cases": [
+          "s13256-025-05577-5"
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-eular-acr-npsle-2023",
+    "title": "EULAR/ACR 2023 Recommendations for the Management of Neuropsychiatric Systemic Lupus Erythematosus",
+    "authors_or_organization": "European Alliance of Associations for Rheumatology (EULAR) & American College of Rheumatology (ACR)",
+    "edition": "2023 Guideline Endorsement",
+    "specialty": "reumatologia",
+    "isbn_or_doi": "doi:10.1136/annrheumdis-2023-224762",
+    "excerpts": [
+      {
+        "reference_id": "ref-eular-npsle-001",
+        "source_title": "EULAR/ACR 2023 Recommendations for the Management of Neuropsychiatric Systemic Lupus Erythematosus",
+        "organization_or_publisher": "EULAR / ACR Taskforce",
+        "year": 2023,
+        "edition_or_version": "2023 Recommendations Update",
+        "section_title": "Diagnosis and Treatment of Inflammatory and Thrombotic Central NPSLE",
+        "page_or_doi": "doi:10.1136/annrheumdis-2023-224762",
+        "key_recommendation": "In young patients presenting with acute motor/speech deficits, dysarthria, and systemic autoimmune signs, prompt neuroimaging and lumbar puncture are mandatory to rule out central infections and ischemia. For inflammatory NPSLE, aggressive pulsed intravenous methylprednisolone followed by high-potency immunosuppression (intravenous cyclophosphamide or rituximab) combined with hydroxychloroquine is recommended.",
+        "evidence_level": "Grade 1A",
+        "associated_specialty": "reumatologia",
+        "associated_cases": [
+          "s13256-026-05974-4"
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-endocrine-acog-pregnancy-hypoparathyroid",
+    "title": "Endocrine Society / ACOG Guidelines for Hypoparathyroidism in Pregnancy",
+    "authors_or_organization": "Endocrine Society and American College of Obstetricians and Gynecologists (ACOG)",
+    "edition": "2023 Consensus Guidelines",
+    "specialty": "ginecologia_obstetricia",
+    "isbn_or_doi": "doi:10.1210/clinem/dgad261",
+    "excerpts": [
+      {
+        "reference_id": "ref-acog-hypopara-001",
+        "source_title": "Endocrine Society / ACOG Guidelines for Hypoparathyroidism in Pregnancy",
+        "organization_or_publisher": "Endocrine Society & ACOG",
+        "year": 2023,
+        "edition_or_version": "Clinical Practice Guideline",
+        "section_title": "Third Trimester Maternal and Fetal Calcium Regulation in 22q11.2 Microdeletion / Primary Hypoparathyroidism",
+        "page_or_doi": "doi:10.1210/clinem/dgad261",
+        "key_recommendation": "In pregnant patients with primary hypoparathyroidism (including 22q11.2 deletion syndrome), maintain maternal albumin-corrected calcium in the low-to-normal range (8.5–9.0 mg/dL) using oral calcium carbonate and active vitamin D (calcitriol). Avoid maternal hypercalcemia to prevent fetal parathyroid suppression and neonatal tetany, and closely monitor urinary calcium excretion.",
+        "evidence_level": "Level B",
+        "associated_specialty": "ginecologia_obstetricia",
+        "associated_cases": [
+          "s13256-025-05650-z"
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-aao-uveal-ppp-2024",
+    "title": "AAO Preferred Practice Pattern for Uveal Diseases",
+    "authors_or_organization": "American Academy of Ophthalmology (AAO) Retina/Intraocular Inflammation Panel",
+    "edition": "2024 Preferred Practice Pattern",
+    "specialty": "oftalmologia",
+    "isbn_or_doi": "doi:10.1016/j.ophtha.2023.11.014",
+    "excerpts": [
+      {
+        "reference_id": "ref-aao-uveal-001",
+        "source_title": "AAO Preferred Practice Pattern for Uveal Diseases",
+        "organization_or_publisher": "American Academy of Ophthalmology",
+        "year": 2024,
+        "edition_or_version": "2024 Guidelines",
+        "section_title": "Management of Idiopathic Uveal Effusion Syndrome and Secondary Ocular Hypertension",
+        "page_or_doi": "doi:10.1016/j.ophtha.2023.11.014",
+        "key_recommendation": "Uveal effusion syndrome (UES) must be differentiated from angle-closure glaucoma and Vogt-Koyanagi-Harada disease using B-scan ultrasonography, ultrasound biomicroscopy (UBM), and optical coherence tomography (OCT). Primary medical management includes topical hypotensive agents and high-dose systemic/topical corticosteroids, with surgical scleral decompression or sclerectomy reserved for refractory exudative retinal detachment.",
+        "evidence_level": "Level IIb",
+        "associated_specialty": "oftalmologia",
+        "associated_cases": [
+          "s13256-024-04496-1"
+        ]
+      }
+    ]
+  }
+]

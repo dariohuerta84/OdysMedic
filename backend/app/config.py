@@ -10,6 +10,8 @@ class Settings(BaseModel):
     base_dir: Path = Path(__file__).resolve().parent.parent
     data_dir: Path = base_dir / "data"
     cases_file: Path = data_dir / "clinical_cases.json"
+    medical_references_file: Path = data_dir / "medical_references.json"
+
     
     # CORS settings
     cors_origins: list[str] = [

@@ -30,3 +30,18 @@ class CriticalityLevel(str, Enum):
     NORMAL = "normal"
     HIGH = "high"
     CRITICAL = "critical"
+
+class EvidenceLevel(str, Enum):
+    LEVEL_A = "Level A"
+    LEVEL_B = "Level B"
+    LEVEL_C = "Level C"
+    GRADE_1A = "Grade 1A"
+    GRADE_1B = "Grade 1B"
+    GRADE_2B = "Grade 2B"
+    EXPERT_CONSENSUS = "Expert Consensus"
+
+class ReferenceType(str, Enum):
+    GUIDELINE = "guideline"
+    TEXTBOOK = "textbook"
+    CONSENSUS = "consensus"
+

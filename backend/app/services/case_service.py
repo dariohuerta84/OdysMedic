@@ -251,4 +251,9 @@ class CaseRepository:
             })
         return catalog
 
+    def get_case_citations(self, case_id: str):
+        from app.services.reference_service import reference_repository
+        return reference_repository.get_citations_for_case(case_id)
+
 case_repository = CaseRepository()
+
