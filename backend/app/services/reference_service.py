@@ -80,10 +80,10 @@ class ReferenceRepository:
         return self._books.get(book_id)
 
     def get_citations_for_case(self, case_id: str) -> list[ClinicalGuidelineExcerpt]:
-        return self._excerpts_by_case.get(case_id, [])
+        return list(self._excerpts_by_case.get(case_id, []))
 
     def get_excerpts_by_specialty(self, specialty: str) -> list[ClinicalGuidelineExcerpt]:
-        return self._excerpts_by_specialty.get(specialty.lower(), [])
+        return list(self._excerpts_by_specialty.get(specialty.lower(), []))
 
     def get_all_excerpts(self) -> list[ClinicalGuidelineExcerpt]:
         return list(self._all_excerpts)

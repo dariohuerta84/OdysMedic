@@ -46,3 +46,19 @@ def test_case_repository_citation_link():
     assert len(citations) >= 1
     assert any("KDIGO" in c.source_title for c in citations)
 
+def test_get_book_by_id_and_all_excerpts():
+    book = reference_repository.get_book_by_id("book-kdigo-aki-ahus-2024")
+    assert book is not None
+    assert "KDIGO" in book.title
+
+    missing_book = reference_repository.get_book_by_id("ref-nonexistent")
+    assert missing_book is None
+
+    all_excerpts = reference_repository.get_all_excerpts()
+    assert len(all_excerpts) >= 6
+
+def test_unknown_case_and_specialty_return_empty_list():
+    assert reference_repository.get_citations_for_case("unknown-case-id") == []
+    assert reference_repository.get_excerpts_by_specialty("unknown-specialty") == []
+
+
