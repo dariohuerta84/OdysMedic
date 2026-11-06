@@ -16,6 +16,15 @@ class Settings(BaseModel):
     # Database settings
     database_url: str = Field(default_factory=lambda: os.getenv("DATABASE_URL", "sqlite:///./odyssmedic.db"))
     
+    # Authentication and JWT settings
+    secret_key: str = Field(default_factory=lambda: os.getenv("SECRET_KEY", "odyssmedic_super_secret_jwt_key_2026_upch"))
+    jwt_algorithm: str = "HS256"
+    access_token_expire_minutes: int = 60 * 24 * 7
+
+    @property
+    def jwt_secret(self) -> str:
+        return self.secret_key
+
     # CORS settings
     cors_origins: list[str] = [
         "http://localhost:3000",
