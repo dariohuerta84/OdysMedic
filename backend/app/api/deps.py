@@ -1,4 +1,4 @@
-from typing import Generator, Optional
+from typing import Optional
 from fastapi import Depends, Header, HTTPException, status
 from sqlalchemy.orm import Session
 
