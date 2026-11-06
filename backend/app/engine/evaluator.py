@@ -1,7 +1,7 @@
 import re
 import unicodedata
 import uuid
-from typing import Any
+from typing import Any, Optional
 from app.models.enums import CognitiveGap
 from app.models.clinical_case import FullClinicalCase, Criterion
 from app.models.evaluation import (
@@ -10,9 +10,12 @@ from app.models.evaluation import (
     DetectedGap,
     RetrospectiveEvaluationReport,
 )
+from app.models.mcq import MCQStationInternal, MCQResult
 from app.engine.gap_classifier import classify_criterion_gap, GAP_METADATA
 from app.engine.scoring import calculate_dimension_scores, calculate_global_score
 from app.engine.pearls_catalog import get_clinical_pearl
+from app.services.reference_service import reference_repository
+from app.services.mcq_service import CASE_ALIASES
 
 def normalize_text(text: str) -> str:
     """Normaliza texto eliminando acentos, puntuacion y convirtiendo a minusculas."""
@@ -259,4 +262,114 @@ def evaluate_case_retrospectively(
         ground_truth_diagnosis=primary_diag_val,
         ground_truth_aliases=aliases,
         actual_patient_outcome=outcome_str,
+    )
+
+
+def evaluate_mcq_station_attempt(
+    station: MCQStationInternal,
+    chosen_option_id: str,
+    response_time_ms: int = 0,
+) -> MCQResult:
+    """
+    Evalua el intento de un estudiante frente a una estacion clinica MCQ graduada.
+    Asigna puntaje (100 o 0), mapea la brecha cognitiva del distractor si aplica,
+    y rescata evidencia de guias clinicas y perlas de alta rentabilidad.
+    """
+    clean_chosen_id = (chosen_option_id or "").strip().upper()
+    chosen_opt = next((opt for opt in station.options if opt.option_id.upper() == clean_chosen_id), None)
+    correct_opt = next((opt for opt in station.options if opt.is_correct), None)
+    correct_option_id = correct_opt.option_id if correct_opt else ""
+
+    # Cargar evidencia bibliografica de la guia clinica
+    citation_evidence: Optional[str] = None
+    if station.citation_ref_id:
+        for exc in reference_repository.get_all_excerpts():
+            if exc.reference_id == station.citation_ref_id:
+                citation_evidence = (
+                    f"Guía: {exc.source_title} ({exc.organization_or_publisher}, {exc.year}). "
+                    f"Nivel de evidencia: {exc.evidence_level}. Recomendación: {exc.key_recommendation}"
+                )
+                break
+
+    if not citation_evidence:
+        case_cits = reference_repository.get_citations_for_case(station.case_id)
+        if not case_cits and station.case_id in CASE_ALIASES:
+            case_cits = reference_repository.get_citations_for_case(CASE_ALIASES[station.case_id])
+        if case_cits:
+            exc = case_cits[0]
+            citation_evidence = (
+                f"Guía: {exc.source_title} ({exc.organization_or_publisher}, {exc.year}). "
+                f"Nivel de evidencia: {exc.evidence_level}. Recomendación: {exc.key_recommendation}"
+            )
+
+    # Cargar perla clinica de alta rentabilidad
+    pearl_key = station.clinical_pearl_id or station.case_id
+    clinical_pearl = get_clinical_pearl(pearl_key)
+    if (not clinical_pearl or "La evaluacion clinica sistematica" in clinical_pearl) and station.case_id in CASE_ALIASES:
+        clinical_pearl = get_clinical_pearl(CASE_ALIASES[station.case_id])
+
+    # Manejo de opcion no encontrada / invalida
+    if chosen_opt is None:
+        valid_options = ", ".join(opt.option_id for opt in station.options)
+        return MCQResult(
+            is_correct=False,
+            points_earned=0.0,
+            correct_option_id=correct_option_id,
+            chosen_option_id=clean_chosen_id,
+            associated_gap=None,
+            clinical_feedback=(
+                f"Opción inválida seleccionada ('{chosen_option_id}'). "
+                f"Las opciones válidas disponibles son: {valid_options}."
+            ),
+            citation_evidence=citation_evidence,
+            clinical_pearl=clinical_pearl,
+            recommended_difficulty=station.difficulty_tier,
+        )
+
+    # Caso respuesta correcta
+    if chosen_opt.is_correct:
+        if "Fundacional" in station.difficulty_tier:
+            recommended_diff = "Nivel 2 (Intermedio)"
+        elif "Intermedio" in station.difficulty_tier:
+            recommended_diff = "Nivel 3 (Avanzado)"
+        else:
+            recommended_diff = "Nivel 3 (Avanzado)"
+
+        feedback = (
+            f"Respuesta correcta: Opción {chosen_opt.option_id}. {chosen_opt.rationale}"
+        )
+        return MCQResult(
+            is_correct=True,
+            points_earned=100.0,
+            correct_option_id=correct_option_id,
+            chosen_option_id=chosen_opt.option_id,
+            associated_gap=None,
+            clinical_feedback=feedback,
+            citation_evidence=citation_evidence,
+            clinical_pearl=clinical_pearl,
+            recommended_difficulty=recommended_diff,
+        )
+
+    # Caso distractor (incorrecto)
+    if "Avanzado" in station.difficulty_tier:
+        recommended_diff = "Nivel 2 (Intermedio)"
+    elif "Intermedio" in station.difficulty_tier:
+        recommended_diff = "Nivel 1 (Fundacional)"
+    else:
+        recommended_diff = "Nivel 1 (Fundacional)"
+
+    feedback = (
+        f"Opción incorrecta ({chosen_opt.option_id}). Trampa clínica: {chosen_opt.rationale} "
+        f"La conducta correcta era la Opción {correct_option_id}: {correct_opt.text if correct_opt else ''}."
+    )
+    return MCQResult(
+        is_correct=False,
+        points_earned=0.0,
+        correct_option_id=correct_option_id,
+        chosen_option_id=chosen_opt.option_id,
+        associated_gap=chosen_opt.associated_gap,
+        clinical_feedback=feedback,
+        citation_evidence=citation_evidence,
+        clinical_pearl=clinical_pearl,
+        recommended_difficulty=recommended_diff,
     )
