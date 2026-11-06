@@ -1,6 +1,6 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, List
-from sqlalchemy import Integer, String, Float, Boolean, Text, DateTime, ForeignKey
+from sqlalchemy import Integer, String, Float, Boolean, Text, DateTime, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.session import Base
 
@@ -22,7 +22,10 @@ class User(Base):
     plan_tier: Mapped[str] = mapped_column(String(20), default="free")
     xp: Mapped[int] = mapped_column(Integer, default=0)
     streak_days: Mapped[int] = mapped_column(Integer, default=1)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=lambda: datetime.now(timezone.utc),
+    )
 
     mastery_profiles: Mapped[List["StudentMastery"]] = relationship(
         "StudentMastery",
@@ -48,6 +51,7 @@ class User(Base):
 
 class StudentMastery(Base):
     __tablename__ = "student_mastery"
+    __table_args__ = (UniqueConstraint("user_id", "specialty", name="uq_user_specialty"),)
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     user_id: Mapped[int] = mapped_column(
@@ -62,8 +66,8 @@ class StudentMastery(Base):
     cases_completed: Mapped[int] = mapped_column(Integer, default=0)
     updated_at: Mapped[datetime] = mapped_column(
         DateTime,
-        default=datetime.utcnow,
-        onupdate=datetime.utcnow,
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc),
     )
 
     user: Mapped["User"] = relationship("User", back_populates="mastery_profiles")
@@ -71,6 +75,7 @@ class StudentMastery(Base):
 
 class StudentGapMetric(Base):
     __tablename__ = "student_gap_metrics"
+    __table_args__ = (UniqueConstraint("user_id", "gap_type", name="uq_user_gap_type"),)
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     user_id: Mapped[int] = mapped_column(
@@ -84,8 +89,8 @@ class StudentGapMetric(Base):
     last_concept: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     updated_at: Mapped[datetime] = mapped_column(
         DateTime,
-        default=datetime.utcnow,
-        onupdate=datetime.utcnow,
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc),
     )
 
     user: Mapped["User"] = relationship("User", back_populates="gap_metrics")
@@ -108,7 +113,10 @@ class CaseAttempt(Base):
     selected_option: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     response_time_ms: Mapped[int] = mapped_column(Integer, default=0)
     detected_gap: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=lambda: datetime.now(timezone.utc),
+    )
 
     user: Mapped["User"] = relationship("User", back_populates="attempts")
 
@@ -124,7 +132,7 @@ class MedicalReferenceDB(Base):
     specialty: Mapped[str] = mapped_column(String(50), nullable=False)
     key_recommendation: Mapped[str] = mapped_column(Text, nullable=False)
     evidence_level: Mapped[str] = mapped_column(String(50), default="Clase I, Nivel A")
-    associated_case: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
+    associated_case: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
 
 
 class SpacedRepetitionTask(Base):
@@ -142,6 +150,9 @@ class SpacedRepetitionTask(Base):
     scheduled_for: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     repetition_cycle: Mapped[str] = mapped_column(String(20), default="D7")
     status: Mapped[str] = mapped_column(String(20), default="pending")
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=lambda: datetime.now(timezone.utc),
+    )
 
     user: Mapped["User"] = relationship("User", back_populates="repetition_tasks")

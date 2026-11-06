@@ -1,3 +1,4 @@
+from sqlite3 import Connection as SQLite3Connection
 from typing import Generator, Optional
 from sqlalchemy import create_engine, event
 from sqlalchemy.engine import Engine
@@ -17,7 +18,7 @@ engine = create_engine(
 
 @event.listens_for(Engine, "connect")
 def set_sqlite_pragma(dbapi_connection, connection_record):
-    if hasattr(dbapi_connection, "cursor"):
+    if isinstance(dbapi_connection, SQLite3Connection):
         cursor = dbapi_connection.cursor()
         try:
             cursor.execute("PRAGMA foreign_keys=ON")

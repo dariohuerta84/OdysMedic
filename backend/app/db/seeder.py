@@ -17,7 +17,7 @@ CARDINAL_SPECIALTIES: List[str] = [
 ]
 
 DEMO_USER_EMAIL = "demo.medico@upch.pe"
-DEMO_USER_PASSWORD_HASH = "$2b$12$e80Yv8yM3N6K5Qp7/m71qO0XbF3V8t1T7/m71qO0XbF3V8t1T71qO"
+DEMO_USER_PASSWORD_HASH = "$2b$12$UBMXF/g6AVc5tpElw5opB./n1mSLwMX1dPTQZsbNPyL8Pn/9gdiT."
 
 
 def seed_initial_data(db: Session) -> Dict[str, Any]:
@@ -50,8 +50,8 @@ def seed_initial_data(db: Session) -> Dict[str, Any]:
                     if not existing_ref:
                         associated_cases = exc.get("associated_cases", [])
                         assoc_case_str = ", ".join(associated_cases) if associated_cases else None
-                        if assoc_case_str and len(assoc_case_str) > 100:
-                            assoc_case_str = assoc_case_str[:100]
+                        if assoc_case_str and len(assoc_case_str) > 255:
+                            assoc_case_str = assoc_case_str[:255]
 
                         ref_record = MedicalReferenceDB(
                             ref_id=ref_id,
