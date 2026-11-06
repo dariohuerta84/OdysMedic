@@ -1,0 +1,55 @@
+from typing import Any, Dict
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
+
+from app.api.deps import get_db, get_active_student
+from app.db.models import User
+from app.models.enums import MedicalSpecialty, CognitiveGap
+from app.models.student import LevelingPrescription
+from app.engine.leveling_engine import generate_leveling_prescription
+from app.services.student_service import student_service
+
+router = APIRouter(prefix="/leveling", tags=["Nivelacion Adaptativa y OCRI"])
+
+
+@router.get("/dashboard")
+def get_dashboard(
+    student: User = Depends(get_active_student),
+    db: Session = Depends(get_db),
+) -> Dict[str, Any]:
+    """
+    Retorna el panel analitico del estudiante con radar OCRI de las 5 especialidades cardinales,
+    puntajes basales, nivel de competencia, racha, XP y tareas de repeticion espaciada.
+    """
+    return student_service.get_student_dashboard(db, student.id)
+
+
+@router.get("/prescription/{specialty}", response_model=LevelingPrescription)
+def get_prescription_by_specialty(
+    specialty: str,
+    student: User = Depends(get_active_student),
+    db: Session = Depends(get_db),
+):
+    """
+    Genera y retorna la prescripcion de nivelacion adaptativa para una especialidad especifica
+    en base al nivel de maestria y brechas cognitivas detectadas en el estudiante.
+    """
+    try:
+        spec_enum = MedicalSpecialty(specialty.lower())
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Especialidad '{specialty}' no valida en el catalogo OdyssMedic.",
+        )
+
+    profile = student_service.get_specialty_mastery(db, student.id, spec_enum)
+    detected_gap = profile.detected_gaps[0] if profile.detected_gaps else CognitiveGap.GAP_DIAGNOSTIC_REASONING
+
+    prescription = generate_leveling_prescription(
+        specialty=spec_enum,
+        mastery_score=profile.score,
+        detected_gap=detected_gap,
+        student_level=profile.level,
+        student_id=str(student.id),
+    )
+    return prescription
