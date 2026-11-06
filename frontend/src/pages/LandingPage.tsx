@@ -9,159 +9,396 @@ import {
   Smartphone,
   Coins,
   ShieldCheck,
-  Hospital,
-  BatteryCharging,
   XCircle,
 } from 'lucide-react';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 export interface LandingPageProps {
   onStartDemo: () => void;
   onExploreWorlds: () => void;
 }
 
-interface StudentTimeRealityPanel {
-  id: string;
-  stepNumber: number;
-  badge: string;
-  iconType: 'hospital' | 'battery' | 'sparkles';
-  title: string;
-  subtitle: string;
-  highlightMetric: string;
-  highlightLabel: string;
-  hospitalRealitySummary: string;
-  frictionPoints: string[];
-  odyssmedicContrast: {
-    approachTitle: string;
-    description: string;
-    keyBenefit: string;
-    timeInvested: string;
-  };
-}
+/**
+ * Animated Row 1: Hospital Shifts vs Micro-cases
+ */
+const ProblemSolutionRow1: React.FC = () => {
+  const { ref, isVisible } = useScrollReveal({ threshold: 0.15, triggerOnce: false });
 
-const STUDENT_TIME_PANELS: StudentTimeRealityPanel[] = [
-  {
-    id: 'guardias-sobrecarga',
-    stepNumber: 1,
-    badge: 'Fase 1 : La Realidad en Sala',
-    iconType: 'hospital',
-    title: 'Guardias de 24 a 36 Horas y Sobrecarga Asistencial',
-    subtitle: 'El tiempo fisico y la fatiga cognitiva impiden abrir libros extensos',
-    highlightMetric: '36 hrs',
-    highlightLabel: 'Turnos hospitalarios continuos de pie',
-    hospitalRealitySummary:
-      'Durante el internado y la formacion clinica, el estudiante enfrenta hasta 30 pacientes por guardia: evoluciones clinicas, notas de ingreso, altas y toma de vias. Al terminar, el agotamiento psicomotor hace imposible concentrarse en lecturas pasivas de 400 paginas.',
-    frictionPoints: [
-      'Jornadas extendidas con privacion aguda de sueno y sobrecarga documental.',
-      'Perdida del 60% en la capacidad de retencion lectora tras un turno de guardia.',
-      'Inviabilidad de cumplir horarios rigidos de academias comerciales presenciales.',
-    ],
-    odyssmedicContrast: {
-      approachTitle: 'Micro-Entrenamiento Clinico de 5 Minutos',
-      description:
-        'Casos clinicos fraccionados en microestaciones que puedes resolver en la sala de descanso o camino al hospital sin abrir libros pesados.',
-      keyBenefit: 'Practica guiada sin exigir bloques de 4 horas continuas.',
-      timeInvested: '3 a 5 min por caso',
-    },
-  },
-  {
-    id: 'bancos-ineficientes',
-    stepNumber: 2,
-    badge: 'Fase 2 : La Inercia Tradicional',
-    iconType: 'battery',
-    title: 'El Colapso de los Bancos de Preguntas Pasivos',
-    subtitle: 'Memorizar claves aisladas genera saturacion mental y olvido acelerado',
-    highlightMetric: '70%',
-    highlightLabel: 'Perdida de retencion tras 48 horas sin refuerzo espaciado',
-    hospitalRealitySummary:
-      'Los bancos tradicionales acumulan cientos de preguntas desactualizadas donde el alumno memoriza la alternativa correcta sin entender la fisiopatologia ni el triaje. Ante un caso atipico o una pregunta formulada de manera distinta en el examen real, la duda reaparece.',
-    frictionPoints: [
-      'Simulacros interminables de 100 preguntas que causan desmotivacion y fatiga visual.',
-      'Retroalimentacion superficial: solo indica si acertaste o erraste sin diagnostico de causa.',
-      'Reiteracion de errores en puntos ciegos no identificados a tiempo.',
-    ],
-    odyssmedicContrast: {
-      approachTitle: 'Diagnostico de Causa Raiz OCRI',
-      description:
-        'El motor clasifica cada desvio en una de 4 brechas: Triaje, Razonamiento Diagnostico, Laboratorio o Manejo Terapeutico, explicando el error con evidencia.',
-      keyBenefit: 'Perlas clinicas de 60 segundos con guias KDIGO, ADA y AHA/ASA indexadas.',
-      timeInvested: '60 seg por perla',
-    },
-  },
-  {
-    id: 'solucion-adaptativa',
-    stepNumber: 3,
-    badge: 'Fase 3 : La Respuesta OdyssMedic',
-    iconType: 'sparkles',
-    title: 'Micro-Aprendizaje Adaptativo con Repeticion Espaciada',
-    subtitle: 'Consolidacion de largo plazo ajustada exactamente a tus minutos disponibles',
-    highlightMetric: '100%',
-    highlightLabel: 'Enfocado en tus brechas clinicas personales',
-    hospitalRealitySummary:
-      'OdyssMedic no te pide cambiar tu rutina hospitalaria. Utiliza algoritmos de repeticion espaciada (D7 / D21) para reevaluar tus brechas clinicas en el momento optimo de consolidacion neuronal, garantizando que el concepto quede grabado antes del examen.',
-    frictionPoints: [
-      'Elimina la sensacion de culpa por no tener 4 horas libres al dia.',
-      'No pierdes tiempo seleccionando que estudiar: el sistema prioriza tus puntos debiles.',
-      'Visualiza en tiempo real si estas Apto para tu examen antes de rendirlo.',
-    ],
-    odyssmedicContrast: {
-      approachTitle: 'Prescripcion Neural Automatizada D7 / D21',
-      description:
-        'Si cometes un desvio en una emergencia endocrina o nefrologica, el motor calendariza una variante clinica a los 7 y 21 dias para fijar la conducta correcta.',
-      keyBenefit: 'Llega al examen y al pase de visita con seguridad y reflejos clinicos entrenados.',
-      timeInvested: '5 min al dia',
-    },
-  },
-];
+  return (
+    <div
+      ref={ref}
+      className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-stretch transition-all duration-700"
+    >
+      {/* Left: The Problem (Pegado a la izquierda) */}
+      <div
+        className={`p-6 sm:p-7 rounded-3xl bg-rose-50/60 border-2 border-rose-200/80 shadow-xs flex flex-col justify-between space-y-5 transition-all duration-700 ease-out ${
+          isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'
+        }`}
+      >
+        <div className="space-y-4">
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            <span className="px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-rose-100 text-rose-800 border border-rose-300">
+              Obstaculo #1 : La Sobrecarga Hospitalaria
+            </span>
+            <span className="text-xl sm:text-2xl font-black font-mono text-rose-700">
+              36 hrs
+            </span>
+          </div>
 
-interface TimeOption {
-  minutes: number;
-  label: string;
-  outputDescription: string;
-  badge: string;
-}
+          <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 leading-snug">
+            Guardias de 36 Horas: El Agotamiento que Impide Abrir Libros
+          </h3>
 
-const TIME_OPTIONS: TimeOption[] = [
-  {
-    minutes: 5,
-    label: '5 Minutos Libres',
-    badge: 'Pausa de Guardia',
-    outputDescription:
-      '1 Desafio Clinico Enfocado + 1 Diagnostico de Causa Raiz OCRI + 1 Perla Clinica de 60 segundos.',
-  },
-  {
-    minutes: 15,
-    label: '15 Minutos Libres',
-    badge: 'Post-Almuerzo o Trayecto',
-    outputDescription:
-      '3 Estaciones Clinicas Secuenciales (Triaje, Diagnostico y Manejo) + Calibracion de Radar de Competencias.',
-  },
-  {
-    minutes: 30,
-    label: '30 Minutos Libres',
-    badge: 'Sesion de Descanso',
-    outputDescription:
-      'Caso Multidisciplinario Completo + Despeje de Cola de Repeticion Espaciada D7/D21 + Revision de Guias.',
-  },
-];
+          {/* Visual Hospital Timeline */}
+          <div className="space-y-2 pt-1">
+            <span className="text-[11px] font-mono text-slate-500 uppercase tracking-wider block font-semibold">
+              Cronograma Real de la Guardia:
+            </span>
+            <div className="grid grid-cols-4 gap-1.5 text-center text-[10px] font-mono">
+              <div className="p-2 rounded-lg bg-white border border-rose-200 text-slate-700">
+                <span className="font-bold block text-rose-700">08:00</span>
+                <span>Pase Visita</span>
+              </div>
+              <div className="p-2 rounded-lg bg-white border border-rose-200 text-slate-700">
+                <span className="font-bold block text-rose-700">14:00</span>
+                <span>Historias</span>
+              </div>
+              <div className="p-2 rounded-lg bg-white border border-rose-200 text-slate-700">
+                <span className="font-bold block text-rose-700">22:00</span>
+                <span>Emergencias</span>
+              </div>
+              <div className="p-2 rounded-lg bg-white border border-rose-200 text-slate-700">
+                <span className="font-bold block text-rose-700">06:00</span>
+                <span>Trauma Shock</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Visual Energy Meter */}
+          <div className="p-3.5 rounded-2xl bg-white border border-rose-200 space-y-1.5 shadow-xs">
+            <div className="flex items-center justify-between text-xs font-mono">
+              <span className="text-slate-600 font-medium">Energia cognitiva tras el turno:</span>
+              <span className="font-bold text-rose-700">8% (Fatiga Extrema)</span>
+            </div>
+            <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+              <div className="h-full bg-rose-500 rounded-full transition-all duration-1000" style={{ width: isVisible ? '8%' : '0%' }} />
+            </div>
+          </div>
+        </div>
+
+        <p className="text-xs text-rose-950 font-medium leading-relaxed pt-2 border-t border-rose-200/60">
+          Tras 30 horas de pie en el hospital, sentarse a estudiar 4 horas al dia es biologicamente imposible.
+        </p>
+      </div>
+
+      {/* Right: The OdyssMedic Solution (Pegado a la derecha) */}
+      <div
+        className={`p-6 sm:p-7 rounded-3xl bg-sky-50/70 border-2 border-sky-300/80 shadow-xs flex flex-col justify-between space-y-5 transition-all duration-700 ease-out delay-150 ${
+          isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
+        }`}
+      >
+        <div className="space-y-4">
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            <span className="px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-sky-100 text-sky-800 border border-sky-300">
+              Solucion OdyssMedic : Micro-Precision
+            </span>
+            <span className="text-xl sm:text-2xl font-black font-mono text-sky-700">
+              5 min
+            </span>
+          </div>
+
+          <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 leading-snug">
+            Simulacion Clinica Adaptativa en las Pausas de Guardia
+          </h3>
+
+          {/* Visual Mobile Case Card */}
+          <div className="p-3.5 rounded-2xl bg-white border border-sky-200 space-y-2.5 shadow-xs">
+            <div className="flex items-center justify-between text-[11px] font-mono">
+              <span className="font-bold text-sky-800">Caso Nefrologia KDIGO 2024</span>
+              <span className="text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                Estacion 1 : Triaje
+              </span>
+            </div>
+            <div className="flex flex-wrap gap-1.5 text-[11px] font-mono">
+              <span className="px-2 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200 font-bold">
+                PA 85/55 mmHg
+              </span>
+              <span className="px-2 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200 font-bold">
+                FC 118 lpm
+              </span>
+              <span className="px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
+                SatO2 95%
+              </span>
+            </div>
+            <div className="p-2 rounded-lg bg-emerald-50/80 border border-emerald-200 text-xs text-emerald-950 font-medium flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span>Expansion con cristaloides y monitorizacion de diuresis horaria</span>
+            </div>
+          </div>
+
+          {/* Visual Feasibility Meter */}
+          <div className="p-3.5 rounded-2xl bg-white border border-sky-200 space-y-1.5 shadow-xs">
+            <div className="flex items-center justify-between text-xs font-mono">
+              <span className="text-slate-600 font-medium">Viabilidad en guardia hospitalaria:</span>
+              <span className="font-bold text-sky-800">100% (3 a 5 min desde el celular)</span>
+            </div>
+            <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+              <div className="h-full bg-sky-500 rounded-full transition-all duration-1000" style={{ width: isVisible ? '100%' : '0%' }} />
+            </div>
+          </div>
+        </div>
+
+        <p className="text-xs text-sky-950 font-medium leading-relaxed pt-2 border-t border-sky-200/60">
+          Entrena casos de alta complejidad en pausas reales del turno sin alterar tu horario asistencial.
+        </p>
+      </div>
+    </div>
+  );
+};
+
+/**
+ * Animated Row 2: Passive MCQ Banks vs OCRI Root Cause Engine
+ */
+const ProblemSolutionRow2: React.FC = () => {
+  const { ref, isVisible } = useScrollReveal({ threshold: 0.15, triggerOnce: false });
+
+  return (
+    <div
+      ref={ref}
+      className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-stretch transition-all duration-700"
+    >
+      {/* Left: The Problem (Pegado a la izquierda) */}
+      <div
+        className={`p-6 sm:p-7 rounded-3xl bg-amber-50/60 border-2 border-amber-200/80 shadow-xs flex flex-col justify-between space-y-5 transition-all duration-700 ease-out ${
+          isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'
+        }`}
+      >
+        <div className="space-y-4">
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            <span className="px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-300">
+              Obstaculo #2 : La Trampa del Banco Pasivo
+            </span>
+            <span className="text-xl sm:text-2xl font-black font-mono text-amber-700">
+              70% Olvido
+            </span>
+          </div>
+
+          <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 leading-snug">
+            Memorizar Claves sin Entender la Causa Raiz del Error
+          </h3>
+
+          {/* Visual Ebbinghaus Decline */}
+          <div className="p-3.5 rounded-2xl bg-white border border-amber-200 space-y-2 shadow-xs">
+            <div className="flex items-center justify-between text-xs font-mono">
+              <span className="text-slate-600 font-medium">Retencion a las 48 horas (Ebbinghaus):</span>
+              <span className="font-bold text-amber-800">Solo 30% retenido</span>
+            </div>
+            <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+              <div className="h-full bg-amber-500 rounded-full transition-all duration-1000" style={{ width: isVisible ? '30%' : '0%' }} />
+            </div>
+            <div className="flex items-center justify-between text-[10px] font-mono text-slate-500 pt-1">
+              <span>Dia 0 : 100%</span>
+              <span>Dia 1 : 55%</span>
+              <span className="text-amber-800 font-bold">Dia 2 : 30%</span>
+            </div>
+          </div>
+
+          {/* Problem Checklist */}
+          <div className="space-y-1.5 text-xs text-slate-700">
+            <div className="flex items-center gap-2 p-2 rounded-xl bg-white border border-amber-200/70">
+              <XCircle className="w-4 h-4 text-amber-600 shrink-0" />
+              <span>Simulacros de 100 preguntas que solo indican clave correcta sin analisis.</span>
+            </div>
+            <div className="flex items-center gap-2 p-2 rounded-xl bg-white border border-amber-200/70">
+              <XCircle className="w-4 h-4 text-amber-600 shrink-0" />
+              <span>El alumno duda ante casos clinicos con parametros modificados en el examen.</span>
+            </div>
+          </div>
+        </div>
+
+        <p className="text-xs text-amber-950 font-medium leading-relaxed pt-2 border-t border-amber-200/60">
+          Memorizar mecanicamente letras no genera reflejos clinicos ni salva vidas en la guardia.
+        </p>
+      </div>
+
+      {/* Right: The OdyssMedic Solution (Pegado a la derecha) */}
+      <div
+        className={`p-6 sm:p-7 rounded-3xl bg-sky-50/70 border-2 border-sky-300/80 shadow-xs flex flex-col justify-between space-y-5 transition-all duration-700 ease-out delay-150 ${
+          isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
+        }`}
+      >
+        <div className="space-y-4">
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            <span className="px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-sky-100 text-sky-800 border border-sky-300">
+              Solucion OdyssMedic : Motor OCRI
+            </span>
+            <span className="text-xl sm:text-2xl font-black font-mono text-sky-700">
+              4 Brechas
+            </span>
+          </div>
+
+          <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 leading-snug">
+            Diagnostico de Causa Raiz con Microperla de 60 Segundos
+          </h3>
+
+          {/* Visual 4-Gap Taxonomy Radar Card */}
+          <div className="p-3.5 rounded-2xl bg-white border border-sky-200 space-y-2.5 shadow-xs">
+            <span className="text-[11px] font-mono uppercase text-sky-800 font-bold block">
+              Deteccion Inmediata de la Causa del Desvio:
+            </span>
+            <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+              <div className="p-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 flex items-center justify-between">
+                <span>Triaje Vital</span>
+                <span className="text-emerald-600 font-bold">OK</span>
+              </div>
+              <div className="p-2 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 flex items-center justify-between font-bold">
+                <span>Razonamiento</span>
+                <span className="text-amber-700">Brecha</span>
+              </div>
+              <div className="p-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 flex items-center justify-between">
+                <span>Laboratorio</span>
+                <span className="text-emerald-600 font-bold">OK</span>
+              </div>
+              <div className="p-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 flex items-center justify-between">
+                <span>Manejo</span>
+                <span className="text-emerald-600 font-bold">OK</span>
+              </div>
+            </div>
+            <div className="p-2 rounded-xl bg-sky-50 border border-sky-200 text-[11px] text-sky-900 font-mono flex items-center gap-2">
+              <Sparkles className="w-3.5 h-3.5 text-sky-600 shrink-0" />
+              <span>Perla clinica KDIGO indexada para subsanar la brecha en 60 segundos.</span>
+            </div>
+          </div>
+        </div>
+
+        <p className="text-xs text-sky-950 font-medium leading-relaxed pt-2 border-t border-sky-200/60">
+          No solo sabes si fallaste: entiendes exactamente por que fallaste y como corregirlo para siempre.
+        </p>
+      </div>
+    </div>
+  );
+};
+
+/**
+ * Animated Row 3: Blind Guessing vs Spaced Repetition D7 / D21
+ */
+const ProblemSolutionRow3: React.FC = () => {
+  const { ref, isVisible } = useScrollReveal({ threshold: 0.15, triggerOnce: false });
+
+  return (
+    <div
+      ref={ref}
+      className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-stretch transition-all duration-700"
+    >
+      {/* Left: The Problem (Pegado a la izquierda) */}
+      <div
+        className={`p-6 sm:p-7 rounded-3xl bg-rose-50/60 border-2 border-rose-200/80 shadow-xs flex flex-col justify-between space-y-5 transition-all duration-700 ease-out ${
+          isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'
+        }`}
+      >
+        <div className="space-y-4">
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            <span className="px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-rose-100 text-rose-800 border border-rose-300">
+              Obstaculo #3 : El Descontrol del Rendimiento
+            </span>
+            <span className="text-xl sm:text-2xl font-black font-mono text-rose-700">
+              0 Certeza
+            </span>
+          </div>
+
+          <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 leading-snug">
+            Llegar al Examen de Titulacion sin Saber si Estas Realmente Apto
+          </h3>
+
+          {/* Visual Traditional Uncertainty Card */}
+          <div className="p-3.5 rounded-2xl bg-white border border-rose-200 space-y-2.5 shadow-xs">
+            <div className="flex items-center justify-between text-xs font-mono">
+              <span className="text-slate-600 font-medium">Certeza de aprobacion en ENAM:</span>
+              <span className="font-bold text-rose-700">Baja (Riesgo de reprobar)</span>
+            </div>
+            <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+              <div className="h-full bg-rose-500 rounded-full transition-all duration-1000" style={{ width: isVisible ? '25%' : '0%' }} />
+            </div>
+            <p className="text-[11px] text-slate-600 font-mono">
+              Los estudiantes rinden examenes con dudas recurrentes en emergencias tiempo-dependientes (ACV, CAD, Shock).
+            </p>
+          </div>
+        </div>
+
+        <p className="text-xs text-rose-950 font-medium leading-relaxed pt-2 border-t border-rose-200/60">
+          La falta de seguimiento objetivo de brechas incrementa la ansiedad y la probabilidad de repetir el internado.
+        </p>
+      </div>
+
+      {/* Right: The OdyssMedic Solution (Pegado a la derecha) */}
+      <div
+        className={`p-6 sm:p-7 rounded-3xl bg-emerald-50/70 border-2 border-emerald-300/80 shadow-xs flex flex-col justify-between space-y-5 transition-all duration-700 ease-out delay-150 ${
+          isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
+        }`}
+      >
+        <div className="space-y-4">
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            <span className="px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-300">
+              Solucion OdyssMedic : Repeticion D7 / D21
+            </span>
+            <span className="text-xl sm:text-2xl font-black font-mono text-emerald-700">
+              94% Exito
+            </span>
+          </div>
+
+          <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 leading-snug">
+            Consolidacion Neural a Largo Plazo y Certificacion de Aptitud
+          </h3>
+
+          {/* Visual Neural Calendar Card */}
+          <div className="p-3.5 rounded-2xl bg-white border border-emerald-200 space-y-2.5 shadow-xs">
+            <div className="grid grid-cols-3 gap-1.5 text-center text-[10px] font-mono">
+              <div className="p-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700">
+                <span className="block font-bold text-slate-900">Dia 1</span>
+                <span>Desvio Detectado</span>
+              </div>
+              <div className="p-2 rounded-xl bg-sky-50 border border-sky-200 text-sky-800 font-bold">
+                <span className="block text-sky-900">Dia 7</span>
+                <span>Refuerzo D7</span>
+              </div>
+              <div className="p-2 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-900 font-bold">
+                <span className="block text-emerald-800">Dia 21</span>
+                <span>Consolidacion</span>
+              </div>
+            </div>
+
+            <div className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between text-xs font-mono font-bold text-emerald-900">
+              <span>Estado Basal Ganado:</span>
+              <span className="px-2 py-0.5 rounded bg-emerald-600 text-white text-[11px]">
+                Apto para el Examen
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <p className="text-xs text-emerald-950 font-medium leading-relaxed pt-2 border-t border-emerald-200/60">
+          Llega a tu examen de internado con certeza matematica y reflejos clinicos comprobados en guardia.
+        </p>
+      </div>
+    </div>
+  );
+};
 
 export const LandingPage: React.FC<LandingPageProps> = ({
   onStartDemo,
   onExploreWorlds,
 }) => {
-  const [activePanelIndex, setActivePanelIndex] = useState<number>(0);
-  const [selectedTimeMinutes, setSelectedTimeMinutes] = useState<number>(5);
-
-  const activePanel = STUDENT_TIME_PANELS[activePanelIndex];
-  const selectedTimeOption =
-    TIME_OPTIONS.find((t) => t.minutes === selectedTimeMinutes) || TIME_OPTIONS[0];
+  const [selectedMetricTab, setSelectedMetricTab] = useState<'tiempo' | 'retencion' | 'causa'>('tiempo');
+  const bentoSection = useScrollReveal({ threshold: 0.1, triggerOnce: false });
+  const ctaSection = useScrollReveal({ threshold: 0.15, triggerOnce: false });
 
   return (
     <div className="relative overflow-hidden bg-slate-50 min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-20 space-y-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-20 space-y-24">
         {/* ========================================================================= */}
         {/* 1. HERO SECTION                                                           */}
         {/* ========================================================================= */}
-        <section className="relative text-center space-y-7 max-w-4xl mx-auto pt-4">
+        <section className="relative text-center space-y-7 max-w-4xl mx-auto pt-4 animate-fade-in-up">
           {/* Institutional Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-sky-200 text-sky-800 text-xs font-mono font-semibold tracking-wide shadow-xs">
             <span className="w-2 h-2 rounded-full bg-sky-500 animate-pulse" />
@@ -236,200 +473,143 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         </section>
 
         {/* ========================================================================= */}
-        {/* 2. THE TIME SCARCITY REALITY: INTERACTIVE PANELS                           */}
+        {/* 2. SCROLL-ANIMATED SPLIT COMPARISON: PROBLEMATICA VS SOLUCION              */}
+        {/* Left Side: Hospital Reality | Right Side: OdyssMedic Precision            */}
         {/* ========================================================================= */}
-        <section className="space-y-8" aria-label="Por que los alumnos no tienen tiempo para estudiar">
-          <div className="text-center max-w-3xl mx-auto space-y-2.5">
-            <span className="px-3 py-1 rounded-full text-xs font-mono uppercase font-semibold bg-sky-50 text-sky-800 border border-sky-200">
-              La Realidad Clinica del Estudiante
+        <section className="space-y-12" aria-label="Problematica hospitalaria vs Solucion OdyssMedic">
+          {/* Section Header */}
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <span className="px-3.5 py-1 rounded-full text-xs font-mono uppercase font-bold bg-sky-50 text-sky-800 border border-sky-200 tracking-wider">
+              El Dilema Clinico : Tiempo vs Rendimiento
             </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Por Que los Alumnos No Tienen Tiempo para Rendir Correctamente sus Examenes
+            <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+              Por Que los Alumnos No Tienen Tiempo para sus Examenes
             </h2>
-            <p className="text-sm text-slate-600 leading-relaxed max-w-2xl mx-auto">
-              La preparacion medica tradicional exige sentarse 4 horas seguidas a memorizar manuales.
-              En un entorno de internado con guardias de 36 horas, esta inercia genera frustracion y bajo rendimiento.
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-2xl mx-auto">
+              Visualiza en tiempo real como la inercia del modelo tradicional colapsa durante la guardia
+              y como la micro-precision adaptativa de OdyssMedic resuelve la falta de tiempo.
             </p>
           </div>
 
-          {/* Step Selector Tabs */}
-          <div className="flex flex-col sm:flex-row items-stretch justify-center gap-3 max-w-4xl mx-auto">
-            {STUDENT_TIME_PANELS.map((panel, idx) => {
-              const isActive = activePanelIndex === idx;
-              const IconComponent =
-                panel.iconType === 'hospital'
-                  ? Hospital
-                  : panel.iconType === 'battery'
-                    ? BatteryCharging
-                    : Sparkles;
-
-              return (
-                <button
-                  key={panel.id}
-                  type="button"
-                  onClick={() => setActivePanelIndex(idx)}
-                  className={`flex-1 flex items-center gap-3 p-4 rounded-2xl border text-left transition-all ${
-                    isActive
-                      ? 'bg-white border-sky-400 ring-2 ring-sky-100 shadow-sm'
-                      : 'bg-white/70 border-slate-200 hover:bg-white text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  <div
-                    className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
-                      isActive
-                        ? 'bg-sky-600 text-white shadow-xs'
-                        : 'bg-slate-100 text-slate-500'
-                    }`}
-                  >
-                    <IconComponent className="w-5 h-5" />
-                  </div>
-                  <div className="overflow-hidden">
-                    <span className="block text-[11px] font-mono text-sky-700 font-semibold uppercase tracking-wider">
-                      Paso {panel.stepNumber} de 3
-                    </span>
-                    <span className={`block text-xs sm:text-sm font-bold truncate ${isActive ? 'text-slate-900' : 'text-slate-700'}`}>
-                      {panel.title}
-                    </span>
-                  </div>
-                </button>
-              );
-            })}
+          {/* Visual Column Headers */}
+          <div className="hidden lg:grid grid-cols-2 gap-10 max-w-5xl mx-auto text-xs font-mono font-bold uppercase tracking-wider">
+            <div className="p-3 rounded-2xl bg-rose-100/60 border border-rose-300 text-rose-800 flex items-center justify-between shadow-xs">
+              <span>Columna Izquierda: La Crisis del Tiempo Hospitalario</span>
+              <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse" />
+            </div>
+            <div className="p-3 rounded-2xl bg-sky-100/60 border border-sky-300 text-sky-800 flex items-center justify-between shadow-xs">
+              <span>Columna Derecha: La Transformacion OdyssMedic</span>
+              <span className="w-2.5 h-2.5 rounded-full bg-sky-500 animate-pulse" />
+            </div>
           </div>
 
-          {/* Active Interactive Panel Card */}
-          <div className="max-w-4xl mx-auto p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-6 animate-fade-in">
-            {/* Header: Title, Badge and Key Stat */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-slate-100">
-              <div className="space-y-1">
-                <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-semibold bg-sky-50 text-sky-800 border border-sky-200">
-                  {activePanel.badge}
+          {/* 3 Animated Rows with Scroll-Reveal Entrance and Exit */}
+          <div className="space-y-8 max-w-5xl mx-auto">
+            <ProblemSolutionRow1 />
+            <ProblemSolutionRow2 />
+            <ProblemSolutionRow3 />
+          </div>
+
+          {/* Visual Interactive Comparison Board */}
+          <div className="max-w-4xl mx-auto p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+              <div>
+                <span className="text-xs font-mono uppercase tracking-wider text-sky-700 font-bold block">
+                  Cuadro Comparativo Interactivo
                 </span>
-                <h3 className="text-xl sm:text-2xl font-bold text-slate-900">
-                  {activePanel.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600">
-                  {activePanel.subtitle}
+                <h4 className="text-base sm:text-lg font-bold text-slate-900">
+                  Selecciona la dimension de comparacion:
+                </h4>
+              </div>
+
+              {/* Selector Tabs */}
+              <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 border border-slate-200">
+                <button
+                  type="button"
+                  onClick={() => setSelectedMetricTab('tiempo')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all ${
+                    selectedMetricTab === 'tiempo'
+                      ? 'bg-white text-sky-800 shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  Tiempo
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectedMetricTab('retencion')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all ${
+                    selectedMetricTab === 'retencion'
+                      ? 'bg-white text-sky-800 shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  Retencion
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectedMetricTab('causa')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all ${
+                    selectedMetricTab === 'causa'
+                      ? 'bg-white text-sky-800 shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  Diagnostico Error
+                </button>
+              </div>
+            </div>
+
+            {/* Scoreboard Content */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">
+              <div className="p-4 rounded-2xl bg-rose-50/60 border border-rose-200 space-y-2">
+                <span className="font-bold text-rose-800 uppercase block">Modelo Tradicional</span>
+                <span className="text-xl sm:text-2xl font-black text-rose-900 block font-mono">
+                  {selectedMetricTab === 'tiempo'
+                    ? '4 Horas Diarias'
+                    : selectedMetricTab === 'retencion'
+                      ? '30% a 48 Horas'
+                      : 'Cero Diagnostico'}
+                </span>
+                <p className="text-slate-600 font-sans text-xs">
+                  {selectedMetricTab === 'tiempo'
+                    ? 'Exige bloques continuos imposibles de encajar tras una guardia de 30 horas.'
+                    : selectedMetricTab === 'retencion'
+                      ? 'La memorizacion pasiva de claves se degrada aceleradamente segun la curva del olvido.'
+                      : 'Solo indica acierto o fallo, sin explicar si el error fue de triaje, dosis o examen auxiliar.'}
                 </p>
               </div>
 
-              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-center shrink-0 min-w-[140px]">
-                <span className="block text-2xl font-extrabold font-mono text-sky-700">
-                  {activePanel.highlightMetric}
+              <div className="p-4 rounded-2xl bg-sky-50/70 border border-sky-300 space-y-2">
+                <span className="font-bold text-sky-800 uppercase block">Motor OdyssMedic</span>
+                <span className="text-xl sm:text-2xl font-black text-sky-900 block font-mono">
+                  {selectedMetricTab === 'tiempo'
+                    ? '3 a 5 Minutos'
+                    : selectedMetricTab === 'retencion'
+                      ? '94% con D7 / D21'
+                      : 'Causa Raiz OCRI'}
                 </span>
-                <span className="text-[11px] text-slate-500 font-medium block leading-tight">
-                  {activePanel.highlightLabel}
-                </span>
-              </div>
-            </div>
-
-            {/* Context Summary */}
-            <p className="text-sm text-slate-700 leading-relaxed bg-slate-50/70 p-4 rounded-2xl border border-slate-200">
-              {activePanel.hospitalRealitySummary}
-            </p>
-
-            {/* Side-by-Side Contrast: Obstacle vs OdyssMedic Solution */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-1">
-              {/* Left Column: The Real Obstacle */}
-              <div className="p-5 rounded-2xl bg-rose-50/50 border border-rose-200 space-y-3">
-                <div className="flex items-center gap-2 text-xs font-mono font-bold text-rose-800 uppercase tracking-wider">
-                  <XCircle className="w-4 h-4 text-rose-600 shrink-0" />
-                  <span>El Obstaculo en la Practica Hospitalaria</span>
-                </div>
-                <ul className="space-y-2 text-xs text-slate-700">
-                  {activePanel.frictionPoints.map((point, pIdx) => (
-                    <li key={pIdx} className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-rose-500 mt-1.5 shrink-0" />
-                      <span>{point}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Right Column: OdyssMedic Precision Solution */}
-              <div className="p-5 rounded-2xl bg-sky-50/60 border border-sky-200 space-y-3 flex flex-col justify-between">
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-xs font-mono font-bold text-sky-800 uppercase tracking-wider">
-                    <CheckCircle2 className="w-4 h-4 text-sky-600 shrink-0" />
-                    <span>{activePanel.odyssmedicContrast.approachTitle}</span>
-                  </div>
-                  <p className="text-xs text-slate-700 leading-relaxed">
-                    {activePanel.odyssmedicContrast.description}
-                  </p>
-                  <p className="text-xs font-medium text-sky-900 pt-1">
-                    {activePanel.odyssmedicContrast.keyBenefit}
-                  </p>
-                </div>
-                <div className="pt-3 border-t border-sky-200/60 flex items-center justify-between text-xs font-mono">
-                  <span className="text-slate-500">Inversion de tiempo:</span>
-                  <span className="font-bold text-sky-800">
-                    {activePanel.odyssmedicContrast.timeInvested}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Quick Interactive Tool: "Que Puedes Lograr Segun tus Minutos Libres" */}
-            <div className="pt-4 border-t border-slate-100 space-y-3">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <span className="text-xs font-mono uppercase font-bold text-slate-700 flex items-center gap-1.5">
-                  <Clock className="w-4 h-4 text-sky-600" />
-                  <span>Comprueba lo que Puedes Lograr con tu Tiempo Real:</span>
-                </span>
-                <span className="text-[11px] font-mono text-slate-500">
-                  Selecciona tus minutos disponibles
-                </span>
-              </div>
-
-              {/* Time Selector Buttons */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                {TIME_OPTIONS.map((opt) => {
-                  const isTimeActive = selectedTimeMinutes === opt.minutes;
-                  return (
-                    <button
-                      key={opt.minutes}
-                      type="button"
-                      onClick={() => setSelectedTimeMinutes(opt.minutes)}
-                      className={`p-3 rounded-xl border text-left transition-all ${
-                        isTimeActive
-                          ? 'bg-sky-50 border-sky-300 ring-1 ring-sky-200 shadow-xs'
-                          : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className={`text-xs font-bold ${isTimeActive ? 'text-sky-900' : 'text-slate-800'}`}>
-                          {opt.label}
-                        </span>
-                        <span className="text-[10px] font-mono bg-white px-2 py-0.5 rounded border border-slate-200 text-slate-600">
-                          {opt.badge}
-                        </span>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Result Pill */}
-              <div className="p-3.5 rounded-xl bg-white border border-slate-200 flex items-start gap-3 shadow-xs">
-                <div className="w-7 h-7 rounded-lg bg-sky-100 text-sky-800 flex items-center justify-center shrink-0 font-bold font-mono text-xs">
-                  {selectedTimeMinutes}m
-                </div>
-                <div>
-                  <span className="text-xs font-semibold text-slate-900 block">
-                    Sesion Prescrita por el Motor OCRI ({selectedTimeOption.label}):
-                  </span>
-                  <span className="text-xs text-slate-600 font-sans">
-                    {selectedTimeOption.outputDescription}
-                  </span>
-                </div>
+                <p className="text-slate-600 font-sans text-xs">
+                  {selectedMetricTab === 'tiempo'
+                    ? 'Micro-estaciones de precision en el celular durante pausas reales de sala de guardia.'
+                    : selectedMetricTab === 'retencion'
+                      ? 'Algoritmo de repeticion espaciada que refuerza exactamente antes de que el concepto se olvide.'
+                      : 'Clasificacion inmediata en las 4 causas raiz clinicas con perla basada en guias KDIGO/ADA.'}
+                </p>
               </div>
             </div>
           </div>
         </section>
 
         {/* ========================================================================= */}
-        {/* 3. COMPARISON & VALUE PROPOSITION BENTO GRID                              */}
+        {/* 3. COMPARISON & VALUE PROPOSITION BENTO GRID (Scroll-Reveal Animated)     */}
         {/* ========================================================================= */}
-        <section className="space-y-8">
+        <section
+          ref={bentoSection.ref}
+          className={`space-y-8 transition-all duration-700 ease-out ${
+            bentoSection.isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-95'
+          }`}
+        >
           <div className="text-center max-w-2xl mx-auto space-y-2">
             <span className="px-3 py-1 rounded-full text-xs font-mono uppercase font-semibold bg-sky-50 text-sky-800 border border-sky-200">
               Arquitectura Cognitiva Diferencial
@@ -537,9 +717,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         </section>
 
         {/* ========================================================================= */}
-        {/* 4. CALL TO ACTION STRIP                                                   */}
+        {/* 4. CALL TO ACTION STRIP (Scroll-Reveal Animated)                           */}
         {/* ========================================================================= */}
-        <section className="text-center p-8 sm:p-12 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-6">
+        <section
+          ref={ctaSection.ref}
+          className={`text-center p-8 sm:p-12 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-6 transition-all duration-700 ease-out ${
+            ctaSection.isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-95'
+          }`}
+        >
           <div className="max-w-2xl mx-auto space-y-2">
             <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
               Listo para calibrar tu razonamiento clinico?
