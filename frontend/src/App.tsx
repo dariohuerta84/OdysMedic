@@ -3,19 +3,31 @@ import { AuthProvider } from './context/AuthContext';
 import { Navbar, NavTabId } from './components/common/Navbar';
 import { AuthModal } from './components/auth/AuthModal';
 import { DashboardPage } from './pages/DashboardPage';
+import { SimulatorPage } from './pages/SimulatorPage';
 
 const AppContent: React.FC = () => {
   const [activeTab, setActiveTab] = useState<NavTabId | string>('dashboard');
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
   const [, setSelectedSpecialty] = useState<string | null>(null);
-  const [, setSelectedCase] = useState<string | null>(null);
+  const [selectedCase, setSelectedCase] = useState<string | null>(null);
 
   const handleSelectSpecialty = (specialtyId: string) => {
     setSelectedSpecialty(specialtyId);
+    if (specialtyId === 'nefrologia') {
+      setSelectedCase('case-nefro-001');
+    } else if (specialtyId === 'endocrinologia') {
+      setSelectedCase('case-endo-002');
+    } else if (specialtyId === 'neurologia') {
+      setSelectedCase('case-neuro-003');
+    } else {
+      setSelectedCase('case-nefro-001');
+    }
+    setActiveTab('simulator');
   };
 
   const handleSelectCase = (caseId: string) => {
     setSelectedCase(caseId);
+    setActiveTab('simulator');
   };
 
   return (
@@ -31,6 +43,11 @@ const AppContent: React.FC = () => {
           <DashboardPage
             onSelectSpecialty={handleSelectSpecialty}
             onSelectCase={handleSelectCase}
+          />
+        ) : activeTab === 'simulator' ? (
+          <SimulatorPage
+            initialCaseId={selectedCase || undefined}
+            onBackToDashboard={() => setActiveTab('dashboard')}
           />
         ) : (
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 text-center text-gray-400">
