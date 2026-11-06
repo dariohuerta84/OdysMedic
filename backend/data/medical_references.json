@@ -180,5 +180,30 @@
         ]
       }
     ]
+  },
+  {
+    "book_id": "book-figo-gtn-2024",
+    "title": "FIGO 2024 Guidelines for the Diagnosis and Management of Gestational Trophoblastic Disease",
+    "authors_or_organization": "International Federation of Gynecology and Obstetrics (FIGO) Gynecologic Oncology Committee",
+    "edition": "FIGO Staging and Clinical Practice Guidelines 2024",
+    "specialty": "ginecologia_obstetricia",
+    "isbn_or_doi": "doi:10.1002/ijgo.15280",
+    "excerpts": [
+      {
+        "reference_id": "ref-figo-gtn-001",
+        "source_title": "FIGO 2024 Guidelines for the Diagnosis and Management of Gestational Trophoblastic Disease",
+        "organization_or_publisher": "International Federation of Gynecology and Obstetrics (FIGO)",
+        "year": 2024,
+        "edition_or_version": "2024 Guideline Update",
+        "section_title": "Metastatic Gestational Trophoblastic Neoplasia and Pulmonary Choriocarcinoma",
+        "page_or_doi": "doi:10.1002/ijgo.15280",
+        "key_recommendation": "In women with abnormal vaginal bleeding, hemoptysis, and pulmonary nodules following a molar or non-molar pregnancy, elevated quantitative serum beta-hCG confirms the diagnosis of metastatic choriocarcinoma without requiring biopsy, which is contraindicated due to severe bleeding risk. Prompt FIGO/WHO prognostic scoring determines whether single-agent (methotrexate) or multi-agent (EMA-CO) chemotherapy is indicated.",
+        "evidence_level": "Level 1A",
+        "associated_specialty": "ginecologia_obstetricia",
+        "associated_cases": [
+          "s13256-024-04987-9"
+        ]
+      }
+    ]
   }
 ]

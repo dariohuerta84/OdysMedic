@@ -283,13 +283,12 @@ def evaluate_mcq_station_attempt(
     # Cargar evidencia bibliografica de la guia clinica
     citation_evidence: Optional[str] = None
     if station.citation_ref_id:
-        for exc in reference_repository.get_all_excerpts():
-            if exc.reference_id == station.citation_ref_id:
-                citation_evidence = (
-                    f"Guía: {exc.source_title} ({exc.organization_or_publisher}, {exc.year}). "
-                    f"Nivel de evidencia: {exc.evidence_level}. Recomendación: {exc.key_recommendation}"
-                )
-                break
+        exc = reference_repository.get_excerpt_by_id(station.citation_ref_id)
+        if exc:
+            citation_evidence = (
+                f"Guía: {exc.source_title} ({exc.organization_or_publisher}, {exc.year}). "
+                f"Nivel de evidencia: {exc.evidence_level}. Recomendación: {exc.key_recommendation}"
+            )
 
     if not citation_evidence:
         case_cits = reference_repository.get_citations_for_case(station.case_id)

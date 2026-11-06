@@ -39,6 +39,11 @@ CLINICAL_PEARLS: dict[str, str] = {
         "Lupus Eritematoso Sistemico con compromiso neuropsiquiatrico (NPSLE); exige confirmacion serologica inmediata "
         "e inicio de pulsos de metilprednisolona combinados con ciclofosfamida."
     ),
+    "s13256-024-04987-9": (
+        "Ante una paciente en edad reproductiva con antecedente de mola hidatiforme que presenta hemoptisis y nodulos pulmonares, "
+        "la determinacion seriada de beta-hCG cuantitativa confirma coriocarcinoma metastasico e indica evaluacion pronostica FIGO "
+        "para inicio inmediato de quimioterapia sistemica basada en metotrexato o etoposido."
+    ),
 }
 
 def get_clinical_pearl(case_id: str) -> str:

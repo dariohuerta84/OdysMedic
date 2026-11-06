@@ -12,7 +12,6 @@ CASE_ALIASES: dict[str, str] = {
     "s13256-026-05974-4": "s13256-020-02558-8",
     "s13256-025-05650-z": "s13256-021-02891-2",
     "s13256-024-04496-1": "s13256-024-04664-5",
-    "s13256-025-05577-5": "s13256-024-04987-9",
 }
 
 
@@ -1224,8 +1223,8 @@ def build_raw_case_stations() -> dict[str, list[MCQStationInternal]]:
                 ),
             ],
             target_competency="Triaje de hemoptisis activa en mujer joven y pesquisa de neoplasia trofoblástica gestacional",
-            clinical_pearl_id="s13256-025-05577-5",
-            citation_ref_id="ref-acog-hypopara-001",
+            clinical_pearl_id="s13256-024-04987-9",
+            citation_ref_id="ref-figo-gtn-001",
         ),
         MCQStationInternal(
             station_id=f"{cid_7}-st2",
@@ -1286,8 +1285,8 @@ def build_raw_case_stations() -> dict[str, list[MCQStationInternal]]:
                 ),
             ],
             target_competency="Interpretación tomográfica de nódulos en suelta de globos y correlación con beta-hCG cuantitativa",
-            clinical_pearl_id="s13256-025-05577-5",
-            citation_ref_id="ref-acog-hypopara-001",
+            clinical_pearl_id="s13256-024-04987-9",
+            citation_ref_id="ref-figo-gtn-001",
         ),
         MCQStationInternal(
             station_id=f"{cid_7}-st3",
@@ -1346,8 +1345,8 @@ def build_raw_case_stations() -> dict[str, list[MCQStationInternal]]:
                 ),
             ],
             target_competency="Estratificación FIGO/OMS y protocolo de poliquimioterapia EMA-CO en coriocarcinoma de alto riesgo",
-            clinical_pearl_id="s13256-025-05577-5",
-            citation_ref_id="ref-acog-hypopara-001",
+            clinical_pearl_id="s13256-024-04987-9",
+            citation_ref_id="ref-figo-gtn-001",
         ),
     ]
 

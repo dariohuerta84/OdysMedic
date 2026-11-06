@@ -15,6 +15,7 @@ class ReferenceRepository:
         )
         self._books: dict[str, MedicalReferenceBook] = {}
         self._all_excerpts: list[ClinicalGuidelineExcerpt] = []
+        self._excerpts_by_id: dict[str, ClinicalGuidelineExcerpt] = {}
         self._excerpts_by_case: dict[str, list[ClinicalGuidelineExcerpt]] = {}
         self._excerpts_by_specialty: dict[str, list[ClinicalGuidelineExcerpt]] = {}
         self._load_references()
@@ -48,6 +49,8 @@ class ReferenceRepository:
                 )
                 excerpts.append(excerpt)
                 self._all_excerpts.append(excerpt)
+                if excerpt.reference_id:
+                    self._excerpts_by_id[excerpt.reference_id] = excerpt
 
                 # Index by specialty
                 spec = excerpt.associated_specialty.lower()
@@ -87,6 +90,9 @@ class ReferenceRepository:
 
     def get_all_excerpts(self) -> list[ClinicalGuidelineExcerpt]:
         return list(self._all_excerpts)
+
+    def get_excerpt_by_id(self, ref_id: str) -> Optional[ClinicalGuidelineExcerpt]:
+        return self._excerpts_by_id.get(ref_id)
 
 
 reference_repository = ReferenceRepository()
