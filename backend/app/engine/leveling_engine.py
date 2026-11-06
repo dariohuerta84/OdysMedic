@@ -129,11 +129,8 @@ def calculate_specialty_competency(
     attempts: int,
     active_deficiencies: Optional[list[DeficiencyType]] = None,
 ) -> SpecialtyMasteryProfile:
-    spec_enum = (
-        specialty
-        if isinstance(specialty, MedicalSpecialty)
-        else MedicalSpecialty(specialty)
-    )
+    spec_str = specialty.value if hasattr(specialty, "value") else str(specialty)
+    spec_enum = MedicalSpecialty(spec_str.lower())
 
     if score < 60.0:
         level = StudentCompetencyLevel.DEFICIENTE
@@ -169,11 +166,8 @@ def generate_leveling_prescription(
     student_level: Optional[StudentCompetencyLevel] = None,
     student_id: str = "estudiante_demo",
 ) -> LevelingPrescription:
-    spec_enum = (
-        specialty
-        if isinstance(specialty, MedicalSpecialty)
-        else MedicalSpecialty(specialty)
-    )
+    spec_str = specialty.value if hasattr(specialty, "value") else str(specialty)
+    spec_enum = MedicalSpecialty(spec_str.lower())
 
     if student_level is None:
         student_level = calculate_specialty_competency(spec_enum, mastery_score, attempts=1).level

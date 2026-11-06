@@ -33,6 +33,7 @@ class LevelingPrescription(BaseModel):
     recommended_exercise_difficulty: str
     target_exercise_ids: list[str] = Field(default_factory=list)
     rationale: str
+    next_repetition_date: Optional[str] = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     is_active: bool = True
 

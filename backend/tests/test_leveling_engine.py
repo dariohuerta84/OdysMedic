@@ -24,6 +24,21 @@ def test_competency_tier_assignment():
     assert profile_adv.level == StudentCompetencyLevel.AVANZADO
     assert profile_adv.needs_leveling is False
 
+def test_exact_boundary_thresholds_and_normalization():
+    # Exactly 60.0 should be EN_DESARROLLO
+    p60 = calculate_specialty_competency(specialty="NEFROLOGIA", score=60.0, attempts=1)
+    assert p60.level == StudentCompetencyLevel.EN_DESARROLLO
+
+    # Exactly 75.0 should be COMPETENTE
+    p75 = calculate_specialty_competency(specialty="NEUROLOGIA", score=75.0, attempts=1)
+    assert p75.level == StudentCompetencyLevel.COMPETENTE
+    assert p75.needs_leveling is False
+
+    # Exactly 90.0 should be AVANZADO
+    p90 = calculate_specialty_competency(specialty="ENDOCRINOLOGIA", score=90.0, attempts=1)
+    assert p90.level == StudentCompetencyLevel.AVANZADO
+    assert p90.needs_leveling is False
+
 def test_generate_leveling_prescription_for_critical_gap():
     prescription = generate_leveling_prescription(
         specialty=MedicalSpecialty.NEFROLOGIA,
