@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
-import { CognitiveGapTag } from '../types/api';
 import {
   ArrowRight,
   Zap,
   Clock,
   CheckCircle2,
-  AlertTriangle,
   Sparkles,
   Compass,
   Smartphone,
   Coins,
   ShieldCheck,
+  Hospital,
+  BatteryCharging,
+  XCircle,
 } from 'lucide-react';
 
 export interface LandingPageProps {
@@ -18,119 +19,128 @@ export interface LandingPageProps {
   onExploreWorlds: () => void;
 }
 
-interface PreviewStation {
-  stationNumber: number;
+interface StudentTimeRealityPanel {
+  id: string;
+  stepNumber: number;
+  badge: string;
+  iconType: 'hospital' | 'battery' | 'sparkles';
   title: string;
   subtitle: string;
-  badge: string;
-  scenario: string;
-  vitals: { label: string; value: string; critical: boolean }[];
-  clinicalQuestion: string;
-  options: { id: string; text: string; isCorrect: boolean }[];
-  detectedGap: CognitiveGapTag;
-  gapDescription: string;
-  pearl: string;
+  highlightMetric: string;
+  highlightLabel: string;
+  hospitalRealitySummary: string;
+  frictionPoints: string[];
+  odyssmedicContrast: {
+    approachTitle: string;
+    description: string;
+    keyBenefit: string;
+    timeInvested: string;
+  };
 }
 
-const PREVIEW_STATIONS: PreviewStation[] = [
+const STUDENT_TIME_PANELS: StudentTimeRealityPanel[] = [
   {
-    stationNumber: 1,
-    title: 'Triaje y Severidad',
-    subtitle: 'Deteccion Temprana de Inestabilidad',
-    badge: 'Estacion 1',
-    scenario:
-      'Mujer de 24 anos ingresa a la guardia de emergencia por astenia severa, ictericia escleral marcada y petequias en extremidades inferiores.',
-    vitals: [
-      { label: 'PA', value: '85/55 mmHg', critical: true },
-      { label: 'FC', value: '118 lpm', critical: true },
-      { label: 'FR', value: '22 rpm', critical: false },
-      { label: 'SatO2', value: '95%', critical: false },
-      { label: 'Glasgow', value: '14/15', critical: false },
+    id: 'guardias-sobrecarga',
+    stepNumber: 1,
+    badge: 'Fase 1 : La Realidad en Sala',
+    iconType: 'hospital',
+    title: 'Guardias de 24 a 36 Horas y Sobrecarga Asistencial',
+    subtitle: 'El tiempo fisico y la fatiga cognitiva impiden abrir libros extensos',
+    highlightMetric: '36 hrs',
+    highlightLabel: 'Turnos hospitalarios continuos de pie',
+    hospitalRealitySummary:
+      'Durante el internado y la formacion clinica, el estudiante enfrenta hasta 30 pacientes por guardia: evoluciones clinicas, notas de ingreso, altas y toma de vias. Al terminar, el agotamiento psicomotor hace imposible concentrarse en lecturas pasivas de 400 paginas.',
+    frictionPoints: [
+      'Jornadas extendidas con privacion aguda de sueno y sobrecarga documental.',
+      'Perdida del 60% en la capacidad de retencion lectora tras un turno de guardia.',
+      'Inviabilidad de cumplir horarios rigidos de academias comerciales presenciales.',
     ],
-    clinicalQuestion:
-      'Cual es la conducta inmediata prioritaria durante el triaje en el box de reanimacion?',
-    options: [
-      {
-        id: 'opt-1',
-        text: 'Canalizar dos vias perifericas gruesas, expandir con cristaloides y monitorizar gasto urinario.',
-        isCorrect: true,
-      },
-      {
-        id: 'opt-2',
-        text: 'Indicar reposo en camilla general y esperar hemograma de rutina.',
-        isCorrect: false,
-      },
-    ],
-    detectedGap: 'GAP_TRIAGE_SEVERITY',
-    gapDescription:
-      'La subestimacion del shock distributivo inicial incrementa la mortalidad en las primeras 6 horas.',
-    pearl:
-      'Perla Clinica: Ante trombocitopenia aguda con anemia e hipotension, prioriza la resucitacion volemica antes de movilizar al paciente a salas de imagen.',
+    odyssmedicContrast: {
+      approachTitle: 'Micro-Entrenamiento Clinico de 5 Minutos',
+      description:
+        'Casos clinicos fraccionados en microestaciones que puedes resolver en la sala de descanso o camino al hospital sin abrir libros pesados.',
+      keyBenefit: 'Practica guiada sin exigir bloques de 4 horas continuas.',
+      timeInvested: '3 a 5 min por caso',
+    },
   },
   {
-    stationNumber: 2,
-    title: 'Razonamiento Diagnostico',
-    subtitle: 'Correlacion Fisiopatologica',
-    badge: 'Estacion 2',
-    scenario:
-      'El laboratorio de urgencia confirma trombocitopenia severa (22,000 /uL), LDH 920 U/L, esquistocitos 3.2% en frotis y falla renal aguda (Creatinina 3.8 mg/dL).',
-    vitals: [
-      { label: 'Plaquetas', value: '22,000 /uL', critical: true },
-      { label: 'Creatinina', value: '3.8 mg/dL', critical: true },
-      { label: 'LDH', value: '920 U/L', critical: true },
-      { label: 'Esquistocitos', value: '3.2%', critical: true },
+    id: 'bancos-ineficientes',
+    stepNumber: 2,
+    badge: 'Fase 2 : La Inercia Tradicional',
+    iconType: 'battery',
+    title: 'El Colapso de los Bancos de Preguntas Pasivos',
+    subtitle: 'Memorizar claves aisladas genera saturacion mental y olvido acelerado',
+    highlightMetric: '70%',
+    highlightLabel: 'Perdida de retencion tras 48 horas sin refuerzo espaciado',
+    hospitalRealitySummary:
+      'Los bancos tradicionales acumulan cientos de preguntas desactualizadas donde el alumno memoriza la alternativa correcta sin entender la fisiopatologia ni el triaje. Ante un caso atipico o una pregunta formulada de manera distinta en el examen real, la duda reaparece.',
+    frictionPoints: [
+      'Simulacros interminables de 100 preguntas que causan desmotivacion y fatiga visual.',
+      'Retroalimentacion superficial: solo indica si acertaste o erraste sin diagnostico de causa.',
+      'Reiteracion de errores en puntos ciegos no identificados a tiempo.',
     ],
-    clinicalQuestion:
-      'Que entidad sindromica debe sospecharse prioritariamente antes de confirmar ADAMTS13?',
-    options: [
-      {
-        id: 'opt-3',
-        text: 'Microangiopatia trombotica: descartar Purpura Trombocitopenica Trombotica (PTT) vs SHU atipico.',
-        isCorrect: true,
-      },
-      {
-        id: 'opt-4',
-        text: 'Purpura trombocitopenica idiopatica aislada sin compromiso microvascular.',
-        isCorrect: false,
-      },
-    ],
-    detectedGap: 'GAP_DIAGNOSTIC_REASONING',
-    gapDescription:
-      'Omitir la presencia de esquistocitos retrasa el diagnostico de microangiopatia trombotica sistemica.',
-    pearl:
-      'Perla Clinica: La triada de anemia hemolitica microangiopatica, trombocitopenia y lesion renal aguda exige descarte inmediato de PTT y activacion del panel de complemento.',
+    odyssmedicContrast: {
+      approachTitle: 'Diagnostico de Causa Raiz OCRI',
+      description:
+        'El motor clasifica cada desvio en una de 4 brechas: Triaje, Razonamiento Diagnostico, Laboratorio o Manejo Terapeutico, explicando el error con evidencia.',
+      keyBenefit: 'Perlas clinicas de 60 segundos con guias KDIGO, ADA y AHA/ASA indexadas.',
+      timeInvested: '60 seg por perla',
+    },
   },
   {
-    stationNumber: 3,
-    title: 'Manejo y Guias Internacionales',
-    subtitle: 'Terapeutica Dirigida Basada en Evidencia',
-    badge: 'Estacion 3',
-    scenario:
-      'Se descarta deficit severo de ADAMTS13 (> 10%) con prueba rapida y se confirma desregulacion de la via alternativa del complemento.',
-    vitals: [
-      { label: 'Guia', value: 'KDIGO 2024', critical: false },
-      { label: 'Nivel', value: 'Grade 1A', critical: false },
-      { label: 'Objetivo', value: 'Preservacion Renal', critical: false },
+    id: 'solucion-adaptativa',
+    stepNumber: 3,
+    badge: 'Fase 3 : La Respuesta OdyssMedic',
+    iconType: 'sparkles',
+    title: 'Micro-Aprendizaje Adaptativo con Repeticion Espaciada',
+    subtitle: 'Consolidacion de largo plazo ajustada exactamente a tus minutos disponibles',
+    highlightMetric: '100%',
+    highlightLabel: 'Enfocado en tus brechas clinicas personales',
+    hospitalRealitySummary:
+      'OdyssMedic no te pide cambiar tu rutina hospitalaria. Utiliza algoritmos de repeticion espaciada (D7 / D21) para reevaluar tus brechas clinicas en el momento optimo de consolidacion neuronal, garantizando que el concepto quede grabado antes del examen.',
+    frictionPoints: [
+      'Elimina la sensacion de culpa por no tener 4 horas libres al dia.',
+      'No pierdes tiempo seleccionando que estudiar: el sistema prioriza tus puntos debiles.',
+      'Visualiza en tiempo real si estas Apto para tu examen antes de rendirlo.',
     ],
-    clinicalQuestion:
-      'Cual es la intervencion terapeutica definitiva segun la guia KDIGO 2024?',
-    options: [
-      {
-        id: 'opt-5',
-        text: 'Iniciar bloqueo de la fraccion C5 del complemento con eculizumab / ravulizumab dentro de las primeras 24-48 horas.',
-        isCorrect: true,
-      },
-      {
-        id: 'opt-6',
-        text: 'Transfundir concentrado de plaquetas profilactico de forma rutinaria.',
-        isCorrect: false,
-      },
-    ],
-    detectedGap: 'GAP_INITIAL_MANAGEMENT',
-    gapDescription:
-      'La transfusion de plaquetas en microangiopatias tromboticas activas puede precipitar trombosis microvascular masiva.',
-    pearl:
-      'Perla Clinica: Segun KDIGO 2024, la transfusion de plaquetas esta contraindicada en microangiopatica trombotica salvo hemorragia con riesgo vital inminente.',
+    odyssmedicContrast: {
+      approachTitle: 'Prescripcion Neural Automatizada D7 / D21',
+      description:
+        'Si cometes un desvio en una emergencia endocrina o nefrologica, el motor calendariza una variante clinica a los 7 y 21 dias para fijar la conducta correcta.',
+      keyBenefit: 'Llega al examen y al pase de visita con seguridad y reflejos clinicos entrenados.',
+      timeInvested: '5 min al dia',
+    },
+  },
+];
+
+interface TimeOption {
+  minutes: number;
+  label: string;
+  outputDescription: string;
+  badge: string;
+}
+
+const TIME_OPTIONS: TimeOption[] = [
+  {
+    minutes: 5,
+    label: '5 Minutos Libres',
+    badge: 'Pausa de Guardia',
+    outputDescription:
+      '1 Desafio Clinico Enfocado + 1 Diagnostico de Causa Raiz OCRI + 1 Perla Clinica de 60 segundos.',
+  },
+  {
+    minutes: 15,
+    label: '15 Minutos Libres',
+    badge: 'Post-Almuerzo o Trayecto',
+    outputDescription:
+      '3 Estaciones Clinicas Secuenciales (Triaje, Diagnostico y Manejo) + Calibracion de Radar de Competencias.',
+  },
+  {
+    minutes: 30,
+    label: '30 Minutos Libres',
+    badge: 'Sesion de Descanso',
+    outputDescription:
+      'Caso Multidisciplinario Completo + Despeje de Cola de Repeticion Espaciada D7/D21 + Revision de Guias.',
   },
 ];
 
@@ -138,11 +148,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   onStartDemo,
   onExploreWorlds,
 }) => {
-  const [activePreviewStation, setActivePreviewStation] = useState<number>(1);
+  const [activePanelIndex, setActivePanelIndex] = useState<number>(0);
+  const [selectedTimeMinutes, setSelectedTimeMinutes] = useState<number>(5);
 
-  const currentPreview =
-    PREVIEW_STATIONS.find((s) => s.stationNumber === activePreviewStation) ||
-    PREVIEW_STATIONS[0];
+  const activePanel = STUDENT_TIME_PANELS[activePanelIndex];
+  const selectedTimeOption =
+    TIME_OPTIONS.find((t) => t.minutes === selectedTimeMinutes) || TIME_OPTIONS[0];
 
   return (
     <div className="relative overflow-hidden bg-slate-50 min-h-screen">
@@ -178,7 +189,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             <button
               type="button"
               onClick={onStartDemo}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm tracking-wide shadow-sm transition-all active:scale-[0.98]"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm tracking-wide shadow-xs transition-all active:scale-[0.98]"
             >
               <Zap className="w-4 h-4 fill-white" />
               <span>Acceso Medico Demo UPCH</span>
@@ -199,7 +210,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <div className="pt-8 grid grid-cols-2 sm:grid-cols-4 gap-4 border-t border-slate-200 max-w-3xl mx-auto">
             <div className="p-3 text-center">
               <span className="block text-xl sm:text-2xl font-bold font-mono text-sky-700">
-                4 Causas Raiz
+                4 Brechas
               </span>
               <span className="text-xs text-slate-500 font-medium">Taxonomia OCRI</span>
             </div>
@@ -225,7 +236,198 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         </section>
 
         {/* ========================================================================= */}
-        {/* 2. COMPARISON & VALUE PROPOSITION BENTO GRID                              */}
+        {/* 2. THE TIME SCARCITY REALITY: INTERACTIVE PANELS                           */}
+        {/* ========================================================================= */}
+        <section className="space-y-8" aria-label="Por que los alumnos no tienen tiempo para estudiar">
+          <div className="text-center max-w-3xl mx-auto space-y-2.5">
+            <span className="px-3 py-1 rounded-full text-xs font-mono uppercase font-semibold bg-sky-50 text-sky-800 border border-sky-200">
+              La Realidad Clinica del Estudiante
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              Por Que los Alumnos No Tienen Tiempo para Rendir Correctamente sus Examenes
+            </h2>
+            <p className="text-sm text-slate-600 leading-relaxed max-w-2xl mx-auto">
+              La preparacion medica tradicional exige sentarse 4 horas seguidas a memorizar manuales.
+              En un entorno de internado con guardias de 36 horas, esta inercia genera frustracion y bajo rendimiento.
+            </p>
+          </div>
+
+          {/* Step Selector Tabs */}
+          <div className="flex flex-col sm:flex-row items-stretch justify-center gap-3 max-w-4xl mx-auto">
+            {STUDENT_TIME_PANELS.map((panel, idx) => {
+              const isActive = activePanelIndex === idx;
+              const IconComponent =
+                panel.iconType === 'hospital'
+                  ? Hospital
+                  : panel.iconType === 'battery'
+                    ? BatteryCharging
+                    : Sparkles;
+
+              return (
+                <button
+                  key={panel.id}
+                  type="button"
+                  onClick={() => setActivePanelIndex(idx)}
+                  className={`flex-1 flex items-center gap-3 p-4 rounded-2xl border text-left transition-all ${
+                    isActive
+                      ? 'bg-white border-sky-400 ring-2 ring-sky-100 shadow-sm'
+                      : 'bg-white/70 border-slate-200 hover:bg-white text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  <div
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
+                      isActive
+                        ? 'bg-sky-600 text-white shadow-xs'
+                        : 'bg-slate-100 text-slate-500'
+                    }`}
+                  >
+                    <IconComponent className="w-5 h-5" />
+                  </div>
+                  <div className="overflow-hidden">
+                    <span className="block text-[11px] font-mono text-sky-700 font-semibold uppercase tracking-wider">
+                      Paso {panel.stepNumber} de 3
+                    </span>
+                    <span className={`block text-xs sm:text-sm font-bold truncate ${isActive ? 'text-slate-900' : 'text-slate-700'}`}>
+                      {panel.title}
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Active Interactive Panel Card */}
+          <div className="max-w-4xl mx-auto p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-6 animate-fade-in">
+            {/* Header: Title, Badge and Key Stat */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+              <div className="space-y-1">
+                <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-semibold bg-sky-50 text-sky-800 border border-sky-200">
+                  {activePanel.badge}
+                </span>
+                <h3 className="text-xl sm:text-2xl font-bold text-slate-900">
+                  {activePanel.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600">
+                  {activePanel.subtitle}
+                </p>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-center shrink-0 min-w-[140px]">
+                <span className="block text-2xl font-extrabold font-mono text-sky-700">
+                  {activePanel.highlightMetric}
+                </span>
+                <span className="text-[11px] text-slate-500 font-medium block leading-tight">
+                  {activePanel.highlightLabel}
+                </span>
+              </div>
+            </div>
+
+            {/* Context Summary */}
+            <p className="text-sm text-slate-700 leading-relaxed bg-slate-50/70 p-4 rounded-2xl border border-slate-200">
+              {activePanel.hospitalRealitySummary}
+            </p>
+
+            {/* Side-by-Side Contrast: Obstacle vs OdyssMedic Solution */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-1">
+              {/* Left Column: The Real Obstacle */}
+              <div className="p-5 rounded-2xl bg-rose-50/50 border border-rose-200 space-y-3">
+                <div className="flex items-center gap-2 text-xs font-mono font-bold text-rose-800 uppercase tracking-wider">
+                  <XCircle className="w-4 h-4 text-rose-600 shrink-0" />
+                  <span>El Obstaculo en la Practica Hospitalaria</span>
+                </div>
+                <ul className="space-y-2 text-xs text-slate-700">
+                  {activePanel.frictionPoints.map((point, pIdx) => (
+                    <li key={pIdx} className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-rose-500 mt-1.5 shrink-0" />
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Right Column: OdyssMedic Precision Solution */}
+              <div className="p-5 rounded-2xl bg-sky-50/60 border border-sky-200 space-y-3 flex flex-col justify-between">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-xs font-mono font-bold text-sky-800 uppercase tracking-wider">
+                    <CheckCircle2 className="w-4 h-4 text-sky-600 shrink-0" />
+                    <span>{activePanel.odyssmedicContrast.approachTitle}</span>
+                  </div>
+                  <p className="text-xs text-slate-700 leading-relaxed">
+                    {activePanel.odyssmedicContrast.description}
+                  </p>
+                  <p className="text-xs font-medium text-sky-900 pt-1">
+                    {activePanel.odyssmedicContrast.keyBenefit}
+                  </p>
+                </div>
+                <div className="pt-3 border-t border-sky-200/60 flex items-center justify-between text-xs font-mono">
+                  <span className="text-slate-500">Inversion de tiempo:</span>
+                  <span className="font-bold text-sky-800">
+                    {activePanel.odyssmedicContrast.timeInvested}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Interactive Tool: "Que Puedes Lograr Segun tus Minutos Libres" */}
+            <div className="pt-4 border-t border-slate-100 space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <span className="text-xs font-mono uppercase font-bold text-slate-700 flex items-center gap-1.5">
+                  <Clock className="w-4 h-4 text-sky-600" />
+                  <span>Comprueba lo que Puedes Lograr con tu Tiempo Real:</span>
+                </span>
+                <span className="text-[11px] font-mono text-slate-500">
+                  Selecciona tus minutos disponibles
+                </span>
+              </div>
+
+              {/* Time Selector Buttons */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                {TIME_OPTIONS.map((opt) => {
+                  const isTimeActive = selectedTimeMinutes === opt.minutes;
+                  return (
+                    <button
+                      key={opt.minutes}
+                      type="button"
+                      onClick={() => setSelectedTimeMinutes(opt.minutes)}
+                      className={`p-3 rounded-xl border text-left transition-all ${
+                        isTimeActive
+                          ? 'bg-sky-50 border-sky-300 ring-1 ring-sky-200 shadow-xs'
+                          : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className={`text-xs font-bold ${isTimeActive ? 'text-sky-900' : 'text-slate-800'}`}>
+                          {opt.label}
+                        </span>
+                        <span className="text-[10px] font-mono bg-white px-2 py-0.5 rounded border border-slate-200 text-slate-600">
+                          {opt.badge}
+                        </span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Result Pill */}
+              <div className="p-3.5 rounded-xl bg-white border border-slate-200 flex items-start gap-3 shadow-xs">
+                <div className="w-7 h-7 rounded-lg bg-sky-100 text-sky-800 flex items-center justify-center shrink-0 font-bold font-mono text-xs">
+                  {selectedTimeMinutes}m
+                </div>
+                <div>
+                  <span className="text-xs font-semibold text-slate-900 block">
+                    Sesion Prescrita por el Motor OCRI ({selectedTimeOption.label}):
+                  </span>
+                  <span className="text-xs text-slate-600 font-sans">
+                    {selectedTimeOption.outputDescription}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* 3. COMPARISON & VALUE PROPOSITION BENTO GRID                              */}
         {/* ========================================================================= */}
         <section className="space-y-8">
           <div className="text-center max-w-2xl mx-auto space-y-2">
@@ -335,176 +537,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         </section>
 
         {/* ========================================================================= */}
-        {/* 3. INTERACTIVE DEMONSTRATION PREVIEW (3-STATION STEPPER)                   */}
-        {/* ========================================================================= */}
-        <section className="space-y-8">
-          <div className="text-center max-w-2xl mx-auto space-y-2">
-            <span className="px-3 py-1 rounded-full text-xs font-mono uppercase font-semibold bg-sky-50 text-sky-800 border border-sky-200">
-              Demostracion Interactiva
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-              Recorrido de Alta Fidelidad en 3 Estaciones
-            </h2>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              Experimenta como OdyssMedic descompone un caso clinico complejo en tres estaciones
-              cognitivas secuenciales con retroalimentacion inmediata.
-            </p>
-          </div>
-
-          {/* Stepper Navigation Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-3xl mx-auto">
-            {PREVIEW_STATIONS.map((station) => {
-              const isActive = activePreviewStation === station.stationNumber;
-              return (
-                <button
-                  key={station.stationNumber}
-                  type="button"
-                  onClick={() => setActivePreviewStation(station.stationNumber)}
-                  className={`w-full sm:w-1/3 flex items-center gap-3 p-3.5 rounded-xl border text-left transition-all ${
-                    isActive
-                      ? 'bg-sky-50 border-sky-400 text-slate-900 font-semibold shadow-xs'
-                      : 'bg-white border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-                  }`}
-                >
-                  <div
-                    className={`w-7 h-7 rounded-lg flex items-center justify-center font-mono text-xs font-bold shrink-0 ${
-                      isActive
-                        ? 'bg-sky-600 text-white'
-                        : 'bg-slate-100 text-slate-500'
-                    }`}
-                  >
-                    {station.stationNumber}
-                  </div>
-                  <div className="overflow-hidden">
-                    <span className="block text-xs font-medium truncate">
-                      {station.title}
-                    </span>
-                    <span className="block text-[10px] text-slate-500 font-mono truncate">
-                      {station.badge}
-                    </span>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Interactive Stepper Card */}
-          <div className="max-w-4xl mx-auto p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-6">
-            {/* Station Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
-              <div>
-                <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold bg-sky-50 text-sky-800 border border-sky-200">
-                  {currentPreview.badge} : {currentPreview.subtitle}
-                </span>
-                <h3 className="text-xl font-bold text-slate-900 mt-1.5">
-                  {currentPreview.title}
-                </h3>
-              </div>
-              <div className="text-xs font-mono text-slate-500">
-                Paso {currentPreview.stationNumber} de 3
-              </div>
-            </div>
-
-            {/* Vignette Scenario */}
-            <div className="space-y-2">
-              <span className="text-xs font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                Caso Clinico - Escenario de Guardia
-              </span>
-              <p className="text-sm text-slate-800 leading-relaxed font-sans bg-slate-50 p-4 rounded-xl border border-slate-200">
-                {currentPreview.scenario}
-              </p>
-            </div>
-
-            {/* Vitals & Telemetry */}
-            <div className="space-y-2">
-              <span className="text-xs font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                Telemetria y Parametros Clave
-              </span>
-              <div className="flex flex-wrap gap-2">
-                {currentPreview.vitals.map((vit, idx) => (
-                  <div
-                    key={idx}
-                    className={`px-3 py-1.5 rounded-lg border text-xs font-mono flex items-center gap-2 ${
-                      vit.critical
-                        ? 'bg-rose-50 border-rose-200 text-rose-800'
-                        : 'bg-white border-slate-200 text-slate-700'
-                    }`}
-                  >
-                    <span className="text-slate-500 font-medium">{vit.label}:</span>
-                    <span className="font-bold">{vit.value}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Clinical Stem Question & Options */}
-            <div className="space-y-3">
-              <span className="text-xs font-mono uppercase tracking-wider text-sky-700 font-semibold">
-                Desafio de Razonamiento
-              </span>
-              <p className="text-sm font-semibold text-slate-900">
-                {currentPreview.clinicalQuestion}
-              </p>
-
-              <div className="space-y-2">
-                {currentPreview.options.map((opt) => (
-                  <div
-                    key={opt.id}
-                    className={`p-3.5 rounded-xl border text-xs font-sans flex items-start gap-3 transition-colors ${
-                      opt.isCorrect
-                        ? 'bg-emerald-50 border-emerald-300 text-emerald-950 font-medium'
-                        : 'bg-slate-50 border-slate-200 text-slate-600'
-                    }`}
-                  >
-                    <div className="mt-0.5 shrink-0">
-                      {opt.isCorrect ? (
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                      ) : (
-                        <div className="w-4 h-4 rounded-full border border-slate-300" />
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <span>{opt.text}</span>
-                      {opt.isCorrect && (
-                        <span className="block mt-1 text-[11px] font-mono text-emerald-700 font-semibold">
-                          Respuesta Correcta Fundamentada
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Cognitive Gap Feedback & 60-Second Pearl */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-              <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 space-y-1.5">
-                <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-amber-800">
-                  <AlertTriangle className="w-4 h-4 text-amber-600" />
-                  <span>Deteccion OCRI: {currentPreview.detectedGap}</span>
-                </div>
-                <p className="text-xs text-slate-700 font-sans leading-relaxed">
-                  {currentPreview.gapDescription}
-                </p>
-              </div>
-
-              <div className="p-4 rounded-xl bg-sky-50 border border-sky-200 space-y-1.5">
-                <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-sky-800">
-                  <Sparkles className="w-4 h-4 text-sky-600" />
-                  <span>Perla Clinica de Guardia</span>
-                </div>
-                <p className="text-xs text-slate-700 font-sans leading-relaxed">
-                  {currentPreview.pearl}
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ========================================================================= */}
         {/* 4. CALL TO ACTION STRIP                                                   */}
         {/* ========================================================================= */}
-        <section className="text-center p-8 sm:p-12 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-6">
+        <section className="text-center p-8 sm:p-12 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-6">
           <div className="max-w-2xl mx-auto space-y-2">
             <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
               Listo para calibrar tu razonamiento clinico?
