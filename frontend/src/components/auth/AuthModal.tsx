@@ -122,7 +122,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         }
       }}
     >
-      <div className="bg-[#0E1117] border border-white/10 rounded-2xl p-6 sm:p-8 max-w-md w-full relative shadow-2xl">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="auth-modal-title"
+        className="bg-[#0E1117] border border-white/10 rounded-2xl p-6 sm:p-8 max-w-md w-full relative shadow-2xl"
+      >
         {/* Header with Title and Close Button */}
         <div className="flex items-start justify-between mb-5">
           <div className="flex items-center gap-3">
@@ -130,7 +135,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <Stethoscope className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white tracking-tight">
+              <h2 id="auth-modal-title" className="text-lg font-bold text-white tracking-tight">
                 OdyssMedic
               </h2>
               <p className="text-xs text-gray-400">
@@ -234,7 +239,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           {tab === 'register' && (
             <>
               <div>
-                <label className="block text-xs font-medium text-gray-300 mb-1.5">
+                <label htmlFor="auth-fullname" className="block text-xs font-medium text-gray-300 mb-1.5">
                   Nombre Completo
                 </label>
                 <div className="relative">
@@ -242,8 +247,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     <UserIcon className="w-4 h-4" />
                   </div>
                   <input
+                    id="auth-fullname"
                     type="text"
                     required
+                    autoComplete="name"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="Dr(a). Mateo Benavides"
@@ -253,7 +260,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-300 mb-1.5">
+                <label htmlFor="auth-role" className="block text-xs font-medium text-gray-300 mb-1.5">
                   Rol Medico
                 </label>
                 <div className="relative">
@@ -261,6 +268,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     <Stethoscope className="w-4 h-4" />
                   </div>
                   <select
+                    id="auth-role"
                     value={role}
                     onChange={(e) => setRole(e.target.value as UserRole)}
                     className="w-full pl-10 pr-4 py-2.5 bg-black/50 border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-clinical-teal focus:ring-1 focus:ring-clinical-teal transition-colors appearance-none"
@@ -281,7 +289,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           )}
 
           <div>
-            <label className="block text-xs font-medium text-gray-300 mb-1.5">
+            <label htmlFor="auth-email" className="block text-xs font-medium text-gray-300 mb-1.5">
               Correo Electronico
             </label>
             <div className="relative">
@@ -289,8 +297,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 <Mail className="w-4 h-4" />
               </div>
               <input
+                id="auth-email"
                 type="email"
                 required
+                autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="medico@upch.pe"
@@ -300,7 +310,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-300 mb-1.5">
+            <label htmlFor="auth-password" className="block text-xs font-medium text-gray-300 mb-1.5">
               Contrasena
             </label>
             <div className="relative">
@@ -308,8 +318,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 <KeyRound className="w-4 h-4" />
               </div>
               <input
+                id="auth-password"
                 type="password"
                 required
+                autoComplete={tab === 'register' ? 'new-password' : 'current-password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder={tab === 'register' ? 'Minimo 8 caracteres' : 'Contrasena clinica'}
