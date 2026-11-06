@@ -93,9 +93,9 @@ function analyzeVitals(vitals?: VitalSigns): ParsedVital[] {
     const rrNum = parseInt(String(rrVal).replace(/[^\d]/g, ''), 10);
     let rrSeverity: 'normal' | 'warning' | 'critical' = 'normal';
     if (!isNaN(rrNum)) {
-      if (rrNum > 30) {
+      if (rrNum > 30 || rrNum < 10) {
         rrSeverity = 'critical';
-      } else if (rrNum > 22) {
+      } else if (rrNum > 22 || rrNum < 12) {
         rrSeverity = 'warning';
       }
     }
@@ -177,6 +177,15 @@ function analyzeVitals(vitals?: VitalSigns): ParsedVital[] {
   }
 
   return list;
+}
+
+/**
+ * Extracts numerical laboratory value from potentially complex text strings
+ */
+function parseLabValue(resultStr: string): number {
+  const normalized = resultStr.replace(/,/g, '');
+  const match = normalized.match(/(\d+(?:\.\d+)?)/);
+  return match ? parseFloat(match[1]) : NaN;
 }
 
 /**
@@ -263,46 +272,46 @@ function parseLabResults(initialLabs?: Record<string, any> | any[]): LabRow[] {
       // Numerical lab heuristics
       if (lowerKey.includes('creatinina')) {
         refStr = '0.6 - 1.2 mg/dL';
-        const num = parseFloat(resultStr.replace(/[^\d.]/g, ''));
+        const num = parseLabValue(resultStr);
         if (!isNaN(num)) {
           if (num >= 3.0) sev = 'critical';
           else if (num > 1.3) sev = 'warning';
         }
       } else if (lowerKey.includes('potasio') || lowerKey === 'k') {
         refStr = '3.5 - 5.0 mEq/L';
-        const num = parseFloat(resultStr.replace(/[^\d.]/g, ''));
+        const num = parseLabValue(resultStr);
         if (!isNaN(num)) {
           if (num > 5.8 || num < 2.8) sev = 'critical';
           else if (num > 5.0 || num < 3.5) sev = 'warning';
         }
       } else if (lowerKey.includes('urea') || lowerKey.includes('bun')) {
         refStr = '15 - 45 mg/dL';
-        const num = parseFloat(resultStr.replace(/[^\d.]/g, ''));
+        const num = parseLabValue(resultStr);
         if (!isNaN(num) && num > 80) sev = 'warning';
       } else if (lowerKey.includes('hemoglobina') || lowerKey === 'hb') {
         refStr = '12.0 - 16.0 g/dL';
-        const num = parseFloat(resultStr.replace(/[^\d.]/g, ''));
+        const num = parseLabValue(resultStr);
         if (!isNaN(num)) {
           if (num < 7.5) sev = 'critical';
           else if (num < 11.0) sev = 'warning';
         }
       } else if (lowerKey.includes('plaquetas') || lowerKey.includes('platelet')) {
         refStr = '150,000 - 450,000 /uL';
-        const num = parseFloat(resultStr.replace(/[^\d.]/g, ''));
+        const num = parseLabValue(resultStr);
         if (!isNaN(num)) {
           if (num < 50000) sev = 'critical';
           else if (num < 100000) sev = 'warning';
         }
       } else if (lowerKey.includes('leucocitos') || lowerKey.includes('wbc')) {
         refStr = '4,500 - 10,500 /uL';
-        const num = parseFloat(resultStr.replace(/[^\d.]/g, ''));
+        const num = parseLabValue(resultStr);
         if (!isNaN(num)) {
           if (num > 20000 || num < 2000) sev = 'critical';
           else if (num > 11000 || num < 4000) sev = 'warning';
         }
       } else if (lowerKey.includes('ph') && !lowerKey.includes('uro')) {
         refStr = '7.35 - 7.45';
-        const num = parseFloat(resultStr.replace(/[^\d.]/g, ''));
+        const num = parseLabValue(resultStr);
         if (!isNaN(num)) {
           if (num < 7.25 || num > 7.55) sev = 'critical';
           else if (num < 7.35 || num > 7.45) sev = 'warning';
@@ -475,6 +484,8 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
           <button
             type="button"
             onClick={() => setIsMobileExpanded(!isMobileExpanded)}
+            aria-expanded={isMobileExpanded}
+            aria-controls="vignette-details-content"
             className="w-full py-2 px-3 rounded-lg bg-clinical-surface border border-clinical-border text-xs font-mono font-semibold text-clinical-cyan hover:bg-white/5 flex items-center justify-center gap-2 transition-colors"
           >
             <span>
@@ -493,6 +504,7 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
 
       {/* 3. Detailed Body: Anamnesis, Physical Exam, Labs */}
       <div
+        id="vignette-details-content"
         className={`p-4 sm:p-6 space-y-6 ${
           isMobileExpanded ? 'block' : 'hidden lg:block'
         }`}
