@@ -62,12 +62,12 @@ export const BentoStats: React.FC<BentoStatsProps> = ({
       className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full ${className}`}
     >
       {/* Card 1: Nivel Clinico Global */}
-      <div className="relative overflow-hidden p-5 rounded-xl bg-clinical-surface/80 border border-clinical-border backdrop-blur-md shadow-lg flex flex-col justify-between hover:border-white/20 hover:-translate-y-0.5 transition-all duration-300 animate-fade-in-up stagger-1 group">
+      <div className="relative overflow-hidden p-5 rounded-xl bg-white border border-slate-200 shadow-xs flex flex-col justify-between hover:border-sky-300 hover:shadow-md transition-all duration-300 animate-fade-in-up stagger-1 group">
         <div className="flex items-center justify-between mb-3">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-gray-400">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
             Nivel Clinico Global
           </span>
-          <div className="w-7 h-7 rounded-lg bg-clinical-cyan/10 border border-clinical-cyan/30 flex items-center justify-center text-clinical-cyan">
+          <div className="w-8 h-8 rounded-lg bg-sky-50 border border-sky-200 flex items-center justify-center text-sky-600 shadow-xs">
             <Award className="w-4 h-4" />
           </div>
         </div>
@@ -76,32 +76,32 @@ export const BentoStats: React.FC<BentoStatsProps> = ({
           <div className="flex items-center gap-2 mb-2">
             <LevelBadge level={level} size="md" showSubtext />
           </div>
-          <p className="text-xs text-gray-300 font-medium">
+          <p className="text-xs text-slate-700 font-medium">
             {resolvedStage}
           </p>
         </div>
 
-        <div className="mt-3 pt-3 border-t border-clinical-border flex items-center justify-between text-[11px] text-gray-400 font-mono">
+        <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 font-mono">
           <span>MOTOR ADAPTATIVO</span>
-          <span className="text-clinical-cyan">CALIBRADO OCRI</span>
+          <span className="text-sky-700 font-semibold">CALIBRADO OCRI</span>
         </div>
       </div>
 
       {/* Card 2: Puntos de Experiencia (XP) */}
-      <div className="relative overflow-hidden p-5 rounded-xl bg-clinical-surface/80 border border-clinical-border backdrop-blur-md shadow-lg flex flex-col justify-between hover:border-white/20 hover:-translate-y-0.5 transition-all duration-300 animate-fade-in-up stagger-2 group">
+      <div className="relative overflow-hidden p-5 rounded-xl bg-white border border-slate-200 shadow-xs flex flex-col justify-between hover:border-sky-300 hover:shadow-md transition-all duration-300 animate-fade-in-up stagger-2 group">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-gray-400">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
             Puntos de Experiencia
           </span>
-          <div className="w-7 h-7 rounded-lg bg-clinical-teal/10 border border-clinical-teal/30 flex items-center justify-center text-clinical-teal-light">
+          <div className="w-8 h-8 rounded-lg bg-sky-50 border border-sky-200 flex items-center justify-center text-sky-600 shadow-xs">
             <Zap className="w-4 h-4" />
           </div>
         </div>
 
         <div className="my-1">
-          <div className="text-2xl font-bold font-mono text-white tracking-tight">
+          <div className="text-2xl font-bold font-mono text-slate-900 tracking-tight">
             {xp.toLocaleString()}{' '}
-            <span className="text-xs font-semibold text-clinical-teal-light font-sans">
+            <span className="text-xs font-semibold text-sky-600 font-sans">
               XP
             </span>
           </div>
@@ -114,59 +114,59 @@ export const BentoStats: React.FC<BentoStatsProps> = ({
           </div>
         </div>
 
-        <div className="mt-3 pt-3 border-t border-clinical-border flex items-center justify-between text-[11px] text-gray-400 font-mono">
+        <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 font-mono">
           <span>{currentTier.nextLevel}</span>
-          <span className="text-gray-300">
+          <span className="text-slate-600 font-medium">
             {xpRemaining > 0 ? `${xpRemaining} XP restantes` : 'Maximo nivel alcanzado'}
           </span>
         </div>
       </div>
 
       {/* Card 3: Racha de Guardia */}
-      <div className="relative overflow-hidden p-5 rounded-xl bg-clinical-surface/80 border border-clinical-border backdrop-blur-md shadow-lg flex flex-col justify-between hover:border-white/20 hover:-translate-y-0.5 transition-all duration-300 animate-fade-in-up stagger-3 group">
+      <div className="relative overflow-hidden p-5 rounded-xl bg-white border border-slate-200 shadow-xs flex flex-col justify-between hover:border-sky-300 hover:shadow-md transition-all duration-300 animate-fade-in-up stagger-3 group">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-gray-400">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
             Racha de Guardia
           </span>
-          <div className="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+          <div className="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 shadow-xs">
             <Flame className="w-4 h-4" />
           </div>
         </div>
 
         <div className="my-1">
-          <div className="text-2xl font-bold font-mono text-white tracking-tight flex items-baseline gap-2">
+          <div className="text-2xl font-bold font-mono text-slate-900 tracking-tight flex items-baseline gap-2">
             <span>{streakDays}</span>
-            <span className="text-xs font-medium text-gray-300 font-sans">
+            <span className="text-xs font-medium text-slate-600 font-sans">
               {streakDays === 1 ? 'dia consecutivo' : 'dias consecutivos'}
             </span>
           </div>
-          <div className="mt-2 inline-flex items-center gap-1.5 px-2 py-0.5 rounded border border-amber-500/30 bg-amber-500/10 text-[11px] font-mono text-amber-300">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+          <div className="mt-2 inline-flex items-center gap-1.5 px-2 py-0.5 rounded border border-amber-200 bg-amber-50 text-[11px] font-mono text-amber-800">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
             <span>
               {streakDays > 0 ? 'Turno Activo / Sin Fallas' : 'Inicia tu guardia hoy'}
             </span>
           </div>
         </div>
 
-        <div className="mt-3 pt-3 border-t border-clinical-border flex items-center justify-between text-[11px] text-gray-400 font-mono">
+        <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 font-mono">
           <span>DISCIPLINA CLINICA</span>
-          <span className="text-amber-400">
+          <span className="text-amber-700 font-semibold">
             {streakDays >= 7 ? 'HABITO HOSPITALARIO' : 'FASE DE CONSOLIDACION'}
           </span>
         </div>
       </div>
 
       {/* Card 4: Repasos Espaciados Pendientes */}
-      <div className="relative overflow-hidden p-5 rounded-xl bg-clinical-surface/80 border border-clinical-border backdrop-blur-md shadow-lg flex flex-col justify-between hover:border-white/20 hover:-translate-y-0.5 transition-all duration-300 animate-fade-in-up stagger-4 group">
+      <div className="relative overflow-hidden p-5 rounded-xl bg-white border border-slate-200 shadow-xs flex flex-col justify-between hover:border-sky-300 hover:shadow-md transition-all duration-300 animate-fade-in-up stagger-4 group">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-gray-400">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
             Repasos Pendientes
           </span>
           <div
-            className={`w-7 h-7 rounded-lg border flex items-center justify-center ${
+            className={`w-8 h-8 rounded-lg border flex items-center justify-center shadow-xs ${
               pendingReviewsCount > 0
-                ? 'bg-rose-500/10 border-rose-500/30 text-rose-400'
-                : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+                ? 'bg-rose-50 border-rose-200 text-rose-600'
+                : 'bg-emerald-50 border-emerald-200 text-emerald-600'
             }`}
           >
             <RotateCw className="w-4 h-4" />
@@ -174,33 +174,33 @@ export const BentoStats: React.FC<BentoStatsProps> = ({
         </div>
 
         <div className="my-1">
-          <div className="text-2xl font-bold font-mono text-white tracking-tight flex items-baseline gap-2">
+          <div className="text-2xl font-bold font-mono text-slate-900 tracking-tight flex items-baseline gap-2">
             <span>{pendingReviewsCount}</span>
-            <span className="text-xs font-medium text-gray-300 font-sans">
+            <span className="text-xs font-medium text-slate-600 font-sans">
               {pendingReviewsCount === 1 ? 'caso activo' : 'casos activos'}
             </span>
           </div>
 
           <div className="mt-2">
             {pendingReviewsCount > 0 ? (
-              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded border border-rose-500/40 bg-rose-500/10 text-[11px] font-mono text-rose-300">
-                <AlertCircle className="w-3 h-3 text-rose-400 shrink-0" />
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded border border-rose-200 bg-rose-50 text-[11px] font-mono text-rose-800">
+                <AlertCircle className="w-3 h-3 text-rose-600 shrink-0" />
                 <span>Ciclos D7 / D21 programados</span>
               </span>
             ) : (
-              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded border border-emerald-500/40 bg-emerald-500/10 text-[11px] font-mono text-emerald-300">
-                <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" />
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded border border-emerald-200 bg-emerald-50 text-[11px] font-mono text-emerald-800">
+                <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
                 <span>Al dia con el algoritmo</span>
               </span>
             )}
           </div>
         </div>
 
-        <div className="mt-3 pt-3 border-t border-clinical-border flex items-center justify-between text-[11px] text-gray-400 font-mono">
+        <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 font-mono">
           <span>CURVA DE EBBINGHAUS</span>
           <span
             className={
-              pendingReviewsCount > 0 ? 'text-rose-400' : 'text-emerald-400'
+              pendingReviewsCount > 0 ? 'text-rose-700 font-semibold' : 'text-emerald-700 font-semibold'
             }
           >
             {pendingReviewsCount > 0 ? 'REPASO REQUERIDO' : 'RETENCION OPTIMA'}

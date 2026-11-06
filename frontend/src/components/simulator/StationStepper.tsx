@@ -46,7 +46,6 @@ export const StationStepper: React.FC<StationStepperProps> = ({
   competencyFocus,
   className = '',
 }) => {
-  // Normalize station numbers 1 to totalStations
   const stationsList: StationInfo[] = Array.from(
     { length: Math.max(totalStations, 3) },
     (_, idx) => {
@@ -66,7 +65,6 @@ export const StationStepper: React.FC<StationStepperProps> = ({
   const currentMeta =
     stationsList.find((s) => s.number === currentStation) || stationsList[0];
 
-  // Check if competencyFocus matches a CognitiveGapTag
   const isRecognizedGap =
     competencyFocus === 'GAP_TRIAGE_SEVERITY' ||
     competencyFocus === 'GAP_DIAGNOSTIC_REASONING' ||
@@ -79,7 +77,7 @@ export const StationStepper: React.FC<StationStepperProps> = ({
 
   return (
     <div
-      className={`rounded-2xl bg-clinical-surface/90 border border-clinical-border p-4 sm:p-5 backdrop-blur-md shadow-lg ${className}`}
+      className={`rounded-2xl bg-white border border-slate-200 p-4 sm:p-5 shadow-xs ${className}`}
       aria-label="Progreso de Estaciones Clinicas"
     >
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -96,10 +94,10 @@ export const StationStepper: React.FC<StationStepperProps> = ({
                   <div
                     className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-mono text-xs font-bold border-2 transition-all ${
                       isCompleted
-                        ? 'bg-emerald-950/40 border-emerald-500 text-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.3)]'
+                        ? 'bg-emerald-50 border-emerald-500 text-emerald-700 shadow-xs'
                         : isCurrent
-                          ? 'bg-clinical-cyan/15 border-clinical-cyan text-clinical-cyan animate-pulse-subtle shadow-[0_0_18px_rgba(6,182,212,0.45)] ring-2 ring-clinical-cyan/30'
-                          : 'bg-slate-900/80 border-slate-800 text-slate-500'
+                          ? 'bg-sky-50 border-sky-600 text-sky-700 ring-2 ring-sky-200 shadow-xs'
+                          : 'bg-slate-100 border-slate-200 text-slate-400'
                     }`}
                     title={`Estacion ${station.number}: ${station.levelTitle}`}
                   >
@@ -114,10 +112,10 @@ export const StationStepper: React.FC<StationStepperProps> = ({
                     <span
                       className={`text-[10px] font-mono uppercase tracking-wider block ${
                         isCurrent
-                          ? 'text-clinical-cyan font-bold'
+                          ? 'text-sky-700 font-bold'
                           : isCompleted
-                            ? 'text-emerald-400'
-                            : 'text-gray-500'
+                            ? 'text-emerald-700'
+                            : 'text-slate-400'
                       }`}
                     >
                       Estacion {station.number}
@@ -125,10 +123,10 @@ export const StationStepper: React.FC<StationStepperProps> = ({
                     <span
                       className={`text-xs font-semibold truncate max-w-[130px] block ${
                         isCurrent
-                          ? 'text-white'
+                          ? 'text-slate-900'
                           : isCompleted
-                            ? 'text-gray-300'
-                            : 'text-gray-500'
+                            ? 'text-slate-700'
+                            : 'text-slate-400'
                       }`}
                     >
                       {station.levelTitle}
@@ -138,13 +136,13 @@ export const StationStepper: React.FC<StationStepperProps> = ({
 
                 {/* Connector Line */}
                 {index < stationsList.length - 1 && (
-                  <div className="flex-1 h-0.5 bg-slate-800 relative">
+                  <div className="flex-1 h-0.5 bg-slate-200 relative">
                     <div
                       className={`h-full transition-all duration-300 ${
                         isCompleted
-                          ? 'bg-emerald-500/80 w-full'
+                          ? 'bg-emerald-500 w-full'
                           : isCurrent
-                            ? 'bg-clinical-cyan/60 w-1/2'
+                            ? 'bg-sky-500 w-1/2'
                             : 'w-0'
                       }`}
                     />
@@ -156,20 +154,20 @@ export const StationStepper: React.FC<StationStepperProps> = ({
         </div>
 
         {/* Current Station Focus & Competency Badge */}
-        <div className="flex flex-wrap items-center gap-2 pt-2 md:pt-0 border-t md:border-t-0 border-white/5">
-          <div className="flex items-center gap-1.5 text-xs text-gray-400 font-mono">
-            <Target className="w-3.5 h-3.5 text-clinical-cyan shrink-0" />
+        <div className="flex flex-wrap items-center gap-2 pt-2 md:pt-0 border-t md:border-t-0 border-slate-100">
+          <div className="flex items-center gap-1.5 text-xs text-slate-500 font-mono">
+            <Target className="w-3.5 h-3.5 text-sky-600 shrink-0" />
             <span className="hidden lg:inline">Foco Evaluado:</span>
           </div>
 
           <CognitiveGapBadge
             gapTag={activeGapTag}
             size="sm"
-            className="shadow-sm"
+            className="shadow-xs"
           />
 
           {competencyFocus && !isRecognizedGap && (
-            <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 border border-white/10 text-gray-300 max-w-xs truncate">
+            <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-slate-100 border border-slate-200 text-slate-700 max-w-xs truncate">
               {competencyFocus}
             </span>
           )}
@@ -177,11 +175,11 @@ export const StationStepper: React.FC<StationStepperProps> = ({
       </div>
 
       {/* Subtitle description for mobile view */}
-      <div className="mt-3 sm:hidden pt-2 border-t border-white/5 flex items-center justify-between text-xs">
-        <span className="text-gray-400 font-mono">
+      <div className="mt-3 sm:hidden pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+        <span className="text-slate-500 font-mono">
           Estacion {currentStation} de {totalStations}:
         </span>
-        <span className="font-semibold text-white">
+        <span className="font-semibold text-slate-900">
           {currentMeta.levelTitle} - {currentMeta.description}
         </span>
       </div>

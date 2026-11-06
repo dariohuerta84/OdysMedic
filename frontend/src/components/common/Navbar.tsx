@@ -10,11 +10,12 @@ import {
   Compass,
   FileText,
   Home,
+  ClipboardCheck,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { LevelBadge } from './LevelBadge';
 
-export type NavTabId = 'dashboard' | 'simulator' | 'library' | 'landing';
+export type NavTabId = 'dashboard' | 'simulator' | 'library' | 'landing' | 'diagnostic';
 
 export interface NavbarProps {
   activeTab: NavTabId | string;
@@ -112,7 +113,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     <nav
       role="navigation"
       aria-label="Navegacion Principal"
-      className={`sticky top-0 z-40 w-full backdrop-blur-md bg-[#090A0F]/85 border-b border-white/10 ${className}`}
+      className={`sticky top-0 z-40 w-full backdrop-blur-md bg-white/95 border-b border-slate-200 shadow-xs ${className}`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
@@ -121,16 +122,16 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               type="button"
               onClick={() => handleNavClick('landing')}
-              className="flex items-center gap-2.5 text-left focus:outline-none focus:ring-1 focus:ring-clinical-teal rounded-lg p-1 transition-transform active:scale-95"
+              className="flex items-center gap-2.5 text-left focus:outline-none focus:ring-2 focus:ring-sky-500 rounded-lg p-1 transition-transform active:scale-95"
             >
-              <div className="w-8 h-8 rounded-lg bg-clinical-teal/20 border border-clinical-teal/50 flex items-center justify-center text-teal-400 shadow-sm">
+              <div className="w-8 h-8 rounded-lg bg-sky-50 border border-sky-200 flex items-center justify-center text-sky-600 shadow-xs">
                 <Activity className="w-4 h-4" />
               </div>
               <div className="flex items-center gap-2">
-                <span className="font-bold text-base tracking-tight text-white">
+                <span className="font-bold text-base tracking-tight text-slate-900">
                   OdyssMedic
                 </span>
-                <span className="px-1.5 py-0.5 text-[10px] font-mono font-medium rounded bg-clinical-teal/20 text-teal-300 border border-clinical-teal/40">
+                <span className="px-1.5 py-0.5 text-[10px] font-mono font-semibold rounded bg-sky-100 text-sky-800 border border-sky-200">
                   UPCH 2026
                 </span>
               </div>
@@ -148,8 +149,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                     onClick={() => handleNavClick(item.id)}
                     className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                       isActive
-                        ? 'bg-clinical-teal/20 text-teal-300 border border-clinical-teal/40 shadow-sm'
-                        : 'text-gray-400 hover:text-white hover:bg-white/5 border border-transparent'
+                        ? 'bg-sky-50 text-sky-800 border border-sky-200 font-semibold shadow-xs'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent'
                     }`}
                   >
                     <Icon className="w-3.5 h-3.5" />
@@ -160,25 +161,38 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
           </div>
 
-          {/* Right Section: Telemetry or Auth */}
+          {/* Right Section: Diagnostic Alert, Telemetry or Auth */}
           <div className="hidden md:flex items-center gap-3">
             {isAuthenticated && user ? (
               <>
+                {/* Diagnostic Requirement Warning Pill */}
+                {!user.diagnostic_completed && (
+                  <button
+                    type="button"
+                    onClick={() => handleNavClick('diagnostic')}
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-300 text-amber-800 hover:bg-amber-100 transition-colors text-xs font-medium animate-pulse"
+                    title="Examen de autoevaluacion obligatorio para desbloquear tu nivelacion"
+                  >
+                    <ClipboardCheck className="w-3.5 h-3.5 text-amber-600" />
+                    <span>Autoevaluacion Requerida</span>
+                  </button>
+                )}
+
                 {/* Racha de Guardia */}
                 <div
-                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 font-mono text-xs"
+                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 font-mono text-xs"
                   title={`Racha de Guardia: ${user.streak_days || 0} dias consecutivos`}
                 >
-                  <Flame className="w-3.5 h-3.5 text-amber-400" />
+                  <Flame className="w-3.5 h-3.5 text-amber-600" />
                   <span className="font-bold">{user.streak_days || 0}d</span>
                 </div>
 
                 {/* XP Badge */}
                 <div
-                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-teal-500/10 border border-teal-500/30 text-teal-300 font-mono text-xs"
+                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-sky-50 border border-sky-200 text-sky-800 font-mono text-xs"
                   title="Puntos de Experiencia Clinica"
                 >
-                  <Zap className="w-3.5 h-3.5 text-teal-400" />
+                  <Zap className="w-3.5 h-3.5 text-sky-600" />
                   <span className="font-bold">
                     {user.experience_points ?? user.xp ?? 0} XP
                   </span>
@@ -197,42 +211,55 @@ export const Navbar: React.FC<NavbarProps> = ({
                     type="button"
                     onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
                     aria-expanded={isProfileDropdownOpen}
-                    className="flex items-center gap-2 pl-2 pr-3 py-1 rounded-xl bg-slate-900/60 hover:bg-slate-800/80 border border-white/10 hover:border-white/20 transition-all text-left"
+                    className="flex items-center gap-2 pl-2 pr-3 py-1 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 transition-all text-left shadow-xs"
                   >
-                    <div className="w-7 h-7 rounded-lg bg-clinical-teal/30 border border-clinical-teal/50 flex items-center justify-center text-teal-300 text-xs font-mono font-bold">
+                    <div className="w-7 h-7 rounded-lg bg-sky-100 border border-sky-200 flex items-center justify-center text-sky-800 text-xs font-mono font-bold">
                       {getUserInitials(user.full_name)}
                     </div>
-                    <span className="text-xs font-medium text-gray-200 max-w-[120px] truncate">
+                    <span className="text-xs font-medium text-slate-800 max-w-[120px] truncate">
                       {user.full_name || user.email}
                     </span>
-                    <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
+                    <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
                   </button>
 
                   {/* Dropdown Menu */}
                   {isProfileDropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-64 rounded-xl bg-[#0E1117] border border-white/10 shadow-2xl p-2 z-50 animate-in fade-in zoom-in-95 duration-100">
-                      <div className="p-3 border-b border-white/10">
-                        <p className="text-xs font-semibold text-white truncate">
+                    <div className="absolute right-0 mt-2 w-64 rounded-xl bg-white border border-slate-200 shadow-xl p-2 z-50 animate-in fade-in zoom-in-95 duration-100">
+                      <div className="p-3 border-b border-slate-100">
+                        <p className="text-xs font-semibold text-slate-900 truncate">
                           {user.full_name || 'Medico OdyssMedic'}
                         </p>
-                        <p className="text-[11px] text-gray-400 truncate font-mono">
+                        <p className="text-[11px] text-slate-500 truncate font-mono">
                           {user.email}
                         </p>
                         <div className="mt-2 flex items-center gap-2">
-                          <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-white/5 border border-white/10 text-gray-300">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 border border-slate-200 text-slate-700">
                             {roleLabelMap[user.role] || user.role}
                           </span>
-                          <span className="text-[10px] text-teal-400 font-mono">
+                          <span className="text-[10px] text-sky-700 font-semibold font-mono">
                             {user.university || 'UPCH'}
                           </span>
                         </div>
                       </div>
 
                       <div className="p-1">
+                        {!user.diagnostic_completed && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setIsProfileDropdownOpen(false);
+                              handleNavClick('diagnostic');
+                            }}
+                            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs text-amber-800 bg-amber-50 hover:bg-amber-100 transition-colors text-left mb-1"
+                          >
+                            <ClipboardCheck className="w-4 h-4 text-amber-600" />
+                            <span>Dar Autoevaluacion</span>
+                          </button>
+                        )}
                         <button
                           type="button"
                           onClick={handleLogout}
-                          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs text-rose-300 hover:text-rose-200 hover:bg-rose-500/10 transition-colors text-left"
+                          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs text-rose-600 hover:text-rose-700 hover:bg-rose-50 transition-colors text-left"
                         >
                           <LogOut className="w-4 h-4" />
                           <span>Cerrar Sesion</span>
@@ -246,7 +273,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <button
                 type="button"
                 onClick={onOpenAuth}
-                className="px-4 py-1.5 rounded-lg bg-clinical-teal hover:bg-clinical-teal-hover transition-colors text-white text-xs font-semibold tracking-wide shadow-md shadow-clinical-teal/20"
+                className="px-4 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-700 transition-colors text-white text-xs font-semibold tracking-wide shadow-xs"
               >
                 Iniciar Sesion / Demo UPCH
               </button>
@@ -256,8 +283,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Mobile Menu Toggle */}
           <div className="flex md:hidden items-center gap-2">
             {isAuthenticated && user && (
-              <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/30 text-amber-300 font-mono text-[11px]">
-                <Flame className="w-3 h-3 text-amber-400" />
+              <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-amber-50 border border-amber-200 text-amber-800 font-mono text-[11px]">
+                <Flame className="w-3 h-3 text-amber-600" />
                 <span>{user.streak_days || 0}d</span>
               </div>
             )}
@@ -266,7 +293,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Alternar menu de navegacion"
               aria-expanded={isMobileMenuOpen}
-              className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
+              className="p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors"
             >
               {isMobileMenuOpen ? (
                 <X className="w-5 h-5" />
@@ -280,7 +307,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile Drawer Overlay */}
       {isMobileMenuOpen && (
-        <div className="md:hidden border-t border-white/10 bg-[#0E1117] px-4 pt-3 pb-6 space-y-3">
+        <div className="md:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-6 space-y-3 shadow-lg">
           {/* Navigation Links */}
           <div className="space-y-1">
             {navItems.map((item) => {
@@ -293,11 +320,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => handleNavClick(item.id)}
                   className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition-all text-left ${
                     isActive
-                      ? 'bg-clinical-teal/20 text-teal-300 border border-clinical-teal/40'
-                      : 'text-gray-300 hover:text-white hover:bg-white/5 border border-transparent'
+                      ? 'bg-sky-50 text-sky-800 border border-sky-200 font-semibold'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent'
                   }`}
                 >
-                  <Icon className="w-4 h-4 text-gray-400" />
+                  <Icon className="w-4 h-4 text-slate-500" />
                   <span>{item.label}</span>
                 </button>
               );
@@ -305,12 +332,12 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* User Telemetry or Auth in Mobile Drawer */}
-          <div className="pt-3 border-t border-white/10">
+          <div className="pt-3 border-t border-slate-200">
             {isAuthenticated && user ? (
               <div className="space-y-3">
-                <div className="p-3 rounded-lg bg-black/40 border border-white/5 space-y-2">
+                <div className="p-3 rounded-lg bg-slate-50 border border-slate-200 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-white">
+                    <span className="text-xs font-semibold text-slate-900">
                       {user.full_name || user.email}
                     </span>
                     <LevelBadge
@@ -318,22 +345,33 @@ export const Navbar: React.FC<NavbarProps> = ({
                       size="sm"
                     />
                   </div>
-                  <div className="flex items-center gap-3 text-xs font-mono text-gray-400">
-                    <span className="flex items-center gap-1 text-amber-300">
+                  <div className="flex items-center gap-3 text-xs font-mono text-slate-600">
+                    <span className="flex items-center gap-1 text-amber-700">
                       <Flame className="w-3.5 h-3.5" />
                       {user.streak_days || 0}d de Guardia
                     </span>
-                    <span className="flex items-center gap-1 text-teal-300">
+                    <span className="flex items-center gap-1 text-sky-700">
                       <Zap className="w-3.5 h-3.5" />
                       {user.experience_points ?? user.xp ?? 0} XP
                     </span>
                   </div>
                 </div>
 
+                {!user.diagnostic_completed && (
+                  <button
+                    type="button"
+                    onClick={() => handleNavClick('diagnostic')}
+                    className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-amber-50 border border-amber-300 text-amber-800 text-xs font-medium hover:bg-amber-100 transition-colors"
+                  >
+                    <ClipboardCheck className="w-4 h-4 text-amber-600" />
+                    <span>Realizar Autoevaluacion Inicial</span>
+                  </button>
+                )}
+
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-medium hover:bg-rose-500/20 transition-colors"
+                  className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-rose-50 border border-rose-200 text-rose-600 text-xs font-medium hover:bg-rose-100 transition-colors"
                 >
                   <LogOut className="w-4 h-4" />
                   <span>Cerrar Sesion</span>
@@ -346,7 +384,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   setIsMobileMenuOpen(false);
                   onOpenAuth?.();
                 }}
-                className="w-full py-2.5 rounded-lg bg-clinical-teal hover:bg-clinical-teal-hover transition-colors text-white text-xs font-semibold tracking-wide shadow-md"
+                className="w-full py-2.5 rounded-lg bg-sky-600 hover:bg-sky-700 transition-colors text-white text-xs font-semibold tracking-wide shadow-xs"
               >
                 Iniciar Sesion / Demo UPCH
               </button>

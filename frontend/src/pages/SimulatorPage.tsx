@@ -1200,32 +1200,32 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
 
   return (
     <div
-      className={`min-h-screen bg-clinical-bg text-gray-100 flex flex-col justify-between py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full space-y-6 ${
+      className={`min-h-screen bg-clinical-bg text-slate-800 flex flex-col justify-between py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full space-y-6 ${
         evaluationResult !== null && !isModalOpen ? 'pb-28 sm:pb-24' : ''
       } ${className}`}
     >
       {/* 1. Header Toolbar: Back navigation, Case Switcher, Live Timer */}
-      <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl bg-clinical-surface/90 border border-clinical-border backdrop-blur-md shadow-xl">
+      <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl bg-white border border-slate-200 shadow-xs">
         <div className="flex flex-wrap items-center gap-3">
           <button
             type="button"
             onClick={onBackToDashboard}
-            className="px-3 py-1.5 rounded-xl bg-slate-900/80 border border-clinical-border hover:border-clinical-cyan/60 text-gray-300 hover:text-white text-xs font-mono font-medium flex items-center gap-2 transition-all active:scale-95"
+            className="px-3.5 py-1.5 rounded-xl bg-slate-50 border border-slate-200 hover:bg-slate-100 text-slate-700 text-xs font-mono font-medium flex items-center gap-2 transition-all active:scale-95 shadow-xs"
             title="Volver al Panel de Mundos Clinicos"
           >
-            <ArrowLeft className="w-4 h-4 text-clinical-cyan" />
+            <ArrowLeft className="w-4 h-4 text-sky-600" />
             <span>Volver al Panel</span>
           </button>
 
           {/* Specialty Case Switcher */}
           <div className="flex items-center gap-2">
-            <span className="text-[11px] font-mono text-gray-400 hidden md:inline">
+            <span className="text-[11px] font-mono text-slate-500 hidden md:inline">
               Caso Clinico:
             </span>
             <select
               value={selectedCaseId}
               onChange={(e) => setSelectedCaseId(e.target.value)}
-              className="bg-slate-900 border border-clinical-border rounded-xl px-3 py-1.5 text-xs font-medium text-white focus:outline-none focus:ring-1 focus:ring-clinical-cyan transition-all"
+              className="bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all shadow-xs"
               aria-label="Selector de Casos de Simulacion"
             >
               <option value="case-nefro-001">
@@ -1244,18 +1244,18 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
         {/* Telemetry Indicator & Decision Timer */}
         <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0">
           {isUsingFallback && (
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-amber-500/10 border border-amber-500/30 text-amber-300">
+            <span className="px-2.5 py-1 rounded-md text-[10px] font-mono bg-amber-50 border border-amber-300 text-amber-800">
               Modo Offline / Protocolo Local
             </span>
           )}
 
           <div
-            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/80 border border-clinical-cyan/30 text-clinical-cyan font-mono text-xs shadow-sm"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-sky-50 border border-sky-200 text-sky-800 font-mono text-xs shadow-xs"
             title="Tiempo activo de toma de decision clinica en la estacion actual"
           >
-            <Clock className="w-3.5 h-3.5 text-clinical-cyan animate-spin-slow" />
-            <span className="text-gray-400 font-sans text-[11px]">T. Decision:</span>
-            <span className="font-bold text-sm text-white">
+            <Clock className="w-3.5 h-3.5 text-sky-600" />
+            <span className="text-slate-500 font-sans text-[11px]">T. Decision:</span>
+            <span className="font-bold text-sm text-sky-900">
               {formatTimer(timeSpentSeconds)}
             </span>
           </div>
@@ -1274,9 +1274,9 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
 
       {/* 3. Main Workspace: Vignette Player + Question / Option Decision Area */}
       {isLoading || !caseDetail ? (
-        <div className="p-16 rounded-2xl bg-clinical-surface/70 border border-clinical-border text-center space-y-4">
-          <RefreshCw className="w-8 h-8 text-clinical-cyan animate-spin mx-auto" />
-          <p className="text-sm font-mono text-gray-300">
+        <div className="p-16 rounded-2xl bg-white border border-slate-200 text-center space-y-4 shadow-xs">
+          <RefreshCw className="w-8 h-8 text-sky-600 animate-spin mx-auto" />
+          <p className="text-sm font-mono text-slate-600">
             Cargando expediente clinico y constantes de triaje...
           </p>
         </div>
@@ -1294,25 +1294,25 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
           {currentStation && (
             <section
               key={stationNumber}
-              className="rounded-2xl bg-clinical-surface/95 border border-clinical-border p-5 sm:p-7 backdrop-blur-md shadow-2xl space-y-6 animate-fade-in-up"
+              className="rounded-2xl bg-white border border-slate-200 p-5 sm:p-7 shadow-xs space-y-6 animate-fade-in-up"
               aria-label="Pregunta Clinica y Opciones de Decision"
             >
               {/* Question Header */}
-              <div className="space-y-2 border-b border-clinical-border pb-4">
+              <div className="space-y-2 border-b border-slate-100 pb-4">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 font-mono text-xs text-clinical-cyan uppercase tracking-wider">
-                    <HelpCircle className="w-4 h-4 text-clinical-cyan" />
+                  <div className="flex items-center gap-2 font-mono text-xs text-sky-700 uppercase tracking-wider font-semibold">
+                    <HelpCircle className="w-4 h-4 text-sky-600" />
                     <span>
                       Estacion {stationNumber} de {stations.length}: Desafio Clinico
                     </span>
                   </div>
 
-                  <span className="text-[11px] font-mono text-gray-400">
+                  <span className="text-[11px] font-mono text-slate-500">
                     Selecciona la mejor conducta basada en evidencia
                   </span>
                 </div>
 
-                <h3 className="text-base sm:text-lg font-bold text-white leading-relaxed">
+                <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-relaxed">
                   {currentStation.clinical_question}
                 </h3>
               </div>
@@ -1332,13 +1332,13 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
               </div>
 
               {/* Submission Action Bar */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-clinical-border">
-                <div className="text-xs font-mono text-gray-400 flex items-center gap-1.5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-slate-100">
+                <div className="text-xs font-mono text-slate-500 flex items-center gap-1.5">
                   <span
                     className={`w-2 h-2 rounded-full ${
                       evaluationResult !== null
-                        ? 'bg-emerald-400'
-                        : 'bg-clinical-cyan animate-pulse-subtle'
+                        ? 'bg-emerald-500'
+                        : 'bg-sky-500 animate-pulse'
                     }`}
                   />
                   <span>
@@ -1358,12 +1358,12 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
                     isSubmitting ||
                     evaluationResult !== null
                   }
-                  className={`w-full sm:w-auto px-6 py-3 rounded-xl font-semibold text-xs sm:text-sm flex items-center justify-center gap-2.5 transition-all shadow-lg active:scale-95 ${
+                  className={`w-full sm:w-auto px-6 py-3 rounded-xl font-semibold text-xs sm:text-sm flex items-center justify-center gap-2.5 transition-all shadow-xs active:scale-95 ${
                     !selectedOptionId ||
                     isSubmitting ||
                     evaluationResult !== null
-                      ? 'bg-slate-800 text-gray-500 border border-slate-700/50 cursor-not-allowed shadow-none'
-                      : 'bg-clinical-teal hover:bg-clinical-teal-hover text-white shadow-clinical-teal/30 ring-1 ring-clinical-teal-light'
+                      ? 'bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed shadow-none'
+                      : 'bg-sky-600 hover:bg-sky-700 text-white shadow-xs'
                   }`}
                 >
                   {isSubmitting ? (
@@ -1393,20 +1393,20 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
       {evaluationResult !== null && !isModalOpen && (
         <aside
           aria-label="Barra de accion de estacion evaluada"
-          className="fixed bottom-0 left-0 right-0 z-40 bg-clinical-surface/95 border-t border-clinical-border shadow-[0_-8px_30px_rgba(0,0,0,0.6)] backdrop-blur-lg px-4 py-3 sm:px-6 transition-all animate-in slide-in-from-bottom duration-300"
+          className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 border-t border-slate-200 shadow-lg backdrop-blur-md px-4 py-3 sm:px-6 transition-all animate-in slide-in-from-bottom duration-300"
         >
           <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <div
                 className={`w-3 h-3 rounded-full shrink-0 ${
-                  evaluationResult.is_correct ? 'bg-emerald-400' : 'bg-rose-400'
+                  evaluationResult.is_correct ? 'bg-emerald-500' : 'bg-rose-500'
                 } animate-pulse`}
               />
               <div>
-                <span className="text-xs sm:text-sm font-semibold text-white block">
+                <span className="text-xs sm:text-sm font-semibold text-slate-900 block">
                   Estacion Evaluada - Decision Clinica Registrada
                 </span>
-                <span className="text-[11px] font-mono text-gray-400">
+                <span className="text-[11px] font-mono text-slate-500">
                   {evaluationResult.is_correct
                     ? 'Conducta acertada (+XP acreditado)'
                     : 'Brecha de razonamiento identificada por el motor OCRI'}
@@ -1418,9 +1418,9 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
               <button
                 type="button"
                 onClick={() => setIsModalOpen(true)}
-                className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-clinical-border text-xs sm:text-sm font-medium text-clinical-cyan flex items-center justify-center gap-2 transition-colors active:scale-95"
+                className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-xs sm:text-sm font-medium text-slate-700 flex items-center justify-center gap-2 transition-colors active:scale-95 shadow-xs"
               >
-                <Lightbulb className="w-4 h-4 text-amber-400 shrink-0" />
+                <Lightbulb className="w-4 h-4 text-amber-500 shrink-0" />
                 <span>Ver Retroalimentacion y Perla Clinica</span>
               </button>
 
@@ -1431,7 +1431,7 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
                     ? handleNextStation
                     : onBackToDashboard
                 }
-                className="flex-1 sm:flex-none px-5 py-2.5 rounded-xl bg-clinical-teal hover:bg-clinical-teal-hover text-white text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all shadow-md shadow-clinical-teal/30 active:scale-95"
+                className="flex-1 sm:flex-none px-5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all shadow-xs active:scale-95"
               >
                 <span>
                   {currentStationIndex < stations.length - 1

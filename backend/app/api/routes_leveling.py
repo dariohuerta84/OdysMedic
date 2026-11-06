@@ -1,15 +1,50 @@
-from typing import Any, Dict
+from typing import Any, Dict, List
 from fastapi import APIRouter, Depends, HTTPException, status
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_db, get_active_student
 from app.db.models import User
+from app.db.diagnostic_bank import get_diagnostic_questions_for_student
 from app.models.enums import MedicalSpecialty, CognitiveGap
 from app.models.student import LevelingPrescription
 from app.engine.leveling_engine import generate_leveling_prescription
 from app.services.student_service import student_service
 
 router = APIRouter(prefix="/leveling", tags=["Nivelacion Adaptativa y OCRI"])
+
+
+class DiagnosticAnswerItem(BaseModel):
+    question_id: int
+    selected_option_id: str
+
+
+class DiagnosticSubmitRequest(BaseModel):
+    answers: List[DiagnosticAnswerItem]
+
+
+@router.get("/diagnostic/questions")
+def get_diagnostic_questions() -> List[Dict[str, Any]]:
+    """
+    Retorna el cuestionario estandarizado de 5 preguntas clinicas basales
+    para la autoevaluacion diagnostica obligatoria antes del ingreso al dashboard.
+    """
+    return get_diagnostic_questions_for_student()
+
+
+@router.post("/diagnostic/submit")
+def submit_diagnostic(
+    payload: DiagnosticSubmitRequest,
+    student: User = Depends(get_active_student),
+    db: Session = Depends(get_db),
+) -> Dict[str, Any]:
+    """
+    Evalua el examen de autoevaluacion inicial del estudiante, calcula su porcentaje
+    de rendimiento real, calibra su radar OCRI basal, determina el estado de aptitud
+    (apto, en_nivelacion, no_apto) y desbloquea el acceso al panel interactivo.
+    """
+    answers_dicts = [a.model_dump() for a in payload.answers]
+    return student_service.submit_diagnostic_exam(db, student.id, answers_dicts)
 
 
 @router.get("/dashboard")

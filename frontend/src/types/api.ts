@@ -15,6 +15,8 @@ export type PlanTier = 'pilot_free' | 'essential' | 'residentado_pro';
 
 export type CompetencyLevel = 'Nivel 1' | 'Nivel 2' | 'Nivel 3';
 
+export type AptitudeStatus = 'apto' | 'en_nivelacion' | 'no_apto';
+
 export interface User {
   id: number | string;
   email: string;
@@ -29,6 +31,10 @@ export interface User {
   stage?: string;
   target_exam?: string;
   xp?: number;
+  diagnostic_completed?: boolean;
+  diagnostic_score?: number | null;
+  aptitude_status?: AptitudeStatus | null;
+  aptitude_label?: string | null;
 }
 
 export interface AuthToken {
@@ -222,6 +228,10 @@ export interface LevelingDashboard {
   }>;
   ocri_score?: number;
   global_ocri_score?: number;
+  diagnostic_completed?: boolean;
+  diagnostic_score?: number | null;
+  aptitude_status?: AptitudeStatus | null;
+  aptitude_label?: string | null;
   pending_repetition_tasks?: any[];
   spaced_repetition_tasks?: any[];
 }
@@ -260,3 +270,50 @@ export interface RegisterRequest {
   stage?: string;
   target_exam?: string;
 }
+
+export interface DiagnosticOption {
+  id: string;
+  text: string;
+}
+
+export interface DiagnosticQuestion {
+  id: number;
+  specialty: string;
+  specialty_label: string;
+  station_type: string;
+  vignette: string;
+  vital_signs: Record<string, string>;
+  question: string;
+  options: DiagnosticOption[];
+}
+
+export interface DiagnosticAnswerItem {
+  question_id: number;
+  selected_option_id: string;
+}
+
+export interface DiagnosticSubmissionRequest {
+  answers: DiagnosticAnswerItem[];
+}
+
+export interface DiagnosticResultDetail {
+  question_id: number;
+  specialty: string;
+  is_correct: boolean;
+  selected_option_id: string;
+  detected_gap?: string | null;
+  explanation: string;
+}
+
+export interface DiagnosticResult {
+  success: boolean;
+  diagnostic_score: number;
+  aptitude_status: AptitudeStatus;
+  aptitude_label: string;
+  correct_count: number;
+  total_questions: number;
+  xp_earned: number;
+  detected_gaps: string[];
+  details: DiagnosticResultDetail[];
+}
+

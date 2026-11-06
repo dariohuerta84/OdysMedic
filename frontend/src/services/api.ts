@@ -15,6 +15,8 @@ import type {
   CognitiveGapTag,
   SpecialtyMastery,
   SpacedRepetitionItem,
+  DiagnosticQuestion,
+  DiagnosticResult,
 } from '../types/api';
 
 const API_BASE_URL =
@@ -134,6 +136,9 @@ export const specialtiesApi = {
       case_count: item.cases_count ?? item.case_count ?? 0,
       cases_count: item.cases_count ?? item.case_count ?? 0,
     }));
+  },
+  getCatalog: async (): Promise<Specialty[]> => {
+    return specialtiesApi.getAll();
   },
 };
 
@@ -390,6 +395,20 @@ export const levelingApi = {
       pending_spaced_repetitions: pendingRepetitions,
       ...d,
     };
+  },
+
+  getDiagnosticQuestions: async (): Promise<DiagnosticQuestion[]> => {
+    const response = await api.get<DiagnosticQuestion[]>('/leveling/diagnostic/questions');
+    return response.data;
+  },
+
+  submitDiagnosticExam: async (
+    answers: Array<{ question_id: number; selected_option_id: string }>
+  ): Promise<DiagnosticResult> => {
+    const response = await api.post<DiagnosticResult>('/leveling/diagnostic/submit', {
+      answers,
+    });
+    return response.data;
   },
 };
 

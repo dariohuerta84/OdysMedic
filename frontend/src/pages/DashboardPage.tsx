@@ -8,6 +8,10 @@ import {
   TrendingUp,
   RefreshCw,
   Sparkles,
+  ClipboardCheck,
+  ShieldCheck,
+  Brain,
+  ArrowRight,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { levelingApi, specialtiesApi } from '../services/api';
@@ -27,6 +31,7 @@ import { SpacedRepetitionQueue } from '../components/dashboard/SpacedRepetitionQ
 export interface DashboardPageProps {
   onSelectSpecialty: (specialtyId: string) => void;
   onSelectCase: (caseId: string) => void;
+  onStartDiagnostic?: () => void;
   className?: string;
 }
 
@@ -124,38 +129,29 @@ const DEFAULT_MASTERIES: SpecialtyMastery[] = [
     specialty_name: 'Ginecologia',
     mastery_score: 70,
     level: 'Nivel 2',
-    cases_completed: 3,
+    cases_completed: 2,
     total_cases: 8,
   },
 ];
 
 const DEFAULT_SPACED_REPETITIONS: SpacedRepetitionItem[] = [
   {
-    case_id: 'case-nefro-001',
-    case_title: 'Sindrome Uremico y Trastorno del Potasio en Emergencia',
+    case_id: 's13256-019-2334-y',
+    case_title: 'Injuria Renal Aguda KDIGO 3 por AINEs en ERC',
     specialty_name: 'Nefrologia',
     cycle: 'D7',
     scheduled_date: new Date().toISOString(),
-    is_overdue: true,
-    gap_type: 'GAP_INITIAL_MANAGEMENT',
+    is_overdue: false,
+    gap_type: 'GAP_LAB_INTERPRETATION',
   },
   {
-    case_id: 'case-endo-002',
-    case_title: 'Cetoacidosis Diabetica Severa con Hipokalemia Inicial',
+    case_id: 's13256-022-03392-w',
+    case_title: 'Cetoacidosis Diabetica Severa con Hipokalemia',
     specialty_name: 'Endocrinologia',
     cycle: 'D21',
-    scheduled_date: new Date().toISOString(),
-    is_overdue: false,
-    gap_type: 'GAP_DIAGNOSTIC_REASONING',
-  },
-  {
-    case_id: 'case-neuro-003',
-    case_title: 'Deficit Focal Agudo y Ventana Terapeutica Trombolitica',
-    specialty_name: 'Neurologia',
-    cycle: 'D7',
-    scheduled_date: new Date().toISOString(),
-    is_overdue: false,
-    gap_type: 'GAP_TRIAGE_SEVERITY',
+    scheduled_date: new Date(Date.now() - 86400000).toISOString(),
+    is_overdue: true,
+    gap_type: 'GAP_INITIAL_MANAGEMENT',
   },
 ];
 
@@ -169,32 +165,32 @@ const GAP_LABELS: Record<CognitiveGapTag, string> = {
 export const DashboardPage: React.FC<DashboardPageProps> = ({
   onSelectSpecialty,
   onSelectCase,
+  onStartDiagnostic,
   className = '',
 }) => {
   const { user } = useAuth();
-
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isUsingFallback, setIsUsingFallback] = useState<boolean>(false);
   const [dashboard, setDashboard] = useState<LevelingDashboard | null>(null);
   const [specialties, setSpecialties] = useState<Specialty[]>(DEFAULT_SPECIALTIES);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isUsingFallback, setIsUsingFallback] = useState<boolean>(false);
 
   const fetchDashboardData = async () => {
     setIsLoading(true);
     try {
-      // Parallel fetch from backend APIs
-      const [dashRes, specsRes] = await Promise.allSettled([
+      const [dashData, specsData] = await Promise.allSettled([
         levelingApi.getDashboard(),
-        specialtiesApi.getAll(),
+        specialtiesApi.getCatalog(),
       ]);
 
-      if (dashRes.status === 'fulfilled' && dashRes.value) {
-        setDashboard(dashRes.value);
+      if (dashData.status === 'fulfilled' && dashData.value) {
+        setDashboard(dashData.value);
+        setIsUsingFallback(false);
       } else {
         setIsUsingFallback(true);
       }
 
-      if (specsRes.status === 'fulfilled' && specsRes.value && specsRes.value.length > 0) {
-        setSpecialties(specsRes.value);
+      if (specsData.status === 'fulfilled' && specsData.value?.length) {
+        setSpecialties(specsData.value);
       } else {
         setSpecialties(DEFAULT_SPECIALTIES);
       }
@@ -210,18 +206,37 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     fetchDashboardData();
   }, []);
 
-  // Compute values from API or fallback
+  const isDiagnosticCompleted = Boolean(
+    dashboard?.diagnostic_completed ?? user?.diagnostic_completed
+  );
+
+  const diagnosticScore =
+    dashboard?.diagnostic_score ?? user?.diagnostic_score ?? null;
+
+  const aptitudeStatus =
+    dashboard?.aptitude_status ?? user?.aptitude_status ?? null;
+
+  const aptitudeLabel =
+    dashboard?.aptitude_label ??
+    (aptitudeStatus === 'apto'
+      ? 'Apto para el Examen / Internado'
+      : aptitudeStatus === 'en_nivelacion'
+        ? 'En Nivelacion (Apto Condicional)'
+        : aptitudeStatus === 'no_apto'
+          ? 'No Apto (Refuerzo Prioritario)'
+          : 'Pendiente de Autoevaluacion');
+
   const radarScores: Record<CognitiveGapTag, number> =
     dashboard?.cognitive_gap_radar || DEFAULT_RADAR_SCORES;
 
   const userLevel: CompetencyLevel =
-    dashboard?.current_level || user?.current_level || 'Nivel 2';
+    dashboard?.current_level || user?.current_level || 'Nivel 1';
 
   const userXP: number =
-    dashboard?.total_xp ?? user?.experience_points ?? user?.xp ?? 1450;
+    dashboard?.total_xp ?? user?.experience_points ?? user?.xp ?? 0;
 
   const streakDays: number =
-    dashboard?.streak_days ?? user?.streak_days ?? 5;
+    dashboard?.streak_days ?? user?.streak_days ?? 1;
 
   const spacedItems: SpacedRepetitionItem[] =
     dashboard?.pending_spaced_repetitions &&
@@ -241,7 +256,6 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     masteriesMap.set(m.specialty_id.toLowerCase(), m);
   });
 
-  // Calculate weakest and strongest gap
   const gapEntries = Object.entries(radarScores) as [CognitiveGapTag, number][];
   const strongestGap = gapEntries.reduce(
     (prev, curr) => (curr[1] > prev[1] ? curr : prev),
@@ -252,45 +266,61 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     gapEntries[0]
   );
 
-  const studentName = user?.full_name || 'Dr. Matias Rivera';
+  const studentName = user?.full_name || 'Dr. Medico UPCH';
   const universityHospital =
     user?.university || 'Universidad Peruana Cayetano Heredia - Hospital Cayetano Heredia';
 
   return (
     <div className={`space-y-8 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 ${className}`}>
       {/* Top Banner: Welcome doctor & shift status */}
-      <section className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-clinical-surface via-clinical-surface/95 to-slate-900 border border-clinical-border p-6 md:p-8 backdrop-blur-md shadow-xl">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-clinical-teal/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 right-1/3 w-64 h-64 bg-clinical-cyan/10 rounded-full blur-2xl pointer-events-none" />
-
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+      <section className="relative overflow-hidden rounded-3xl bg-white border border-slate-200 p-6 md:p-8 shadow-xs">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-2.5 py-1 rounded-md bg-clinical-teal/20 border border-clinical-teal/40 font-mono text-xs font-semibold text-clinical-teal-light flex items-center gap-1.5">
-                <Hospital className="w-3.5 h-3.5" />
+              <span className="px-2.5 py-1 rounded-md bg-sky-50 border border-sky-200 font-mono text-xs font-semibold text-sky-800 flex items-center gap-1.5 shadow-xs">
+                <Hospital className="w-3.5 h-3.5 text-sky-600" />
                 <span>Guardia de Medicina Interna / UPCH</span>
               </span>
 
-              <span className="px-2.5 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/30 font-mono text-xs text-emerald-400 flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Simulador Activo</span>
-              </span>
+              {isDiagnosticCompleted ? (
+                <span className={`px-2.5 py-1 rounded-md border font-mono text-xs font-semibold flex items-center gap-1.5 shadow-xs ${
+                  aptitudeStatus === 'apto'
+                    ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                    : aptitudeStatus === 'en_nivelacion'
+                      ? 'bg-amber-50 text-amber-800 border-amber-300'
+                      : 'bg-rose-50 text-rose-800 border-rose-300'
+                }`}>
+                  {aptitudeStatus === 'apto' ? (
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                  ) : aptitudeStatus === 'en_nivelacion' ? (
+                    <Brain className="w-3.5 h-3.5 text-amber-600" />
+                  ) : (
+                    <AlertTriangle className="w-3.5 h-3.5 text-rose-600" />
+                  )}
+                  <span>Diagnostico: {aptitudeLabel} ({diagnosticScore}%)</span>
+                </span>
+              ) : (
+                <span className="px-2.5 py-1 rounded-md bg-amber-50 border border-amber-300 font-mono text-xs font-semibold text-amber-800 flex items-center gap-1.5 animate-pulse shadow-xs">
+                  <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
+                  <span>Autoevaluacion Inicial Pendiente</span>
+                </span>
+              )}
 
               {isUsingFallback && (
-                <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-amber-500/10 border border-amber-500/30 text-amber-300">
+                <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-slate-100 border border-slate-200 text-slate-600">
                   Modo Demostracion Local
                 </span>
               )}
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
               Bienvenido, {studentName}
             </h1>
 
-            <p className="text-xs sm:text-sm text-gray-400 max-w-2xl leading-relaxed">
-              {universityHospital}. Tu desempeno diagnostico esta siendo
-              calibrado en tiempo real por el motor OCRI para optimizar tu curva
-              de preparacion ENAM y Residentado Medico.
+            <p className="text-xs sm:text-sm text-slate-600 max-w-2xl leading-relaxed">
+              {universityHospital}. Tu desempeno diagnostico esta calibrado en
+              tiempo real por el motor OCRI para optimizar tu preparacion para el ENAM
+              y el Residentado Medico.
             </p>
           </div>
 
@@ -299,26 +329,66 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               type="button"
               onClick={fetchDashboardData}
               disabled={isLoading}
-              className="px-3.5 py-2 rounded-lg bg-clinical-surface border border-clinical-border hover:border-clinical-cyan/50 text-gray-300 hover:text-white text-xs font-mono flex items-center gap-2 transition-all"
+              className="px-3.5 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-mono flex items-center gap-2 transition-all shadow-xs"
               title="Actualizar telemetria"
             >
               <RefreshCw
-                className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin text-clinical-cyan' : ''}`}
+                className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin text-sky-600' : 'text-slate-500'}`}
               />
               <span>Sincronizar</span>
             </button>
 
-            <button
-              type="button"
-              onClick={() => onSelectSpecialty('nefrologia')}
-              className="px-4 py-2 rounded-lg bg-clinical-teal hover:bg-clinical-teal-hover text-white text-xs font-semibold flex items-center gap-2 transition-all shadow-[0_0_16px_rgba(13,102,93,0.5)]"
-            >
-              <Activity className="w-4 h-4" />
-              <span>Entrar a Guardia de Turno</span>
-            </button>
+            {isDiagnosticCompleted ? (
+              <button
+                type="button"
+                onClick={() => onSelectSpecialty('nefrologia')}
+                className="px-5 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-semibold flex items-center gap-2 transition-all shadow-xs active:scale-95"
+              >
+                <Activity className="w-4 h-4" />
+                <span>Entrar a Guardia de Turno</span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={onStartDiagnostic}
+                className="px-5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold flex items-center gap-2 transition-all shadow-xs active:scale-95 animate-bounce"
+              >
+                <ClipboardCheck className="w-4 h-4" />
+                <span>Rendir Autoevaluacion Diagnostica</span>
+              </button>
+            )}
           </div>
         </div>
       </section>
+
+      {/* Mandatory Diagnostic Prompt Card if pending */}
+      {!isDiagnosticCompleted && (
+        <section className="p-6 rounded-2xl bg-amber-50/90 border border-amber-300 text-slate-900 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-start gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-white border border-amber-300 flex items-center justify-center shrink-0 text-amber-600 shadow-xs">
+              <ClipboardCheck className="w-6 h-6" />
+            </div>
+            <div className="space-y-1">
+              <h3 className="text-sm sm:text-base font-bold text-amber-950">
+                Paso Requerido: Autoevaluacion Diagnostica Inicial
+              </h3>
+              <p className="text-xs text-amber-900 leading-relaxed max-w-2xl">
+                Para que tu porcentaje de rendimiento y aptitud clinica no reflejen puntuaciones arbitrarias,
+                debes rendir primero la autoevaluacion de 5 preguntas clinicas basales. Esto calibrara tu radar OCRI
+                y determinara si tu estado inicial es Apto o requiere nivelacion prioritaria.
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={onStartDiagnostic}
+            className="px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-xs shrink-0 transition-all hover:scale-105"
+          >
+            <span>Iniciar Autoevaluacion (5 Casos)</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </section>
+      )}
 
       {/* Bento Grid: High-Yield Student Metrics */}
       <section aria-label="Metricas Clave del Estudiante">
@@ -334,35 +404,28 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
       {/* Two-Column Section: Competency Radar (Left) + Spaced Repetition (Right) */}
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
         {/* Left Column: 4-Gap Competency Radar */}
-        <div className="rounded-xl bg-clinical-surface/90 border border-clinical-border p-5 backdrop-blur-md flex flex-col justify-between shadow-lg">
-          <div className="flex items-center justify-between pb-3 border-b border-clinical-border mb-3">
+        <div className="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 flex flex-col justify-between shadow-xs">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-mono uppercase tracking-wider text-clinical-cyan">
+                <span className="text-xs font-mono uppercase tracking-wider text-sky-700 font-semibold">
                   Motor Analitico OCRI
                 </span>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono border border-clinical-cyan/30 bg-clinical-cyan/10 text-clinical-cyan">
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono border border-sky-200 bg-sky-50 text-sky-800 font-semibold">
                   4 Brechas Cognitivas
                 </span>
               </div>
-              <h2 className="text-base font-bold text-white mt-1">
+              <h2 className="text-base font-bold text-slate-900 mt-1">
                 Radar de Competencia Clinica
               </h2>
             </div>
 
             <div className="text-right">
-              <span className="text-[10px] font-mono text-gray-400 block">
-                MEDIA GLOBAL
+              <span className="text-[10px] font-mono text-slate-500 block uppercase font-medium">
+                {isDiagnosticCompleted ? 'Rendimiento Basal' : 'Diagnostico'}
               </span>
-              <span className="text-base font-mono font-bold text-clinical-teal-light">
-                {Math.round(
-                  ((radarScores.GAP_TRIAGE_SEVERITY ?? 0) +
-                    (radarScores.GAP_DIAGNOSTIC_REASONING ?? 0) +
-                    (radarScores.GAP_LAB_INTERPRETATION ?? 0) +
-                    (radarScores.GAP_INITIAL_MANAGEMENT ?? 0)) /
-                    4
-                )}
-                %
+              <span className="text-base font-mono font-bold text-sky-700">
+                {isDiagnosticCompleted ? `${diagnosticScore ?? Math.round(dashboard?.ocri_score ?? 0)}%` : 'Pendiente'}
               </span>
             </div>
           </div>
@@ -373,38 +436,38 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           </div>
 
           {/* Summary of weakest vs strongest clinical gap */}
-          <div className="mt-4 pt-4 border-t border-clinical-border grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <div className="mt-4 pt-4 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
             {/* Strongest */}
-            <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-start gap-2.5">
-              <div className="w-6 h-6 rounded-md bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
+            <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 flex items-start gap-2.5">
+              <div className="w-6 h-6 rounded-md bg-white border border-emerald-200 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
                 <CheckCircle2 className="w-3.5 h-3.5" />
               </div>
               <div className="space-y-0.5 min-w-0">
-                <div className="text-[10px] uppercase font-mono font-semibold text-emerald-400 tracking-wider">
+                <div className="text-[10px] uppercase font-mono font-bold text-emerald-800 tracking-wider">
                   Fortaleza Clinica
                 </div>
-                <div className="font-semibold text-white truncate">
+                <div className="font-semibold text-slate-900 truncate">
                   {GAP_LABELS[strongestGap[0]]}
                 </div>
-                <div className="text-gray-300 font-mono text-[11px]">
+                <div className="text-slate-600 font-mono text-[11px]">
                   Precision: {strongestGap[1]}%
                 </div>
               </div>
             </div>
 
             {/* Weakest */}
-            <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-start gap-2.5">
-              <div className="w-6 h-6 rounded-md bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0 mt-0.5">
+            <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 flex items-start gap-2.5">
+              <div className="w-6 h-6 rounded-md bg-white border border-amber-200 text-amber-600 flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
                 <AlertTriangle className="w-3.5 h-3.5" />
               </div>
               <div className="space-y-0.5 min-w-0">
-                <div className="text-[10px] uppercase font-mono font-semibold text-amber-400 tracking-wider">
+                <div className="text-[10px] uppercase font-mono font-bold text-amber-800 tracking-wider">
                   Foco de Refuerzo
                 </div>
-                <div className="font-semibold text-white truncate">
+                <div className="font-semibold text-slate-900 truncate">
                   {GAP_LABELS[weakestGap[0]]}
                 </div>
-                <div className="text-gray-300 font-mono text-[11px]">
+                <div className="text-slate-600 font-mono text-[11px]">
                   Precision: {weakestGap[1]}% (Prioridad)
                 </div>
               </div>
@@ -412,11 +475,11 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           </div>
 
           {/* Actionable recommendation */}
-          <div className="mt-3 p-2.5 rounded-lg bg-black/30 border border-white/5 text-[11px] text-gray-400 flex items-center gap-2">
-            <TrendingUp className="w-3.5 h-3.5 text-clinical-cyan shrink-0" />
+          <div className="mt-3 p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-[11px] text-slate-600 flex items-center gap-2">
+            <TrendingUp className="w-3.5 h-3.5 text-sky-600 shrink-0" />
             <span>
               El algoritmo inyectara mas estaciones de{' '}
-              <strong className="text-white font-medium">
+              <strong className="text-slate-900 font-semibold">
                 {GAP_LABELS[weakestGap[0]]}
               </strong>{' '}
               para acelerar tu ascenso de nivel.
@@ -429,30 +492,30 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           <SpacedRepetitionQueue
             items={spacedItems}
             onReview={onSelectCase}
-            className="h-full shadow-lg"
+            className="h-full shadow-xs"
           />
         </div>
       </section>
 
       {/* Bottom Section: Clinical Worlds (Specialties) */}
       <section className="space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-clinical-border">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-200">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-clinical-cyan/10 border border-clinical-cyan/30 flex items-center justify-center text-clinical-cyan">
+            <div className="w-8 h-8 rounded-lg bg-sky-50 border border-sky-200 flex items-center justify-center text-sky-600 shadow-xs">
               <Compass className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white tracking-tight">
+              <h2 className="text-lg font-bold text-slate-900 tracking-tight">
                 Mundos Clinicos (Especialidades Medicas)
               </h2>
-              <p className="text-xs text-gray-400">
+              <p className="text-xs text-slate-500">
                 Exploracion modular de casos estructurados bajo simulacion de guardia hospitalaria
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 text-xs font-mono text-gray-400">
-            <Sparkles className="w-3.5 h-3.5 text-clinical-cyan" />
+          <div className="flex items-center gap-2 text-xs font-mono text-slate-500">
+            <Sparkles className="w-3.5 h-3.5 text-sky-600" />
             <span>{specialties.length} especialidades disponibles</span>
           </div>
         </div>

@@ -7,10 +7,11 @@ import {
   SimulatorPage,
   LibraryPage,
   LandingPage,
+  DiagnosticExamPage,
 } from './pages';
 
 const AppContent: React.FC = () => {
-  const { loginDemo, isAuthenticated } = useAuth();
+  const { user, loginDemo, isAuthenticated } = useAuth();
   const [activeTab, setActiveTab] = useState<NavTabId | string>('landing');
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
   const [selectedCase, setSelectedCase] = useState<string | null>(null);
@@ -35,7 +36,11 @@ const AppContent: React.FC = () => {
 
   const handleStartDemo = async () => {
     if (isAuthenticated) {
-      setActiveTab('dashboard');
+      if (user && !user.diagnostic_completed) {
+        setActiveTab('diagnostic');
+      } else {
+        setActiveTab('dashboard');
+      }
       return;
     }
     try {
@@ -47,7 +52,7 @@ const AppContent: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-clinical-bg text-gray-100 flex flex-col justify-between selection:bg-clinical-teal selection:text-white">
+    <div className="min-h-screen bg-clinical-bg text-slate-800 flex flex-col justify-between selection:bg-sky-500 selection:text-white">
       <Navbar
         activeTab={activeTab}
         onSelectTab={setActiveTab}
@@ -65,6 +70,11 @@ const AppContent: React.FC = () => {
             <DashboardPage
               onSelectSpecialty={handleSelectSpecialty}
               onSelectCase={handleSelectCase}
+              onStartDiagnostic={() => setActiveTab('diagnostic')}
+            />
+          ) : activeTab === 'diagnostic' ? (
+            <DiagnosticExamPage
+              onComplete={() => setActiveTab('dashboard')}
             />
           ) : activeTab === 'simulator' ? (
             <SimulatorPage
@@ -74,8 +84,8 @@ const AppContent: React.FC = () => {
           ) : activeTab === 'library' ? (
             <LibraryPage onSelectCase={handleSelectCase} />
           ) : (
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 text-center text-gray-400">
-              <h2 className="text-xl font-bold text-white mb-2">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 text-center text-slate-500">
+              <h2 className="text-xl font-bold text-slate-900 mb-2">
                 Modulo Clinico en Preparacion
               </h2>
               <p className="text-sm max-w-md mx-auto">
@@ -92,8 +102,8 @@ const AppContent: React.FC = () => {
       />
 
       {activeTab !== 'landing' && (
-        <footer className="border-t border-clinical-border py-6 px-4 text-center">
-          <p className="text-xs font-mono text-gray-500">
+        <footer className="border-t border-slate-200 py-6 px-4 text-center bg-white">
+          <p className="text-xs font-mono text-slate-500">
             ODYSSMEDIC PRECISION ENGINE - BIOINCUBADORA CAYETANO 2026
           </p>
         </footer>

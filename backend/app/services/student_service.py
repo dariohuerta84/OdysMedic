@@ -10,6 +10,7 @@ from app.db.models import (
     SpacedRepetitionTask,
 )
 from app.db.seeder import seed_initial_data, CARDINAL_SPECIALTIES, DEMO_USER_EMAIL
+from app.db.diagnostic_bank import DIAGNOSTIC_QUESTIONS
 from app.models.enums import (
     MedicalSpecialty,
     CognitiveGap,
@@ -231,6 +232,21 @@ class StudentService:
             for t in pending_tasks
         ]
 
+
+        aptitude_label = (
+            "Apto para Internado / Examen"
+            if user.aptitude_status == "apto"
+            else (
+                "En Nivelación"
+                if user.aptitude_status == "en_nivelacion"
+                else (
+                    "No Apto"
+                    if user.aptitude_status == "no_apto"
+                    else "Pendiente de Autoevaluación"
+                )
+            )
+        )
+
         return {
             "id": user.id,
             "email": user.email,
@@ -241,6 +257,10 @@ class StudentService:
             "plan_tier": user.plan_tier,
             "xp": user.xp,
             "streak_days": user.streak_days,
+            "diagnostic_completed": bool(user.diagnostic_completed),
+            "diagnostic_score": user.diagnostic_score,
+            "aptitude_status": user.aptitude_status,
+            "aptitude_label": aptitude_label,
             "created_at": user.created_at.isoformat() if user.created_at else None,
             "user": {
                 "id": user.id,
@@ -252,6 +272,10 @@ class StudentService:
                 "plan_tier": user.plan_tier,
                 "xp": user.xp,
                 "streak_days": user.streak_days,
+                "diagnostic_completed": bool(user.diagnostic_completed),
+                "diagnostic_score": user.diagnostic_score,
+                "aptitude_status": user.aptitude_status,
+                "aptitude_label": aptitude_label,
             },
             "specialties": specialty_profiles,
             "specialty_profiles": specialty_profiles,
@@ -260,6 +284,130 @@ class StudentService:
             "global_ocri_score": ocri_score,
             "pending_repetition_tasks": formatted_tasks,
             "spaced_repetition_tasks": formatted_tasks,
+        }
+
+    def submit_diagnostic_exam(
+        self,
+        db: Session,
+        user_id: int,
+        answers: List[Dict[str, Any]],
+    ) -> Dict[str, Any]:
+        user = db.query(User).filter_by(id=user_id).first()
+        if not user:
+            raise ValueError(f"User with id {user_id} not found")
+
+        question_map = {q["id"]: q for q in DIAGNOSTIC_QUESTIONS}
+        correct_count = 0
+        total_questions = len(DIAGNOSTIC_QUESTIONS)
+        results_detail = []
+        detected_gaps_list = []
+
+        ans_dict = {a.get("question_id"): a.get("selected_option_id") for a in answers}
+
+        for q_id, q_data in question_map.items():
+            selected_opt_id = ans_dict.get(q_id)
+            selected_opt = next(
+                (opt for opt in q_data["options"] if str(opt["id"]).lower() == str(selected_opt_id or "").lower()),
+                None
+            )
+
+            is_correct = bool(selected_opt and selected_opt.get("is_correct"))
+            if is_correct:
+                correct_count += 1
+                results_detail.append({
+                    "question_id": q_id,
+                    "specialty": q_data["specialty"],
+                    "is_correct": True,
+                    "selected_option_id": selected_opt_id,
+                    "detected_gap": None,
+                    "explanation": selected_opt.get("explanation") if selected_opt else "",
+                })
+            else:
+                gap = selected_opt.get("detected_gap") if selected_opt else q_data.get("target_gap")
+                if gap:
+                    detected_gaps_list.append(gap)
+                    gap_metric = (
+                        db.query(StudentGapMetric)
+                        .filter_by(user_id=user.id, gap_type=gap)
+                        .first()
+                    )
+                    if gap_metric:
+                        gap_metric.fail_count += 1
+                        gap_metric.last_concept = f"diagnostic_q{q_id}"
+                        gap_metric.updated_at = datetime.now(timezone.utc)
+                    else:
+                        gap_metric = StudentGapMetric(
+                            user_id=user.id,
+                            gap_type=gap,
+                            fail_count=1,
+                            last_concept=f"diagnostic_q{q_id}",
+                        )
+                        db.add(gap_metric)
+                    db.flush()
+
+                results_detail.append({
+                    "question_id": q_id,
+                    "specialty": q_data["specialty"],
+                    "is_correct": False,
+                    "selected_option_id": selected_opt_id,
+                    "detected_gap": gap,
+                    "explanation": selected_opt.get("explanation") if selected_opt else "Respuesta no seleccionada o incorrecta.",
+                })
+
+        score_pct = round((correct_count / total_questions) * 100.0, 1)
+
+        if score_pct >= 75.0:
+            aptitude_status = "apto"
+            aptitude_label = "Apto para Internado / Examen"
+        elif score_pct >= 50.0:
+            aptitude_status = "en_nivelacion"
+            aptitude_label = "En Nivelación - Apto Condicional"
+        else:
+            aptitude_status = "no_apto"
+            aptitude_label = "No Apto - Nivelación Prioritaria Requerida"
+
+        user.diagnostic_completed = True
+        user.diagnostic_score = score_pct
+        user.aptitude_status = aptitude_status
+        user.diagnostic_completed_at = datetime.now(timezone.utc)
+        user.xp += 100
+
+        for spec_name in CARDINAL_SPECIALTIES:
+            spec_questions = [r for r in results_detail if r["specialty"] == spec_name]
+            if spec_questions:
+                spec_correct = sum(1 for r in spec_questions if r["is_correct"])
+                calibrated_score = round((spec_correct / len(spec_questions)) * 100.0, 1)
+            else:
+                calibrated_score = score_pct
+
+            mastery = db.query(StudentMastery).filter_by(user_id=user.id, specialty=spec_name).first()
+            if not mastery:
+                mastery = StudentMastery(
+                    user_id=user.id,
+                    specialty=spec_name,
+                    mastery_score=calibrated_score,
+                    competency_level="deficiente" if calibrated_score < 70 else "competente",
+                    cases_completed=0,
+                )
+                db.add(mastery)
+            else:
+                mastery.mastery_score = calibrated_score
+                mastery.competency_level = "deficiente" if calibrated_score < 70 else "competente"
+                mastery.updated_at = datetime.now(timezone.utc)
+
+        db.commit()
+        db.refresh(user)
+
+        return {
+            "success": True,
+            "diagnostic_score": score_pct,
+            "aptitude_status": aptitude_status,
+            "aptitude_label": aptitude_label,
+            "correct_count": correct_count,
+            "total_questions": total_questions,
+            "xp_earned": 100,
+            "detected_gaps": list(set(detected_gaps_list)),
+            "details": results_detail,
         }
 
     def record_mcq_attempt(

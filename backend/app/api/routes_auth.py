@@ -40,6 +40,9 @@ def format_user_profile(user: User) -> dict:
         "plan_tier": user.plan_tier,
         "xp": user.xp,
         "streak_days": user.streak_days,
+        "diagnostic_completed": bool(user.diagnostic_completed),
+        "diagnostic_score": user.diagnostic_score,
+        "aptitude_status": user.aptitude_status,
         "created_at": user.created_at.isoformat() if user.created_at else None,
     }
 

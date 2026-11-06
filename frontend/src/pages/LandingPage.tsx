@@ -3,15 +3,14 @@ import { CognitiveGapTag } from '../types/api';
 import {
   ArrowRight,
   Zap,
-  Brain,
   Clock,
   CheckCircle2,
   AlertTriangle,
   Sparkles,
   Compass,
-  TrendingUp,
   Smartphone,
   Coins,
+  ShieldCheck,
 } from 'lucide-react';
 
 export interface LandingPageProps {
@@ -146,38 +145,32 @@ export const LandingPage: React.FC<LandingPageProps> = ({
     PREVIEW_STATIONS[0];
 
   return (
-    <div className="relative overflow-hidden selection:bg-clinical-teal selection:text-white">
-      {/* Background Decorative Gradients */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] pointer-events-none overflow-hidden opacity-30">
-        <div className="absolute -top-32 left-1/4 w-96 h-96 bg-clinical-teal/20 rounded-full blur-[128px]" />
-        <div className="absolute top-20 right-1/4 w-96 h-96 bg-clinical-cyan/15 rounded-full blur-[128px]" />
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-20 space-y-24">
+    <div className="relative overflow-hidden bg-slate-50 min-h-screen">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-20 space-y-20">
         {/* ========================================================================= */}
         {/* 1. HERO SECTION                                                           */}
         {/* ========================================================================= */}
-        <section className="relative text-center space-y-8 max-w-4xl mx-auto pt-6">
+        <section className="relative text-center space-y-7 max-w-4xl mx-auto pt-4">
           {/* Institutional Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/90 border border-clinical-teal/40 text-clinical-teal-light text-xs font-mono tracking-wide shadow-lg">
-            <span className="w-2 h-2 rounded-full bg-clinical-teal animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-sky-200 text-sky-800 text-xs font-mono font-semibold tracking-wide shadow-xs">
+            <span className="w-2 h-2 rounded-full bg-sky-500 animate-pulse" />
             <span>BioIncubadora Cayetano | Proyectos de Ingenieria 2 - UPCH</span>
           </div>
 
           {/* Headline */}
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-tight">
             El Simulador Clinico que Transforma el{' '}
-            <span className="bg-gradient-to-r from-clinical-teal-light via-clinical-cyan to-teal-400 bg-clip-text text-transparent">
+            <span className="text-sky-600">
               Razonamiento Medico
             </span>{' '}
-            Frente al Burnout de Guardia
+            Frente al Turno Hospitalario
           </h1>
 
           {/* Subtitle */}
-          <p className="text-base sm:text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Entrenamiento adaptativo de alta fidelidad para internos y estudiantes peruanos.
-            Diagnostica tus brechas cognitivas (OCRI) y consolida conceptos clave con perlas
-            de 60 segundos y guias internacionales.
+          <p className="text-base sm:text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
+            Entrenamiento adaptativo de precision para internos y estudiantes de medicina.
+            Diagnostica tus brechas cognitivas (OCRI) y consolida conceptos clinicos clave con
+            microperlas de 60 segundos y guias de practica clinica internacionales.
           </p>
 
           {/* Action Buttons */}
@@ -185,7 +178,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             <button
               type="button"
               onClick={onStartDemo}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-gradient-to-r from-clinical-teal to-teal-600 hover:from-teal-500 hover:to-teal-700 text-white font-bold text-sm tracking-wide shadow-lg shadow-teal-950/40 hover:shadow-teal-900/60 transition-all active:scale-[0.98]"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm tracking-wide shadow-sm transition-all active:scale-[0.98]"
             >
               <Zap className="w-4 h-4 fill-white" />
               <span>Acceso Medico Demo UPCH</span>
@@ -195,38 +188,38 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             <button
               type="button"
               onClick={onExploreWorlds}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-gray-200 hover:text-white border border-white/10 hover:border-clinical-cyan/40 font-semibold text-sm transition-all active:scale-[0.98]"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 border border-slate-200 font-semibold text-sm transition-all shadow-xs active:scale-[0.98]"
             >
-              <Compass className="w-4 h-4 text-clinical-cyan" />
-              <span>Explorar Simulador y Mundos Clinicos</span>
+              <Compass className="w-4 h-4 text-sky-600" />
+              <span>Explorar Casos y Especialidades</span>
             </button>
           </div>
 
           {/* Trust Metrics Bar */}
-          <div className="pt-8 grid grid-cols-2 sm:grid-cols-4 gap-4 border-t border-white/10 max-w-3xl mx-auto">
+          <div className="pt-8 grid grid-cols-2 sm:grid-cols-4 gap-4 border-t border-slate-200 max-w-3xl mx-auto">
             <div className="p-3 text-center">
-              <span className="block text-xl sm:text-2xl font-bold font-mono text-clinical-cyan">
+              <span className="block text-xl sm:text-2xl font-bold font-mono text-sky-700">
                 4 Causas Raiz
               </span>
-              <span className="text-xs text-gray-400">Taxonomia OCRI</span>
+              <span className="text-xs text-slate-500 font-medium">Taxonomia OCRI</span>
             </div>
             <div className="p-3 text-center">
-              <span className="block text-xl sm:text-2xl font-bold font-mono text-white">
+              <span className="block text-xl sm:text-2xl font-bold font-mono text-slate-900">
                 D7 / D21
               </span>
-              <span className="text-xs text-gray-400">Repeticion Espaciada</span>
+              <span className="text-xs text-slate-500 font-medium">Repeticion Espaciada</span>
             </div>
             <div className="p-3 text-center">
-              <span className="block text-xl sm:text-2xl font-bold font-mono text-clinical-teal-light">
+              <span className="block text-xl sm:text-2xl font-bold font-mono text-sky-700">
                 60 Segundos
               </span>
-              <span className="text-xs text-gray-400">Microperlas de Guardia</span>
+              <span className="text-xs text-slate-500 font-medium">Microperlas de Guardia</span>
             </div>
             <div className="p-3 text-center">
-              <span className="block text-xl sm:text-2xl font-bold font-mono text-emerald-400">
+              <span className="block text-xl sm:text-2xl font-bold font-mono text-emerald-700">
                 100% Indexado
               </span>
-              <span className="text-xs text-gray-400">KDIGO, ADA, AHA/ASA</span>
+              <span className="text-xs text-slate-500 font-medium">KDIGO, ADA, AHA/ASA</span>
             </div>
           </div>
         </section>
@@ -235,123 +228,106 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         {/* 2. COMPARISON & VALUE PROPOSITION BENTO GRID                              */}
         {/* ========================================================================= */}
         <section className="space-y-8">
-          <div className="text-center max-w-2xl mx-auto space-y-3">
-            <span className="px-3 py-1 rounded-full text-xs font-mono uppercase font-semibold bg-clinical-teal/15 text-clinical-teal-light border border-clinical-teal/30">
+          <div className="text-center max-w-2xl mx-auto space-y-2">
+            <span className="px-3 py-1 rounded-full text-xs font-mono uppercase font-semibold bg-sky-50 text-sky-800 border border-sky-200">
               Arquitectura Cognitiva Diferencial
             </span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-              Disenado para la Realidad Hospitalaria y el Pase de Visita
+            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+              Disenado para el Pase de Visita y la Guardia Medica
             </h2>
-            <p className="text-sm text-gray-400 leading-relaxed">
-              Supera la memorizacion pasiva. OdyssMedic correlaciona el desempeno en el turno
-              con el diagnostico de brechas especificas para elevar tu rango de competencia.
+            <p className="text-sm text-slate-600 leading-relaxed">
+              Supera la memorizacion pasiva. OdyssMedic correlaciona tus decisiones en el turno
+              con el diagnostico de brechas cognitivas para elevar tu rango de competencia.
             </p>
           </div>
 
+          {/* Bento Grid (4 Cards) */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Card 1: Mas alla de los bancos estaticos */}
-            <div className="p-6 rounded-2xl bg-gradient-to-b from-slate-900/90 to-[#0C0F1D] border border-white/10 hover:border-clinical-cyan/40 transition-all flex flex-col justify-between space-y-4 group">
+            {/* Card 1: Diagnostico de Brecha Cognitiva */}
+            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs hover:border-sky-300 hover:shadow-md transition-all flex flex-col justify-between space-y-4 group">
               <div className="space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-clinical-cyan/15 border border-clinical-cyan/30 flex items-center justify-center text-clinical-cyan">
-                  <Brain className="w-5 h-5" />
+                <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-200 flex items-center justify-center text-sky-600 shadow-xs">
+                  <ShieldCheck className="w-5 h-5" />
                 </div>
-                <h3 className="text-lg font-bold text-white group-hover:text-clinical-cyan transition-colors">
-                  Mas alla de los bancos estaticos
+                <h3 className="text-lg font-bold text-slate-900 group-hover:text-sky-700 transition-colors">
+                  Deteccion de Brechas OCRI
                 </h3>
-                <p className="text-xs text-gray-300 leading-relaxed font-sans">
-                  No te limitamos a un simple &quot;Correcto o Incorrecto&quot;. Identificamos
-                  la causa raiz del error clinico en 4 dimensiones criticas:
+                <p className="text-xs text-slate-600 leading-relaxed font-sans">
+                  No es solo acertar o fallar. El motor clasifica tus desviaciones en 4 causas raiz:
+                  Triaje de Severidad, Razonamiento Diagnostico, Interpretacion de Laboratorio y Manejo Inicial.
                 </p>
-                <ul className="text-xs text-gray-400 space-y-1.5 font-mono">
-                  <li className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-teal-400 shrink-0" />
-                    <span>Triaje de Severidad</span>
-                  </li>
-                  <li className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-teal-400 shrink-0" />
-                    <span>Razonamiento Diagnostico</span>
-                  </li>
-                  <li className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-teal-400 shrink-0" />
-                    <span>Interpretacion de Laboratorio</span>
-                  </li>
-                  <li className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-teal-400 shrink-0" />
-                    <span>Manejo Inicial de Guardia</span>
-                  </li>
-                </ul>
+                <div className="p-2.5 rounded-lg bg-sky-50 border border-sky-200 text-xs text-sky-800 font-mono font-medium">
+                  Taxonomia adaptativa basada en analisis de incidentes clinicos.
+                </div>
               </div>
-              <div className="pt-3 border-t border-white/5 text-[11px] font-mono text-clinical-teal-light">
-                Motor Diagnostico OCRI Integrado
+              <div className="pt-3 border-t border-slate-100 text-[11px] font-mono text-sky-700 font-semibold">
+                Calibracion Basada en Evidencia
               </div>
             </div>
 
-            {/* Card 2: Repaso Espaciado D7/D21 */}
-            <div className="p-6 rounded-2xl bg-gradient-to-b from-slate-900/90 to-[#0C0F1D] border border-white/10 hover:border-teal-400/40 transition-all flex flex-col justify-between space-y-4 group">
+            {/* Card 2: Repeticion Espaciada Neural */}
+            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs hover:border-sky-300 hover:shadow-md transition-all flex flex-col justify-between space-y-4 group">
               <div className="space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-teal-500/15 border border-teal-500/30 flex items-center justify-center text-teal-400">
-                  <TrendingUp className="w-5 h-5" />
+                <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-200 flex items-center justify-center text-sky-600 shadow-xs">
+                  <Clock className="w-5 h-5" />
                 </div>
-                <h3 className="text-lg font-bold text-white group-hover:text-teal-300 transition-colors">
-                  Repaso Espaciado D7/D21
+                <h3 className="text-lg font-bold text-slate-900 group-hover:text-sky-700 transition-colors">
+                  Repeticion Espaciada D7 / D21
                 </h3>
-                <p className="text-xs text-gray-300 leading-relaxed font-sans">
-                  Algoritmo basado en la curva del olvido de Ebbinghaus adaptado a la practica medica.
+                <p className="text-xs text-slate-600 leading-relaxed font-sans">
                   Cuando fallas una estacion, OdyssMedic agenda un refuerzo tactico a los 7 y 21 dias
-                  con variaciones clinicas para consolidar memoria a largo plazo.
+                  con variaciones clinicas para consolidar memoria de largo plazo segun la curva de Ebbinghaus.
                 </p>
-                <div className="p-2.5 rounded-lg bg-black/40 border border-white/5 text-xs text-gray-300 font-mono">
-                  Ideal para el pase de visita hospitalario y la preparacion ENAM / EsSalud.
+                <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-700 font-mono">
+                  Ideal para el pase de visita hospitalario y la preparacion ENAM.
                 </div>
               </div>
-              <div className="pt-3 border-t border-white/5 text-[11px] font-mono text-teal-400">
+              <div className="pt-3 border-t border-slate-100 text-[11px] font-mono text-sky-700 font-semibold">
                 Prescripcion Adaptativa Automatizada
               </div>
             </div>
 
             {/* Card 3: Accesibilidad Inmediata en Sala */}
-            <div className="p-6 rounded-2xl bg-gradient-to-b from-slate-900/90 to-[#0C0F1D] border border-white/10 hover:border-amber-400/40 transition-all flex flex-col justify-between space-y-4 group">
+            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs hover:border-sky-300 hover:shadow-md transition-all flex flex-col justify-between space-y-4 group">
               <div className="space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 shadow-xs">
                   <Smartphone className="w-5 h-5" />
                 </div>
-                <h3 className="text-lg font-bold text-white group-hover:text-amber-300 transition-colors">
-                  Accesibilidad Inmediata en Sala
+                <h3 className="text-lg font-bold text-slate-900 group-hover:text-amber-700 transition-colors">
+                  Accesibilidad en Movil
                 </h3>
-                <p className="text-xs text-gray-300 leading-relaxed font-sans">
-                  Optimizado para el ritmo frenetico de turnos de 12 y 24 horas. Interfaz responsive
-                  ultraligera disenada tanto para smartphones en el bolsillo del mandil como para
-                  laptops en sala de residentes, sin descargas pesadas ni configuracion previa.
+                <p className="text-xs text-slate-600 leading-relaxed font-sans">
+                  Optimizado para el ritmo de turnos de 12 y 24 horas. Interfaz responsive ultraligera
+                  disenada para smartphones en el bolsillo del mandil y laptops en sala de residentes.
                 </p>
-                <div className="flex items-center gap-2 text-xs font-mono text-gray-400">
-                  <Clock className="w-4 h-4 text-amber-400 shrink-0" />
+                <div className="flex items-center gap-2 text-xs font-mono text-slate-600">
+                  <Clock className="w-4 h-4 text-amber-600 shrink-0" />
                   <span>Casos completables en menos de 5 minutos</span>
                 </div>
               </div>
-              <div className="pt-3 border-t border-white/5 text-[11px] font-mono text-amber-400">
+              <div className="pt-3 border-t border-slate-100 text-[11px] font-mono text-amber-700 font-semibold">
                 Web App Responsive de Cero Friccion
               </div>
             </div>
 
             {/* Card 4: Accesible y Cost-Effective */}
-            <div className="p-6 rounded-2xl bg-gradient-to-b from-slate-900/90 to-[#0C0F1D] border border-white/10 hover:border-emerald-400/40 transition-all flex flex-col justify-between space-y-4 group">
+            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs hover:border-sky-300 hover:shadow-md transition-all flex flex-col justify-between space-y-4 group">
               <div className="space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 shadow-xs">
                   <Coins className="w-5 h-5" />
                 </div>
-                <h3 className="text-lg font-bold text-white group-hover:text-emerald-300 transition-colors">
-                  Accesible y Cost-Effective
+                <h3 className="text-lg font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">
+                  Accesible y Equitativo
                 </h3>
-                <p className="text-xs text-gray-300 leading-relaxed font-sans">
-                  Frente a cursos y bancos comerciales tradicionales que superan los USD 300 anuales,
-                  OdyssMedic propone un modelo equitativo desde S/ 28 al mes, accesible a cualquier
-                  estudiante o interno peruano con tecnologia de vanguardia UPCH.
+                <p className="text-xs text-slate-600 leading-relaxed font-sans">
+                  Frente a academias comerciales que superan los USD 300 anuales, OdyssMedic propone un
+                  modelo accesible a cualquier estudiante o interno con tecnologia de vanguardia UPCH.
                 </p>
-                <div className="p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-xs text-emerald-300 font-mono font-semibold">
-                  S/ 28/mes vs USD 300+ en academias
+                <div className="p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 font-mono font-semibold">
+                  Modelo equitativo para internos peruanos
                 </div>
               </div>
-              <div className="pt-3 border-t border-white/5 text-[11px] font-mono text-emerald-400">
+              <div className="pt-3 border-t border-slate-100 text-[11px] font-mono text-emerald-700 font-semibold">
                 Democratizacion del Razonamiento Clinico
               </div>
             </div>
@@ -362,14 +338,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         {/* 3. INTERACTIVE DEMONSTRATION PREVIEW (3-STATION STEPPER)                   */}
         {/* ========================================================================= */}
         <section className="space-y-8">
-          <div className="text-center max-w-2xl mx-auto space-y-3">
-            <span className="px-3 py-1 rounded-full text-xs font-mono uppercase font-semibold bg-clinical-cyan/15 text-clinical-cyan border border-clinical-cyan/30">
+          <div className="text-center max-w-2xl mx-auto space-y-2">
+            <span className="px-3 py-1 rounded-full text-xs font-mono uppercase font-semibold bg-sky-50 text-sky-800 border border-sky-200">
               Demostracion Interactiva
             </span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
               Recorrido de Alta Fidelidad en 3 Estaciones
             </h2>
-            <p className="text-sm text-gray-400 leading-relaxed">
+            <p className="text-sm text-slate-600 leading-relaxed">
               Experimenta como OdyssMedic descompone un caso clinico complejo en tres estaciones
               cognitivas secuenciales con retroalimentacion inmediata.
             </p>
@@ -386,15 +362,15 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   onClick={() => setActivePreviewStation(station.stationNumber)}
                   className={`w-full sm:w-1/3 flex items-center gap-3 p-3.5 rounded-xl border text-left transition-all ${
                     isActive
-                      ? 'bg-clinical-teal/20 border-clinical-teal text-white shadow-lg shadow-teal-950/30 font-semibold'
-                      : 'bg-slate-900/80 border-white/10 text-gray-400 hover:text-white hover:bg-slate-800'
+                      ? 'bg-sky-50 border-sky-400 text-slate-900 font-semibold shadow-xs'
+                      : 'bg-white border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                   }`}
                 >
                   <div
                     className={`w-7 h-7 rounded-lg flex items-center justify-center font-mono text-xs font-bold shrink-0 ${
                       isActive
-                        ? 'bg-clinical-teal text-white'
-                        : 'bg-slate-800 text-gray-400'
+                        ? 'bg-sky-600 text-white'
+                        : 'bg-slate-100 text-slate-500'
                     }`}
                   >
                     {station.stationNumber}
@@ -403,7 +379,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                     <span className="block text-xs font-medium truncate">
                       {station.title}
                     </span>
-                    <span className="block text-[10px] text-gray-500 font-mono truncate">
+                    <span className="block text-[10px] text-slate-500 font-mono truncate">
                       {station.badge}
                     </span>
                   </div>
@@ -413,35 +389,35 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           </div>
 
           {/* Interactive Stepper Card */}
-          <div className="max-w-4xl mx-auto p-6 sm:p-8 rounded-2xl bg-gradient-to-b from-[#11162B] to-[#0A0D18] border border-white/10 shadow-2xl space-y-6">
+          <div className="max-w-4xl mx-auto p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-6">
             {/* Station Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
               <div>
-                <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold bg-clinical-cyan/20 text-clinical-cyan border border-clinical-cyan/40">
+                <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold bg-sky-50 text-sky-800 border border-sky-200">
                   {currentPreview.badge} : {currentPreview.subtitle}
                 </span>
-                <h3 className="text-xl font-bold text-white mt-1.5">
+                <h3 className="text-xl font-bold text-slate-900 mt-1.5">
                   {currentPreview.title}
                 </h3>
               </div>
-              <div className="text-xs font-mono text-gray-400">
+              <div className="text-xs font-mono text-slate-500">
                 Paso {currentPreview.stationNumber} de 3
               </div>
             </div>
 
             {/* Vignette Scenario */}
             <div className="space-y-2">
-              <span className="text-xs font-mono uppercase tracking-wider text-gray-400 font-semibold">
+              <span className="text-xs font-mono uppercase tracking-wider text-slate-500 font-semibold">
                 Caso Clinico - Escenario de Guardia
               </span>
-              <p className="text-sm text-gray-200 leading-relaxed font-sans bg-black/40 p-4 rounded-xl border border-white/5">
+              <p className="text-sm text-slate-800 leading-relaxed font-sans bg-slate-50 p-4 rounded-xl border border-slate-200">
                 {currentPreview.scenario}
               </p>
             </div>
 
             {/* Vitals & Telemetry */}
             <div className="space-y-2">
-              <span className="text-xs font-mono uppercase tracking-wider text-gray-400 font-semibold">
+              <span className="text-xs font-mono uppercase tracking-wider text-slate-500 font-semibold">
                 Telemetria y Parametros Clave
               </span>
               <div className="flex flex-wrap gap-2">
@@ -450,11 +426,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                     key={idx}
                     className={`px-3 py-1.5 rounded-lg border text-xs font-mono flex items-center gap-2 ${
                       vit.critical
-                        ? 'bg-rose-500/10 border-rose-500/30 text-rose-300'
-                        : 'bg-slate-800/80 border-white/10 text-gray-300'
+                        ? 'bg-rose-50 border-rose-200 text-rose-800'
+                        : 'bg-white border-slate-200 text-slate-700'
                     }`}
                   >
-                    <span className="text-gray-400 font-medium">{vit.label}:</span>
+                    <span className="text-slate-500 font-medium">{vit.label}:</span>
                     <span className="font-bold">{vit.value}</span>
                   </div>
                 ))}
@@ -463,10 +439,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
             {/* Clinical Stem Question & Options */}
             <div className="space-y-3">
-              <span className="text-xs font-mono uppercase tracking-wider text-clinical-cyan font-semibold">
+              <span className="text-xs font-mono uppercase tracking-wider text-sky-700 font-semibold">
                 Desafio de Razonamiento
               </span>
-              <p className="text-sm font-semibold text-white">
+              <p className="text-sm font-semibold text-slate-900">
                 {currentPreview.clinicalQuestion}
               </p>
 
@@ -476,21 +452,21 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                     key={opt.id}
                     className={`p-3.5 rounded-xl border text-xs font-sans flex items-start gap-3 transition-colors ${
                       opt.isCorrect
-                        ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-200'
-                        : 'bg-slate-900/60 border-white/5 text-gray-400'
+                        ? 'bg-emerald-50 border-emerald-300 text-emerald-950 font-medium'
+                        : 'bg-slate-50 border-slate-200 text-slate-600'
                     }`}
                   >
                     <div className="mt-0.5 shrink-0">
                       {opt.isCorrect ? (
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                       ) : (
-                        <div className="w-4 h-4 rounded-full border border-gray-600" />
+                        <div className="w-4 h-4 rounded-full border border-slate-300" />
                       )}
                     </div>
                     <div className="flex-1">
-                      <span className="font-medium">{opt.text}</span>
+                      <span>{opt.text}</span>
                       {opt.isCorrect && (
-                        <span className="block mt-1 text-[11px] font-mono text-emerald-400">
+                        <span className="block mt-1 text-[11px] font-mono text-emerald-700 font-semibold">
                           Respuesta Correcta Fundamentada
                         </span>
                       )}
@@ -502,22 +478,22 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
             {/* Cognitive Gap Feedback & 60-Second Pearl */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-              <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-1.5">
-                <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-amber-300">
-                  <AlertTriangle className="w-4 h-4 text-amber-400" />
+              <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 space-y-1.5">
+                <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-amber-800">
+                  <AlertTriangle className="w-4 h-4 text-amber-600" />
                   <span>Deteccion OCRI: {currentPreview.detectedGap}</span>
                 </div>
-                <p className="text-xs text-gray-300 font-sans leading-relaxed">
+                <p className="text-xs text-slate-700 font-sans leading-relaxed">
                   {currentPreview.gapDescription}
                 </p>
               </div>
 
-              <div className="p-4 rounded-xl bg-teal-500/10 border border-teal-500/30 space-y-1.5">
-                <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-teal-300">
-                  <Sparkles className="w-4 h-4 text-teal-400" />
+              <div className="p-4 rounded-xl bg-sky-50 border border-sky-200 space-y-1.5">
+                <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-sky-800">
+                  <Sparkles className="w-4 h-4 text-sky-600" />
                   <span>Perla Clinica de Guardia</span>
                 </div>
-                <p className="text-xs text-gray-300 font-sans leading-relaxed">
+                <p className="text-xs text-slate-700 font-sans leading-relaxed">
                   {currentPreview.pearl}
                 </p>
               </div>
@@ -528,14 +504,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         {/* ========================================================================= */}
         {/* 4. CALL TO ACTION STRIP                                                   */}
         {/* ========================================================================= */}
-        <section className="text-center p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-slate-900 via-[#10192A] to-slate-900 border border-clinical-teal/30 space-y-6">
-          <div className="max-w-2xl mx-auto space-y-3">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-              Listo para entrenar tu razonamiento clinico?
+        <section className="text-center p-8 sm:p-12 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-6">
+          <div className="max-w-2xl mx-auto space-y-2">
+            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+              Listo para calibrar tu razonamiento clinico?
             </h2>
-            <p className="text-sm text-gray-300 leading-relaxed">
-              Unete a la comunidad de internos y residentes de Cayetano Heredia que estan dominando
-              la guardia con medicina de precision y aprendizaje adaptativo.
+            <p className="text-sm text-slate-600 leading-relaxed">
+              Unete a la comunidad de internos y residentes de Cayetano Heredia que entrenan
+              con medicina de precision y aprendizaje adaptativo de alto rendimiento.
             </p>
           </div>
 
@@ -543,7 +519,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             <button
               type="button"
               onClick={onStartDemo}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-clinical-teal hover:bg-teal-600 text-white font-bold text-sm shadow-xl shadow-teal-950/40 transition-all active:scale-[0.98]"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm shadow-xs transition-all active:scale-[0.98]"
             >
               <span>Comenzar Entrenamiento Demo</span>
               <ArrowRight className="w-4 h-4" />
@@ -551,7 +527,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             <button
               type="button"
               onClick={onExploreWorlds}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-gray-200 border border-white/10 font-semibold text-sm transition-all"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 font-semibold text-sm transition-all"
             >
               <span>Ver Casos y Especialidades</span>
             </button>
@@ -561,39 +537,39 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         {/* ========================================================================= */}
         {/* 5. ACADEMIC & INSTITUTIONAL FOOTER                                        */}
         {/* ========================================================================= */}
-        <footer className="pt-12 border-t border-white/10 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-gray-400 font-sans">
+        <footer className="pt-10 border-t border-slate-200 space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-slate-600 font-sans">
             <div className="space-y-1.5">
-              <span className="text-[11px] font-mono uppercase tracking-wider text-gray-500 font-semibold block">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold block">
                 Proyecto de Investigacion Aplicada
               </span>
-              <p className="text-white font-semibold text-sm">OdyssMedic Precision Engine</p>
-              <p className="text-gray-400">
+              <p className="text-slate-900 font-bold text-sm">OdyssMedic Precision Engine</p>
+              <p className="text-slate-500">
                 Proyectos de Ingenieria 2 - BioIncubadora Cayetano
               </p>
-              <p className="text-gray-400">
+              <p className="text-slate-500">
                 Universidad Peruana Cayetano Heredia (UPCH) 2026
               </p>
             </div>
 
             <div className="space-y-1.5">
-              <span className="text-[11px] font-mono uppercase tracking-wider text-gray-500 font-semibold block">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold block">
                 Equipo de Desarrollo
               </span>
-              <p className="text-gray-300">
-                <span className="text-white font-medium">Autores:</span> Dario Huerta Cruz & Elvis Deiwis Pilco Cruz
+              <p className="text-slate-600">
+                <span className="text-slate-900 font-medium">Autores:</span> Dario Huerta Cruz & Elvis Deiwis Pilco Cruz
               </p>
-              <p className="text-gray-300">
-                <span className="text-white font-medium">Evaluador y Docente:</span> Mag. Noe Bazan
+              <p className="text-slate-600">
+                <span className="text-slate-900 font-medium">Evaluador y Docente:</span> Mag. Noe Bazan
               </p>
-              <p className="text-gray-400">Facultad de Ciencias e Ingenieria - UPCH</p>
+              <p className="text-slate-500">Facultad de Ciencias e Ingenieria - UPCH</p>
             </div>
 
             <div className="space-y-1.5">
-              <span className="text-[11px] font-mono uppercase tracking-wider text-gray-500 font-semibold block">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold block">
                 Fundamentacion Academica
               </span>
-              <p className="text-gray-400 leading-relaxed">
+              <p className="text-slate-500 leading-relaxed">
                 Plataforma de simulacion clinica adaptativa basada en la integracion de RAG
                 con guias de practica clinica de referencia y modelado del proceso de razonamiento
                 diagnostico en medicina de emergencia.
@@ -601,7 +577,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </div>
           </div>
 
-          <div className="text-center pt-6 border-t border-white/5 text-[11px] font-mono text-gray-500">
+          <div className="text-center pt-6 border-t border-slate-200 text-[11px] font-mono text-slate-400">
             ODYSSMEDIC PRECISION ENGINE (C) 2026 - UNIVERSIDAD PERUANA CAYETANO HEREDIA. TODOS LOS DERECHOS RESERVADOS.
           </div>
         </footer>

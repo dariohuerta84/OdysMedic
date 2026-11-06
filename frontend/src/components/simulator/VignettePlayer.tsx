@@ -411,46 +411,46 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
 
   return (
     <article
-      className={`rounded-2xl bg-clinical-surface/95 border border-clinical-border overflow-hidden shadow-2xl backdrop-blur-md transition-all ${className}`}
+      className={`rounded-2xl bg-white border border-slate-200 overflow-hidden shadow-xs transition-all ${className}`}
       aria-label="Expediente Clinico y Vineta del Paciente"
     >
       {/* 1. Header: Patient Demographics & Chief Complaint */}
-      <header className="p-4 sm:p-6 border-b border-clinical-border bg-gradient-to-r from-slate-900/90 via-clinical-surface to-slate-900/70">
+      <header className="p-4 sm:p-6 border-b border-slate-200 bg-slate-50/60">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-md bg-white/5 border border-white/10 font-mono text-[11px] text-gray-300 flex items-center gap-1.5">
-                <User className="w-3.5 h-3.5 text-clinical-cyan" />
+              <span className="px-2.5 py-0.5 rounded-md bg-white border border-slate-200 font-mono text-[11px] text-slate-700 flex items-center gap-1.5 shadow-xs">
+                <User className="w-3.5 h-3.5 text-sky-600" />
                 <span>
                   Paciente: {caseDetail.patient_age} anos | Sexo {caseDetail.patient_gender}
                 </span>
               </span>
 
-              <span className="px-2.5 py-0.5 rounded-md bg-clinical-teal/20 border border-clinical-teal/40 font-mono text-[11px] text-teal-300">
+              <span className="px-2.5 py-0.5 rounded-md bg-sky-50 border border-sky-200 font-mono text-[11px] text-sky-800 font-semibold">
                 {caseDetail.difficulty_level || 'Nivel 1'}
               </span>
 
               {caseDetail.specialty_id && (
-                <span className="px-2.5 py-0.5 rounded-md bg-cyan-500/10 border border-cyan-500/30 font-mono text-[11px] text-cyan-300 uppercase">
+                <span className="px-2.5 py-0.5 rounded-md bg-sky-100 border border-sky-200 font-mono text-[11px] text-sky-800 uppercase font-semibold">
                   {caseDetail.specialty_id}
                 </span>
               )}
             </div>
 
-            <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight">
+            <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
               {caseDetail.display_title || caseDetail.title}
             </h2>
           </div>
 
           {/* Chief Complaint Alert Box */}
-          <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/40 text-rose-300 max-w-md shadow-sm">
+          <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 max-w-md shadow-xs">
             <div className="flex items-start gap-2.5">
-              <ShieldAlert className="w-4 h-4 text-rose-400 shrink-0 mt-0.5 animate-pulse" />
+              <ShieldAlert className="w-4 h-4 text-rose-600 shrink-0 mt-0.5 animate-pulse" />
               <div className="space-y-0.5 min-w-0">
-                <span className="text-[10px] uppercase font-mono font-bold tracking-wider text-rose-400 block">
+                <span className="text-[10px] uppercase font-mono font-bold tracking-wider text-rose-700 block">
                   Motivo de Ingreso / Alerta de Guardia
                 </span>
-                <p className="text-xs font-semibold text-white leading-snug">
+                <p className="text-xs font-semibold text-slate-900 leading-snug">
                   {caseDetail.chief_complaint || 'Ingreso por emergencia para evaluacion clinica.'}
                 </p>
               </div>
@@ -459,10 +459,10 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
         </div>
 
         {/* 2. Vital Signs Monospace Banner */}
-        <div className="mt-4 pt-4 border-t border-white/10">
+        <div className="mt-4 pt-4 border-t border-slate-200">
           <div className="flex items-center gap-2 mb-2.5">
-            <HeartPulse className="w-3.5 h-3.5 text-clinical-cyan" />
-            <span className="text-[11px] font-mono uppercase tracking-wider text-gray-400">
+            <HeartPulse className="w-3.5 h-3.5 text-sky-600" />
+            <span className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-medium">
               Constantes Fisiologicas en Triaje (Monitoreo Continuo)
             </span>
           </div>
@@ -479,7 +479,7 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
                 />
               ))
             ) : (
-              <span className="text-xs font-mono text-gray-500 italic">
+              <span className="text-xs font-mono text-slate-400 italic">
                 Constantes vitales no registradas al ingreso.
               </span>
             )}
@@ -493,7 +493,7 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
             onClick={() => setIsMobileExpanded(!isMobileExpanded)}
             aria-expanded={isMobileExpanded}
             aria-controls="vignette-details-content"
-            className="w-full py-2 px-3 rounded-lg bg-clinical-surface border border-clinical-border text-xs font-mono font-semibold text-clinical-cyan hover:bg-white/5 flex items-center justify-center gap-2 transition-colors"
+            className="w-full py-2 px-3 rounded-lg bg-white border border-slate-200 text-xs font-mono font-semibold text-sky-700 hover:bg-slate-50 flex items-center justify-center gap-2 transition-colors shadow-xs"
           >
             <span>
               {isMobileExpanded
@@ -518,14 +518,14 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
       >
         {/* A. Anamnesis / History of Present Illness */}
         <section className="space-y-3" aria-label="Anamnesis y Enfermedad Actual">
-          <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-clinical-teal-light">
-            <FileText className="w-4 h-4 text-teal-400" />
-            <h3 className="font-bold text-white">
+          <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-sky-700">
+            <FileText className="w-4 h-4 text-sky-600" />
+            <h3 className="font-bold text-slate-900">
               Anamnesis y Evolucion del Cuadro Clinico
             </h3>
           </div>
 
-          <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-2.5 text-xs sm:text-sm text-gray-300 leading-relaxed">
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2.5 text-xs sm:text-sm text-slate-700 leading-relaxed">
             {anamnesisParagraphs.length > 0 ? (
               anamnesisParagraphs.map((para, i) => (
                 <p key={i} className="text-justify sm:text-left">
@@ -533,7 +533,7 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
                 </p>
               ))
             ) : (
-              <p className="text-gray-500 italic">
+              <p className="text-slate-400 italic">
                 Informacion de anamnesis pendiente de anamnesis dirigida.
               </p>
             )}
@@ -542,9 +542,9 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
 
         {/* B. Physical Examination */}
         <section className="space-y-3" aria-label="Examen Fisico Detallado">
-          <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-clinical-cyan">
-            <Stethoscope className="w-4 h-4 text-clinical-cyan" />
-            <h3 className="font-bold text-white">
+          <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-sky-700">
+            <Stethoscope className="w-4 h-4 text-sky-600" />
+            <h3 className="font-bold text-slate-900">
               Examen Fisico Dirigido por Sistemas
             </h3>
           </div>
@@ -554,18 +554,18 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
               physicalSystems.map((item, index) => (
                 <div
                   key={index}
-                  className="p-3.5 rounded-xl bg-slate-900/60 border border-clinical-border space-y-1"
+                  className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1"
                 >
-                  <span className="text-[11px] font-mono font-bold uppercase text-clinical-cyan tracking-wide">
+                  <span className="text-[11px] font-mono font-bold uppercase text-sky-800 tracking-wide">
                     {item.title}
                   </span>
-                  <p className="text-xs text-gray-300 leading-normal">
+                  <p className="text-xs text-slate-700 leading-normal">
                     {item.detail}
                   </p>
                 </div>
               ))
             ) : (
-              <div className="p-3 rounded-xl bg-slate-900/60 border border-clinical-border text-xs text-gray-400">
+              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-400">
                 Sin hallazgos especificos consignados en el examen fisico.
               </div>
             )}
@@ -575,21 +575,21 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
         {/* C. Initial Laboratory Findings Table */}
         <section className="space-y-3" aria-label="Examenes de Laboratorio Iniciales">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-amber-400">
-              <TestTubes className="w-4 h-4 text-amber-400" />
-              <h3 className="font-bold text-white">
+            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-sky-700">
+              <TestTubes className="w-4 h-4 text-sky-600" />
+              <h3 className="font-bold text-slate-900">
                 Pruebas de Laboratorio e Imagenes Iniciales
               </h3>
             </div>
-            <span className="text-[11px] font-mono text-gray-400">
+            <span className="text-[11px] font-mono text-slate-500">
               {labRows.length} parametros analizados
             </span>
           </div>
 
           {labRows.length > 0 ? (
-            <div className="overflow-x-auto rounded-xl border border-clinical-border bg-slate-950/70">
+            <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-xs">
               <table className="w-full text-left text-xs font-mono">
-                <thead className="bg-slate-900/90 text-gray-400 uppercase text-[10px] tracking-wider border-b border-clinical-border">
+                <thead className="bg-slate-50 text-slate-600 uppercase text-[10px] tracking-wider border-b border-slate-200">
                   <tr>
                     <th scope="col" className="py-2.5 px-4 font-semibold">
                       Prueba / Parametro
@@ -605,31 +605,31 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/5">
+                <tbody className="divide-y divide-slate-100">
                   {labRows.map((lab, idx) => {
                     const rowHighlight =
                       lab.severity === 'critical'
-                        ? 'bg-rose-500/10 text-rose-200'
+                        ? 'bg-rose-50/50 text-rose-900'
                         : lab.severity === 'warning'
-                          ? 'bg-amber-500/10 text-amber-200'
-                          : 'text-gray-300 hover:bg-white/[0.02]';
+                          ? 'bg-amber-50/50 text-amber-900'
+                          : 'text-slate-800 hover:bg-slate-50/60';
 
                     const badgeClass =
                       lab.severity === 'critical'
-                        ? 'bg-rose-500/20 text-rose-300 border-rose-500/40 animate-pulse'
+                        ? 'bg-rose-50 text-rose-800 border-rose-200'
                         : lab.severity === 'warning'
-                          ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
-                          : 'bg-slate-800/80 text-gray-400 border-slate-700';
+                          ? 'bg-amber-50 text-amber-800 border-amber-200'
+                          : 'bg-slate-100 text-slate-600 border-slate-200';
 
                     return (
                       <tr key={idx} className={`transition-colors ${rowHighlight}`}>
-                        <td className="py-2.5 px-4 font-semibold text-white">
+                        <td className="py-2.5 px-4 font-semibold text-slate-900">
                           {lab.test}
                         </td>
                         <td className="py-2.5 px-4 font-bold">
                           {lab.result}
                         </td>
-                        <td className="py-2.5 px-4 text-gray-400 hidden sm:table-cell">
+                        <td className="py-2.5 px-4 text-slate-500 hidden sm:table-cell">
                           {lab.reference}
                         </td>
                         <td className="py-2.5 px-4 text-right">
@@ -637,7 +637,7 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
                             className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] uppercase font-bold border ${badgeClass}`}
                           >
                             {lab.severity === 'critical' && (
-                              <AlertCircle className="w-3 h-3 text-rose-400" />
+                              <AlertCircle className="w-3 h-3 text-rose-600" />
                             )}
                             {lab.severity === 'critical'
                               ? 'Critico'
@@ -653,7 +653,7 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
               </table>
             </div>
           ) : (
-            <div className="p-4 rounded-xl bg-black/30 border border-white/5 text-center text-xs font-mono text-gray-400">
+            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-center text-xs font-mono text-slate-500">
               No hay reportes de laboratorio adjuntos para este caso.
             </div>
           )}

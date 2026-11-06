@@ -22,6 +22,10 @@ class User(Base):
     plan_tier: Mapped[str] = mapped_column(String(20), default="free")
     xp: Mapped[int] = mapped_column(Integer, default=0)
     streak_days: Mapped[int] = mapped_column(Integer, default=1)
+    diagnostic_completed: Mapped[bool] = mapped_column(Boolean, default=False)
+    diagnostic_score: Mapped[Optional[float]] = mapped_column(Float, nullable=True, default=None)
+    aptitude_status: Mapped[Optional[str]] = mapped_column(String(50), nullable=True, default=None)
+    diagnostic_completed_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True, default=None)
     created_at: Mapped[datetime] = mapped_column(
         DateTime,
         default=lambda: datetime.now(timezone.utc),

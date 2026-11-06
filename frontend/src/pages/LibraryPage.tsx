@@ -258,56 +258,56 @@ function getSpecialtyBadgeStyle(specialtyId?: string): {
   const norm = (specialtyId || '').toLowerCase().replace('-', '_');
   if (norm.includes('nefro')) {
     return {
-      bg: 'bg-blue-500/10',
-      text: 'text-blue-300',
-      border: 'border-blue-500/30',
+      bg: 'bg-sky-50',
+      text: 'text-sky-800',
+      border: 'border-sky-200',
       label: 'Nefrologia',
     };
   }
   if (norm.includes('endo')) {
     return {
-      bg: 'bg-purple-500/10',
-      text: 'text-purple-300',
-      border: 'border-purple-500/30',
+      bg: 'bg-purple-50',
+      text: 'text-purple-800',
+      border: 'border-purple-200',
       label: 'Endocrinologia',
     };
   }
   if (norm.includes('neuro')) {
     return {
-      bg: 'bg-amber-500/10',
-      text: 'text-amber-300',
-      border: 'border-amber-500/30',
+      bg: 'bg-amber-50',
+      text: 'text-amber-800',
+      border: 'border-amber-200',
       label: 'Neurologia',
     };
   }
   if (norm.includes('reuma')) {
     return {
-      bg: 'bg-rose-500/10',
-      text: 'text-rose-300',
-      border: 'border-rose-500/30',
+      bg: 'bg-rose-50',
+      text: 'text-rose-800',
+      border: 'border-rose-200',
       label: 'Reumatologia',
     };
   }
   if (norm.includes('gineco') || norm.includes('obstet')) {
     return {
-      bg: 'bg-emerald-500/10',
-      text: 'text-emerald-300',
-      border: 'border-emerald-500/30',
+      bg: 'bg-emerald-50',
+      text: 'text-emerald-800',
+      border: 'border-emerald-200',
       label: 'Ginecologia y Obstetricia',
     };
   }
   if (norm.includes('oftalmo')) {
     return {
-      bg: 'bg-cyan-500/10',
-      text: 'text-cyan-300',
-      border: 'border-cyan-500/30',
+      bg: 'bg-cyan-50',
+      text: 'text-cyan-800',
+      border: 'border-cyan-200',
       label: 'Oftalmologia',
     };
   }
   return {
-    bg: 'bg-teal-500/10',
-    text: 'text-teal-300',
-    border: 'border-teal-500/30',
+    bg: 'bg-slate-50',
+    text: 'text-slate-800',
+    border: 'border-slate-200',
     label: specialtyId || 'Clinica Medica',
   };
 }
@@ -405,34 +405,34 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({ onSelectCase }) => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-in fade-in duration-300">
       {/* Header and Context Banner */}
       <div className="space-y-4">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-clinical-border pb-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-6">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-semibold bg-clinical-teal/20 text-clinical-teal-light border border-clinical-teal/40">
+              <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-semibold bg-sky-50 text-sky-800 border border-sky-200">
                 Evidencia Indexada UPCH 2026
               </span>
               {isOfflineFallback && (
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-amber-50 text-amber-800 border border-amber-300">
                   Modo Offline Local
                 </span>
               )}
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white flex items-center gap-3">
-              <BookOpen className="w-7 h-7 text-clinical-cyan" />
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 flex items-center gap-3">
+              <BookOpen className="w-7 h-7 text-sky-600" />
               <span>Biblioteca de Guias Clinicas Internacionales</span>
             </h1>
-            <p className="mt-2 text-sm text-gray-300 max-w-3xl leading-relaxed">
+            <p className="mt-2 text-sm text-slate-600 max-w-3xl leading-relaxed">
               Evidencia medica canonica (KDIGO, ADA, AHA/ASA, EULAR, FIGO, AAO) con recomendaciones
               terapeuticas graduadas para fundamentar cada decision durante la guardia de emergencia.
             </p>
           </div>
 
           <div className="flex items-center gap-3 self-start md:self-auto">
-            <div className="px-3.5 py-2 rounded-xl bg-slate-900/80 border border-white/10 text-right">
-              <span className="block text-[10px] font-mono uppercase text-gray-400">
+            <div className="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-right shadow-xs">
+              <span className="block text-[10px] font-mono uppercase text-slate-500 font-semibold">
                 Total Guias
               </span>
-              <span className="text-lg font-bold font-mono text-clinical-cyan">
+              <span className="text-lg font-bold font-mono text-sky-700">
                 {references.length}
               </span>
             </div>
@@ -441,7 +441,7 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({ onSelectCase }) => {
 
         {/* Specialty Filter Buttons */}
         <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
-          <Filter className="w-4 h-4 text-gray-400 shrink-0 ml-1 mr-1" />
+          <Filter className="w-4 h-4 text-slate-500 shrink-0 ml-1 mr-1" />
           {SPECIALTY_OPTIONS.map((opt) => {
             const isSelected = selectedSpecialty === opt.id;
             return (
@@ -449,10 +449,10 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({ onSelectCase }) => {
                 key={opt.id}
                 type="button"
                 onClick={() => setSelectedSpecialty(opt.id)}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all focus:outline-none focus:ring-1 focus:ring-clinical-teal ${
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all focus:outline-none focus:ring-1 focus:ring-sky-500 ${
                   isSelected
-                    ? 'bg-clinical-teal text-white shadow-md font-semibold'
-                    : 'bg-slate-900/90 text-gray-400 hover:text-white hover:bg-slate-800 border border-white/5'
+                    ? 'bg-sky-600 text-white shadow-xs font-semibold'
+                    : 'bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-slate-200 shadow-xs'
                 }`}
               >
                 {opt.label}
@@ -463,7 +463,7 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({ onSelectCase }) => {
 
         {/* Live Search Bar */}
         <div className="relative">
-          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
             <Search className="w-4 h-4" />
           </div>
           <input
@@ -471,13 +471,13 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({ onSelectCase }) => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Buscar por titulo, palabra clave, fuente (KDIGO, ADA, AHA), seccion o ano..."
-            className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-slate-900/90 border border-white/10 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-clinical-cyan focus:ring-1 focus:ring-clinical-cyan transition-colors"
+            className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-white border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 transition-colors shadow-xs"
           />
           {searchQuery && (
             <button
               type="button"
               onClick={() => setSearchQuery('')}
-              className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-white"
+              className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-700"
               aria-label="Limpiar busqueda"
             >
               <X className="w-4 h-4" />
@@ -486,12 +486,12 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({ onSelectCase }) => {
         </div>
 
         {/* Results Counter and Indicator */}
-        <div className="flex items-center justify-between text-xs font-mono text-gray-400 px-1">
+        <div className="flex items-center justify-between text-xs font-mono text-slate-500 px-1">
           <span>
             Mostrando {filteredReferences.length} de {references.length} guias registradas
           </span>
           {searchQuery && (
-            <span className="text-clinical-cyan">
+            <span className="text-sky-700 font-semibold">
               Filtro activo: &quot;{searchQuery}&quot;
             </span>
           )}
@@ -504,22 +504,22 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({ onSelectCase }) => {
           {[1, 2, 3, 4, 5, 6].map((idx) => (
             <div
               key={idx}
-              className="p-6 rounded-2xl bg-slate-900/60 border border-white/5 animate-pulse space-y-4"
+              className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs animate-pulse space-y-4"
             >
-              <div className="h-4 bg-slate-800 rounded w-1/3" />
-              <div className="h-6 bg-slate-800 rounded w-4/5" />
-              <div className="h-16 bg-slate-800/60 rounded" />
-              <div className="h-8 bg-slate-800 rounded w-full" />
+              <div className="h-4 bg-slate-100 rounded w-1/3" />
+              <div className="h-6 bg-slate-100 rounded w-4/5" />
+              <div className="h-16 bg-slate-50 rounded" />
+              <div className="h-8 bg-slate-100 rounded w-full" />
             </div>
           ))}
         </div>
       ) : filteredReferences.length === 0 ? (
-        <div className="text-center py-16 px-4 bg-slate-900/40 rounded-2xl border border-white/5 space-y-3">
-          <BookOpen className="w-10 h-10 text-gray-500 mx-auto" />
-          <h3 className="text-base font-semibold text-white">
+        <div className="text-center py-16 px-4 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-3">
+          <BookOpen className="w-10 h-10 text-slate-400 mx-auto" />
+          <h3 className="text-base font-semibold text-slate-900">
             No se encontraron guias clinicas
           </h3>
-          <p className="text-xs text-gray-400 max-w-md mx-auto">
+          <p className="text-xs text-slate-600 max-w-md mx-auto">
             No hay referencias que coincidan con &quot;{searchQuery}&quot; en la especialidad seleccionada.
             Intenta con otros terminos o restablece los filtros.
           </p>
@@ -529,7 +529,7 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({ onSelectCase }) => {
               setSearchQuery('');
               setSelectedSpecialty('todas');
             }}
-            className="mt-2 inline-flex items-center gap-2 px-4 py-1.5 text-xs font-medium rounded-lg bg-clinical-teal/20 text-teal-300 hover:bg-clinical-teal/30 border border-clinical-teal/40 transition-colors"
+            className="mt-2 inline-flex items-center gap-2 px-4 py-1.5 text-xs font-medium rounded-lg bg-sky-50 text-sky-800 hover:bg-sky-100 border border-sky-200 transition-colors shadow-xs"
           >
             <RefreshCw className="w-3.5 h-3.5" />
             <span>Restablecer Filtros</span>
@@ -553,12 +553,12 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({ onSelectCase }) => {
             return (
               <article
                 key={ref.id || ref.reference_id}
-                className="flex flex-col justify-between p-5 sm:p-6 rounded-2xl bg-gradient-to-b from-[#101422] to-[#0A0D18] border border-white/10 hover:border-clinical-cyan/40 transition-all hover:shadow-xl hover:shadow-cyan-950/20 group"
+                className="flex flex-col justify-between p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-sky-300 transition-all hover:shadow-md group shadow-xs"
               >
                 <div className="space-y-4">
                   {/* Top Badges: Source, Year, Specialty */}
                   <div className="flex items-center justify-between gap-2 flex-wrap">
-                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-clinical-cyan/15 text-clinical-cyan border border-clinical-cyan/30">
+                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-sky-50 text-sky-800 border border-sky-200">
                       {source}
                     </span>
                     <div className="flex items-center gap-1.5">
@@ -567,7 +567,7 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({ onSelectCase }) => {
                       >
                         {specialtyBadge.label}
                       </span>
-                      <span className="inline-flex items-center gap-1 text-[11px] font-mono text-gray-400">
+                      <span className="inline-flex items-center gap-1 text-[11px] font-mono text-slate-500">
                         <Calendar className="w-3 h-3" />
                         <span>{ref.year}</span>
                       </span>
@@ -576,12 +576,12 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({ onSelectCase }) => {
 
                   {/* Title & Section */}
                   <div>
-                    <h2 className="text-base font-bold text-white group-hover:text-clinical-cyan transition-colors leading-snug">
+                    <h2 className="text-base font-bold text-slate-900 group-hover:text-sky-700 transition-colors leading-snug">
                       {title}
                     </h2>
                     {ref.section_title && (
-                      <p className="mt-1 text-xs text-gray-400 font-mono flex items-center gap-1.5">
-                        <Layers className="w-3 h-3 shrink-0 text-clinical-teal" />
+                      <p className="mt-1 text-xs text-slate-500 font-mono flex items-center gap-1.5">
+                        <Layers className="w-3 h-3 shrink-0 text-sky-600" />
                         <span className="truncate">{ref.section_title}</span>
                       </p>
                     )}
@@ -589,33 +589,33 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({ onSelectCase }) => {
 
                   {/* Evidence Level Badge */}
                   {ref.evidence_level && (
-                    <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-[10px] font-mono font-semibold text-emerald-400">
+                    <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-50 border border-emerald-300 text-[10px] font-mono font-semibold text-emerald-800">
                       <CheckCircle2 className="w-3 h-3" />
                       <span>Nivel de Evidencia: {ref.evidence_level}</span>
                     </div>
                   )}
 
                   {/* Key Clinical Recommendation Takeaway */}
-                  <div className="p-3.5 rounded-xl bg-black/40 border border-white/5 space-y-1.5">
-                    <div className="flex items-center gap-1.5 text-[10px] font-mono uppercase font-bold text-teal-300">
-                      <Sparkles className="w-3 h-3 text-teal-400" />
+                  <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
+                    <div className="flex items-center gap-1.5 text-[10px] font-mono uppercase font-bold text-sky-800">
+                      <Sparkles className="w-3 h-3 text-sky-600" />
                       <span>Recomendacion Terapeutica Clave</span>
                     </div>
-                    <p className="text-xs text-gray-200 leading-relaxed font-sans line-clamp-5">
+                    <p className="text-xs text-slate-700 leading-relaxed font-sans line-clamp-5">
                       {takeaway}
                     </p>
                   </div>
                 </div>
 
                 {/* Bottom Action Footer */}
-                <div className="pt-4 mt-4 border-t border-white/5 space-y-2">
+                <div className="pt-4 mt-4 border-t border-slate-100 space-y-2">
                   <div className="flex items-center justify-between gap-2">
                     {doi ? (
                       <a
                         href={citationUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-[11px] font-mono text-clinical-cyan hover:underline truncate max-w-[200px]"
+                        className="inline-flex items-center gap-1 text-[11px] font-mono text-sky-700 hover:text-sky-900 hover:underline truncate max-w-[200px]"
                         title={doi}
                       >
                         <span className="truncate">{doi}</span>
@@ -626,7 +626,7 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({ onSelectCase }) => {
                         href={citationUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-[11px] font-mono text-gray-400 hover:text-clinical-cyan hover:underline"
+                        className="inline-flex items-center gap-1 text-[11px] font-mono text-slate-500 hover:text-sky-700 hover:underline"
                       >
                         <span>PubMed / DOI</span>
                         <ExternalLink className="w-3.5 h-3.5 shrink-0" />
@@ -634,7 +634,7 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({ onSelectCase }) => {
                     )}
 
                     {ref.edition_or_version && (
-                      <span className="text-[10px] font-mono text-gray-500 truncate max-w-[120px]">
+                      <span className="text-[10px] font-mono text-slate-400 truncate max-w-[120px]">
                         {ref.edition_or_version}
                       </span>
                     )}
@@ -644,9 +644,9 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({ onSelectCase }) => {
                   <button
                     type="button"
                     onClick={() => handleTrainCase(ref)}
-                    className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-clinical-teal/15 hover:bg-clinical-teal/30 border border-clinical-teal/40 hover:border-clinical-teal text-teal-300 hover:text-white text-xs font-semibold tracking-wide transition-all active:scale-[0.98]"
+                    className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-sky-50 hover:bg-sky-100 border border-sky-200 text-sky-800 text-xs font-semibold tracking-wide transition-all active:scale-[0.98] shadow-xs"
                   >
-                    <Play className="w-3.5 h-3.5 text-teal-400 fill-teal-400" />
+                    <Play className="w-3.5 h-3.5 text-sky-600 fill-sky-600" />
                     <span>Entrenar Caso Basado en esta Guia</span>
                   </button>
                 </div>

@@ -64,7 +64,6 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
 
   const rings = [25, 50, 75, 100];
 
-  // Helper to calculate vertex point on an axis for a given percentage (0..100)
   const getPoint = (axis: AxisDefinition, scorePercent: number) => {
     const clamped = Math.min(100, Math.max(0, scorePercent));
     const r = (clamped / 100) * maxRadius;
@@ -74,7 +73,6 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
     };
   };
 
-  // Student scores polygon points
   const polygonPoints = AXES.map((axis) => {
     const score = scores[axis.key] ?? 0;
     const pt = getPoint(axis, score);
@@ -94,21 +92,11 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
           aria-label="Radar de Competencias Clinicas OCRI de 4 Brechas"
         >
           <defs>
-            {/* Cyan glow for radar polygon */}
-            <filter id="radar-glow" x="-20%" y="-20%" width="140%" height="140%">
-              <feDropShadow
-                dx="0"
-                dy="0"
-                stdDeviation="4"
-                floodColor="#06B6D4"
-                floodOpacity="0.45"
-              />
-            </filter>
-            {/* Subtle radial background gradient */}
+            {/* Subtle radial background gradient for light canvas */}
             <radialGradient id="radar-bg-radial" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#0D665D" stopOpacity="0.12" />
-              <stop offset="70%" stopColor="#0E1117" stopOpacity="0.6" />
-              <stop offset="100%" stopColor="#090A0F" stopOpacity="0.9" />
+              <stop offset="0%" stopColor="#E0F2FE" stopOpacity="0.5" />
+              <stop offset="70%" stopColor="#F0F9FF" stopOpacity="0.3" />
+              <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0.1" />
             </radialGradient>
           </defs>
 
@@ -136,7 +124,7 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
                 <polygon
                   points={pts}
                   fill="none"
-                  stroke="rgba(255, 255, 255, 0.12)"
+                  stroke="#E2E8F0"
                   strokeWidth={pct === 100 ? '1.5' : '1'}
                   strokeDasharray={pct === 100 ? undefined : '3 3'}
                 />
@@ -144,11 +132,11 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
                 <text
                   x={cx + 4}
                   y={cy - r + 3}
-                  fill="#64748B"
+                  fill="#94A3B8"
                   fontSize="8.5"
                   fontFamily="monospace"
                   textAnchor="start"
-                  className="opacity-70 pointer-events-none"
+                  className="pointer-events-none font-medium"
                 >
                   {pct}%
                 </text>
@@ -166,7 +154,7 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
                 y1={cy}
                 x2={outer.x}
                 y2={outer.y}
-                stroke="rgba(255, 255, 255, 0.16)"
+                stroke="#CBD5E1"
                 strokeWidth="1"
               />
             );
@@ -175,11 +163,10 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
           {/* Student scores polygon */}
           <polygon
             points={polygonPoints}
-            fill="#0D665D"
-            fillOpacity="0.25"
-            stroke="#06B6D4"
+            fill="#BAE6FD"
+            fillOpacity="0.45"
+            stroke="#0284C7"
             strokeWidth="2.5"
-            filter="url(#radar-glow)"
             className="transition-all duration-300 ease-out"
           />
 
@@ -210,9 +197,9 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
                     cx={pt.x}
                     cy={pt.y}
                     r={11}
-                    fill="#06B6D4"
-                    fillOpacity="0.2"
-                    stroke="#06B6D4"
+                    fill="#38BDF8"
+                    fillOpacity="0.25"
+                    stroke="#0284C7"
                     strokeWidth="1.5"
                     className="animate-ping"
                   />
@@ -223,10 +210,10 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
                   cx={pt.x}
                   cy={pt.y}
                   r={isHovered ? 6 : 4.5}
-                  fill="#06B6D4"
-                  stroke="#090A0F"
+                  fill="#0284C7"
+                  stroke="#FFFFFF"
                   strokeWidth="2"
-                  className="transition-all duration-150"
+                  className="transition-all duration-150 shadow-sm"
                 />
               </g>
             );
@@ -241,17 +228,17 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
           >
             <text
               x={cx}
-              y={cy - maxRadius - 26}
+              y={cy - maxRadius - 24}
               textAnchor="middle"
-              className="font-sans font-semibold text-[11px] fill-slate-200 tracking-wide"
+              className="font-sans font-semibold text-[11px] fill-slate-700 tracking-wide"
             >
               Triaje / Gravedad
             </text>
             <text
               x={cx}
-              y={cy - maxRadius - 12}
+              y={cy - maxRadius - 10}
               textAnchor="middle"
-              className="font-mono font-bold text-[11px] fill-cyan-400"
+              className="font-mono font-bold text-[12px] fill-sky-700"
             >
               {Math.round(scores.GAP_TRIAGE_SEVERITY ?? 0)}%
             </text>
@@ -267,7 +254,7 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
               x={cx + maxRadius + 14}
               y={cy - 6}
               textAnchor="start"
-              className="font-sans font-semibold text-[11px] fill-slate-200 tracking-wide"
+              className="font-sans font-semibold text-[11px] fill-slate-700 tracking-wide"
             >
               Razonamiento
             </text>
@@ -275,15 +262,15 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
               x={cx + maxRadius + 14}
               y={cy + 8}
               textAnchor="start"
-              className="font-sans font-semibold text-[11px] fill-slate-200 tracking-wide"
+              className="font-sans font-semibold text-[11px] fill-slate-700 tracking-wide"
             >
               Diagnostico
             </text>
             <text
               x={cx + maxRadius + 14}
-              y={cy + 23}
+              y={cy + 24}
               textAnchor="start"
-              className="font-mono font-bold text-[11px] fill-cyan-400"
+              className="font-mono font-bold text-[12px] fill-sky-700"
             >
               {Math.round(scores.GAP_DIAGNOSTIC_REASONING ?? 0)}%
             </text>
@@ -299,7 +286,7 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
               x={cx}
               y={cy + maxRadius + 18}
               textAnchor="middle"
-              className="font-mono font-bold text-[11px] fill-cyan-400"
+              className="font-mono font-bold text-[12px] fill-sky-700"
             >
               {Math.round(scores.GAP_LAB_INTERPRETATION ?? 0)}%
             </text>
@@ -307,7 +294,7 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
               x={cx}
               y={cy + maxRadius + 32}
               textAnchor="middle"
-              className="font-sans font-semibold text-[11px] fill-slate-200 tracking-wide"
+              className="font-sans font-semibold text-[11px] fill-slate-700 tracking-wide"
             >
               Interpretacion de Labs
             </text>
@@ -323,7 +310,7 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
               x={cx - maxRadius - 14}
               y={cy - 6}
               textAnchor="end"
-              className="font-sans font-semibold text-[11px] fill-slate-200 tracking-wide"
+              className="font-sans font-semibold text-[11px] fill-slate-700 tracking-wide"
             >
               Manejo
             </text>
@@ -331,15 +318,15 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
               x={cx - maxRadius - 14}
               y={cy + 8}
               textAnchor="end"
-              className="font-sans font-semibold text-[11px] fill-slate-200 tracking-wide"
+              className="font-sans font-semibold text-[11px] fill-slate-700 tracking-wide"
             >
               Terapeutico
             </text>
             <text
               x={cx - maxRadius - 14}
-              y={cy + 23}
+              y={cy + 24}
               textAnchor="end"
-              className="font-mono font-bold text-[11px] fill-cyan-400"
+              className="font-mono font-bold text-[12px] fill-sky-700"
             >
               {Math.round(scores.GAP_INITIAL_MANAGEMENT ?? 0)}%
             </text>
@@ -348,16 +335,16 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
 
         {/* Central interactive HUD readout */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="text-center px-2 py-1 rounded-lg bg-clinical-surface/80 border border-white/5 backdrop-blur-sm max-w-[130px]">
+          <div className="text-center px-2.5 py-1.5 rounded-lg bg-white/95 border border-slate-200 shadow-xs backdrop-blur-sm max-w-[130px]">
             {activeAxis ? (
               <>
-                <div className="text-[10px] uppercase font-mono tracking-wider text-cyan-400 truncate">
+                <div className="text-[10px] uppercase font-mono tracking-wider text-sky-700 font-semibold truncate">
                   {activeAxis.shortTitle}
                 </div>
-                <div className="text-sm font-mono font-bold text-white">
+                <div className="text-sm font-mono font-bold text-slate-900">
                   {activeScore}%
                 </div>
-                <div className="text-[9px] text-gray-400 font-sans">
+                <div className="text-[9px] text-slate-500 font-sans">
                   {activeScore! >= 80
                     ? 'Dominio Solido'
                     : activeScore! >= 60
@@ -367,10 +354,10 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
               </>
             ) : (
               <>
-                <div className="text-[9px] font-mono uppercase tracking-wider text-gray-400">
+                <div className="text-[9px] font-mono uppercase tracking-wider text-slate-500 font-medium">
                   Precision OCRI
                 </div>
-                <div className="text-xs font-mono font-bold text-white">
+                <div className="text-sm font-mono font-bold text-slate-900">
                   {Math.round(
                     (scores.GAP_TRIAGE_SEVERITY +
                       scores.GAP_DIAGNOSTIC_REASONING +
@@ -380,7 +367,7 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
                   )}
                   %
                 </div>
-                <div className="text-[8.5px] text-gray-500 font-mono">
+                <div className="text-[8.5px] text-slate-500 font-mono">
                   4 Brechas
                 </div>
               </>
@@ -390,7 +377,7 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
       </div>
 
       {/* Legend and performance pills */}
-      <div className="w-full grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-clinical-border text-xs">
+      <div className="w-full grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-slate-200 text-xs">
         {AXES.map((axis) => {
           const score = Math.round(scores[axis.key] ?? 0);
           const isSelected = hoveredGap === axis.key;
@@ -406,25 +393,25 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
               }
               className={`flex items-center justify-between p-2 rounded-lg border text-left transition-all ${
                 isSelected
-                  ? 'bg-clinical-teal/20 border-clinical-cyan text-white shadow-[0_0_10px_rgba(6,182,212,0.2)]'
-                  : 'bg-clinical-surface/40 border-clinical-border text-gray-300 hover:border-white/20'
+                  ? 'bg-sky-50 border-sky-400 text-slate-900 shadow-xs'
+                  : 'bg-white border-slate-200 text-slate-700 hover:border-sky-200 hover:bg-slate-50'
               }`}
             >
               <div className="flex items-center gap-1.5 min-w-0">
                 <span
                   className={`w-2 h-2 rounded-full shrink-0 ${
                     score >= 80
-                      ? 'bg-emerald-400'
+                      ? 'bg-emerald-500'
                       : score >= 60
-                        ? 'bg-cyan-400'
-                        : 'bg-amber-400'
+                        ? 'bg-sky-500'
+                        : 'bg-amber-500'
                   }`}
                 />
                 <span className="text-[11px] truncate font-medium">
                   {axis.shortTitle}
                 </span>
               </div>
-              <span className="font-mono text-[11px] font-semibold text-white ml-2">
+              <span className="font-mono text-[11px] font-semibold text-slate-900 ml-2">
                 {score}%
               </span>
             </button>

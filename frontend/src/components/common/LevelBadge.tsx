@@ -19,20 +19,20 @@ const LEVEL_MAP: Record<string, LevelConfig> = {
   'Nivel 1': {
     label: 'Nivel 1',
     subtext: 'Fundacional',
-    containerClass: 'bg-cyan-500/10 border-cyan-500/40 text-cyan-300',
-    dotClass: 'bg-cyan-400',
+    containerClass: 'bg-sky-50 border-sky-200 text-sky-800',
+    dotClass: 'bg-sky-500',
   },
   'Nivel 2': {
     label: 'Nivel 2',
     subtext: 'Intermedio',
-    containerClass: 'bg-emerald-500/10 border-emerald-500/40 text-emerald-300',
-    dotClass: 'bg-emerald-400',
+    containerClass: 'bg-emerald-50 border-emerald-200 text-emerald-800',
+    dotClass: 'bg-emerald-500',
   },
   'Nivel 3': {
     label: 'Nivel 3',
     subtext: 'Avanzado',
-    containerClass: 'bg-indigo-500/10 border-indigo-500/40 text-indigo-300',
-    dotClass: 'bg-indigo-400',
+    containerClass: 'bg-indigo-50 border-indigo-200 text-indigo-800',
+    dotClass: 'bg-indigo-500',
   },
 };
 
@@ -57,14 +57,14 @@ export const LevelBadge: React.FC<LevelBadgeProps> = ({
 
   return (
     <span
-      className={`inline-flex items-center rounded-lg border font-mono font-medium transition-colors ${config.containerClass} ${sizeClasses[size]} ${className}`}
-      title={`${config.label}: Competencia ${config.subtext}`}
+      className={`inline-flex items-center rounded-lg border font-mono font-medium transition-colors shadow-xs ${config.containerClass} ${sizeClasses[size]} ${className}`}
+      title={`${config.label} (${config.subtext})`}
     >
-      <span className={`rounded-full shrink-0 ${dotSizes[size]} ${config.dotClass}`} />
-      <span className="font-semibold">{config.label}</span>
+      <span className={`rounded-full shrink-0 ${config.dotClass} ${dotSizes[size]}`} />
+      <span>{config.label}</span>
       {showSubtext && (
-        <span className="opacity-75 font-sans text-[11px]">
-          ({config.subtext})
+        <span className="opacity-75 text-[10px] uppercase font-sans">
+          {config.subtext}
         </span>
       )}
     </span>

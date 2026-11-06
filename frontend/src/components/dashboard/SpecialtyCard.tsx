@@ -33,65 +33,65 @@ const getSpecialtyIcon = (
   if (norm.includes('nefro')) {
     return {
       icon: Droplets,
-      accentColor: 'text-cyan-400',
-      bgAccent: 'bg-cyan-500/10',
-      borderAccent: 'border-cyan-500/30',
+      accentColor: 'text-sky-600',
+      bgAccent: 'bg-sky-50',
+      borderAccent: 'border-sky-200',
     };
   }
   if (norm.includes('endo')) {
     return {
       icon: Activity,
-      accentColor: 'text-amber-400',
-      bgAccent: 'bg-amber-500/10',
-      borderAccent: 'border-amber-500/30',
+      accentColor: 'text-amber-600',
+      bgAccent: 'bg-amber-50',
+      borderAccent: 'border-amber-200',
     };
   }
   if (norm.includes('neuro')) {
     return {
       icon: Brain,
-      accentColor: 'text-indigo-400',
-      bgAccent: 'bg-indigo-500/10',
-      borderAccent: 'border-indigo-500/30',
+      accentColor: 'text-indigo-600',
+      bgAccent: 'bg-indigo-50',
+      borderAccent: 'border-indigo-200',
     };
   }
   if (norm.includes('reuma')) {
     return {
       icon: ShieldAlert,
-      accentColor: 'text-rose-400',
-      bgAccent: 'bg-rose-500/10',
-      borderAccent: 'border-rose-500/30',
+      accentColor: 'text-rose-600',
+      bgAccent: 'bg-rose-50',
+      borderAccent: 'border-rose-200',
     };
   }
   if (norm.includes('gineco') || norm.includes('obste')) {
     return {
       icon: Baby,
-      accentColor: 'text-teal-400',
-      bgAccent: 'bg-teal-500/10',
-      borderAccent: 'border-teal-500/30',
+      accentColor: 'text-sky-600',
+      bgAccent: 'bg-sky-50',
+      borderAccent: 'border-sky-200',
     };
   }
   if (norm.includes('cardio')) {
     return {
       icon: Heart,
-      accentColor: 'text-rose-400',
-      bgAccent: 'bg-rose-500/10',
-      borderAccent: 'border-rose-500/30',
+      accentColor: 'text-rose-600',
+      bgAccent: 'bg-rose-50',
+      borderAccent: 'border-rose-200',
     };
   }
   if (norm.includes('neumo') || norm.includes('pulm')) {
     return {
       icon: Wind,
-      accentColor: 'text-sky-400',
-      bgAccent: 'bg-sky-500/10',
-      borderAccent: 'border-sky-500/30',
+      accentColor: 'text-sky-600',
+      bgAccent: 'bg-sky-50',
+      borderAccent: 'border-sky-200',
     };
   }
 
   return {
     icon: Stethoscope,
-    accentColor: 'text-emerald-400',
-    bgAccent: 'bg-emerald-500/10',
-    borderAccent: 'border-emerald-500/30',
+    accentColor: 'text-emerald-600',
+    bgAccent: 'bg-emerald-50',
+    borderAccent: 'border-emerald-200',
   };
 };
 
@@ -134,23 +134,23 @@ export const SpecialtyCard: React.FC<SpecialtyCardProps> = ({
   return (
     <div
       onClick={handleClick}
-      className={`group relative rounded-xl bg-clinical-surface/90 border border-clinical-border p-5 backdrop-blur-md flex flex-col justify-between transition-all duration-200 ${
+      className={`group relative rounded-xl bg-white border border-slate-200 p-5 shadow-xs flex flex-col justify-between transition-all duration-200 ${
         isUnlocked
-          ? 'cursor-pointer hover:border-clinical-cyan/60 hover:shadow-[0_4px_24px_rgba(6,182,212,0.12)] hover:-translate-y-0.5'
-          : 'opacity-60 cursor-not-allowed border-dashed'
+          ? 'cursor-pointer hover:border-sky-300 hover:shadow-md hover:-translate-y-0.5'
+          : 'opacity-60 cursor-not-allowed border-dashed bg-slate-50'
       } ${className}`}
     >
       <div>
         {/* Top bar: Icon, badges and lock indicator */}
         <div className="flex items-start justify-between gap-3 mb-3">
           <div
-            className={`w-11 h-11 rounded-xl border flex items-center justify-center shrink-0 transition-transform group-hover:scale-105 ${iconConfig.bgAccent} ${iconConfig.borderAccent} ${iconConfig.accentColor}`}
+            className={`w-11 h-11 rounded-xl border flex items-center justify-center shrink-0 transition-transform group-hover:scale-105 shadow-xs ${iconConfig.bgAccent} ${iconConfig.borderAccent} ${iconConfig.accentColor}`}
           >
             <Icon className="w-5 h-5" />
           </div>
 
           <div className="flex flex-wrap items-center gap-1.5 justify-end">
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono border border-clinical-cyan/30 bg-clinical-cyan/10 text-clinical-cyan">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono border border-sky-200 bg-sky-50 text-sky-800">
               <Sparkles className="w-2.5 h-2.5" />
               <span>{highYieldTopic}</span>
             </span>
@@ -158,7 +158,7 @@ export const SpecialtyCard: React.FC<SpecialtyCardProps> = ({
             {isUnlocked ? (
               <LevelBadge level={currentLevel} size="sm" />
             ) : (
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono border border-gray-700 bg-gray-800 text-gray-400">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono border border-slate-300 bg-slate-100 text-slate-500">
                 <Lock className="w-2.5 h-2.5" />
                 <span>Bloqueado</span>
               </span>
@@ -168,24 +168,24 @@ export const SpecialtyCard: React.FC<SpecialtyCardProps> = ({
 
         {/* Title and description */}
         <div className="mb-4">
-          <h3 className="text-base font-bold text-white group-hover:text-cyan-300 transition-colors">
+          <h3 className="text-base font-bold text-slate-900 group-hover:text-sky-700 transition-colors">
             {specialty.name}
           </h3>
-          <p className="text-xs text-gray-400 mt-1 line-clamp-2 leading-relaxed">
+          <p className="text-xs text-slate-600 mt-1 line-clamp-2 leading-relaxed">
             {specialty.description}
           </p>
         </div>
       </div>
 
       {/* Mastery, Cases count, and CTA Button */}
-      <div className="pt-3 border-t border-clinical-border/80 space-y-3">
+      <div className="pt-3 border-t border-slate-100 space-y-3">
         {/* Progress & metrics */}
         <div>
           <div className="flex items-center justify-between text-xs font-mono mb-1.5">
-            <span className="text-gray-400 text-[11px]">
+            <span className="text-slate-500 text-[11px]">
               {casesCompleted} / {totalCases} casos resueltos
             </span>
-            <span className="text-white font-semibold text-[11px]">
+            <span className="text-slate-900 font-semibold text-[11px]">
               {masteryScore}% maestria
             </span>
           </div>
@@ -212,12 +212,12 @@ export const SpecialtyCard: React.FC<SpecialtyCardProps> = ({
           }}
           className={`w-full py-2.5 px-3.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
             !isUnlocked
-              ? 'bg-slate-800 text-gray-500 cursor-not-allowed'
+              ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
               : isCompleted
-                ? 'bg-clinical-surface border border-clinical-teal text-clinical-teal-light hover:bg-clinical-teal/20'
+                ? 'bg-white border border-sky-300 text-sky-700 hover:bg-sky-50'
                 : hasStarted
-                  ? 'bg-clinical-teal hover:bg-clinical-teal-hover text-white shadow-[0_0_12px_rgba(13,102,93,0.4)]'
-                  : 'bg-clinical-surface hover:bg-white/5 border border-clinical-border hover:border-clinical-cyan text-gray-200 hover:text-white'
+                  ? 'bg-sky-600 hover:bg-sky-700 text-white shadow-xs'
+                  : 'bg-sky-50 hover:bg-sky-100 border border-sky-200 text-sky-800'
           }`}
         >
           <span>

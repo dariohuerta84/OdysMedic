@@ -16,20 +16,20 @@ export const VitalSignBadge: React.FC<VitalSignBadgeProps> = ({
   className = '',
 }) => {
   const containerClasses: Record<'normal' | 'warning' | 'critical', string> = {
-    normal: 'bg-slate-900/60 border-slate-700/50 text-slate-200',
-    warning: 'bg-amber-950/30 border-amber-500/40 text-amber-300',
-    critical: 'bg-rose-950/40 border-rose-500/50 text-rose-300 animate-pulse-subtle shadow-[0_0_12px_rgba(244,63,94,0.25)]',
+    normal: 'bg-slate-50 border-slate-200 text-slate-800',
+    warning: 'bg-amber-50/80 border-amber-200 text-amber-900',
+    critical: 'bg-rose-50 border-rose-200 text-rose-900 shadow-xs animate-pulse-subtle',
   };
 
   const labelPillClasses: Record<'normal' | 'warning' | 'critical', string> = {
-    normal: 'bg-slate-800/90 text-slate-400 border-slate-700/60',
-    warning: 'bg-amber-900/50 text-amber-400 border-amber-500/40',
-    critical: 'bg-rose-900/60 text-rose-300 border-rose-500/50',
+    normal: 'bg-white text-slate-600 border-slate-200',
+    warning: 'bg-amber-100 text-amber-800 border-amber-200',
+    critical: 'bg-rose-100 text-rose-800 border-rose-200',
   };
 
   return (
     <div
-      className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-md border font-mono text-xs shadow-sm transition-colors ${containerClasses[severity]} ${className}`}
+      className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-md border font-mono text-xs shadow-xs transition-colors ${containerClasses[severity]} ${className}`}
       title={`${label}: ${value}${unit ? ` ${unit}` : ''} (${severity})`}
     >
       <span
@@ -41,7 +41,7 @@ export const VitalSignBadge: React.FC<VitalSignBadgeProps> = ({
         {value}
       </span>
       {unit && (
-        <span className="text-[10px] opacity-75 font-normal ml-0.5">
+        <span className="text-[10px] text-slate-500 font-normal ml-0.5">
           {unit}
         </span>
       )}
