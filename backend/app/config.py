@@ -1,5 +1,6 @@
+import os
 from pathlib import Path
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 class Settings(BaseModel):
     app_name: str = "OdyssMedic Backend API"
@@ -12,6 +13,8 @@ class Settings(BaseModel):
     cases_file: Path = data_dir / "clinical_cases.json"
     medical_references_file: Path = data_dir / "medical_references.json"
 
+    # Database settings
+    database_url: str = Field(default_factory=lambda: os.getenv("DATABASE_URL", "sqlite:///./odyssmedic.db"))
     
     # CORS settings
     cors_origins: list[str] = [
