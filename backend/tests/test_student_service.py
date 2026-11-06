@@ -352,3 +352,88 @@ def test_toggle_user_plan(isolated_db: Session):
 
     with pytest.raises(ValueError):
         student_service.toggle_user_plan(isolated_db, user_id=999999)
+
+
+def test_get_specialty_mastery_non_existent_user_raises_value_error(isolated_db: Session):
+    with pytest.raises(ValueError, match="User with id 999999 not found"):
+        student_service.get_specialty_mastery(isolated_db, user_id=999999, specialty="nefrologia")
+
+
+def test_spaced_repetition_d21_progression_and_completion_on_success(isolated_db: Session):
+    user = student_service.register_user(
+        db=isolated_db,
+        email="repetition.test@upch.pe",
+        password="TestPassword2026",
+        full_name="Interno Repeticion",
+    )
+
+    # 1. First failure -> D7 cycle
+    presc1 = student_service.record_mcq_attempt(
+        db=isolated_db,
+        user_id=user.id,
+        case_id="s13256-019-2334-y",
+        station_number=1,
+        is_correct=False,
+        gap=CognitiveGap.GAP_TRIAGE_SEVERITY,
+        specialty=MedicalSpecialty.NEFROLOGIA,
+    )
+    assert presc1.next_repetition_date is not None
+
+    tasks = isolated_db.query(SpacedRepetitionTask).filter_by(user_id=user.id, status="pending").all()
+    assert len(tasks) == 1
+    assert tasks[0].repetition_cycle == "D7"
+
+    # 2. Second failure on same case -> upgrades to D21 cycle
+    presc2 = student_service.record_mcq_attempt(
+        db=isolated_db,
+        user_id=user.id,
+        case_id="s13256-019-2334-y",
+        station_number=2,
+        is_correct=False,
+        gap=CognitiveGap.GAP_DIAGNOSTIC_REASONING,
+        specialty=MedicalSpecialty.NEFROLOGIA,
+    )
+    assert presc2.next_repetition_date is not None
+
+    tasks = isolated_db.query(SpacedRepetitionTask).filter_by(user_id=user.id, status="pending").all()
+    assert len(tasks) == 1
+    assert tasks[0].repetition_cycle == "D21"
+
+    # 3. Success on review attempt -> resolves pending repetition task
+    student_service.record_mcq_attempt(
+        db=isolated_db,
+        user_id=user.id,
+        case_id="s13256-019-2334-y",
+        station_number=3,
+        is_correct=True,
+        specialty=MedicalSpecialty.NEFROLOGIA,
+    )
+    pending_after_success = isolated_db.query(SpacedRepetitionTask).filter_by(user_id=user.id, status="pending").all()
+    assert len(pending_after_success) == 0
+
+    completed_task = isolated_db.query(SpacedRepetitionTask).filter_by(user_id=user.id, status="completed").first()
+    assert completed_task is not None
+
+
+def test_dashboard_includes_auxiliary_specialty_when_present(isolated_db: Session):
+    user = student_service.register_user(
+        db=isolated_db,
+        email="aux.specialty@upch.pe",
+        password="Password123",
+        full_name="Interno Oftalmologia",
+    )
+
+    # Record attempt in oftalmologia (auxiliary specialty)
+    student_service.record_mcq_attempt(
+        db=isolated_db,
+        user_id=user.id,
+        case_id="s13256-024-04496-1",
+        station_number=1,
+        is_correct=True,
+        specialty=MedicalSpecialty.OFTALMOLOGIA,
+    )
+
+    dashboard = student_service.get_student_dashboard(isolated_db, user.id)
+    assert "oftalmologia" in dashboard["specialty_profiles"]
+    # Radar chart remains 5 cardinal specialties
+    assert len(dashboard["radar"]) == 5

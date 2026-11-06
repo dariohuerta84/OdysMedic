@@ -28,35 +28,43 @@ class StudentService:
     def get_or_create_demo_user(self, db: Session) -> User:
         user = db.query(User).filter_by(email=DEMO_USER_EMAIL).first()
         if not user:
-            seed_initial_data(db)
+            try:
+                seed_initial_data(db)
+            except Exception:
+                db.rollback()
+                raise
             user = db.query(User).filter_by(email=DEMO_USER_EMAIL).first()
 
         if not user:
-            user = User(
-                email=DEMO_USER_EMAIL,
-                password_hash=hash_password("demo123"),
-                full_name="Médico Demo UPCH",
-                university="Universidad Peruana Cayetano Heredia",
-                stage="Internado Rotatorio 2026",
-                target_exam="ENIM-EsSalud",
-                plan_tier="free",
-                xp=0,
-                streak_days=1,
-            )
-            db.add(user)
-            db.flush()
-            for spec in CARDINAL_SPECIALTIES:
-                db.add(
-                    StudentMastery(
-                        user_id=user.id,
-                        specialty=spec,
-                        mastery_score=50.0,
-                        competency_level="deficiente",
-                        cases_completed=0,
-                    )
+            try:
+                user = User(
+                    email=DEMO_USER_EMAIL,
+                    password_hash=hash_password("demo1234"),
+                    full_name="Médico Demo UPCH",
+                    university="Universidad Peruana Cayetano Heredia",
+                    stage="Internado Rotatorio 2026",
+                    target_exam="ENIM-EsSalud",
+                    plan_tier="free",
+                    xp=0,
+                    streak_days=1,
                 )
-            db.commit()
-            db.refresh(user)
+                db.add(user)
+                db.flush()
+                for spec in CARDINAL_SPECIALTIES:
+                    db.add(
+                        StudentMastery(
+                            user_id=user.id,
+                            specialty=spec,
+                            mastery_score=50.0,
+                            competency_level="deficiente",
+                            cases_completed=0,
+                        )
+                    )
+                db.commit()
+                db.refresh(user)
+            except Exception:
+                db.rollback()
+                raise
 
         return user
 
@@ -75,33 +83,37 @@ class StudentService:
             raise ValueError(f"User with email '{email}' is already registered")
 
         password_hashed = hash_password(password)
-        user = User(
-            email=email,
-            password_hash=password_hashed,
-            full_name=full_name,
-            university=university,
-            stage=stage,
-            target_exam=target_exam,
-            plan_tier="free",
-            xp=0,
-            streak_days=1,
-        )
-        db.add(user)
-        db.flush()
-
-        for spec in CARDINAL_SPECIALTIES:
-            mastery = StudentMastery(
-                user_id=user.id,
-                specialty=spec,
-                mastery_score=50.0,
-                competency_level="deficiente",
-                cases_completed=0,
+        try:
+            user = User(
+                email=email,
+                password_hash=password_hashed,
+                full_name=full_name,
+                university=university,
+                stage=stage,
+                target_exam=target_exam,
+                plan_tier="free",
+                xp=0,
+                streak_days=1,
             )
-            db.add(mastery)
+            db.add(user)
+            db.flush()
 
-        db.commit()
-        db.refresh(user)
-        return user
+            for spec in CARDINAL_SPECIALTIES:
+                mastery = StudentMastery(
+                    user_id=user.id,
+                    specialty=spec,
+                    mastery_score=50.0,
+                    competency_level="deficiente",
+                    cases_completed=0,
+                )
+                db.add(mastery)
+
+            db.commit()
+            db.refresh(user)
+            return user
+        except Exception:
+            db.rollback()
+            raise
 
     def authenticate_user(self, db: Session, email: str, password: str) -> Optional[User]:
         user = db.query(User).filter_by(email=email).first()
@@ -117,6 +129,10 @@ class StudentService:
         user_id: int,
         specialty: Union[MedicalSpecialty, str],
     ) -> SpecialtyMasteryProfile:
+        user = db.query(User).filter_by(id=user_id).first()
+        if not user:
+            raise ValueError(f"User with id {user_id} not found")
+
         spec_str = specialty.value if isinstance(specialty, MedicalSpecialty) else str(specialty).lower()
         spec_enum = MedicalSpecialty(spec_str)
 
@@ -126,16 +142,20 @@ class StudentService:
             .first()
         )
         if not mastery:
-            mastery = StudentMastery(
-                user_id=user_id,
-                specialty=spec_str,
-                mastery_score=50.0,
-                competency_level="deficiente",
-                cases_completed=0,
-            )
-            db.add(mastery)
-            db.commit()
-            db.refresh(mastery)
+            try:
+                mastery = StudentMastery(
+                    user_id=user_id,
+                    specialty=spec_str,
+                    mastery_score=50.0,
+                    competency_level="deficiente",
+                    cases_completed=0,
+                )
+                db.add(mastery)
+                db.commit()
+                db.refresh(mastery)
+            except Exception:
+                db.rollback()
+                raise
 
         gap_metrics = (
             db.query(StudentGapMetric)
@@ -182,6 +202,13 @@ class StudentService:
                 "needs_leveling": profile.needs_leveling,
             })
             total_score += profile.score
+
+        # Also include auxiliary specialties if the student has records
+        all_masteries = db.query(StudentMastery).filter_by(user_id=user_id).all()
+        for m in all_masteries:
+            if m.specialty not in specialty_profiles:
+                aux_profile = self.get_specialty_mastery(db, user_id, m.specialty)
+                specialty_profiles[m.specialty] = aux_profile.model_dump(mode="json")
 
         ocri_score = round(total_score / len(CARDINAL_SPECIALTIES), 2) if CARDINAL_SPECIALTIES else 0.0
 
@@ -255,101 +282,143 @@ class StudentService:
         spec_enum = MedicalSpecialty(spec_str)
         gap_str = gap.value if isinstance(gap, CognitiveGap) else (str(gap) if gap is not None else None)
 
-        # 1. Insert CaseAttempt
-        attempt = CaseAttempt(
-            user_id=user.id,
-            case_id=case_id,
-            station_id=station_number,
-            score=score,
-            passed=is_correct,
-            response_time_ms=response_time_ms,
-            detected_gap=gap_str,
-        )
-        db.add(attempt)
-
-        # 2. Update XP: +25 XP for correct, +5 XP for attempt
-        user.xp += 25 if is_correct else 5
-
-        # 3. If not correct and gap is present: update metric and schedule repetition task
-        if not is_correct and gap_str:
-            gap_metric = (
-                db.query(StudentGapMetric)
-                .filter_by(user_id=user.id, gap_type=gap_str)
-                .first()
-            )
-            if gap_metric:
-                gap_metric.fail_count += 1
-                gap_metric.last_concept = case_id
-                gap_metric.updated_at = datetime.now(timezone.utc)
-            else:
-                gap_metric = StudentGapMetric(
-                    user_id=user.id,
-                    gap_type=gap_str,
-                    fail_count=1,
-                    last_concept=case_id,
-                )
-                db.add(gap_metric)
-
-            rep_task = SpacedRepetitionTask(
+        try:
+            # 1. Insert CaseAttempt
+            attempt = CaseAttempt(
                 user_id=user.id,
                 case_id=case_id,
-                gap_type=gap_str,
-                scheduled_for=datetime.now(timezone.utc) + timedelta(days=7),
-                repetition_cycle="D7",
-                status="pending",
+                station_id=station_number,
+                score=score,
+                passed=is_correct,
+                response_time_ms=response_time_ms,
+                detected_gap=gap_str,
             )
-            db.add(rep_task)
+            db.add(attempt)
 
-        # 4. Update StudentMastery with EMA alpha = 0.25
-        mastery = (
-            db.query(StudentMastery)
-            .filter_by(user_id=user.id, specialty=spec_str)
-            .first()
-        )
-        if not mastery:
-            mastery = StudentMastery(
-                user_id=user.id,
-                specialty=spec_str,
-                mastery_score=50.0,
-                competency_level="deficiente",
-                cases_completed=0,
+            # 2. Update XP: +25 XP for correct, +5 XP for attempt
+            user.xp += 25 if is_correct else 5
+
+            # 3. Spaced repetition & Gap metrics
+            next_rep_iso: Optional[str] = None
+            if is_correct:
+                pending_case_tasks = (
+                    db.query(SpacedRepetitionTask)
+                    .filter_by(user_id=user.id, case_id=case_id, status="pending")
+                    .all()
+                )
+                for t in pending_case_tasks:
+                    t.status = "completed"
+            elif gap_str:
+                gap_metric = (
+                    db.query(StudentGapMetric)
+                    .filter_by(user_id=user.id, gap_type=gap_str)
+                    .first()
+                )
+                if gap_metric:
+                    gap_metric.fail_count += 1
+                    gap_metric.last_concept = case_id
+                    gap_metric.updated_at = datetime.now(timezone.utc)
+                else:
+                    gap_metric = StudentGapMetric(
+                        user_id=user.id,
+                        gap_type=gap_str,
+                        fail_count=1,
+                        last_concept=case_id,
+                    )
+                    db.add(gap_metric)
+
+                existing_pending_task = (
+                    db.query(SpacedRepetitionTask)
+                    .filter_by(user_id=user.id, case_id=case_id, status="pending")
+                    .first()
+                )
+                # D7 -> D21 progression on recurring error or existing pending task
+                if existing_pending_task or gap_metric.fail_count > 1:
+                    cycle = "D21"
+                    days_ahead = 21
+                else:
+                    cycle = "D7"
+                    days_ahead = 7
+
+                scheduled_time = datetime.now(timezone.utc) + timedelta(days=days_ahead)
+                next_rep_iso = scheduled_time.isoformat()
+
+                if existing_pending_task:
+                    existing_pending_task.gap_type = gap_str
+                    existing_pending_task.repetition_cycle = cycle
+                    existing_pending_task.scheduled_for = scheduled_time
+                else:
+                    rep_task = SpacedRepetitionTask(
+                        user_id=user.id,
+                        case_id=case_id,
+                        gap_type=gap_str,
+                        scheduled_for=scheduled_time,
+                        repetition_cycle=cycle,
+                        status="pending",
+                    )
+                    db.add(rep_task)
+
+            # 4. Update StudentMastery with EMA alpha = 0.25
+            mastery = (
+                db.query(StudentMastery)
+                .filter_by(user_id=user.id, specialty=spec_str)
+                .first()
             )
-            db.add(mastery)
-            db.flush()
+            if not mastery:
+                mastery = StudentMastery(
+                    user_id=user.id,
+                    specialty=spec_str,
+                    mastery_score=50.0,
+                    competency_level="deficiente",
+                    cases_completed=0,
+                )
+                db.add(mastery)
+                db.flush()
 
-        current_score = mastery.mastery_score
-        new_score = round(0.25 * score + 0.75 * current_score, 2)
-        mastery.mastery_score = new_score
-        mastery.cases_completed += 1
-        mastery.updated_at = datetime.now(timezone.utc)
+            current_score = mastery.mastery_score
+            new_score = round(0.25 * score + 0.75 * current_score, 2)
+            mastery.mastery_score = new_score
+            mastery.cases_completed += 1
+            mastery.updated_at = datetime.now(timezone.utc)
 
-        active_defs = []
-        if not is_correct and gap_str:
-            active_defs.append(map_gap_to_deficiency(gap_str))
+            # Active deficiencies from persistent StudentGapMetric
+            active_gap_metrics = (
+                db.query(StudentGapMetric)
+                .filter_by(user_id=user.id)
+                .filter(StudentGapMetric.fail_count > 0)
+                .all()
+            )
+            all_defs = [map_gap_to_deficiency(gm.gap_type) for gm in active_gap_metrics]
+            if not is_correct and gap_str:
+                all_defs.append(map_gap_to_deficiency(gap_str))
+            unique_active_defs = list(dict.fromkeys(all_defs)) if all_defs else None
 
-        profile = calculate_specialty_competency(
-            specialty=spec_enum,
-            score=new_score,
-            attempts=mastery.cases_completed,
-            active_deficiencies=active_defs if active_defs else None,
-        )
-        mastery.competency_level = profile.level.value
+            profile = calculate_specialty_competency(
+                specialty=spec_enum,
+                score=new_score,
+                attempts=mastery.cases_completed,
+                active_deficiencies=unique_active_defs,
+            )
+            mastery.competency_level = profile.level.value
 
-        # 5. Generate LevelingPrescription
-        effective_gap = gap if gap is not None else CognitiveGap.GAP_DIAGNOSTIC_REASONING
-        prescription = generate_leveling_prescription(
-            specialty=spec_enum,
-            mastery_score=new_score,
-            detected_gap=effective_gap,
-            student_level=profile.level,
-            student_id=str(user.id),
-        )
-        if not is_correct and gap_str:
-            prescription.next_repetition_date = (datetime.now(timezone.utc) + timedelta(days=7)).isoformat()
+            # 5. Generate LevelingPrescription
+            effective_gap = gap if gap is not None else CognitiveGap.GAP_DIAGNOSTIC_REASONING
+            prescription = generate_leveling_prescription(
+                specialty=spec_enum,
+                mastery_score=new_score,
+                detected_gap=effective_gap,
+                student_level=profile.level,
+                student_id=str(user.id),
+            )
+            if next_rep_iso:
+                prescription.next_repetition_date = next_rep_iso
 
-        # 6. Commit and return
-        db.commit()
-        return prescription
+            # 6. Commit and return
+            db.commit()
+            return prescription
+        except Exception:
+            db.rollback()
+            raise
 
     def toggle_user_plan(
         self,
@@ -361,14 +430,18 @@ class StudentService:
         if not user:
             raise ValueError(f"User with id {user_id} not found")
 
-        if new_tier is not None:
-            user.plan_tier = new_tier
-        else:
-            user.plan_tier = "premium" if user.plan_tier == "free" else "free"
+        try:
+            if new_tier is not None:
+                user.plan_tier = new_tier
+            else:
+                user.plan_tier = "premium" if user.plan_tier == "free" else "free"
 
-        db.commit()
-        db.refresh(user)
-        return user
+            db.commit()
+            db.refresh(user)
+            return user
+        except Exception:
+            db.rollback()
+            raise
 
 
 student_service = StudentService()
