@@ -9,6 +9,7 @@ import {
   X,
   Compass,
   FileText,
+  Home,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { LevelBadge } from './LevelBadge';
@@ -60,6 +61,11 @@ export const Navbar: React.FC<NavbarProps> = ({
   }, []);
 
   const navItems = [
+    {
+      id: 'landing',
+      label: 'Vision UPCH',
+      icon: Home,
+    },
     {
       id: 'dashboard',
       label: 'Mundos Clinicos',

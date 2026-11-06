@@ -160,7 +160,8 @@ function analyzeVitals(vitals?: VitalSigns): ParsedVital[] {
   const gcsVal =
     typeof rawGcs === 'object' && rawGcs !== null ? rawGcs.value : rawGcs;
   if (gcsVal !== undefined && gcsVal !== null) {
-    const gcsNum = parseInt(String(gcsVal).replace(/[^\d]/g, ''), 10);
+    const match = String(gcsVal).match(/^(\d{1,2})/);
+    const gcsNum = match ? parseInt(match[1], 10) : NaN;
     let gcsSeverity: 'normal' | 'warning' | 'critical' = 'normal';
     if (!isNaN(gcsNum)) {
       if (gcsNum <= 8) {
@@ -183,7 +184,9 @@ function analyzeVitals(vitals?: VitalSigns): ParsedVital[] {
  * Extracts numerical laboratory value from potentially complex text strings
  */
 function parseLabValue(resultStr: string): number {
-  const normalized = resultStr.replace(/,/g, '');
+  const normalized = resultStr
+    .replace(/(\d+),(\d{1,2})(?!\d)/g, '$1.$2')
+    .replace(/,/g, '');
   const match = normalized.match(/(\d+(?:\.\d+)?)/);
   return match ? parseFloat(match[1]) : NaN;
 }
@@ -288,7 +291,11 @@ function parseLabResults(initialLabs?: Record<string, any> | any[]): LabRow[] {
         refStr = '15 - 45 mg/dL';
         const num = parseLabValue(resultStr);
         if (!isNaN(num) && num > 80) sev = 'warning';
-      } else if (lowerKey.includes('hemoglobina') || lowerKey === 'hb') {
+      } else if (
+        (lowerKey.includes('hemoglobina') || lowerKey === 'hb') &&
+        !lowerKey.includes('glicosilada') &&
+        !lowerKey.includes('a1c')
+      ) {
         refStr = '12.0 - 16.0 g/dL';
         const num = parseLabValue(resultStr);
         if (!isNaN(num)) {

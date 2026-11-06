@@ -275,7 +275,7 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
               <p className="font-semibold text-xs sm:text-sm text-white">
                 {medRef.title} ({medRef.year})
               </p>
-              {medRef.pmid_doi && (
+              {medRef.pmid_doi ? (
                 <a
                   href={citationUrl}
                   target="_blank"
@@ -285,7 +285,17 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
                   <span>{medRef.pmid_doi}</span>
                   <ExternalLink className="w-3.5 h-3.5" />
                 </a>
-              )}
+              ) : citationUrl ? (
+                <a
+                  href={citationUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-[11px] font-mono text-clinical-cyan hover:underline shrink-0"
+                >
+                  <span>Buscar en PubMed</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              ) : null}
             </div>
 
             {medRef.key_takeaway && (

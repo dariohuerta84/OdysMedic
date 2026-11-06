@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import { Navbar, NavTabId } from './components/common/Navbar';
 import { AuthModal } from './components/auth/AuthModal';
-import { DashboardPage } from './pages/DashboardPage';
-import { SimulatorPage } from './pages/SimulatorPage';
+import {
+  DashboardPage,
+  SimulatorPage,
+  LibraryPage,
+  LandingPage,
+} from './pages';
 
 const AppContent: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<NavTabId | string>('dashboard');
+  const { loginDemo, isAuthenticated } = useAuth();
+  const [activeTab, setActiveTab] = useState<NavTabId | string>('landing');
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
   const [, setSelectedSpecialty] = useState<string | null>(null);
   const [selectedCase, setSelectedCase] = useState<string | null>(null);
@@ -30,6 +35,19 @@ const AppContent: React.FC = () => {
     setActiveTab('simulator');
   };
 
+  const handleStartDemo = async () => {
+    if (isAuthenticated) {
+      setActiveTab('dashboard');
+      return;
+    }
+    try {
+      await loginDemo();
+      setActiveTab('dashboard');
+    } catch {
+      setIsAuthModalOpen(true);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-clinical-bg text-gray-100 flex flex-col justify-between selection:bg-clinical-teal selection:text-white">
       <Navbar
@@ -39,7 +57,12 @@ const AppContent: React.FC = () => {
       />
 
       <main className="flex-1 pb-12">
-        {activeTab === 'dashboard' ? (
+        {activeTab === 'landing' ? (
+          <LandingPage
+            onStartDemo={handleStartDemo}
+            onExploreWorlds={() => setActiveTab('dashboard')}
+          />
+        ) : activeTab === 'dashboard' ? (
           <DashboardPage
             onSelectSpecialty={handleSelectSpecialty}
             onSelectCase={handleSelectCase}
@@ -49,6 +72,8 @@ const AppContent: React.FC = () => {
             initialCaseId={selectedCase || undefined}
             onBackToDashboard={() => setActiveTab('dashboard')}
           />
+        ) : activeTab === 'library' ? (
+          <LibraryPage onSelectCase={handleSelectCase} />
         ) : (
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 text-center text-gray-400">
             <h2 className="text-xl font-bold text-white mb-2">
@@ -66,11 +91,13 @@ const AppContent: React.FC = () => {
         onClose={() => setIsAuthModalOpen(false)}
       />
 
-      <footer className="border-t border-clinical-border py-6 px-4 text-center">
-        <p className="text-xs font-mono text-gray-500">
-          ODYSSMEDIC PRECISION ENGINE - BIOINCUBADORA CAYETANO 2026
-        </p>
-      </footer>
+      {activeTab !== 'landing' && (
+        <footer className="border-t border-clinical-border py-6 px-4 text-center">
+          <p className="text-xs font-mono text-gray-500">
+            ODYSSMEDIC PRECISION ENGINE - BIOINCUBADORA CAYETANO 2026
+          </p>
+        </footer>
+      )}
     </div>
   );
 };

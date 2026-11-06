@@ -1,9 +1,20 @@
-from fastapi import APIRouter
+from typing import Optional
+from fastapi import APIRouter, Query
 from app.models.reference import MedicalReferenceBook, ClinicalGuidelineExcerpt
 from app.services.reference_service import reference_repository
 from app.services.mcq_service import CASE_ALIASES
 
 router = APIRouter(prefix="/references", tags=["Guias Medicas y RAG"])
+
+
+@router.get("", response_model=list[ClinicalGuidelineExcerpt])
+def get_all_references(specialty: Optional[str] = Query(None, description="Filtrar referencias por especialidad")):
+    """
+    Retorna la lista de extractos de guias medicas, opcionalmente filtrada por especialidad.
+    """
+    if specialty:
+        return reference_repository.get_excerpts_by_specialty(specialty)
+    return reference_repository._all_excerpts
 
 
 @router.get("/books", response_model=list[MedicalReferenceBook])
