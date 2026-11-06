@@ -13,11 +13,9 @@ const AppContent: React.FC = () => {
   const { loginDemo, isAuthenticated } = useAuth();
   const [activeTab, setActiveTab] = useState<NavTabId | string>('landing');
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
-  const [, setSelectedSpecialty] = useState<string | null>(null);
   const [selectedCase, setSelectedCase] = useState<string | null>(null);
 
   const handleSelectSpecialty = (specialtyId: string) => {
-    setSelectedSpecialty(specialtyId);
     if (specialtyId === 'nefrologia') {
       setSelectedCase('case-nefro-001');
     } else if (specialtyId === 'endocrinologia') {

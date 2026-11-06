@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { CognitiveGapTag } from '../types/api';
 import {
   ArrowRight,
   Zap,
@@ -18,117 +19,131 @@ export interface LandingPageProps {
   onExploreWorlds: () => void;
 }
 
+interface PreviewStation {
+  stationNumber: number;
+  title: string;
+  subtitle: string;
+  badge: string;
+  scenario: string;
+  vitals: { label: string; value: string; critical: boolean }[];
+  clinicalQuestion: string;
+  options: { id: string; text: string; isCorrect: boolean }[];
+  detectedGap: CognitiveGapTag;
+  gapDescription: string;
+  pearl: string;
+}
+
+const PREVIEW_STATIONS: PreviewStation[] = [
+  {
+    stationNumber: 1,
+    title: 'Triaje y Severidad',
+    subtitle: 'Deteccion Temprana de Inestabilidad',
+    badge: 'Estacion 1',
+    scenario:
+      'Mujer de 24 anos ingresa a la guardia de emergencia por astenia severa, ictericia escleral marcada y petequias en extremidades inferiores.',
+    vitals: [
+      { label: 'PA', value: '85/55 mmHg', critical: true },
+      { label: 'FC', value: '118 lpm', critical: true },
+      { label: 'FR', value: '22 rpm', critical: false },
+      { label: 'SatO2', value: '95%', critical: false },
+      { label: 'Glasgow', value: '14/15', critical: false },
+    ],
+    clinicalQuestion:
+      'Cual es la conducta inmediata prioritaria durante el triaje en el box de reanimacion?',
+    options: [
+      {
+        id: 'opt-1',
+        text: 'Canalizar dos vias perifericas gruesas, expandir con cristaloides y monitorizar gasto urinario.',
+        isCorrect: true,
+      },
+      {
+        id: 'opt-2',
+        text: 'Indicar reposo en camilla general y esperar hemograma de rutina.',
+        isCorrect: false,
+      },
+    ],
+    detectedGap: 'GAP_TRIAGE_SEVERITY',
+    gapDescription:
+      'La subestimacion del shock distributivo inicial incrementa la mortalidad en las primeras 6 horas.',
+    pearl:
+      'Perla Clinica: Ante trombocitopenia aguda con anemia e hipotension, prioriza la resucitacion volemica antes de movilizar al paciente a salas de imagen.',
+  },
+  {
+    stationNumber: 2,
+    title: 'Razonamiento Diagnostico',
+    subtitle: 'Correlacion Fisiopatologica',
+    badge: 'Estacion 2',
+    scenario:
+      'El laboratorio de urgencia confirma trombocitopenia severa (22,000 /uL), LDH 920 U/L, esquistocitos 3.2% en frotis y falla renal aguda (Creatinina 3.8 mg/dL).',
+    vitals: [
+      { label: 'Plaquetas', value: '22,000 /uL', critical: true },
+      { label: 'Creatinina', value: '3.8 mg/dL', critical: true },
+      { label: 'LDH', value: '920 U/L', critical: true },
+      { label: 'Esquistocitos', value: '3.2%', critical: true },
+    ],
+    clinicalQuestion:
+      'Que entidad sindromica debe sospecharse prioritariamente antes de confirmar ADAMTS13?',
+    options: [
+      {
+        id: 'opt-3',
+        text: 'Microangiopatia trombotica: descartar Purpura Trombocitopenica Trombotica (PTT) vs SHU atipico.',
+        isCorrect: true,
+      },
+      {
+        id: 'opt-4',
+        text: 'Purpura trombocitopenica idiopatica aislada sin compromiso microvascular.',
+        isCorrect: false,
+      },
+    ],
+    detectedGap: 'GAP_DIAGNOSTIC_REASONING',
+    gapDescription:
+      'Omitir la presencia de esquistocitos retrasa el diagnostico de microangiopatia trombotica sistemica.',
+    pearl:
+      'Perla Clinica: La triada de anemia hemolitica microangiopatica, trombocitopenia y lesion renal aguda exige descarte inmediato de PTT y activacion del panel de complemento.',
+  },
+  {
+    stationNumber: 3,
+    title: 'Manejo y Guias Internacionales',
+    subtitle: 'Terapeutica Dirigida Basada en Evidencia',
+    badge: 'Estacion 3',
+    scenario:
+      'Se descarta deficit severo de ADAMTS13 (> 10%) con prueba rapida y se confirma desregulacion de la via alternativa del complemento.',
+    vitals: [
+      { label: 'Guia', value: 'KDIGO 2024', critical: false },
+      { label: 'Nivel', value: 'Grade 1A', critical: false },
+      { label: 'Objetivo', value: 'Preservacion Renal', critical: false },
+    ],
+    clinicalQuestion:
+      'Cual es la intervencion terapeutica definitiva segun la guia KDIGO 2024?',
+    options: [
+      {
+        id: 'opt-5',
+        text: 'Iniciar bloqueo de la fraccion C5 del complemento con eculizumab / ravulizumab dentro de las primeras 24-48 horas.',
+        isCorrect: true,
+      },
+      {
+        id: 'opt-6',
+        text: 'Transfundir concentrado de plaquetas profilactico de forma rutinaria.',
+        isCorrect: false,
+      },
+    ],
+    detectedGap: 'GAP_INITIAL_MANAGEMENT',
+    gapDescription:
+      'La transfusion de plaquetas en microangiopatias tromboticas activas puede precipitar trombosis microvascular masiva.',
+    pearl:
+      'Perla Clinica: Segun KDIGO 2024, la transfusion de plaquetas esta contraindicada en microangiopatica trombotica salvo hemorragia con riesgo vital inminente.',
+  },
+];
+
 export const LandingPage: React.FC<LandingPageProps> = ({
   onStartDemo,
   onExploreWorlds,
 }) => {
   const [activePreviewStation, setActivePreviewStation] = useState<number>(1);
 
-  const previewStations = [
-    {
-      stationNumber: 1,
-      title: 'Triaje y Severidad',
-      subtitle: 'Deteccion Temprana de Inestabilidad',
-      badge: 'Estacion 1',
-      scenario:
-        'Mujer de 24 anos ingresa a la guardia de emergencia por astenia severa, ictericia escleral marcada y petequias en extremidades inferiores.',
-      vitals: [
-        { label: 'PA', value: '85/55 mmHg', critical: true },
-        { label: 'FC', value: '118 lpm', critical: true },
-        { label: 'FR', value: '22 rpm', critical: false },
-        { label: 'SatO2', value: '95%', critical: false },
-        { label: 'Glasgow', value: '14/15', critical: false },
-      ],
-      clinicalQuestion:
-        'Cual es la conducta inmediata prioritaria durante el triaje en el box de reanimacion?',
-      options: [
-        {
-          id: 'opt-1',
-          text: 'Canalizar dos vias perifericas gruesas, expandir con cristaloides y monitorizar gasto urinario.',
-          isCorrect: true,
-        },
-        {
-          id: 'opt-2',
-          text: 'Indicar reposo en camilla general y esperar hemograma de rutina.',
-          isCorrect: false,
-        },
-      ],
-      detectedGap: 'GAP_TRIAGE_SEVERITY',
-      gapDescription:
-        'La subestimacion del shock distributivo inicial incrementa la mortalidad en las primeras 6 horas.',
-      pearl:
-        'Perla Clinica: Ante trombocitopenia aguda con anemia e hipotension, prioriza la resucitacion volemica antes de movilizar al paciente a salas de imagen.',
-    },
-    {
-      stationNumber: 2,
-      title: 'Razonamiento Diagnostico',
-      subtitle: 'Correlacion Fisiopatologica',
-      badge: 'Estacion 2',
-      scenario:
-        'El laboratorio de urgencia confirma trombocitopenia severa (22,000 /uL), LDH 920 U/L, esquistocitos 3.2% en frotis y falla renal aguda (Creatinina 3.8 mg/dL).',
-      vitals: [
-        { label: 'Plaquetas', value: '22,000 /uL', critical: true },
-        { label: 'Creatinina', value: '3.8 mg/dL', critical: true },
-        { label: 'LDH', value: '920 U/L', critical: true },
-        { label: 'Esquistocitos', value: '3.2%', critical: true },
-      ],
-      clinicalQuestion:
-        'Que entidad sindromica debe sospecharse prioritariamente antes de confirmar ADAMTS13?',
-      options: [
-        {
-          id: 'opt-3',
-          text: 'Microangiopatia trombotica: descartar Purpura Trombocitopenica Trombotica (PTT) vs SHU atipico.',
-          isCorrect: true,
-        },
-        {
-          id: 'opt-4',
-          text: 'Purpura trombocitopenica idiopatica aislada sin compromiso microvascular.',
-          isCorrect: false,
-        },
-      ],
-      detectedGap: 'GAP_DIAGNOSTIC_REASONING',
-      gapDescription:
-        'Omitir la presencia de esquistocitos retrasa el diagnostico de microangiopatia trombotica sistemica.',
-      pearl:
-        'Perla Clinica: La triada de anemia hemolitica microangiopatica, trombocitopenia y lesion renal aguda exige descarte inmediato de PTT y activacion del panel de complemento.',
-    },
-    {
-      stationNumber: 3,
-      title: 'Manejo y Guias Internacionales',
-      subtitle: 'Terapeutica Dirigida Basada en Evidencia',
-      badge: 'Estacion 3',
-      scenario:
-        'Se descarta deficit severo de ADAMTS13 (> 10%) con prueba rapida y se confirma desregulacion de la via alternativa del complemento.',
-      vitals: [
-        { label: 'Guia', value: 'KDIGO 2024', critical: false },
-        { label: 'Nivel', value: 'Grade 1A', critical: false },
-        { label: 'Objetivo', value: 'Preservacion Renal', critical: false },
-      ],
-      clinicalQuestion:
-        'Cual es la intervencion terapeutica definitiva segun la guia KDIGO 2024?',
-      options: [
-        {
-          id: 'opt-5',
-          text: 'Iniciar bloqueo de la fraccion C5 del complemento con eculizumab / ravulizumab dentro de las primeras 24-48 horas.',
-          isCorrect: true,
-        },
-        {
-          id: 'opt-6',
-          text: 'Transfundir concentrado de plaquetas profilactico de forma rutinaria.',
-          isCorrect: false,
-        },
-      ],
-      detectedGap: 'GAP_INITIAL_MANAGEMENT',
-      gapDescription:
-        'La transfusion de plaquetas en microangiopatias tromboticas activas puede precipitar trombosis microvascular masiva.',
-      pearl:
-        'Perla Clinica: Segun KDIGO 2024, la transfusion de plaquetas esta contraindicada en microangiopatia trombotica salvo hemorragia con riesgo vital inminente.',
-    },
-  ];
-
   const currentPreview =
-    previewStations.find((s) => s.stationNumber === activePreviewStation) ||
-    previewStations[0];
+    PREVIEW_STATIONS.find((s) => s.stationNumber === activePreviewStation) ||
+    PREVIEW_STATIONS[0];
 
   return (
     <div className="relative overflow-hidden selection:bg-clinical-teal selection:text-white">
@@ -362,7 +377,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
           {/* Stepper Navigation Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-3xl mx-auto">
-            {previewStations.map((station) => {
+            {PREVIEW_STATIONS.map((station) => {
               const isActive = activePreviewStation === station.stationNumber;
               return (
                 <button
