@@ -141,14 +141,14 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="pearl-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200 overflow-y-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md animate-fade-in duration-200 overflow-y-auto"
       onClick={(e) => {
         if (e.target === e.currentTarget) {
           onClose();
         }
       }}
     >
-      <div className="relative w-full max-w-2xl max-h-[92vh] overflow-y-auto rounded-2xl bg-[#0E1117] border border-clinical-border shadow-2xl p-5 sm:p-6 space-y-5 text-left my-auto custom-scrollbar">
+      <div className="relative w-full max-w-2xl max-h-[92vh] overflow-y-auto rounded-2xl bg-[#0E1117] border border-clinical-border shadow-2xl p-5 sm:p-6 space-y-5 text-left my-auto custom-scrollbar animate-scale-in">
         {/* Close Button */}
         <button
           type="button"
@@ -161,7 +161,7 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
 
         {/* 1. Header: Correct (Emerald) / Incorrect (Coral) Banner */}
         <header
-          className={`p-4 sm:p-5 rounded-2xl border transition-all ${
+          className={`p-4 sm:p-5 rounded-2xl border transition-all animate-fade-in-up ${
             isCorrect
               ? 'bg-emerald-950/40 border-emerald-500/50 text-emerald-300'
               : 'bg-rose-950/40 border-rose-500/50 text-rose-300'
@@ -223,7 +223,7 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
         {/* 2. Cognitive Gap Diagnostic Card */}
         <section
           aria-label="Diagnostico de la decision clinica"
-          className="p-4 rounded-xl bg-slate-900/90 border border-clinical-border space-y-2 shadow-inner"
+          className="p-4 rounded-xl bg-slate-900/90 border border-clinical-border space-y-2 shadow-inner animate-fade-in-up stagger-1"
         >
           <div className="flex items-center gap-2 font-mono text-xs uppercase font-bold text-clinical-cyan tracking-wider">
             <Brain className="w-4 h-4 text-clinical-cyan shrink-0" />
@@ -241,7 +241,7 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
         {/* 3. 60-Second Actionable Clinical Pearl */}
         <section
           aria-label="Perla clinica"
-          className="border border-clinical-teal/40 bg-clinical-teal/[0.08] p-4 sm:p-5 rounded-xl space-y-2.5 shadow-sm"
+          className="border border-clinical-teal/40 bg-clinical-teal/[0.08] p-4 sm:p-5 rounded-xl space-y-2.5 shadow-lg shadow-teal-950/25 animate-pearl-reveal"
         >
           <div className="flex items-center gap-2 font-mono text-xs uppercase font-bold text-teal-300 tracking-wider">
             <Lightbulb className="w-4 h-4 text-teal-400 shrink-0" />
@@ -255,7 +255,7 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
         {/* 4. Medical Guideline & Evidence Citation */}
         <section
           aria-label="Referencia y guia clinica"
-          className="p-4 rounded-xl bg-slate-900/90 border border-clinical-border space-y-3"
+          className="p-4 rounded-xl bg-slate-900/90 border border-clinical-border space-y-3 animate-fade-in-up stagger-2"
         >
           <div className="flex items-center justify-between flex-wrap gap-2">
             <div className="flex items-center gap-2 font-mono text-xs uppercase font-bold text-clinical-cyan tracking-wider">

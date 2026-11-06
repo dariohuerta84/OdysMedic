@@ -29,6 +29,8 @@ export const OptionCard: React.FC<OptionCardProps> = ({
     }
   };
 
+  const staggerClass = index === 0 ? 'stagger-1' : index === 1 ? 'stagger-2' : index === 2 ? 'stagger-3' : 'stagger-4';
+
   return (
     <div
       role="button"
@@ -39,12 +41,12 @@ export const OptionCard: React.FC<OptionCardProps> = ({
         if (!disabled) onSelect();
       }}
       onKeyDown={handleKeyDown}
-      className={`group relative flex items-start gap-3.5 sm:gap-4 p-4 sm:p-5 rounded-2xl border text-left cursor-pointer transition-all duration-200 select-none focus:outline-none focus:ring-2 focus:ring-clinical-cyan/60 ${
+      className={`group relative flex items-start gap-3.5 sm:gap-4 p-4 sm:p-5 rounded-2xl border text-left cursor-pointer transition-all duration-200 select-none focus:outline-none focus:ring-2 focus:ring-clinical-cyan/60 animate-fade-in-up ${staggerClass} ${
         disabled
           ? 'opacity-60 cursor-not-allowed border-clinical-border bg-slate-900/40'
           : isSelected
-            ? 'bg-clinical-teal/20 border-clinical-teal shadow-[0_0_20px_rgba(13,102,93,0.35)] ring-1 ring-clinical-teal/60'
-            : 'bg-clinical-surface/80 border-clinical-border hover:border-clinical-cyan/60 hover:bg-slate-900/90 hover:shadow-lg'
+            ? 'bg-clinical-teal/20 border-clinical-teal shadow-[0_0_20px_rgba(13,102,93,0.35)] ring-1 ring-clinical-teal/60 scale-[1.008]'
+            : 'bg-clinical-surface/80 border-clinical-border hover:border-clinical-cyan/60 hover:bg-slate-900/90 hover:scale-[1.004] hover:shadow-lg active:scale-[0.99]'
       } ${className}`}
     >
       {/* Letter Identifier in Circle */}

@@ -18,7 +18,7 @@ export const VitalSignBadge: React.FC<VitalSignBadgeProps> = ({
   const containerClasses: Record<'normal' | 'warning' | 'critical', string> = {
     normal: 'bg-slate-900/60 border-slate-700/50 text-slate-200',
     warning: 'bg-amber-950/30 border-amber-500/40 text-amber-300',
-    critical: 'bg-rose-950/40 border-rose-500/50 text-rose-300 animate-pulse',
+    critical: 'bg-rose-950/40 border-rose-500/50 text-rose-300 animate-pulse-subtle shadow-[0_0_12px_rgba(244,63,94,0.25)]',
   };
 
   const labelPillClasses: Record<'normal' | 'warning' | 'critical', string> = {

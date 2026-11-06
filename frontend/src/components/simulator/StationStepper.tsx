@@ -98,7 +98,7 @@ export const StationStepper: React.FC<StationStepperProps> = ({
                       isCompleted
                         ? 'bg-emerald-950/40 border-emerald-500 text-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.3)]'
                         : isCurrent
-                          ? 'bg-clinical-cyan/10 border-clinical-cyan text-clinical-cyan animate-pulse shadow-[0_0_16px_rgba(6,182,212,0.4)]'
+                          ? 'bg-clinical-cyan/15 border-clinical-cyan text-clinical-cyan animate-pulse-subtle shadow-[0_0_18px_rgba(6,182,212,0.45)] ring-2 ring-clinical-cyan/30'
                           : 'bg-slate-900/80 border-slate-800 text-slate-500'
                     }`}
                     title={`Estacion ${station.number}: ${station.levelTitle}`}

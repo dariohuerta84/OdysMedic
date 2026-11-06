@@ -55,33 +55,35 @@ const AppContent: React.FC = () => {
       />
 
       <main className="flex-1 pb-12">
-        {activeTab === 'landing' ? (
-          <LandingPage
-            onStartDemo={handleStartDemo}
-            onExploreWorlds={() => setActiveTab('dashboard')}
-          />
-        ) : activeTab === 'dashboard' ? (
-          <DashboardPage
-            onSelectSpecialty={handleSelectSpecialty}
-            onSelectCase={handleSelectCase}
-          />
-        ) : activeTab === 'simulator' ? (
-          <SimulatorPage
-            initialCaseId={selectedCase || undefined}
-            onBackToDashboard={() => setActiveTab('dashboard')}
-          />
-        ) : activeTab === 'library' ? (
-          <LibraryPage onSelectCase={handleSelectCase} />
-        ) : (
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 text-center text-gray-400">
-            <h2 className="text-xl font-bold text-white mb-2">
-              Modulo Clinico en Preparacion
-            </h2>
-            <p className="text-sm max-w-md mx-auto">
-              Esta estacion clinica sera desplegada en las siguientes fases del simulador adaptativo.
-            </p>
-          </div>
-        )}
+        <div key={activeTab} className="animate-fade-in-up">
+          {activeTab === 'landing' ? (
+            <LandingPage
+              onStartDemo={handleStartDemo}
+              onExploreWorlds={() => setActiveTab('dashboard')}
+            />
+          ) : activeTab === 'dashboard' ? (
+            <DashboardPage
+              onSelectSpecialty={handleSelectSpecialty}
+              onSelectCase={handleSelectCase}
+            />
+          ) : activeTab === 'simulator' ? (
+            <SimulatorPage
+              initialCaseId={selectedCase || undefined}
+              onBackToDashboard={() => setActiveTab('dashboard')}
+            />
+          ) : activeTab === 'library' ? (
+            <LibraryPage onSelectCase={handleSelectCase} />
+          ) : (
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 text-center text-gray-400">
+              <h2 className="text-xl font-bold text-white mb-2">
+                Modulo Clinico en Preparacion
+              </h2>
+              <p className="text-sm max-w-md mx-auto">
+                Esta estacion clinica sera desplegada en las siguientes fases del simulador adaptativo.
+              </p>
+            </div>
+          )}
+        </div>
       </main>
 
       <AuthModal

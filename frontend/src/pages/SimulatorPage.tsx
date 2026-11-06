@@ -1293,7 +1293,8 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
           {/* B. Active Station Question Stem and Options */}
           {currentStation && (
             <section
-              className="rounded-2xl bg-clinical-surface/95 border border-clinical-border p-5 sm:p-7 backdrop-blur-md shadow-2xl space-y-6"
+              key={stationNumber}
+              className="rounded-2xl bg-clinical-surface/95 border border-clinical-border p-5 sm:p-7 backdrop-blur-md shadow-2xl space-y-6 animate-fade-in-up"
               aria-label="Pregunta Clinica y Opciones de Decision"
             >
               {/* Question Header */}
@@ -1337,7 +1338,7 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
                     className={`w-2 h-2 rounded-full ${
                       evaluationResult !== null
                         ? 'bg-emerald-400'
-                        : 'bg-clinical-cyan animate-ping'
+                        : 'bg-clinical-cyan animate-pulse-subtle'
                     }`}
                   />
                   <span>

@@ -356,10 +356,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               </span>
               <span className="text-base font-mono font-bold text-clinical-teal-light">
                 {Math.round(
-                  (radarScores.GAP_TRIAGE_SEVERITY +
-                    radarScores.GAP_DIAGNOSTIC_REASONING +
-                    radarScores.GAP_LAB_INTERPRETATION +
-                    radarScores.GAP_INITIAL_MANAGEMENT) /
+                  ((radarScores.GAP_TRIAGE_SEVERITY ?? 0) +
+                    (radarScores.GAP_DIAGNOSTIC_REASONING ?? 0) +
+                    (radarScores.GAP_LAB_INTERPRETATION ?? 0) +
+                    (radarScores.GAP_INITIAL_MANAGEMENT ?? 0)) /
                     4
                 )}
                 %

@@ -62,7 +62,7 @@ export const BentoStats: React.FC<BentoStatsProps> = ({
       className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full ${className}`}
     >
       {/* Card 1: Nivel Clinico Global */}
-      <div className="relative overflow-hidden p-5 rounded-xl bg-clinical-surface/80 border border-clinical-border backdrop-blur-md shadow-lg flex flex-col justify-between hover:border-white/20 transition-all group">
+      <div className="relative overflow-hidden p-5 rounded-xl bg-clinical-surface/80 border border-clinical-border backdrop-blur-md shadow-lg flex flex-col justify-between hover:border-white/20 hover:-translate-y-0.5 transition-all duration-300 animate-fade-in-up stagger-1 group">
         <div className="flex items-center justify-between mb-3">
           <span className="text-[11px] font-mono uppercase tracking-wider text-gray-400">
             Nivel Clinico Global
@@ -88,7 +88,7 @@ export const BentoStats: React.FC<BentoStatsProps> = ({
       </div>
 
       {/* Card 2: Puntos de Experiencia (XP) */}
-      <div className="relative overflow-hidden p-5 rounded-xl bg-clinical-surface/80 border border-clinical-border backdrop-blur-md shadow-lg flex flex-col justify-between hover:border-white/20 transition-all group">
+      <div className="relative overflow-hidden p-5 rounded-xl bg-clinical-surface/80 border border-clinical-border backdrop-blur-md shadow-lg flex flex-col justify-between hover:border-white/20 hover:-translate-y-0.5 transition-all duration-300 animate-fade-in-up stagger-2 group">
         <div className="flex items-center justify-between mb-2">
           <span className="text-[11px] font-mono uppercase tracking-wider text-gray-400">
             Puntos de Experiencia
@@ -123,7 +123,7 @@ export const BentoStats: React.FC<BentoStatsProps> = ({
       </div>
 
       {/* Card 3: Racha de Guardia */}
-      <div className="relative overflow-hidden p-5 rounded-xl bg-clinical-surface/80 border border-clinical-border backdrop-blur-md shadow-lg flex flex-col justify-between hover:border-white/20 transition-all group">
+      <div className="relative overflow-hidden p-5 rounded-xl bg-clinical-surface/80 border border-clinical-border backdrop-blur-md shadow-lg flex flex-col justify-between hover:border-white/20 hover:-translate-y-0.5 transition-all duration-300 animate-fade-in-up stagger-3 group">
         <div className="flex items-center justify-between mb-2">
           <span className="text-[11px] font-mono uppercase tracking-wider text-gray-400">
             Racha de Guardia
@@ -157,7 +157,7 @@ export const BentoStats: React.FC<BentoStatsProps> = ({
       </div>
 
       {/* Card 4: Repasos Espaciados Pendientes */}
-      <div className="relative overflow-hidden p-5 rounded-xl bg-clinical-surface/80 border border-clinical-border backdrop-blur-md shadow-lg flex flex-col justify-between hover:border-white/20 transition-all group">
+      <div className="relative overflow-hidden p-5 rounded-xl bg-clinical-surface/80 border border-clinical-border backdrop-blur-md shadow-lg flex flex-col justify-between hover:border-white/20 hover:-translate-y-0.5 transition-all duration-300 animate-fade-in-up stagger-4 group">
         <div className="flex items-center justify-between mb-2">
           <span className="text-[11px] font-mono uppercase tracking-wider text-gray-400">
             Repasos Pendientes
