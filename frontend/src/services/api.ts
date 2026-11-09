@@ -17,6 +17,9 @@ import type {
   SpacedRepetitionItem,
   DiagnosticQuestion,
   DiagnosticResult,
+  DiagnosticExamMode,
+  DiagnosticSpecialtyOption,
+  RegisterRequest,
 } from '../types/api';
 
 const API_BASE_URL =
@@ -98,15 +101,7 @@ export const authApi = {
     }
   },
 
-  register: async (data: {
-    email: string;
-    password: string;
-    full_name: string;
-    role?: string;
-    university?: string;
-    stage?: string;
-    target_exam?: string;
-  }): Promise<AuthToken> => {
+  register: async (data: RegisterRequest): Promise<AuthToken> => {
     const response = await api.post<AuthToken>('/auth/register', data);
     if (response.data?.access_token && typeof window !== 'undefined') {
       localStorage.setItem('odyssmedic_token', response.data.access_token);
@@ -397,16 +392,37 @@ export const levelingApi = {
     };
   },
 
-  getDiagnosticQuestions: async (): Promise<DiagnosticQuestion[]> => {
-    const response = await api.get<DiagnosticQuestion[]>('/leveling/diagnostic/questions');
+  getDiagnosticSpecialties: async (): Promise<DiagnosticSpecialtyOption[]> => {
+    const response = await api.get<DiagnosticSpecialtyOption[]>(
+      '/leveling/diagnostic/specialties'
+    );
+    return response.data;
+  },
+
+  getDiagnosticQuestions: async (
+    mode: DiagnosticExamMode = 'general',
+    specialty?: string | null
+  ): Promise<DiagnosticQuestion[]> => {
+    const params = new URLSearchParams();
+    params.set('mode', mode);
+    if (mode === 'specialty' && specialty) {
+      params.set('specialty', specialty);
+    }
+    const response = await api.get<DiagnosticQuestion[]>(
+      `/leveling/diagnostic/questions?${params.toString()}`
+    );
     return response.data;
   },
 
   submitDiagnosticExam: async (
-    answers: Array<{ question_id: number; selected_option_id: string }>
+    answers: Array<{ question_id: number; selected_option_id: string }>,
+    mode: DiagnosticExamMode = 'general',
+    specialty?: string | null
   ): Promise<DiagnosticResult> => {
     const response = await api.post<DiagnosticResult>('/leveling/diagnostic/submit', {
       answers,
+      mode,
+      specialty: mode === 'specialty' ? specialty || null : null,
     });
     return response.data;
   },
@@ -426,7 +442,7 @@ export const referencesApi = {
       guideline_source:
         r.organization_or_publisher || r.source_title || 'Guia Medica',
       title: r.source_title || r.section_title || 'Referencia Clinica',
-      year: r.year || 2026,
+      year: r.year || 2024,
       pmid_doi: r.page_or_doi || '',
       key_takeaway: r.key_recommendation || '',
       reference_id: r.reference_id,
@@ -439,6 +455,10 @@ export const referencesApi = {
       evidence_level: r.evidence_level,
       associated_specialty: r.associated_specialty,
       associated_cases: r.associated_cases,
+      anamnesis_checklist: r.anamnesis_checklist || [],
+      physical_exam_signs: r.physical_exam_signs || [],
+      diagnostic_cutoffs: r.diagnostic_cutoffs || [],
+      red_flags: r.red_flags || [],
     }));
   },
 
@@ -453,7 +473,7 @@ export const referencesApi = {
       guideline_source:
         r.organization_or_publisher || r.source_title || 'Guia Medica',
       title: r.source_title || r.section_title || 'Referencia Clinica',
-      year: r.year || 2026,
+      year: r.year || 2024,
       pmid_doi: r.page_or_doi || '',
       key_takeaway: r.key_recommendation || '',
       reference_id: r.reference_id,
@@ -466,6 +486,10 @@ export const referencesApi = {
       evidence_level: r.evidence_level,
       associated_specialty: r.associated_specialty,
       associated_cases: r.associated_cases,
+      anamnesis_checklist: r.anamnesis_checklist || [],
+      physical_exam_signs: r.physical_exam_signs || [],
+      diagnostic_cutoffs: r.diagnostic_cutoffs || [],
+      red_flags: r.red_flags || [],
     }));
   },
 };

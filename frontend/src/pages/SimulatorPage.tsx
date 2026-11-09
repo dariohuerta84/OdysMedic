@@ -1183,6 +1183,11 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
     setSelectedOptionId(null);
     setTimeSpentSeconds(0);
 
+    // Scroll to top of station smoothly
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     if (currentStationIndex < stations.length - 1) {
       setCurrentStationIndex((prev) => prev + 1);
     } else {
@@ -1200,62 +1205,62 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
 
   return (
     <div
-      className={`min-h-screen bg-clinical-bg text-slate-800 flex flex-col justify-between py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full space-y-6 ${
+      className={`min-h-screen bg-[#FDFCFA] text-[#0B252E] flex flex-col justify-between py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full space-y-6 ${
         evaluationResult !== null && !isModalOpen ? 'pb-28 sm:pb-24' : ''
       } ${className}`}
     >
       {/* 1. Header Toolbar: Back navigation, Case Switcher, Live Timer */}
-      <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl bg-white border border-slate-200 shadow-xs">
+      <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:px-6 rounded-2xl bg-white border border-[#DCE5E3]">
         <div className="flex flex-wrap items-center gap-3">
           <button
             type="button"
             onClick={onBackToDashboard}
-            className="px-3.5 py-1.5 rounded-xl bg-slate-50 border border-slate-200 hover:bg-slate-100 text-slate-700 text-xs font-mono font-medium flex items-center gap-2 transition-all active:scale-95 shadow-xs"
-            title="Volver al Panel de Mundos Clinicos"
+            className="px-4 py-2 rounded-full bg-[#F2F7F6] border border-[#DCE5E3] hover:bg-[#ECF6F4] text-[#0B252E] text-xs font-medium flex items-center gap-2 transition-colors"
+            title="Volver a Mundo Clinico"
           >
-            <ArrowLeft className="w-4 h-4 text-sky-600" />
-            <span>Volver al Panel</span>
+            <ArrowLeft className="w-4 h-4 text-[#0E6F65]" />
+            <span>Volver a Mundo Clinico</span>
           </button>
 
           {/* Specialty Case Switcher */}
           <div className="flex items-center gap-2">
-            <span className="text-[11px] font-mono text-slate-500 hidden md:inline">
-              Caso Clinico:
+            <span className="text-xs text-[#6B7D83] hidden md:inline">
+              Escenario:
             </span>
             <select
               value={selectedCaseId}
               onChange={(e) => setSelectedCaseId(e.target.value)}
-              className="bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all shadow-xs"
-              aria-label="Selector de Casos de Simulacion"
+              className="bg-[#FDFCFA] border border-[#DCE5E3] rounded-full px-4 py-2 text-xs font-medium text-[#0B252E] focus:outline-none focus:border-[#0E6F65] transition-colors"
+              aria-label="Selector de casos de simulacion"
             >
               <option value="case-nefro-001">
-                Nefrologia - Falla Renal Aguda y aHUS (KDIGO)
+                Nefrologia · Falla Renal Aguda y aHUS (KDIGO)
               </option>
               <option value="case-endo-002">
-                Endocrinologia - Cetoacidosis Diabetica (ADA)
+                Endocrinologia · Cetoacidosis Diabetica (ADA)
               </option>
               <option value="case-neuro-003">
-                Neurologia - ACV Isquemico Agudo (AHA/ASA)
+                Neurologia · ACV Isquemico Agudo (AHA/ASA)
               </option>
             </select>
           </div>
         </div>
 
-        {/* Telemetry Indicator & Decision Timer */}
+        {/* Decision Timer */}
         <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0">
           {isUsingFallback && (
-            <span className="px-2.5 py-1 rounded-md text-[10px] font-mono bg-amber-50 border border-amber-300 text-amber-800">
-              Modo Offline / Protocolo Local
+            <span className="text-xs text-[#8A6116]">
+              Repositorio clinico local
             </span>
           )}
 
           <div
-            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-sky-50 border border-sky-200 text-sky-800 font-mono text-xs shadow-xs"
-            title="Tiempo activo de toma de decision clinica en la estacion actual"
+            className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#F2F7F6] border border-[#DCE5E3] text-[#0B252E] text-xs"
+            title="Tiempo dedicado a la estacion actual"
           >
-            <Clock className="w-3.5 h-3.5 text-sky-600" />
-            <span className="text-slate-500 font-sans text-[11px]">T. Decision:</span>
-            <span className="font-bold text-sm text-sky-900">
+            <Clock className="w-3.5 h-3.5 text-[#0E6F65]" />
+            <span className="text-[#6B7D83]">Tiempo:</span>
+            <span className="font-semibold text-sm text-[#0E6F65]">
               {formatTimer(timeSpentSeconds)}
             </span>
           </div>
@@ -1263,7 +1268,7 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
       </header>
 
       {/* 2. Station Stepper Progress Component */}
-      <section aria-label="Progreso de Estaciones">
+      <section aria-label="Progreso de estaciones">
         <StationStepper
           currentStation={stationNumber}
           totalStations={stations.length > 0 ? stations.length : 3}
@@ -1274,16 +1279,16 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
 
       {/* 3. Main Workspace: Vignette Player + Question / Option Decision Area */}
       {isLoading || !caseDetail ? (
-        <div className="p-16 rounded-2xl bg-white border border-slate-200 text-center space-y-4 shadow-xs">
-          <RefreshCw className="w-8 h-8 text-sky-600 animate-spin mx-auto" />
-          <p className="text-sm font-mono text-slate-600">
-            Cargando expediente clinico y constantes de triaje...
+        <div className="p-16 rounded-3xl bg-white border border-[#DCE5E3] text-center space-y-4">
+          <RefreshCw className="w-7 h-7 text-[#0E6F65] animate-spin mx-auto" />
+          <p className="text-sm text-[#4A5D64]">
+            Preparando expediente clinico y constantes de ingreso...
           </p>
         </div>
       ) : (
         <main className="space-y-6">
           {/* A. Clinical Scenario & Anamnesis View */}
-          <section aria-label="Historia Clinica y Constantes">
+          <section aria-label="Historia clinica y constantes">
             <VignettePlayer
               caseDetail={caseDetail}
               isCollapsedDefaultOnMobile={true}
@@ -1294,25 +1299,25 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
           {currentStation && (
             <section
               key={stationNumber}
-              className="rounded-2xl bg-white border border-slate-200 p-5 sm:p-7 shadow-xs space-y-6 animate-fade-in-up"
-              aria-label="Pregunta Clinica y Opciones de Decision"
+              className="rounded-3xl bg-white border border-[#DCE5E3] p-5 sm:p-8 space-y-6"
+              aria-label="Pregunta clinica y opciones de decision"
             >
               {/* Question Header */}
-              <div className="space-y-2 border-b border-slate-100 pb-4">
+              <div className="space-y-2 border-b border-[#EDF2F0] pb-5">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 font-mono text-xs text-sky-700 uppercase tracking-wider font-semibold">
-                    <HelpCircle className="w-4 h-4 text-sky-600" />
+                  <div className="flex items-center gap-2 text-xs text-[#0E6F65] uppercase tracking-[0.14em] font-semibold">
+                    <HelpCircle className="w-4 h-4 text-[#0E6F65]" />
                     <span>
-                      Estacion {stationNumber} de {stations.length}: Desafio Clinico
+                      Estacion {stationNumber} de {stations.length} · Decision clinica
                     </span>
                   </div>
 
-                  <span className="text-[11px] font-mono text-slate-500">
-                    Selecciona la mejor conducta basada en evidencia
+                  <span className="text-xs text-[#6B7D83]">
+                    Selecciona la conducta mejor fundamentada
                   </span>
                 </div>
 
-                <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-relaxed">
+                <h3 className="font-serif text-lg sm:text-xl font-semibold text-[#0B252E] leading-relaxed">
                   {currentStation.clinical_question}
                 </h3>
               </div>
@@ -1332,21 +1337,23 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
               </div>
 
               {/* Submission Action Bar */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-slate-100">
-                <div className="text-xs font-mono text-slate-500 flex items-center gap-1.5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-[#EDF2F0]">
+                <div className="text-xs text-[#4A5D64] flex items-center gap-2">
                   <span
                     className={`w-2 h-2 rounded-full ${
                       evaluationResult !== null
-                        ? 'bg-emerald-500'
-                        : 'bg-sky-500 animate-pulse'
+                        ? 'bg-[#0E6F65]'
+                        : selectedOptionId
+                          ? 'bg-[#0E6F65]'
+                          : 'bg-[#C4D3CF]'
                     }`}
                   />
                   <span>
                     {evaluationResult !== null
-                      ? 'Decision clinica registrada. Puedes revisar la perla clinica o continuar.'
+                      ? 'Decision clinica evaluada. Puedes consultar la retroalimentacion o avanzar.'
                       : selectedOptionId
-                        ? 'Decision seleccionada. Listo para confirmar conducta.'
-                        : 'Selecciona una de las alternativas para continuar.'}
+                        ? 'Alternativa seleccionada. Lista para confirmar.'
+                        : 'Elige una alternativa para habilitar la confirmacion.'}
                   </span>
                 </div>
 
@@ -1358,28 +1365,28 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
                     isSubmitting ||
                     evaluationResult !== null
                   }
-                  className={`w-full sm:w-auto px-6 py-3 rounded-xl font-semibold text-xs sm:text-sm flex items-center justify-center gap-2.5 transition-all shadow-xs active:scale-95 ${
+                  className={`w-full sm:w-auto px-7 py-3 rounded-full font-medium text-xs sm:text-sm flex items-center justify-center gap-2.5 transition-colors ${
                     !selectedOptionId ||
                     isSubmitting ||
                     evaluationResult !== null
-                      ? 'bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed shadow-none'
-                      : 'bg-sky-600 hover:bg-sky-700 text-white shadow-xs'
+                      ? 'bg-[#F2F7F6] text-[#8FA1A6] border border-[#DCE5E3] cursor-not-allowed'
+                      : 'bg-[#0E6F65] hover:bg-[#0A564E] text-white shadow-xs'
                   }`}
                 >
                   {isSubmitting ? (
                     <>
                       <RefreshCw className="w-4 h-4 animate-spin text-white" />
-                      <span>Evaluando con Motor OCRI...</span>
+                      <span>Evaluando criterio clinico...</span>
                     </>
                   ) : evaluationResult !== null ? (
                     <>
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                      <span>Estacion Evaluada</span>
+                      <CheckCircle2 className="w-4 h-4 text-[#0E6F65]" />
+                      <span>Estacion evaluada</span>
                     </>
                   ) : (
                     <>
                       <Send className="w-4 h-4" />
-                      <span>Confirmar Decision Clinica</span>
+                      <span>Confirmar decision clinica</span>
                     </>
                   )}
                 </button>
@@ -1393,23 +1400,23 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
       {evaluationResult !== null && !isModalOpen && (
         <aside
           aria-label="Barra de accion de estacion evaluada"
-          className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 border-t border-slate-200 shadow-lg backdrop-blur-md px-4 py-3 sm:px-6 transition-all animate-in slide-in-from-bottom duration-300"
+          className="fixed bottom-0 left-0 right-0 z-40 bg-[#FDFCFA]/95 border-t border-[#DCE5E3] shadow-lg backdrop-blur-sm px-4 py-3.5 sm:px-6 transition-all"
         >
           <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <div
-                className={`w-3 h-3 rounded-full shrink-0 ${
-                  evaluationResult.is_correct ? 'bg-emerald-500' : 'bg-rose-500'
-                } animate-pulse`}
+                className={`w-2.5 h-2.5 rounded-full shrink-0 ${
+                  evaluationResult.is_correct ? 'bg-[#0E6F65]' : 'bg-[#9E3F42]'
+                }`}
               />
               <div>
-                <span className="text-xs sm:text-sm font-semibold text-slate-900 block">
-                  Estacion Evaluada - Decision Clinica Registrada
+                <span className="font-serif text-sm font-semibold text-[#0B252E] block">
+                  Estacion evaluada · Decision registrada
                 </span>
-                <span className="text-[11px] font-mono text-slate-500">
+                <span className="text-xs text-[#4A5D64]">
                   {evaluationResult.is_correct
-                    ? 'Conducta acertada (+XP acreditado)'
-                    : 'Brecha de razonamiento identificada por el motor OCRI'}
+                    ? 'Conducta clinica acertada'
+                    : 'Oportunidad de refuerzo detectada en tu ruta'}
                 </span>
               </div>
             </div>
@@ -1418,10 +1425,10 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
               <button
                 type="button"
                 onClick={() => setIsModalOpen(true)}
-                className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-xs sm:text-sm font-medium text-slate-700 flex items-center justify-center gap-2 transition-colors active:scale-95 shadow-xs"
+                className="flex-1 sm:flex-none px-4 py-2.5 rounded-full bg-white hover:bg-[#F2F7F6] border border-[#DCE5E3] text-xs sm:text-sm font-medium text-[#0B252E] flex items-center justify-center gap-2 transition-colors"
               >
-                <Lightbulb className="w-4 h-4 text-amber-500 shrink-0" />
-                <span>Ver Retroalimentacion y Perla Clinica</span>
+                <Lightbulb className="w-4 h-4 text-[#0E6F65] shrink-0" />
+                <span>Ver retroalimentacion</span>
               </button>
 
               <button
@@ -1431,12 +1438,12 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
                     ? handleNextStation
                     : onBackToDashboard
                 }
-                className="flex-1 sm:flex-none px-5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all shadow-xs active:scale-95"
+                className="flex-1 sm:flex-none px-6 py-2.5 rounded-full bg-[#0E6F65] hover:bg-[#0A564E] text-white text-xs sm:text-sm font-medium flex items-center justify-center gap-2 transition-colors"
               >
                 <span>
                   {currentStationIndex < stations.length - 1
-                    ? 'Siguiente Estacion'
-                    : 'Finalizar Caso'}
+                    ? 'Siguiente estacion'
+                    : 'Finalizar caso'}
                 </span>
                 <ChevronRight className="w-4 h-4" />
               </button>

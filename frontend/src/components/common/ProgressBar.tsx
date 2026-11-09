@@ -20,34 +20,34 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   const clampedProgress = Math.min(100, Math.max(0, Math.round(progress)));
 
   const colorClasses: Record<'teal' | 'emerald' | 'cyan' | 'amber' | 'rose' | 'violet', string> = {
-    teal: 'bg-sky-500',
-    emerald: 'bg-emerald-500',
-    cyan: 'bg-sky-400',
-    amber: 'bg-amber-500',
-    rose: 'bg-rose-500',
-    violet: 'bg-indigo-500',
+    teal: 'bg-[#0E6F65]',
+    emerald: 'bg-[#1D7A68]',
+    cyan: 'bg-[#2C8C7E]',
+    amber: 'bg-[#C48B28]',
+    rose: 'bg-[#B95256]',
+    violet: 'bg-[#0A564E]',
   };
 
   const heightClasses: Record<'sm' | 'md' | 'lg', string> = {
     sm: 'h-1.5',
-    md: 'h-2.5',
-    lg: 'h-4',
+    md: 'h-2',
+    lg: 'h-3',
   };
 
   return (
     <div className={`w-full ${className}`}>
       {(showLabel || label) && (
-        <div className="flex items-center justify-between text-xs font-mono text-slate-600 mb-1.5">
-          <span className="font-sans font-medium text-slate-600 truncate">
-            {label || 'Progreso Clinico'}
+        <div className="flex items-center justify-between text-xs font-sans text-[#4A5D64] mb-1.5">
+          <span className="font-medium truncate">
+            {label || 'Progreso clinico'}
           </span>
-          <span className="font-semibold text-slate-900 ml-2">
+          <span className="font-semibold text-[#0B252E] ml-2">
             {clampedProgress}%
           </span>
         </div>
       )}
       <div
-        className={`w-full bg-slate-100 border border-slate-200 rounded-full overflow-hidden ${heightClasses[height]}`}
+        className={`w-full bg-[#EAECEB] rounded-full overflow-hidden ${heightClasses[height]}`}
         role="progressbar"
         aria-valuenow={clampedProgress}
         aria-valuemin={0}

@@ -1,4 +1,5 @@
-from typing import Optional
+from typing import Optional, List
+import json
 from fastapi import APIRouter, Depends, HTTPException, Body, status
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
@@ -16,8 +17,15 @@ class UserRegisterRequest(BaseModel):
     password: str
     full_name: str
     university: Optional[str] = "Universidad Peruana Cayetano Heredia"
-    stage: Optional[str] = "Internado Rotatorio 2026"
-    target_exam: Optional[str] = "ENIM-EsSalud"
+    stage: Optional[str] = None
+    target_exam: Optional[str] = None
+    career: Optional[str] = "Medicina Humana"
+    academic_year: Optional[str] = None
+    primary_goal: Optional[str] = "preparar_enam"
+    initial_world: Optional[str] = "medicina_interna"
+    interest_areas: Optional[List[str]] = None
+    onboarding_track: Optional[str] = "ruta"
+    privacy_accepted: Optional[bool] = True
 
 
 class UserLoginRequest(BaseModel):
@@ -29,6 +37,16 @@ class TogglePlanRequest(BaseModel):
     plan_tier: Optional[str] = None
 
 
+def _parse_interests(raw_value: Optional[str]) -> List[str]:
+    if not raw_value:
+        return []
+    try:
+        parsed = json.loads(raw_value)
+        return [str(x) for x in parsed] if isinstance(parsed, list) else []
+    except Exception:
+        return []
+
+
 def format_user_profile(user: User) -> dict:
     return {
         "id": user.id,
@@ -37,12 +55,21 @@ def format_user_profile(user: User) -> dict:
         "university": user.university,
         "stage": user.stage,
         "target_exam": user.target_exam,
+        "career": getattr(user, "career", "Medicina Humana") or "Medicina Humana",
+        "academic_year": getattr(user, "academic_year", None) or user.stage,
+        "primary_goal": getattr(user, "primary_goal", "preparar_enam") or "preparar_enam",
+        "initial_world": getattr(user, "initial_world", "medicina_interna") or "medicina_interna",
+        "interest_areas": _parse_interests(getattr(user, "interest_areas", None)),
+        "onboarding_track": getattr(user, "onboarding_track", "ruta") or "ruta",
+        "privacy_accepted": bool(getattr(user, "privacy_accepted", True)),
         "plan_tier": user.plan_tier,
         "xp": user.xp,
         "streak_days": user.streak_days,
         "diagnostic_completed": bool(user.diagnostic_completed),
         "diagnostic_score": user.diagnostic_score,
         "aptitude_status": user.aptitude_status,
+        "diagnostic_mode": getattr(user, "diagnostic_mode", None),
+        "diagnostic_specialty": getattr(user, "diagnostic_specialty", None),
         "created_at": user.created_at.isoformat() if user.created_at else None,
     }
 
@@ -63,8 +90,15 @@ def register(
             password=payload.password,
             full_name=payload.full_name,
             university=payload.university or "Universidad Peruana Cayetano Heredia",
-            stage=payload.stage or "Internado Rotatorio 2026",
-            target_exam=payload.target_exam or "ENIM-EsSalud",
+            stage=payload.stage,
+            target_exam=payload.target_exam,
+            career=payload.career or "Medicina Humana",
+            academic_year=payload.academic_year,
+            primary_goal=payload.primary_goal or "preparar_enam",
+            initial_world=payload.initial_world or "medicina_interna",
+            interest_areas=payload.interest_areas,
+            onboarding_track=payload.onboarding_track or "ruta",
+            privacy_accepted=True if payload.privacy_accepted is None else bool(payload.privacy_accepted),
         )
     except ValueError as e:
         raise HTTPException(

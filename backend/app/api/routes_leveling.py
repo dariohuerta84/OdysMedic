@@ -1,11 +1,14 @@
-from typing import Any, Dict, List
-from fastapi import APIRouter, Depends, HTTPException, status
+from typing import Any, Dict, List, Optional
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_db, get_active_student
 from app.db.models import User
-from app.db.diagnostic_bank import get_diagnostic_questions_for_student
+from app.db.diagnostic_bank import (
+    DIAGNOSTIC_SPECIALTIES,
+    get_diagnostic_questions_for_student,
+)
 from app.models.enums import MedicalSpecialty, CognitiveGap
 from app.models.student import LevelingPrescription
 from app.engine.leveling_engine import generate_leveling_prescription
@@ -21,15 +24,28 @@ class DiagnosticAnswerItem(BaseModel):
 
 class DiagnosticSubmitRequest(BaseModel):
     answers: List[DiagnosticAnswerItem]
+    mode: Optional[str] = "general"
+    specialty: Optional[str] = None
+
+
+@router.get("/diagnostic/specialties")
+def get_diagnostic_specialties() -> List[Dict[str, str]]:
+    """
+    Retorna las especialidades disponibles para el modo de evaluacion inicial focalizada.
+    """
+    return DIAGNOSTIC_SPECIALTIES
 
 
 @router.get("/diagnostic/questions")
-def get_diagnostic_questions() -> List[Dict[str, Any]]:
+def get_diagnostic_questions(
+    mode: str = Query("general", description="Modo de evaluacion: 'general' o 'specialty'"),
+    specialty: Optional[str] = Query(None, description="Especialidad cuando mode='specialty'"),
+) -> List[Dict[str, Any]]:
     """
     Retorna el cuestionario estandarizado de 5 preguntas clinicas basales
-    para la autoevaluacion diagnostica obligatoria antes del ingreso al dashboard.
+    (modo general multi-especialidad o modo de una sola especialidad).
     """
-    return get_diagnostic_questions_for_student()
+    return get_diagnostic_questions_for_student(mode=mode, specialty=specialty)
 
 
 @router.post("/diagnostic/submit")
@@ -44,7 +60,13 @@ def submit_diagnostic(
     (apto, en_nivelacion, no_apto) y desbloquea el acceso al panel interactivo.
     """
     answers_dicts = [a.model_dump() for a in payload.answers]
-    return student_service.submit_diagnostic_exam(db, student.id, answers_dicts)
+    return student_service.submit_diagnostic_exam(
+        db=db,
+        user_id=student.id,
+        answers=answers_dicts,
+        mode=payload.mode or "general",
+        specialty=payload.specialty,
+    )
 
 
 @router.get("/dashboard")

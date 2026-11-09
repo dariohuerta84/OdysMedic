@@ -1,0 +1,1292 @@
+[
+  {
+    "book_id": "book-kdigo-aki-ahus-2024",
+    "title": "KDIGO 2024 Clinical Practice Guideline for Acute Kidney Injury and Thrombotic Microangiopathy",
+    "authors_or_organization": "Kidney Disease: Improving Global Outcomes (KDIGO) Work Group",
+    "edition": "Actualizacion Guia Practica Clinica 2024",
+    "specialty": "nefrologia",
+    "isbn_or_doi": "doi:10.1016/j.kisu.2024.01.002",
+    "excerpts": [
+      {
+        "reference_id": "ref-kdigo-ahus-001",
+        "source_title": "KDIGO 2024 Clinical Practice Guideline for Acute Kidney Injury and Thrombotic Microangiopathy",
+        "organization_or_publisher": "Kidney Disease: Improving Global Outcomes (KDIGO)",
+        "year": 2024,
+        "edition_or_version": "Guia KDIGO 2024",
+        "section_title": "Evaluacion Diagnostica y Terapia Dirigida en Microangiopatia Trombotica y SHUa",
+        "page_or_doi": "doi:10.1016/j.kisu.2024.01.002",
+        "key_recommendation": "Ante anemia hemolitica microangiopatica Coombs negativa, trombocitopenia e injuria renal aguda, solicitar actividad de ADAMTS13 y estudio de complemento antes de plasmaferesis; descartada la PTT (ADAMTS13 >10%), iniciar inhibicion terminal de C5 (eculizumab o ravulizumab) de forma temprana.",
+        "evidence_level": "Grade 1A",
+        "associated_specialty": "nefrologia",
+        "associated_cases": [
+          "s13256-019-2334-y",
+          "s13256-022-03392-w"
+        ],
+        "anamnesis_checklist": [
+          "Indagar episodio diarreico prodromico sanguinolento (STEC-SHU) frente a inicio insidioso o posparto.",
+          "Registrar exposicion reciente a farmacos desencadenantes (inhibidores de calcineurina, gemcitabina, quimioterapia).",
+          "Documentar antecedentes familiares de nefropatia inexplicada o microangiopatia recurrente.",
+          "Cuantificar reduccion del volumen urinario en las ultimas 24 a 48 horas y coluria."
+        ],
+        "physical_exam_signs": [
+          "Palidez mucocutanea marcada acompañada de ictericia flavinica leve por hemolisis.",
+          "Petequias o equimosis espontaneas en extremidades inferiores y zonas de presion.",
+          "Hipertension arterial severa de reciente aparicion o emergencia hipertensiva con retinopatia.",
+          "Edema periferico bimaleolar y signos de sobrecarga hidrica pulmonar."
+        ],
+        "diagnostic_cutoffs": [
+          "Esquistocitos >1% en frotis de sangre periferica con LDH elevada y haptoglobina indetectable.",
+          "Plaquetas <150,000/mm3 o descenso >25% respecto al valor basal con prueba de Coombs directo negativa.",
+          "Actividad de ADAMTS13 >10% excluye purpura trombocitopenica trombotica (PTT) y orienta a SHUa.",
+          "Creatinina serica con incremento >=0.3 mg/dL en 48 h o >=1.5 veces el valor basal (KDIGO IRA)."
+        ],
+        "red_flags": [
+          "Oligoanuria (<0.3 mL/kg/h por mas de 12 horas) refractaria a optimizacion hemodinamica.",
+          "Encefalopatia aguda, convulsiones o focalidad neurologica asociada a microtrombosis.",
+          "Hiperkalemia >=6.5 mEq/L o alteraciones electrocardiograficas del complejo QRS.",
+          "Edema agudo de pulmon u oxigenacion comprometida durante sobrecarga de volumen."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-brenner-rector-nephrology-11e",
+    "title": "Brenner & Rector's The Kidney: Trastornos Hidroelectroliticos y Acido-Base",
+    "authors_or_organization": "Yu A, Chertow GM, Luyckx V, Marsden PA, Skorecki K, Taal MW (Elsevier)",
+    "edition": "11.a Edicion",
+    "specialty": "nefrologia",
+    "isbn_or_doi": "ISBN:978-0-323-53265-5",
+    "excerpts": [
+      {
+        "reference_id": "ref-brenner-electrolytes-002",
+        "source_title": "Brenner & Rector's The Kidney (11.a Ed.)",
+        "organization_or_publisher": "Elsevier Saunders",
+        "year": 2023,
+        "edition_or_version": "11.a Edicion, Cap. 17-19",
+        "section_title": "Abordaje Fisiopatologico de Disnatremias Sintomaticas e Hiperkalemia Critica",
+        "page_or_doi": "pp. 542-618",
+        "key_recommendation": "En hiperkalemia con cambios en el ECG, administrar gluconato de calcio al 10% endovenoso de inmediato para estabilizar la membrana miocardica, seguido de terapia redistributiva (insulina regular con dextrosa y beta-2 agonistas nebulizados) y eliminacion efectiva de potasio.",
+        "evidence_level": "Nivel I, Consenso Fisiologico",
+        "associated_specialty": "nefrologia",
+        "associated_cases": [
+          "s13256-022-03392-w"
+        ],
+        "anamnesis_checklist": [
+          "Cuantificar ingesta de agua libre, perdidas gastrointestinales (vomitos, diarrea, fistulas) y uso de diureticos.",
+          "Revisar prescripcion de IECA, ARA-II, espironolactona, AINEs o trimetoprima-sulfametoxazol.",
+          "Confirmar adherencia a sesiones programadas de hemodialisis o dialisis peritoneal.",
+          "Interrogar debilidad muscular ascendente, parestesias peribucales, letargia o nauseas."
+        ],
+        "physical_exam_signs": [
+          "Evaluacion del volumen extracelular: turgencia cutanea, presion venosa yugular y ortostatismo.",
+          "Hiporreflexia osteotendinosa o cuadriparesia flacida en hiperkalemia severa.",
+          "Bradikardia, pulso irregular o compromiso del sensorio por edema cerebral osmotico.",
+          "Auscultacion cardiopulmonar para definir estado euvolemico, hipovolemico o hipervolemico."
+        ],
+        "diagnostic_cutoffs": [
+          "Anion Gap serico = Na+ - (Cl- + HCO3-); valor normal 8 a 12 mEq/L corrigiendo por hipoalbuminemia.",
+          "FENa <1% y Na+ urinario <20 mEq/L en oliguria con integridad tubular prerrenal (sin diureticos).",
+          "Hiponatremia grave <120 mEq/L: limite maximo de correccion 8 a 10 mEq/L en 24 horas.",
+          "Hiperkalemia severa K+ >=6.5 mEq/L o cualquier valor con ondas T picudas, PR prolongado o QRS ancho."
+        ],
+        "red_flags": [
+          "Ensanchamiento progresivo del QRS o patron sinusoidal premonitorio de fibrilacion ventricular.",
+          "Convulsiones o depresion respiratoria por hiponatremia hipotonica aguda (<48 h).",
+          "Sobrecorreccion de sodio >10 mEq/L en 24 h en pacientes desnutridos o hepatopatas (riesgo de mielinolisis).",
+          "Acidosis metabolica severa con pH <7.15 refractaria en contexto de anuria."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-era-edta-ckd-glomerular-2024",
+    "title": "ERA / Sociedad Europea de Nefrologia: Consenso en Glomerulopatias y Enfermedad Renal Cronica",
+    "authors_or_organization": "European Renal Association (ERA) Immunonephrology Working Group",
+    "edition": "Guia Clinica 2024",
+    "specialty": "nefrologia",
+    "isbn_or_doi": "doi:10.1093/ndt/gfad254",
+    "excerpts": [
+      {
+        "reference_id": "ref-era-glomerular-003",
+        "source_title": "Consenso Europeo ERA en Sindrome Nefrotico, Nefritico y Nefroproteccion",
+        "organization_or_publisher": "European Renal Association (ERA)",
+        "year": 2024,
+        "edition_or_version": "Consenso Clinico 2024",
+        "section_title": "Diferenciacion Sindromica Glomerular y Terapia Nefroprotectora Dual",
+        "page_or_doi": "doi:10.1093/ndt/gfad254",
+        "key_recommendation": "En enfermedad renal cronica proteinurica (RAC >=200 mg/g), asociar inhibicion del eje renina-angiotensina a dosis maxima tolerada junto con inhibidores de SGLT2 (dapagliflozina o empagliflozina) mientras la TFGe sea >=20 mL/min/1.73m2 para retardar la progresion renal y eventos cardiovasculares.",
+        "evidence_level": "Clase I, Nivel A",
+        "associated_specialty": "nefrologia",
+        "associated_cases": [
+          "s13256-019-2334-y"
+        ],
+        "anamnesis_checklist": [
+          "Precisar presencia de orina espumosa persistente frente a hematuria macroscopica color te o coca-cola.",
+          "Documentar infeccion faringoamigdalina o cutanea previa (latencia 1-3 semanas vs sinfaringitica).",
+          "Indagar sintomas sistemicos: artralgias, fotosensibilidad, hemoptisis, purpura palpable o perdida ponderal.",
+          "Registrar evolucion historica de creatinina, glucemia, hipertension y consumo cronico de AINEs."
+        ],
+        "physical_exam_signs": [
+          "Edema blando con signo de la fovea matutino periorbitario y progresion a anasarca.",
+          "Xantelasmas, bandas de Muehrcke ungueales y derrame pleural trasudativo en sindrome nefrotico.",
+          "Ingurgitacion yugular e hipertension volumen-dependiente en sindrome nefritico agudo.",
+          "Soplos abdominales periumbilicales sugestivos de estenosis renovascular."
+        ],
+        "diagnostic_cutoffs": [
+          "Proteinuria en rango nefrotico: >=3.5 g/24 h (o relacion proteina/creatinina urinaria >=3000 mg/g) + albumina <3.0 g/dL.",
+          "Sedimento activo nefritico: >5 eritrocitos/campo con >40% dismorficos/acantocitos >=5% o cilindros hematicos.",
+          "Caida aguda aceptable de TFGe tras iniciar IECA/iSGLT2: hasta 25-30% sin hiperkalemia progresiva.",
+          "Profilaxis antitrombotica individualizada en nefropatia membranosa cuando albumina serica <2.5 g/dL."
+        ],
+        "red_flags": [
+          "Duplicacion de creatinina en semanas (glomerulonefritis rapidamente progresiva: urgencia de biopsia y pulsos).",
+          "Dolor subito en flanco con hematuria o disnea inexplicable en nefrotico (trombosis de vena renal / TEP).",
+          "Hemoptisis asociada a fallo renal agudo (sindrome pulmon-riñon ANCA o anti-MBG).",
+          "Fiebre y dolor abdominal difuso en paciente con ascitis nefrotica (peritonitis bacteriana primaria)."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-ada-diabetes-2024",
+    "title": "ADA Standards of Care in Diabetes 2024-2025",
+    "authors_or_organization": "American Diabetes Association (ADA) Professional Practice Committee",
+    "edition": "Diabetes Care Suppl. 1",
+    "specialty": "endocrinologia",
+    "isbn_or_doi": "doi:10.2337/dc24-S016",
+    "excerpts": [
+      {
+        "reference_id": "ref-ada-hyperglycemia-001",
+        "source_title": "ADA Standards of Care in Diabetes 2024-2025",
+        "organization_or_publisher": "American Diabetes Association (ADA)",
+        "year": 2024,
+        "edition_or_version": "Standards of Care, Seccion 16",
+        "section_title": "Crisis Hiperglucemicas Hospitalarias: Cetoacidosis Diabetica y Estado Hiperosmolar",
+        "page_or_doi": "doi:10.2337/dc24-S016",
+        "key_recommendation": "En crisis hiperglucemicas agudas o hiperglucemia secundaria a quimioterapia con alteraciones electroliticas, priorizar reanimacion con cristaloides isotonicos y verificar potasio serico >=3.3 mEq/L antes de iniciar perfusion intravenosa continua de insulina regular; reponer potasio y magnesio de forma paralela.",
+        "evidence_level": "Grado A",
+        "associated_specialty": "endocrinologia",
+        "associated_cases": [
+          "s13256-022-03392-w"
+        ],
+        "anamnesis_checklist": [
+          "Identificar factor precipitante: infeccion oculta, omision de insulina, isquemia miocardica o farmacos (corticoides, capecitabina, antipsicoticos).",
+          "Interrogar polidipsia, poliuria, perdida de peso aguda, dolor abdominal difuso y vomitos.",
+          "Registrar tipo de diabetes previa, esquema basal-bolo habitual y uso de iSGLT2 (riesgo de CAD euglucemica).",
+          "Evaluar tiempo de instalacion: horas en CAD frente a varios dias de deshidratacion progresiva en EHH."
+        ],
+        "physical_exam_signs": [
+          " Patron respiratorio de Kussmaul (taquipnea profunda compensatoria) y aliento cetonico afrutado.",
+          "Mucosas secas, hipotension ortostatica, taquicardia y llenado capilar enlentecido.",
+          "Estado mental desde alerta hasta estupor o coma (correlacionado con osmolaridad efectiva >320 mOsm/kg).",
+          "Sensibilidad abdominal en epigastrio que simula abdomen agudo y cede al corregir la acidemia."
+        ],
+        "diagnostic_cutoffs": [
+          "CAD: Glucosa >=200 mg/dL (o historia de DM), pH <7.30 o HCO3- <18 mEq/L y beta-hidroxibutirato >=3.0 mmol/L.",
+          "EHH: Glucosa >=600 mg/dL, osmolaridad efectiva >=300-320 mOsm/kg, pH >7.30 y ausencia de cetosis significativa.",
+          "Umbral critico de potasio: si K+ <3.3 mEq/L, diferir insulina y reponer 20-40 mEq/h hasta K+ >=3.3 mEq/L.",
+          "Criterio de resolucion de CAD: glucosa <200 mg/dL + dos de: HCO3- >=15 mEq/L, pH venoso >7.30, Anion Gap <=12 mEq/L."
+        ],
+        "red_flags": [
+          "Hipokalemia <3.3 mEq/L al ingreso (riesgo de arritmia letal y paro respiratorio si se administra insulina).",
+          "Cefalea y deterioro neurologico brusco durante la hidratacion en jovenes (edema cerebral).",
+          "CAD euglucemica (glucosa <250 mg/dL con acidosis severa) en usuarios de inhibidores SGLT2 o gestantes.",
+          "Ausencia de descenso de cetonemia/Anion Gap tras 4-6 horas de infusion adecuada."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-ata-thyroid-emergencies-2023",
+    "title": "American Thyroid Association (ATA): Guias de Tirotoxicosis, Tormenta Tiroidea y Coma Mixedematoso",
+    "authors_or_organization": "American Thyroid Association Task Force",
+    "edition": "Compendio Clinico Actualizado",
+    "specialty": "endocrinologia",
+    "isbn_or_doi": "doi:10.1089/thy.2023.0112",
+    "excerpts": [
+      {
+        "reference_id": "ref-ata-thyroid-002",
+        "source_title": "Guias Clinicas ATA en Urgencias Tiroideas y Disfuncion Tiroidea",
+        "organization_or_publisher": "American Thyroid Association (ATA)",
+        "year": 2023,
+        "edition_or_version": "Consenso ATA",
+        "section_title": "Secuencia Farmacologica en Tormenta Tiroidea y Manejo del Coma Mixedematoso",
+        "page_or_doi": "doi:10.1089/thy.2023.0112",
+        "key_recommendation": "En tormenta tiroidea (escala Burch-Wartofsky >=45), bloquear primero la sintesis hormonal con propiltiouracilo o metimazol, administrar soluciones yodadas al menos 1 hora despues de la tionamida para evitar el fenomeno de Jod-Basedow, asociar betabloqueo e hidrocortisona endovenosa.",
+        "evidence_level": "Recomendacion Fuerte, Calidad Moderada",
+        "associated_specialty": "endocrinologia",
+        "associated_cases": [],
+        "anamnesis_checklist": [
+          "Indagar diagnostico previo de enfermedad de Graves, bocio multinodular toxico o suspension brusca de antitiroideos.",
+          "Buscar sobrecarga yodada reciente (contraste tomografico yodado o tratamiento con amiodarona).",
+          "En hipotiroidismo severo: investigar exposicion al frio, infeccion respiratoria, uso de sedantes u opioides.",
+          "Registrar palpitaciones, perdida de peso con hiperfagia, intolerancia termica o diarrea hipersecretora."
+        ],
+        "physical_exam_signs": [
+          "Hiperpirexia (>39 °C), taquiarritmia desproporcionada o fibrilacion auricular de respuesta rapida en tormenta tiroidea.",
+          "Bocio difuso con soplo tiroideo, oftalmopatia infiltrativa (proptosis, retraccion palpebral) y mixedema pretibial.",
+          "Hipotermia central, bradicardia sinusal, hipoventilacion y fase de relajacion lenta de reflejos en coma mixedematoso.",
+          "Ictericia e insuficiencia cardiaca de alto gasto en tirotoxicosis descompensada."
+        ],
+        "diagnostic_cutoffs": [
+          "Escala de Burch-Wartofsky: >=45 puntos altamente sugestivo de tormenta tiroidea; 25-44 tormenta inminente.",
+          "Hipertiroidismo primario franco: TSH <0.01 mUI/L con T4 libre y/o T3 libre marcadamente elevadas.",
+          "Secuencia temporal obligatoria: administrar yodo inorganico >=60 minutos DESPUES de iniciar tionamida.",
+          "En coma mixedematoso: administrar hidrocortisona 100 mg IV cada 8 h ANTES o junto con levotiroxina para evitar crisis adrenal."
+        ],
+        "red_flags": [
+          "Agitacion psicomotriz, delirio o estupor en paciente tirotóxico febril.",
+          "Agranulocitosis inducida por metimazol/PTU (odinofagia febril con neutrofilos absolutos <500/mm3).",
+          "Falla hepatica fulminante asociada a propiltiouracilo fuera del primer trimestre o tormenta.",
+          "Hiponatremia dilucional severa e hipercapnia progresiva en coma mixedematoso."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-endocrine-society-adrenal-2023",
+    "title": "Endocrine Society Clinical Practice Guideline: Insuficiencia Suprarrenal Primaria y Crisis Adrenal",
+    "authors_or_organization": "Bornstein SR, Allolio B, Arlt W, et al. (Endocrine Society)",
+    "edition": "Guia de Practica Clinica",
+    "specialty": "endocrinologia",
+    "isbn_or_doi": "doi:10.1210/jc.2015-1710",
+    "excerpts": [
+      {
+        "reference_id": "ref-endo-adrenal-003",
+        "source_title": "Endocrine Society: Diagnostico y Manejo de la Crisis Adrenal Aguda",
+        "organization_or_publisher": "Endocrine Society",
+        "year": 2023,
+        "edition_or_version": "Revision Clinica Vigente",
+        "section_title": "Reconocimiento Temprano y Reemplazo Parenteral Inmediato en Crisis Suprarrenal",
+        "page_or_doi": "JCEM Clinical Practice Guidelines",
+        "key_recommendation": "Ante sospecha clinica de crisis suprarrenal aguda (hipotension refractaria a fluidos, dolor abdominal e hiponatremia/hiperkalemia), no retrasar jamas el tratamiento esperando cortisol serico: administrar de inmediato hidrocortisona 100 mg en bolo IV seguida de 200 mg/24 h y solucion salina isotonica al 0.9%.",
+        "evidence_level": "Grado 1A",
+        "associated_specialty": "endocrinologia",
+        "associated_cases": [],
+        "anamnesis_checklist": [
+          "Documentar uso cronico de glucocorticoides (>20 mg/dia de prednisona por >3 semanas) y suspension abrupta.",
+          "Interrogar astenia progresiva vespertina, avidez por la sal, perdida de peso, anorexia y mareo postural.",
+          "Investigar antecedentes de tuberculosis, autoinmunidad poliglandular, anticoagulacion o sepsis meningococica.",
+          "Identificar estresor fisiologico agudo (cirugia, gastroenteritis, fiebre) sin ajuste de dosis de estres."
+        ],
+        "physical_exam_signs": [
+          "Hiperpigmentacion mucocutanea en pliegues palmares, encías, areolas y cicatrices recientes (solo en origen primario por exceso de ACTH).",
+          "Hipotension arterial severa o choque distributivo con escasa respuesta inicial a catecolaminas.",
+          "Dolor abdominal difuso con defensa engañosa y fiebre no explicada por foco septico.",
+          "Deshidratacion extracelular marcada."
+        ],
+        "diagnostic_cutoffs": [
+          "Cortisol matutino (8:00 AM) <3 ug/dL confirma insuficiencia adrenal; >15-18 ug/dL habitualmente la descarta.",
+          "Prueba de estimulacion con ACTH (cosintropina 250 ug): pico de cortisol <18 ug/dL a los 30-60 minutos.",
+          "Triada bioquimica clasica en origen primario: hiponatremia + hiperkalemia + hipoglucemia con acidosis metabolica leve.",
+          "Dosis de rescate: Hidrocortisona 100 mg IV STAT (posee actividad mineralocorticoide suficiente a >=50 mg/dia)."
+        ],
+        "red_flags": [
+          "Choque vasoplejico refractario a cristaloides y noradrenalina.",
+          "Purpura fulminans asociada a colapso circulatorio (Sindrome de Waterhouse-Friderichsen).",
+          "Cefalea subita retroorbitaria y diplopia/hemianopsia bitemporal (apoplejia hipofisaria).",
+          "Hipoglucemia neuroglucopenica recurrente en ayuno."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-aha-stroke-pba-2023",
+    "title": "AHA/ASA Guidelines for Acute Ischemic Stroke, Hemorrhagic Rehabilitation & Pseudobulbar Affect",
+    "authors_or_organization": "American Heart Association / American Stroke Association (AHA/ASA)",
+    "edition": "Actualizacion Guias de ACV 2023-2024",
+    "specialty": "neurologia",
+    "isbn_or_doi": "doi:10.1161/STR.0000000000000438",
+    "excerpts": [
+      {
+        "reference_id": "ref-aha-pba-001",
+        "source_title": "AHA/ASA Guidelines for Stroke Management and Post-Stroke Complications",
+        "organization_or_publisher": "American Heart Association / American Stroke Association",
+        "year": 2023,
+        "edition_or_version": "Guia AHA/ASA",
+        "section_title": "Codigo Ictus, Neurorehabilitacion y Afecto Pseudobulbar Post-ACV",
+        "page_or_doi": "doi:10.1161/STR.0000000000000438",
+        "key_recommendation": "En deficit neurologico focal agudo, realizar TC cerebral sin contraste en <20 minutos para excluir hemorragia y definir trombolisis IV (<4.5 h) o trombectomia mecanica (<24 h en oclusion de gran vaso). En fase subaguda/cronica, diferenciar el afecto pseudobulbar (llanto o risa involuntaria) de la depresion post-ictus e indicar ISRS o dextrometorfano/quinidina.",
+        "evidence_level": "Clase I, Nivel A",
+        "associated_specialty": "neurologia",
+        "associated_cases": [
+          "s13256-023-04294-1",
+          "s13256-025-05577-5"
+        ],
+        "anamnesis_checklist": [
+          "Establecer hora exacta de 'ultima vez visto asintomatico' (ventana terapeutica de reperfusion).",
+          "Revisar contraindicaciones absolutas de fibrinolisis: anticoagulacion oral activa, cirugia mayor <14 dias, ACV hemorragico previo.",
+          "En seguimiento post-ACV: distinguir episodios breves estereotipados de llanto incongruente (afecto pseudobulbar) de anhedonia sostenida.",
+          "Documentar fibrilacion auricular, hipertension arterial, dislipidemia y adherencia antitrombotica."
+        ],
+        "physical_exam_signs": [
+          "Cuantificacion estandarizada del deficit con escala NIHSS (lenguaje, mirada conjugada, campimetria, fuerza motora, ataxia).",
+          "Auscultacion cardiaca y carotidea en busqueda de ritmo irregular o soplos cervicales.",
+          "Evaluacion de reflejo nauseoso y deglucion (tamizaje de disfagia) antes de cualquier ingesta oral.",
+          "Espasticidad piramidal e hiperreflexia en seguimiento de secuelas hemorragicas o isquemicas."
+        ],
+        "diagnostic_cutoffs": [
+          "Meta de presion arterial previa a trombolisis IV: PA <185/110 mmHg (mantener <180/105 mmHg por 24 h post-rtPA).",
+          "Glucemia capilar obligatoria inmediata: descartar hipoglucemia (<60 mg/dL) como simulador de ictus.",
+          "Ventana de alteplasa/tenecteplasa IV: <=4.5 horas desde inicio de sintomas; trombectomia en gran vaso hasta 6-24 h segun perfusion.",
+          "Prevencion secundaria post-hemorragia intracerebral: control estricto de PA ambulatoria <130/80 mmHg."
+        ],
+        "red_flags": [
+          "Caida de >=4 puntos en NIHSS o deterioro brusco de conciencia post-trombolisis (sospecha de transformacion hemorragica: detener infusion y TC urgente).",
+          "Cefalea en trueno con rigidez de nuca (hemorragia subaracnoidea aneurismatica).",
+          "Infarto cerebeloso extenso con ataxia troncal e hidrocefalia obstructiva de fosa posterior.",
+          "Hipertension maligna >220/120 mmHg no controlada."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-aes-ncs-status-epilepticus-2023",
+    "title": "American Epilepsy Society (AES) & Neurocritical Care Society: Guia de Estado Epileptico",
+    "authors_or_organization": "American Epilepsy Society / Neurocritical Care Society",
+    "edition": "Algoritmo Terapeutico Cronometrado",
+    "specialty": "neurologia",
+    "isbn_or_doi": "doi:10.5698/ep.2023.1601",
+    "excerpts": [
+      {
+        "reference_id": "ref-aes-status-002",
+        "source_title": "Guia Basada en Evidencia AES para el Tratamiento del Estado Epileptico Convulsivo",
+        "organization_or_publisher": "American Epilepsy Society (AES)",
+        "year": 2023,
+        "edition_or_version": "Protocolo Escalonado AES",
+        "section_title": "Manejo Cronometrado de Primera y Segunda Linea en Estado Epileptico",
+        "page_or_doi": "Epilepsy Currents Guideline",
+        "key_recommendation": "Toda crisis convulsiva continua >=5 minutos (o >=2 crisis sin recuperacion de conciencia interictal) define estado epileptico operativo y exige benzodiazepina parenteral a dosis plena inmediata (lorazepam IV, midazolam IM o diazepam IV), seguida de antiepileptico de segunda linea (levetiracetam, valproato o fosfenitoina) si persiste a los 10-20 minutos.",
+        "evidence_level": "Nivel A (Ensayo ESETT)",
+        "associated_specialty": "neurologia",
+        "associated_cases": [],
+        "anamnesis_checklist": [
+          "Cronometrar duracion exacta desde inicio motor y si recupero estado de alerta entre crisis.",
+          "Verificar suspension u olvido de medicacion anticonvulsivante habitual.",
+          "Indagar fiebre/neuroinfeccion, traumatismo craneoencefalico, abstinencia alcoholica o intoxicacion por simpaticomimeticos/isoniazida.",
+          "Confirmar gestacion o puerperio en mujeres en edad fertil (descartar eclampsia -> sulfato de magnesio)."
+        ],
+        "physical_exam_signs": [
+          "Permeabilidad de via aerea, cianosis peribucal y traumatismo lingual lateral.",
+          "Desviacion oculocefalica forzada, nistagmo sutil o mioclonias palpebrales (estado epileptico no convulsivo post-control motor).",
+          "Signos meningeos, petequias cutaneas o focalidad motora postictal (paralisis de Todd).",
+          "Pupilas midriaticas o asimetricas (herniacion uncal)."
+        ],
+        "diagnostic_cutoffs": [
+          "Definicion operativa T1 (inicio de tratamiento de urgencia): >=5 minutos en crisis tonico-clonica generalizada.",
+          "Primera linea (min 5-10): Midazolam 10 mg IM (>40 kg) o Lorazepam 0.1 mg/kg IV (max 4 mg/dosis).",
+          "Segunda linea equivalente (ensayo ESETT): Levetiracetam 60 mg/kg IV (max 4500 mg), Valproato 40 mg/kg IV (max 3000 mg) o Fosfenitoina 20 mg PE/kg.",
+          "Glucemia capilar inmediata: si <60 mg/dL administrar Tiamina 100 mg IV seguida de Dextrosa 50% 50 mL."
+        ],
+        "red_flags": [
+          "Infradosificacion de benzodiazepinas por temor a depresion respiratoria (principal causa evitable de refractariedad).",
+          "Ausencia de despertar 20-30 minutos despues de ceder las sacudidas (exige EEG continuo para descartar estatus sutil).",
+          "Estado epileptico refractario (>30-60 min pese a 1.a y 2.a linea: intubacion e infusion anestesica).",
+          "Rabdomiolisis severa, hipertermia maligna y acidosis lactica profunda."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-idsa-escmid-cns-infections-2024",
+    "title": "IDSA / ESCMID Guidelines for Acute Bacterial Meningitis and Viral Encephalitis",
+    "authors_or_organization": "Infectious Diseases Society of America (IDSA) & ESCMID Study Group",
+    "edition": "Guia Conjunta Neuroinfecciones",
+    "specialty": "neurologia",
+    "isbn_or_doi": "doi:10.1016/j.cmi.2023.10.018",
+    "excerpts": [
+      {
+        "reference_id": "ref-idsa-meningitis-003",
+        "source_title": "Guias ESCMID / IDSA de Meningitis Bacteriana Aguda y Encefalitis Herpetica",
+        "organization_or_publisher": "ESCMID / IDSA",
+        "year": 2024,
+        "edition_or_version": "Guia Clinica Neuroinfecciones",
+        "section_title": "Criterios de Neuroimagen Previa a Puncion Lumbar y Terapia Antimicrobiana Empirica",
+        "page_or_doi": "doi:10.1016/j.cmi.2023.10.018",
+        "key_recommendation": "En sospecha de meningitis bacteriana aguda, obtener hemocultivos e iniciar dexametasona junto con antibioterapia bactericida a dosis meningeas dentro de la primera hora; si se requiere TC craneal previa a la puncion lumbar, administrar hemocultivos + dexametasona + antibiotico ANTES de trasladar al tomografo.",
+        "evidence_level": "Grado A-I",
+        "associated_specialty": "neurologia",
+        "associated_cases": [],
+        "anamnesis_checklist": [
+          "Explorar triada/tetrada clasica: fiebre alta, cefalea holocraneana intensa, rigidez cervical y alteracion del estado mental.",
+          "Identificar factores de riesgo para Listeria monocytogenes: edad >50 anos, gestacion, alcoholismo o inmunosupresion.",
+          "Indagar otitis media supurada, sinusitis, fistula de LCR postraumatica o esplenectomia.",
+          "Evaluar cambios conductuales subagudos, afasia o alucinaciones olfatorias (sospecha de encefalitis temporal por VHS-1)."
+        ],
+        "physical_exam_signs": [
+          "Signos de irritacion meningea: rigidez de nuca, maniobras de Kernig y Brudzinski, y acentuacion de cefalea por sacudida (jolt accentuation).",
+          "Fondo de ojo para detectar papiledema y examen neurologico focal o paralisis de pares craneales.",
+          "Inspeccion cutanea integral buscando purpura petequial o equimotica meningococica.",
+          "Escala de coma de Glasgow seriada."
+        ],
+        "diagnostic_cutoffs": [
+          "Indicaciones de TC antes de PL: inmunocompromiso grave, historia de lesion SNC, convulsion de inicio <1 sem, papiledema, GCS <10 o deficit focal.",
+          "LCR bacteriano tipico: leucocitos >1000/mm3 (>80% PMN), relacion glucosa LCR/serica <0.4, proteinas >100-200 mg/dL, lactato LCR >3.5 mmol/L.",
+          "Esquema empirico adulto >50 anos: Ceftriaxona 2 g IV c/12h + Vancomicina + Ampicilina 2 g IV c/4h (cobertura Listeria) + Dexametasona.",
+          "Sospecha de encefalitis viral temporal: anadir Aciclovir 10 mg/kg IV cada 8 horas ajustado a funcion renal."
+        ],
+        "red_flags": [
+          "Retrasar el inicio de antibiotico por esperar tomografia o puncion lumbar.",
+          "Realizar puncion lumbar en paciente con signos de herniacion cerebral o deficit focal agudo sin TC previa.",
+          "Shock septico meningococico fulminante con coagulacion intravascular diseminada.",
+          "Hidrocefalia aguda comunicante o estatus convulsivo secundario."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-eular-acr-npsle-2023",
+    "title": "EULAR 2023/2024 Recommendations for the Management of Systemic Lupus Erythematosus & NPSLE",
+    "authors_or_organization": "European Alliance of Associations for Rheumatology (EULAR) & ACR",
+    "edition": "Actualizacion Recomendaciones EULAR",
+    "specialty": "reumatologia",
+    "isbn_or_doi": "doi:10.1136/annrheumdis-2023-224762",
+    "excerpts": [
+      {
+        "reference_id": "ref-eular-npsle-001",
+        "source_title": "EULAR Recommendations for Systemic Lupus Erythematosus and Neuropsychiatric Lupus",
+        "organization_or_publisher": "EULAR / ACR Taskforce",
+        "year": 2024,
+        "edition_or_version": "Actualizacion 2023-2024",
+        "section_title": "Diagnostico Diferencial e Inmunosupresion en Lupus Neuropsiquiatrico y Organo Mayor",
+        "page_or_doi": "doi:10.1136/annrheumdis-2023-224762",
+        "key_recommendation": "Todo paciente con LES debe recibir hidroxicloroquina salvo contraindicacion. Ante compromiso grave de organo vital o lupus neuropsiquiatrico inflamatorio (tras excluir infeccion del SNC y trombosis antifosfolipido), indicar pulsos endovenosos de metilprednisolona seguidos de ciclofosfamida IV, micofenolato o terapia biologica ahorradora de esteroides.",
+        "evidence_level": "Grado 1A",
+        "associated_specialty": "reumatologia",
+        "associated_cases": [
+          "s13256-026-05974-4"
+        ],
+        "anamnesis_checklist": [
+          "Explorar criterios multisistemicos: eritema malar fotosensible, ulceras orales indoloras, alopecia no cicatricial, serositis y poliartritis simetrica no erosiva.",
+          "Registrar historia obstetrica adversa o trombosis venosa/arterial previa (sindrome antifosfolipido asociado).",
+          "Ante sintomas neurologicos agudos: diferenciar mecanismo inflamatorio (psicosis, mielitis, convulsiones) de isquemico/trombotico o infeccioso.",
+          "Verificar adherencia a hidroxicloroquina, controles oftalmologicos y dosis acumulada de prednisona."
+        ],
+        "physical_exam_signs": [
+          "Eritema malar que respeta surcos nasogenianos y lesiones discoides o subagudas en zonas fotoexpuestas.",
+          "Sinovitis simetrica de pequenas articulaciones de manos y muñecas sin deformidad erosiva fija.",
+          "Frote pleural o pericardico, edemas de miembros inferiores e hipertension (tamizaje de nefritis lupica).",
+          "Disartria, déficit motor piramidal, corea o neuropatia craneal en compromiso neuropsiquiatrico."
+        ],
+        "diagnostic_cutoffs": [
+          "Criterio obligatorio de entrada EULAR/ACR: ANA >=1:80 en celulas HEp-2.",
+          "Marcadores de actividad lupica: hipocomplementemia (C3 y C4 bajos) + elevacion de titulos anti-dsDNA.",
+          "Umbral para biopsia renal en LES: proteinuria >=500 mg/24 h (o relacion P/C >=0.5) o sedimento glomerular activo.",
+          "Meta de mantenimiento de prednisona EULAR: reducir a <=5 mg/dia y retirar cuando exista remision sostenida."
+        ],
+        "red_flags": [
+          "Fiebre y alteracion aguda de conciencia en paciente inmunosuprimido (puncion lumbar obligatoria antes de escalar inmunosupresion).",
+          "Hemorragia alveolar difusa (disnea subita, caida de hemoglobina >1.5-2 g/dL e infiltrados bilaterales).",
+          "Sindrome antifosfolipido catastrofico con fallo multiorganico microtrombotico.",
+          "Mielitis transversa aguda con nivel sensitivo y retencion urinaria."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-acr-septic-crystal-arthritis-2023",
+    "title": "ACR / EULAR Clinical Guidelines: Monoartritis Aguda, Artritis Septica y Artropatias por Cristales",
+    "authors_or_organization": "American College of Rheumatology (ACR) & EULAR",
+    "edition": "Guia Practica Monoartritis Aguda",
+    "specialty": "reumatologia",
+    "isbn_or_doi": "doi:10.1002/art.41289",
+    "excerpts": [
+      {
+        "reference_id": "ref-acr-monoarthritis-002",
+        "source_title": "Guias ACR/EULAR de Diagnostico Urgente en Monoartritis Aguda y Gota",
+        "organization_or_publisher": "American College of Rheumatology (ACR)",
+        "year": 2023,
+        "edition_or_version": "Consenso Clinico Vigente",
+        "section_title": "Artrocentesis Diagnostica Obligatoria y Manejo Diferencial entre Sepsis Articular y Cristales",
+        "page_or_doi": "doi:10.1002/art.41289",
+        "key_recommendation": "Toda monoartritis aguda febril o inflamatoria de inicio reciente debe considerarse artritis septica hasta demostrar lo contrario mediante artrocentesis inmediata previa al inicio de antibioticos; la deteccion de cristales de urato monosodico o pirofosfato NO excluye infeccion concomitante si la tincion de Gram o el recuento celular son criticos.",
+        "evidence_level": "Clase I, Nivel A",
+        "associated_specialty": "reumatologia",
+        "associated_cases": [],
+        "anamnesis_checklist": [
+          "Precisar velocidad de instalacion (maximo dolor en <12-24 h tipico de gota vs progresion continua en artritis septica).",
+          "Indagar cirugia articular reciente, protesis articular, artritis reumatoide previa, diabetes o uso de drogas IV.",
+          "Investigar conducta sexual de riesgo, tenosinovitis migratoria y pustulas acrales (artritis gonococica diseminada).",
+          "Registrar uso de tiazidas, furosemida, consumo de alcohol/purinas y enfermedad renal cronica."
+        ],
+        "physical_exam_signs": [
+          "Articulacion tumefacta, caliente, eritematosa con limitacion dolorosa extrema tanto a la movilizacion activa como pasiva.",
+          "Tofos subcutaneos en pabellon auricular, bursa olecraneana o primera metatarsofalangica (podagra).",
+          "Inspeccion de piel distal en busca de lesiones vesiculopustulosas hemorragicas o puertas de entrada cutaneas.",
+          "Evaluacion diferencial entre derrame intraarticular verdadero y bursitis/celulitis periarticular (no puncionar a traves de celulitis activa)."
+        ],
+        "diagnostic_cutoffs": [
+          "Liquido sinovial septico: leucocitos >50,000/mm3 (especialmente >100,000/mm3) con >90% polimorfonucleares.",
+          "En protesis articular, recuentos mucho menores (>1,100-3,000 leucocitos/mm3) ya sugieren infeccion periprotesica.",
+          "Microscopia de luz polarizada: agujas con birrefringencia fuertemente negativa (gota) vs rombos debilmente positivos (CPPD).",
+          "No iniciar ni suspender alopurinol de novo sin profilaxis antiinflamatoria; no suspenderlo bruscamente si ya lo tomaba cronicamente."
+        ],
+        "red_flags": [
+          "Iniciar antibioticoterapia empirica antes de aspirar el liquido sinovial en monoartritis accesible.",
+          "Destruccion irreversible del cartilago hialino en 24-48 horas si se retrasa el drenaje articular y cobertura antiestafilococica.",
+          "Artritis septica poliarticular o axial (esternoclavicular / sacroiliaca) con bacteriemia persistente.",
+          "Toxicidad por colchicina en insuficiencia renal avanzada o uso concomitante de claritromicina."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-kdhe-eular-anca-vasculitis-2023",
+    "title": "EULAR Recommendations for the Management of ANCA-Associated Vasculitis & Giant Cell Arteritis",
+    "authors_or_organization": "Hellmich B, Sanchez-Alamo B, Schirmer JH, et al. (EULAR)",
+    "edition": "Actualizacion Vasculitis Sistemicas 2023",
+    "specialty": "reumatologia",
+    "isbn_or_doi": "doi:10.1136/ard-2022-223764",
+    "excerpts": [
+      {
+        "reference_id": "ref-eular-vasculitis-003",
+        "source_title": "Recomendaciones EULAR en Vasculitis Asociadas a ANCA y Arteritis de Celulas Gigantes",
+        "organization_or_publisher": "European Alliance of Associations for Rheumatology (EULAR)",
+        "year": 2023,
+        "edition_or_version": "Guia EULAR Vasculitis",
+        "section_title": "Prevencion de Ceguera Irreversible en ACG y Sindrome Pulmon-Riñon en Vasculitis ANCA",
+        "page_or_doi": "doi:10.1136/ard-2022-223764",
+        "key_recommendation": "En mayores de 50 anos con cefalea temporal de novo, claudicacion mandibular o amaurosis fugax sospechosa de arteritis de celulas gigantes, iniciar glucocorticoides sistemicos a dosis altas de inmediato SIN esperar la biopsia de arteria temporal ni ecografia Doppler para prevenir neuropatia optica isquemica permanente.",
+        "evidence_level": "Grado 1B",
+        "associated_specialty": "reumatologia",
+        "associated_cases": [],
+        "anamnesis_checklist": [
+          "En >50 anos: interrogar cefalea temporal reciente, dolor mandibular al masticar, hipersensibilidad del cuero cabelludo, diplopia o rigidez matutina escapulopelvica (polimialgia reumatica).",
+          "En sospecha de vasculitis de pequeño vaso: sinusitis cronica costrosa, epistaxis, otitis serosa, parestesias asimetricas (mononeuritis multiple) y hemoptisis.",
+          "Descartar exposicion a cocaina adulterada con levamisol o hidralazina/propiltiouracilo (vasculitis inducida por farmacos).",
+          "Cuantificar sintomas constitucionales: fiebre prolongada de origen oscuro, sudoracion nocturna y perdida ponderal."
+        ],
+        "physical_exam_signs": [
+          "Arteria temporal engrosada, nodular, hipersensible y con pulso disminuido o ausente.",
+          "Defecto pupilar aferente relativo y disco optico palido-edematoso (blanco tiza) en neuropatia optica isquemica arteritica.",
+          "Purpura palpable no blanqueable a la vitropresion en extremidades inferiores y caida del pie/muñeca por mononeuritis.",
+          "Asimetria de pulsos y presion arterial (>10-15 mmHg) entre miembros superiores en vasculitis de gran vaso."
+        ],
+        "diagnostic_cutoffs": [
+          "VSG habitualmente >50 mm/h y PCR muy elevada en arteritis de celulas gigantes activa.",
+          "Serologia ANCA por inmunoensayo especifico: anti-PR3 (predominio GPA) y anti-MPO (predominio MPA / EGPA).",
+          "En ACG con sintomas visuales isquemicos: Metilprednisolona 500-1000 mg IV/dia por 3 dias antes de prednisona oral.",
+          "La biopsia de arteria temporal mantiene rendimiento diagnostico dentro de las primeras 2 semanas de corticoterapia."
+        ],
+        "red_flags": [
+          "Amaurosis fugax o diplopia transitoria en adulto mayor con cefalea (emergencia neuro-oftalmologica: riesgo inminente de ceguera bilateral).",
+          "Sindrome pulmon-riñon (infiltrados alveolares + deterioro agudo de creatinina con hematuria glomerular).",
+          "Estenosis subglotica o perforacion septal nasal progresiva.",
+          "Isquemia mesenterica o miocardica vasculitica."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-endocrine-acog-pregnancy-hypoparathyroid",
+    "title": "ACOG Practice Bulletins & Endocrine Society Consensus: Patologia Medica y Trastornos Hipertensivos en la Gestacion",
+    "authors_or_organization": "American College of Obstetricians and Gynecologists (ACOG) & Endocrine Society",
+    "edition": "Guias Consensuadas ACOG",
+    "specialty": "ginecologia_obstetricia",
+    "isbn_or_doi": "doi:10.1210/clinem/dgad261",
+    "excerpts": [
+      {
+        "reference_id": "ref-acog-hypopara-001",
+        "source_title": "ACOG / Endocrine Society Guidelines for High-Risk Obstetrics and Maternal Calcium/Hypertensive Disorders",
+        "organization_or_publisher": "ACOG & Endocrine Society",
+        "year": 2023,
+        "edition_or_version": "Guia de Practica Clinica",
+        "section_title": "Manejo de Preeclampsia con Criterios de Severidad y Homeostasis Calcica Materno-Fetal",
+        "page_or_doi": "doi:10.1210/clinem/dgad261",
+        "key_recommendation": "En preeclampsia con criterios de severidad, iniciar sulfato de magnesio endovenoso (Esquema Zuspan: 4 g carga + 1 g/h) para neuroprofilaxis de eclampsia y antihipertensivo agudo si PA >=160/110 mmHg. En gestantes con hipoparatiroidismo primario (ej. microdelecion 22q11.2), mantener calcio corregido entre 8.5 y 9.0 mg/dL con calcitriol y carbonato de calcio evitando hipercalcemia materna.",
+        "evidence_level": "Nivel A / Consenso",
+        "associated_specialty": "ginecologia_obstetricia",
+        "associated_cases": [
+          "s13256-025-05650-z"
+        ],
+        "anamnesis_checklist": [
+          "Confirmar edad gestacional exacta por ecografia del primer trimestre y controles prenatales previos.",
+          "Interrogar sintomas premonitorios vasoespasticos: cefalea frontooccipital refractaria, escotomas centelleantes, acufenos y epigastralgia/dolor en hipocondrio derecho.",
+          "En trastornos del metabolismo calcico: indagar parestesias peribucales, calambres carpopedales, cirugia cervical previa o cardiopatia congenita.",
+          "Percibir movimientos fetales activos, perdidas transvaginales (liquido o sangre) y dinamica uterina."
+        ],
+        "physical_exam_signs": [
+          "Toma estandarizada de presion arterial sentada con brazalete adecuado en dos ocasiones separadas.",
+          "Evaluacion de reflejos osteotendinosos rotulianos (hiperreflexia/clonus pre-eclamptico vs abolicion por intoxicacion con magnesio).",
+          "Signos de Chvostek y Trousseau en hipocalcemia materna sintomatica.",
+          "Altura uterina, tono uterino basal y auscultacion de frecuencia cardiaca fetal (110-160 lpm)."
+        ],
+        "diagnostic_cutoffs": [
+          "Preeclampsia severa: PA >=160/110 mmHg, plaquetas <100,000/mm3, TGO/TGP >=2x LSN, creatinina >1.1 mg/dL, edema pulmonar o sintomas cerebrales/visuales.",
+          "Meta de calcio corregido por albumina en gestante hipoparatiroidea: 8.5 a 9.0 mg/dL.",
+          "Vigilancia de toxicidad por Sulfato de Magnesio: diuresis >=30 mL/h, FR >=12-16 rpm y reflejo patelar presente (antidoto: gluconato de calcio 1 g IV).",
+          "Contraindicados absolutamente en el embarazo: IECA, ARA-II y tiazidas depletivas."
+        ],
+        "red_flags": [
+          "Hemolisis, transaminasas duplicadas y trombocitopenia progresiva (Sindrome HELLP: riesgo de hematoma subcapsular hepatico).",
+          "Abolicion del reflejo rotuliano seguida de bradipnea <12 rpm durante infusion de sulfato de magnesio.",
+          "Hipertonia uterina dolorosa con bradicardia fetal (desprendimiento prematuro de placenta).",
+          "Convulsion tonico-clonica generalizada en segunda mitad del embarazo o puerperio."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-figo-gtn-2024",
+    "title": "FIGO 2024 Guidelines for Gestational Trophoblastic Disease & Postpartum Hemorrhage (E-MOTIVE)",
+    "authors_or_organization": "International Federation of Gynecology and Obstetrics (FIGO)",
+    "edition": "Guias Clinicas FIGO 2024",
+    "specialty": "ginecologia_obstetricia",
+    "isbn_or_doi": "doi:10.1002/ijgo.15280",
+    "excerpts": [
+      {
+        "reference_id": "ref-figo-gtn-001",
+        "source_title": "FIGO 2024 Guidelines for Gestational Trophoblastic Neoplasia and Obstetric Hemorrhage",
+        "organization_or_publisher": "International Federation of Gynecology and Obstetrics (FIGO)",
+        "year": 2024,
+        "edition_or_version": "Actualizacion FIGO 2024",
+        "section_title": "Neoplasia Trofoblastica Gestacional Metastasica y Paquete de Hemorragia Posparto",
+        "page_or_doi": "doi:10.1002/ijgo.15280",
+        "key_recommendation": "En mujeres con antecedente de embarazo molar o a termino que presentan metrorragia, hemoptisis y nodulos pulmonares con beta-hCG cuantitativa elevada, se confirma coriocarcinoma metastasico sin biopsiar las lesiones (alto riesgo de hemorragia letal) y se inicia quimioterapia segun puntaje FIGO/OMS. En hemorragia posparto primaria, activar clave roja con uterotonicos y acido tranexamico precoz (<3 h).",
+        "evidence_level": "Nivel 1A",
+        "associated_specialty": "ginecologia_obstetricia",
+        "associated_cases": [
+          "s13256-024-04987-9"
+        ],
+        "anamnesis_checklist": [
+          "Documentar evento gestacional antecedente (mola hidatiforme, aborto espontaneo o parto a termino) e intervalo en meses.",
+          "Registrar hiperemesis gravidica severa, sangrado uterino anomalo en primer trimestre o expulsion de vesiculas.",
+          "En posparto inmediato: revisar factores de las '4 T' (Tono: macrosomia/polihidramnios/parto prolongado; Trauma; Tejido retenido; Trombina).",
+          "Indagar disnea, dolor toracico, hemoptisis o cefalea focal en sospecha de metastasis trofoblasticas."
+        ],
+        "physical_exam_signs": [
+          "Altura uterina discordante (mayor a la esperada para edad gestacional) y quistes tecaluteinicos anexiales bilaterales en mola completa.",
+          "Palpacion bimanual en HPP: utero blando e infraumbilical mal involucionado (atonia uterina: 70-80% de causas).",
+          "Indice de choque obstetrico (FC / PAS) para deteccion temprana de hipoperfusion antes de que caiga la presion sistolica.",
+          "Revision sistematica con valvas de canal vaginal y cervix para descartar desgarros sangrantes."
+        ],
+        "diagnostic_cutoffs": [
+          "Indice de Choque Obstetrico >=0.9 alerta inestabilidad hemodinamica y necesidad de hemoterapia.",
+          "Criterios FIGO de NTG post-molar: meseta de beta-hCG en 4 mediciones (3 sem) o ascenso >=10% en 3 mediciones (2 sem).",
+          "Puntaje pronostico OMS/FIGO: <=6 bajo riesgo (monoterapia con metotrexato o actinomicina D); >=7 alto riesgo (poliquimioterapia EMA-CO).",
+          "Acido tranexamico en HPP: 1 g IV en 10 minutos dentro de las primeras 3 horas del parto (ensayo WOMAN)."
+        ],
+        "red_flags": [
+          "Intentar biopsia de lesion vaginal violacea o nodulo pulmonar en sospecha de coriocarcinoma (hemorragia exanguinante).",
+          "Administrar metilergonovina en paciente con hipertension o preeclampsia (crisis hipertensiva y vasoespasmo cerebral/coronario).",
+          "Beta-hCG >100,000 mUI/mL con tirotoxicosis clinica secundaria a estimulacion cruzada del receptor de TSH.",
+          "Tríada letal en HPP masiva: coagulopatia dilucional, acidosis metabolica e hipotermia."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-cdc-who-ectopic-pid-2024",
+    "title": "CDC & RCOG Clinical Guidelines: Embarazo Ectopico y Enfermedad Inflamatoria Pelvica",
+    "authors_or_organization": "Centers for Disease Control and Prevention (CDC) & Royal College of Obstetricians and Gynaecologists",
+    "edition": "Guia Ginecologia de Urgencias",
+    "specialty": "ginecologia_obstetricia",
+    "isbn_or_doi": "doi:10.1111/1471-0528.14338",
+    "excerpts": [
+      {
+        "reference_id": "ref-rcog-ectopic-003",
+        "source_title": "Guias RCOG / CDC para Embarazo Ectopico Tubarico e Infeccion Tracto Genital Superior",
+        "organization_or_publisher": "RCOG & CDC",
+        "year": 2024,
+        "edition_or_version": "Protocolo Ginecologico Vigente",
+        "section_title": "Algoritmo Diagnostico de Gestacion de Localizacion Desconocida y Criterios Quirurgicos vs Metotrexato",
+        "page_or_doi": "BJOG Green-top Guideline No. 21",
+        "key_recommendation": "En toda mujer en edad reproductiva con dolor pelvico agudo o sangrado vaginal, solicitar beta-hCG de forma sistematica. El embarazo ectopico roto con inestabilidad hemodinamica o hemoperitoneo significativo exige cirugia urgente (salpingectomia); el manejo medico con metotrexato se reserva estrictamente para pacientes estables sin dolor grave ni latido embrionario ectopico.",
+        "evidence_level": "Grado A",
+        "associated_specialty": "ginecologia_obstetricia",
+        "associated_cases": [],
+        "anamnesis_checklist": [
+          "Precisar fecha de ultima menstruacion, regularidad menstrual, metodo anticonceptivo (DIU, ligadura previa) y deseo reproductivo.",
+          "Registrar factores de daño tubarico: EPI previa por Chlamydia/gonococo, embarazo ectopico anterior, cirugia tubarica o reproduccion asistida.",
+          "Interrogar dolor hipogastrico unilateral súbito, omalgia refleja (irritacion frenica por hemoperitoneo) y lipotimia.",
+          "En sospecha de EPI: flujo cervical mucopurulento, dispareunia profunda, fiebre y sangrado postcoital."
+        ],
+        "physical_exam_signs": [
+          "Dolor exquisito a la movilizacion cervical lateral (signo de Frenkel) y abombamiento doloroso del fondo de saco de Douglas ('grito del Douglas').",
+          "Abdomen con defensa y rebote hipogastrico junto a palidez y taquicardia en ruptura tubarica.",
+          "Masa anexial palpable dolorosa (evitar palpacion bimanual brusca ante sospecha de ectopico integro a tension).",
+          "Especuloscopia para cuantificar sangrado uterino escaso oscuro ('borra de cafe') o cervicitis mucopurulenta."
+        ],
+        "diagnostic_cutoffs": [
+          "Zona discriminatoria ecografica transvaginal: con beta-hCG >=1,500-3,500 mUI/mL debe visualizarse saco gestacional intrauterino (con cautela si hay embarazo deseado viable temprano).",
+          "Candidata ideal a Metotrexato IM: hemodinamicamente estable, masa <3.5 cm sin latido cardiaco ectopico, beta-hCG idealmente <5,000 mUI/mL y funcion hepatorrenal normal.",
+          "Seguimiento post-metotrexato: descenso de beta-hCG >=15% entre el dia 4 y el dia 7.",
+          "Cobertura empirica ambulatoria EPI (CDC): Ceftriaxona IM dosis unica + Doxiciclina 14 d + Metronidazol 14 d."
+        ],
+        "red_flags": [
+          "Omalgia, sincope o hipotension en mujer con prueba de embarazo positiva (hemoperitoneo masivo: quirofano inmediato).",
+          "Masa anexial compleja febril persistente >48-72 h pese a antibioticos EV (absceso tubo-ovarico roto).",
+          "Presencia de actividad cardiaca embrionaria extrauterina (contraindicacion relativa/absoluta de metotrexato).",
+          " Paciente Rh negativo no sensibilizada sin profilaxis con inmunoglobulina anti-D."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-aao-uveal-ppp-2024",
+    "title": "AAO Preferred Practice Pattern: Enfermedades Uveales e Inflamacion Intraocular",
+    "authors_or_organization": "American Academy of Ophthalmology (AAO) Uveitis Panel",
+    "edition": "Preferred Practice Pattern 2024",
+    "specialty": "oftalmologia",
+    "isbn_or_doi": "doi:10.1016/j.ophtha.2023.11.014",
+    "excerpts": [
+      {
+        "reference_id": "ref-aao-uveal-001",
+        "source_title": "AAO Preferred Practice Pattern for Uveal Diseases",
+        "organization_or_publisher": "American Academy of Ophthalmology (AAO)",
+        "year": 2024,
+        "edition_or_version": "PPP 2024",
+        "section_title": "Uveitis Anterior Aguda, Sindrome de Efusion Uveal e Hipertension Ocular Secundaria",
+        "page_or_doi": "doi:10.1016/j.ophtha.2023.11.014",
+        "key_recommendation": "Diferenciar el sindrome de efusion uveal y las uveitis hipertensivas del cierre angular primario mediante biomicroscopia con lampara de hendidura, gonioscopia, ecografia modo B/UBM y OCT. El manejo combina control hipotensor ocular y corticoides topicos/sistemicos tras descartar etiologia infecciosa (herpes, toxoplasmosis, sifilis, tuberculosis).",
+        "evidence_level": "Nivel IIa",
+        "associated_specialty": "oftalmologia",
+        "associated_cases": [
+          "s13256-024-04496-1"
+        ],
+        "anamnesis_checklist": [
+          "Caracterizar el 'ojo rojo profundo': dolor ocular sordo agravado al acomodar, fotofobia consensual intensa y vision borrosa.",
+          "Investigar espondiloartropatias asociadas a HLA-B27 (lumbalgia inflamatoria matutina, psoriasis, enfermedad inflamatoria intestinal).",
+          "Descartar infecciones sistemicas (tuberculosis, lues, herpes zoster oftalmico con signo de Hutchinson) e inmunosupresion.",
+          "Registrar hipermetropia alta/nanoftalmos (factor de riesgo clasico para sindrome de efusion uveal)."
+        ],
+        "physical_exam_signs": [
+          "Inyeccion ciliar o periqueratica violacea circunferencial que no blanquea con fenilefrina topica superficial.",
+          "Miosis reactiva lenta o pupila festoneada irregular por sinequias posteriores al cristalino.",
+          "Fenomeno de Tyndall (celulas y flare proteico en camara anterior), precipitados queraticos o hipopion esteril.",
+          "Desprendimiento coroideo o retiniano exudativo seroso cambiante con la postura en efusion uveal."
+        ],
+        "diagnostic_cutoffs": [
+          "Agudeza visual basal corregida con agujero estenopeico obligatoria en toda urgencia oftalmologica.",
+          "Presion intraocular normal: 10 a 21 mmHg (puede estar disminuida por hiposecrecion ciliar o elevada en trabeculitis herpetica/Posner-Schlossman).",
+          "Clasificacion SUN de actividad celular en camara anterior (grados 0.5+ a 4+ en haz de 1x1 mm).",
+          "Tamizaje infeccioso obligatorio antes de iniciar corticoides sistemicos o biologicos anti-TNF."
+        ],
+        "red_flags": [
+          "Hipopion con dolor intenso dentro de los dias posteriores a cirugia de catarata o inyeccion intravitrea (endoftalmitis infecciosa aguda).",
+          "Administrar corticoides topicos sin fluoresceina previa (riesgo de perforacion corneal si existe queratitis dendritica herpetica).",
+          "Panuveitis bilateral con desprendimiento exudativo y meningismo (enfermedad de Vogt-Koyanagi-Harada).",
+          "Necrosis retiniana aguda rapidamente progresiva."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-egs-glaucoma-angle-closure-5e",
+    "title": "European Glaucoma Society (EGS) Terminology and Guidelines for Glaucoma",
+    "authors_or_organization": "European Glaucoma Society (EGS)",
+    "edition": "5.a Edicion",
+    "specialty": "oftalmologia",
+    "isbn_or_doi": "ISBN:978-88-98320-41-7",
+    "excerpts": [
+      {
+        "reference_id": "ref-egs-angle-closure-002",
+        "source_title": "European Glaucoma Society Guidelines: Cierre Angular Primario Agudo",
+        "organization_or_publisher": "European Glaucoma Society (EGS)",
+        "year": 2023,
+        "edition_or_version": "5.a Edicion",
+        "section_title": "Diagnostico de Emergencia y Reduccion Rapida de PIO en Glaucoma Agudo de Angulo Cerrado",
+        "page_or_doi": "Cap. 2-3, Urgencias Glaucomatosas",
+        "key_recommendation": "El cierre angular primario agudo cursa con bloqueo pupilar, camara anterior estrecha y PIO habitualmente >40-50 mmHg; exige reduccion inmediata de la presion intraocular con acetazolamida sistemica, hipotensores topicos (betabloqueador, alfa-2 agonista, inhibidor anhidrasa carbonica) seguido de pilocarpina al descender la isquemia iridiana e iridotomia periferica laser YAG definitiva en ambos ojos.",
+        "evidence_level": "Clase I, Nivel A",
+        "associated_specialty": "oftalmologia",
+        "associated_cases": [],
+        "anamnesis_checklist": [
+          "Indagar inicio subito en penumbra/cine o tras uso de farmacos midriaticos, anticolinergicos, descongestionantes o topiramato.",
+          "Documentar dolor periocular hemicraneal severo, halos coloreados alrededor de las luces y perdida visual rapida.",
+          "Reconocer sintomas vagales floridos (nauseas, vomitos intensos y bradicardia) que suelen confundirse con cuadro gastrointestinal o migraña.",
+          "Verificar alergia a sulfonamidas e insuficiencia renal grave antes de administrar acetazolamida."
+        ],
+        "physical_exam_signs": [
+          "Pupila en semimidriasis media fija y arreactiva a la luz.",
+          "Cornea opaca o edematosa ('en vidrio esmerilado') con hiperemia conjuntivo-ciliar mixta.",
+          "Globo ocular petreo a la palpacion bidigital comparativa cuando no se dispone de tonometro inmediato.",
+          "Camara anterior periferica muy estrecha (grado 0-1 de Van Herick) en ojo afectado y contralateral."
+        ],
+        "diagnostic_cutoffs": [
+          "PIO en crisis aguda habitualmente >=40-60 mmHg (riesgo de atrofia optica isquemica en horas).",
+          "Acetazolamida inicial: 500 mg IV o VO (evitar en alergia grave a sulfas o hipokalemia/acidosis severa).",
+          "Manitol 20% endovenoso (1-1.5 g/kg en 30-45 min) en casos refractarios vigilando sobrecarga cardiaca.",
+          "Iridotomia periferica laser YAG obligatoria en el ojo adelfo (riesgo de ataque contralateral 50% a 5 anos)."
+        ],
+        "red_flags": [
+          "Instilar midriaticos (atropina, tropicamida) en ojo rojo doloroso con camara estrecha.",
+          "Cierre angular bilateral simultaneo con miopizacion aguda en paciente joven que inicio topiramato (suspender farmaco y usar cicloplejicos, NO pilocarpina).",
+          "Vomitos incoercibles diagnosticados erroneamente como abdomen agudo omitiendo el examen pupilar.",
+          "Perdida irreversible del campo visual y excavacion glaucomatosa aguda."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-kanski-retinal-vascular-10e",
+    "title": "Kanski's Clinical Ophthalmology: Urgencias Neuro-Oftalmologicas y Vasculares Retinianas",
+    "authors_or_organization": "Salmon JF (Elsevier)",
+    "edition": "10.a Edicion",
+    "specialty": "oftalmologia",
+    "isbn_or_doi": "ISBN:978-0-7020-8373-0",
+    "excerpts": [
+      {
+        "reference_id": "ref-kanski-retina-003",
+        "source_title": "Kanski Oftalmologia Clinica (10.a Ed.): Perdida Visual Subita Indolora",
+        "organization_or_publisher": "Elsevier",
+        "year": 2024,
+        "edition_or_version": "10.a Edicion, Cap. 13-16",
+        "section_title": "Diferenciacion de Oclusion de Arteria Central de la Retina, Desprendimiento Retiniano y Neuritis Optica",
+        "page_or_doi": "pp. 512-624",
+        "key_recommendation": "La oclusion de la arteria central de la retina (OACR) es un equivalente de ictus isquemico agudo y requiere derivacion inmediata a unidad de ictus (estudio carotideo, cardioembolico y descarte urgente de arteritis de celulas gigantes en >50 anos). El desprendimiento de retina regmatogeno con macula aplicada ('macula-on') constituye urgencia quirurgica prioritaria para preservar la vision central.",
+        "evidence_level": "Nivel I, Guia Clinica",
+        "associated_specialty": "oftalmologia",
+        "associated_cases": [],
+        "anamnesis_checklist": [
+          "Distinguir perdida visual indolora subita (segundos: vascular) vs cortina/sombra periferica precedida de fotopsias y miodesopsias (desprendimiento regmatogeno).",
+          "En pacientes jovenes (20-45 anos): preguntar dolor retroocular desencadenado por movimientos oculares y desaturacion del color rojo (neuritis optica desmielinizante).",
+          "Indagar miopia magna, cirugia previa de catarata o trauma ocular contuso.",
+          "Explorar amaurosis fugax previa, fibrilacion auricular y sintomas de arteritis temporal."
+        ],
+        "physical_exam_signs": [
+          "Defecto pupilar aferente relativo (pupila de Marcus Gunn) en test de iluminacion alternante.",
+          "OACR en fondo de ojo: retina blanquecina isquemica con 'mancha rojo cereza' foveal y segmentacion vascular.",
+          "OVCR en fondo de ojo: hemorragias intrarretinianas en llama en los 4 cuadrantes ('tormenta de sangre y fuego'), venas tortuosas y edema papilar.",
+          "Bolsa retiniana movil, elevada y ondulante con perdida del reflejo rojo en desprendimiento retiniano."
+        ],
+        "diagnostic_cutoffs": [
+          "Ventana de viabilidad retiniana experimental ante isquemia arterial completa: ~90 a 240 minutos.",
+          "En >50 anos con OACR o NOIA: solicitar VSG y PCR urgentes en la primera hora para excluir causa arteritica.",
+          "En neuritis optica tipica (ONTT): evitar prednisona oral aislada a dosis bajas (aumenta recurrencias); usar metilprednisolona IV 1 g/dia x 3 dias si se indica acelerar recuperacion.",
+          "Desprendimiento regmatogeno macula-on: reposo postural y reparacion quirurgica antes de progresion foveal."
+        ],
+        "red_flags": [
+          "Aparicion brusca de lluvia de moscas volantes ('hollin vitreo') con destellos luminosos (desgarro retiniano o hemovitreo).",
+          "OACR precedida de cefalea temporal o claudicacion mandibular (riesgo de ceguera contralateral en horas).",
+          "Celulitis orbitaria postseptal (proptosis, oftalmoplejia dolorosa y disminucion de AV: riesgo de trombosis del seno cavernoso).",
+          "Quemadura quimica ocular por alcalis (irrigacion profusa inmediata en el lugar antes de tomar agudeza visual)."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-esc-acs-pe-2024",
+    "title": "European Society of Cardiology (ESC) Guidelines: Sindromes Coronarios Agudos e Insuficiencia Cardiaca",
+    "authors_or_organization": "European Society of Cardiology (ESC) Clinical Practice Guidelines Committee",
+    "edition": "Guias ESC 2023-2024",
+    "specialty": "medicina_interna",
+    "isbn_or_doi": "doi:10.1093/eurheartj/ehad191",
+    "excerpts": [
+      {
+        "reference_id": "ref-esc-acs-001",
+        "source_title": "Guias ESC de Manejo del Sindrome Coronario Agudo e Insuficiencia Cardiaca Aguda",
+        "organization_or_publisher": "European Society of Cardiology (ESC)",
+        "year": 2024,
+        "edition_or_version": "Guia ESC Vigente",
+        "section_title": "Estratificacion Hemodinamica del Dolor Toracico Isquemico y Tiempos de Reperfusion",
+        "page_or_doi": "doi:10.1093/eurheartj/ehad191",
+        "key_recommendation": "Ante dolor toracico agudo sospechoso, obtener e interpretar un ECG de 12 derivadas en <=10 minutos (incluyendo V3R-V4R y V7-V9 si hay sospecha de infarto ventricular derecho o posterior). En IAMCEST, priorizar angioplastia primaria si el tiempo desde el diagnostico hasta el paso de guia es <=120 minutos; de lo contrario, iniciar fibrinolisis en <=10 minutos si no hay contraindicaciones.",
+        "evidence_level": "Clase I, Nivel A",
+        "associated_specialty": "medicina_interna",
+        "associated_cases": [],
+        "anamnesis_checklist": [
+          "Caracterizar semiologia ALICIA del dolor toracico, equivalentes anginosos (disnea subita, sincope, epigastralgia en adultos mayores/diabeticos) y hora cero.",
+          "Descartar señales de diseccion aortica aguda (dolor desgarrante irradiado a region interescapular) antes de antiagregar o anticoagular.",
+          "Preguntar uso de inhibidores de fosfodiesterasa-5 (sildenafilo <24 h, tadalafilo <48 h) antes de indicar nitratos.",
+          "Evaluar factores mayores de riesgo cardiovascular e historia de sangrado activo o ACV previo."
+        ],
+        "physical_exam_signs": [
+          "Clasificacion de Killip-Kimball al ingreso: I sin estertores, II crepitantes <50% campos o S3, III edema agudo de pulmon, IV choque cardiogenico.",
+          "Asimetria de pulsos radiales/femorales (>20 mmHg) o nuevo soplo diastolico aortico (sospecha de diseccion tipo A).",
+          "Triada de infarto de ventriculo derecho: hipotension arterial + ingurgitacion yugular + campos pulmonares limpios.",
+          "Perfusion periferica (temperatura acral, livideces moteadas y llenado capilar)."
+        ],
+        "diagnostic_cutoffs": [
+          "Tiempo primer contacto medico a ECG interpretado: <=10 minutos.",
+          "Oxigenoterapia en SCA: solo indicada cuando SatO2 <90% (evitar hiperoxia rutinaria).",
+          "Algoritmo hs-cTn 0h/1h en SCASEST para rule-out / rule-in rapido.",
+          "Ventana maxima de angioplastia primaria frente a fibrinolisis en centro sin hemodinamia: <=120 minutos."
+        ],
+        "red_flags": [
+          "Administrar nitratos o furosemida en infarto inferior con compromiso de ventriculo derecho (colapso de precarga).",
+          "Infradesnivel del ST en V1-V3 con ondas R altas (equivalente de oclusion circunfleja/posterior: verificar V7-V9).",
+          "Bloqueo de rama izquierda o derecha de nueva aparicion con inestabilidad isquemica.",
+          "Complicaciones mecanicas post-IAM: soplo holosistolico rudo nuevo (CIV o ruptura de musculo papilar)."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-surviving-sepsis-campaign-2024",
+    "title": "Surviving Sepsis Campaign: Guias Internacionales para el Manejo de la Sepsis y el Choque Septico",
+    "authors_or_organization": "Society of Critical Care Medicine (SCCM) & European Society of Intensive Care Medicine (ESICM)",
+    "edition": "Directrices Internacionales Vigentes",
+    "specialty": "medicina_interna",
+    "isbn_or_doi": "doi:10.1007/s00134-021-06506-y",
+    "excerpts": [
+      {
+        "reference_id": "ref-ssc-sepsis-002",
+        "source_title": "Surviving Sepsis Campaign: Paquete de Primera Hora y Reanimacion Hemodinamica",
+        "organization_or_publisher": "SCCM / ESICM",
+        "year": 2024,
+        "edition_or_version": "Consenso Sepsis-3 / SSC",
+        "section_title": "Reconocimiento por Disfuncion Organica (SOFA), Antimicrobianos Tempranos y Vasopresores",
+        "page_or_doi": "Intensive Care Medicine Guidelines",
+        "key_recommendation": "En sepsis con hipoperfusion o choque septico, extraer hemocultivos sin demorar la administracion de antimicrobianos endovenosos de amplio espectro (<1 hora), infundir al menos 30 mL/kg de cristaloides balanceados en las primeras 3 horas guiando bolos ulteriores por respuesta dinamica, e iniciar noradrenalina como vasopresor de primera linea para alcanzar PAM >=65 mmHg.",
+        "evidence_level": "Recomendacion Fuerte, Evidencia Alta",
+        "associated_specialty": "medicina_interna",
+        "associated_cases": [],
+        "anamnesis_checklist": [
+          "Rastrear foco infeccioso anatomico probable: respiratorio, urinario obstructivo, intraabdominal, piel/partes blandas, cateter intravascular o SNC.",
+          "Identificar factores de riesgo para germenes multirresistentes (BLEE, MRSA, Pseudomonas): hospitalizacion o antibioticos en los ultimos 90 dias.",
+          "Indagar inmunosupresion (neutropenia post-quimioterapia, VIH avanzado, esplenectomia, cirrosis).",
+          "Determinar si el foco requiere control quirurgico/intervencionista urgente (colangitis, pielonefritis enfisematosa/litiasica obstructiva, fascitis necrosante)."
+        ],
+        "physical_exam_signs": [
+          "Alteracion aguda del sensorio (encefalopatia septica precoz, especialmente en adultos mayores).",
+          "Taquipnea (FR >=22 rpm) como signo clinico temprano de acidosis metabolica e inflamacion sistemica.",
+          "Tiempo de llenado capilar periferico (>3 seg en pulpejo) y score de moteado cutaneo prerrotuliano.",
+          "Inspeccion de sitios de venopuncion, perine (gangrena de Fournier) y auscultacion pulmonar."
+        ],
+        "diagnostic_cutoffs": [
+          "Sepsis-3: Infeccion sospechada o documentada + incremento agudo >=2 puntos en escala SOFA.",
+          "Choque septico: Necesidad de vasopresor para mantener PAM >=65 mmHg + lactato serico >2 mmol/L (>18 mg/dL) pese a reanimacion hidrica adecuada.",
+          "Meta inicial de presion arterial media con Noradrenalina: PAM >=65 mmHg (puede iniciarse por via periferica proximal segura sin esperar CVC).",
+          "En choque refractario a dosis crecientes de noradrenalina (>=0.25-0.5 ug/kg/min): anadir Vasopresina e Hidrocortisona 200 mg/dia."
+        ],
+        "red_flags": [
+          "No usar qSOFA como unica herramienta aislada de tamizaje por su baja sensibilidad temprana.",
+          "Retrasar el drenaje de foco cerrado (absceso o hidronefrosis infectada): los antibioticos solos fracasan sin control del foco.",
+          "Dolor desproporcionado a los hallazgos cutaneos con crepitacion o ampollas hemorragicas (fascitis necrosante).",
+          "Lactato persistentemente >4 mmol/L sin aclaramiento en mediciones seriadas cada 2-4 horas."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-harrison-internal-medicine-21e",
+    "title": "Harrison. Principios de Medicina Interna: Neumologia, Tromboembolismo e Infectologia",
+    "authors_or_organization": "Loscalzo J, Fauci A, Kasper D, Hauser S, Longo D, Jameson JL (McGraw-Hill)",
+    "edition": "21.a Edicion",
+    "specialty": "medicina_interna",
+    "isbn_or_doi": "ISBN:978-1-264-26850-4",
+    "excerpts": [
+      {
+        "reference_id": "ref-harrison-pulm-003",
+        "source_title": "Harrison Principios de Medicina Interna (21.a Ed.)",
+        "organization_or_publisher": "McGraw-Hill Medical",
+        "year": 2023,
+        "edition_or_version": "21.a Edicion",
+        "section_title": "Probabilidad Pre-Test en Tromboembolismo Pulmonar, Neumonia y Enfermedad Granulomatosa",
+        "page_or_doi": "Seccion Trastornos del Aparato Respiratorio",
+        "key_recommendation": "Integrar siempre la probabilidad clinica pre-test (escala de Wells o Ginebra) antes de solicitar dimero D o angio-TC pulmonar: en probabilidad baja/intermedia un dimero D ajustado por edad negativo excluye TEP de forma segura, mientras que en probabilidad alta se procede directamente a angio-TC e inicio de anticoagulacion parenteral salvo sangrado activo.",
+        "evidence_level": "Clase I, Nivel A",
+        "associated_specialty": "medicina_interna",
+        "associated_cases": [],
+        "anamnesis_checklist": [
+          "Evaluar criterios de Wells: inmovilizacion >=3 dias o cirugia en las ultimas 4 semanas, neoplasia activa, TVP/TEP previo y hemoptisis.",
+          "En disnea subaguda con tos: interrogar contactos baciliferos (TBC), exposicion ocupacional/aves, artralgias y lesiones cutaneas (eritema nodoso).",
+          "En neumonia adquirida en la comunidad: cuantificar comorbilidades cardiopulmonares y tolerancia oral.",
+          "Revisar uso de estrogenos orales, puerperio o viajes prolongados."
+        ],
+        "physical_exam_signs": [
+          "Asimetria de perimetro gemelar (>3 cm) con edema unilateral y empastamiento venoso profundo.",
+          "Taquicardia sinusal, taquipnea e hipoxemia con auscultacion pulmonar sorprendentemente limpia en TEP agudo.",
+          "Ingurgitacion yugular y reforzamiento del componente pulmonar del segundo ruido (P2) en sobrecarga aguda del VD.",
+          "Sindrome de condensacion pulmonar (matidez, vibraciones vocales aumentadas, soplo tubarico y crepitantes) en NAC."
+        ],
+        "diagnostic_cutoffs": [
+          "Dimero D ajustado por edad en mayores de 50 anos: Edad x 10 ug/L (o ng/mL FEU) en probabilidad clinica no alta.",
+          "Escala CURB-65 en NAC: 0-1 manejo ambulatorio, 2 hospitalizacion en sala general, >=3 valorar cuidados intensivos.",
+          "TEP de alto riesgo (masivo): PAS <90 mmHg o caida >=40 mmHg por >15 min -> indicacion de trombolisis sistemica.",
+          "Triada del Sindrome de Lofgren: adenopatias hiliares bilaterales simetricas + eritema nodoso + periartritis de tobillos."
+        ],
+        "red_flags": [
+          "Solicitar dimero D en paciente postoperado de alta probabilidad clinica (retrasa innecesariamente la angio-TC y anticoagulacion).",
+          "Sincope y dilatacion del ventriculo derecho con troponina/BNP elevados (TEP intermedio-alto con riesgo de descompensacion subita).",
+          "Hemoptisis franca >100-200 mL/24 h con compromiso del intercambio gaseoso.",
+          "Falla renal o alergia a contraste: utilizar gammagrafia V/Q y ecografia compresiva venosa proximal."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-who-minsa-pediatric-emergency-2024",
+    "title": "OMS / MINSA: Atencion Integrada de Emergencias Pediatricas, Rehidratacion (Plan A/B/C) y Neumologia",
+    "authors_or_organization": "Organizacion Mundial de la Salud (OMS) & Ministerio de Salud (MINSA)",
+    "edition": "Guia Tecnica Pediatrica Vigente",
+    "specialty": "pediatria",
+    "isbn_or_doi": "ISBN:978-92-4-154837-3",
+    "excerpts": [
+      {
+        "reference_id": "ref-who-peds-dehydration-001",
+        "source_title": "Guias OMS / MINSA de Enfermedad Diarreica Aguda, Deshidratacion y Shock Hipovolemico Pediatrico",
+        "organization_or_publisher": "OMS / MINSA",
+        "year": 2024,
+        "edition_or_version": "Protocolo AIEPI / Guia Tecnica",
+        "section_title": "Clasificacion Clinica de Deshidratacion, Terapia de Rehidratacion Oral y Plan C Endovenoso",
+        "page_or_doi": "Seccion Rehidratacion y Soporte Vital",
+        "key_recommendation": "En deshidratacion leve a moderada sin shock, la terapia de rehidratacion oral con SRO de osmolaridad reducida (75 mOsm/L Na+) es de eleccion (Plan B: 50-100 mL/kg en 4 h) junto con suplementacion de zinc. En deshidratacion grave (Plan C), reponer 100 mL/kg de solucion salina 0.9% o Lactato Ringer en dos fases ajustadas por edad (<12 meses: 30 mL/kg en 1 h + 70 mL/kg en 5 h; >=12 meses: 30 mL/kg en 30 min + 70 mL/kg en 2.5 h).",
+        "evidence_level": "Grado 1A",
+        "associated_specialty": "pediatria",
+        "associated_cases": [],
+        "anamnesis_checklist": [
+          "Cuantificar numero y volumen de deposiciones acuosas, presencia de sangre/moco (disenteria) y frecuencia de vomitos.",
+          "Registrar diuresis reciente (numero de panales mojados en las ultimas 12 horas) y avidez o incapacidad para beber.",
+          "Verificar carnet de vacunacion contra rotavirus, estado nutricional basal (desnutricion aguda severa modifica pautas de fluidos) y lactancia materna.",
+          "Descartar ingesta de infusiones caseras hiperosmolares, bebidas deportivas o antidiarreicos inhibidores de motilidad."
+        ],
+        "physical_exam_signs": [
+          "Evaluacion del Triangulo de Evaluacion Pediatrica (Apariencia, Trabajo respiratorio y Circulacion cutanea).",
+          "Cuatro signos cardinales OMS: estado neurologico (alerta, irritable o letargico/inconsciente), ojos hundidos, sed/capacidad de beber y signo del pliegue cutaneo.",
+          "Fontanela anterior deprimida en lactantes, ausencia de lagrimas y mucosa yugal seca.",
+          "Tiempo de llenado capilar, calidad de pulsos perifericos vs centrales y peso desnudo exacto."
+        ],
+        "diagnostic_cutoffs": [
+          "Deshidratacion grave (Plan C): >=2 signos incluyendo letargia/inconsciencia, incapacidad de beber o pliegue muy lento (>2 segundos).",
+          "Bolo inicial en shock hipovolemico franco: 20 mL/kg de NaCl 0.9% en 10-20 min reevaluando estertores y hepatomegalia.",
+          "SRO de baja osmolaridad OMS: Sodio 75 mEq/L, Glucosa 75 mmol/L, Osmolaridad total 245 mOsm/L.",
+          "Zinc suplementario por 10-14 dias: 10 mg/dia en <6 meses y 20 mg/dia en >=6 meses para reducir recurrencia."
+        ],
+        "red_flags": [
+          "Usar soluciones hipotonicas (dextrosa 5% pura o agua libre) en bolos de expansion -> hiponatremia e hipertension endocraneana.",
+          "Prescribir loperamida u opioides en lactantes (ileo paralitico toxico y translocacion bacteriana).",
+          "Deposiciones en 'jalea de grosella' con episodios de llanto colico y flexion de piernas (invaginacion intestinal).",
+          "Oligoanuria con palidez y petequias tras diarrea sanguinolenta (Sindrome Uremico Hemolitico)."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-aap-bronchiolitis-croup-2023",
+    "title": "American Academy of Pediatrics (AAP): Guias de Practica Clinica en Bronquiolitis, Crup y Fiebre en el Lactante",
+    "authors_or_organization": "American Academy of Pediatrics (AAP) Subcommittee",
+    "edition": "Compendio Pediatrico AAP",
+    "specialty": "pediatria",
+    "isbn_or_doi": "doi:10.1542/peds.2014-2742",
+    "excerpts": [
+      {
+        "reference_id": "ref-aap-resp-002",
+        "source_title": "Guias AAP de Bronquiolitis Viral Aguda y Obstruccion Respiratoria Alta Pediatrica",
+        "organization_or_publisher": "American Academy of Pediatrics (AAP)",
+        "year": 2023,
+        "edition_or_version": "Guia Clinica AAP Vigente",
+        "section_title": "Uso Racional de Terapias en Bronquiolitis frente a Laringotraqueitis Aguda (Crup)",
+        "page_or_doi": "Pediatrics Clinical Practice Guidelines",
+        "key_recommendation": "En bronquiolitis aguda (primer episodio sibilante en <24 meses), el diagnostico es clinico sin requerir radiografia ni laboratorio de rutina, y el manejo se basa en oxigeno suplementario si SatO2 <90% e hidratacion, evitando salbutamol, corticoides y antibioticos innecesarios. En crup viral, indicar dexametasona 0.6 mg/kg en todos los grados de severidad y asociar adrenalina nebulizada si hay estridor en reposo.",
+        "evidence_level": "Calidad de Evidencia A / Recomendacion Fuerte",
+        "associated_specialty": "pediatria",
+        "associated_cases": [],
+        "anamnesis_checklist": [
+          "Investigar factores de alto riesgo para bronquiolitis grave/apnea: edad <6-12 semanas, prematuridad <32-35 semanas, cardiopatia congenita hemodinamicamente significativa o displasia broncopulmonar.",
+          "Precisar cuadro catarral alto previo de 2-3 dias frente a atragantamiento subito mientras jugaba/comia (cuerpo extrano bronquial).",
+          "Evaluar ingesta lactea efectiva (<50% de las tomas habituales indica riesgo de agotamiento y deshidratacion).",
+          "Preguntar pausas respiratorias (apneas >15-20 seg) presenciadas por los cuidadores."
+        ],
+        "physical_exam_signs": [
+          "Frecuencia respiratoria contada durante 60 segundos completos con el nino tranquilo y afebril.",
+          "Signos de dificultad respiratoria (escala Wood-Downes / Westley): aleteo nasal, tiraje subcostal/intercostal/supraesternal, quejido espiratorio y disociacion toracoabdominal.",
+          "Diferenciar estridor inspiratorio con tos perruna (via aerea extratoracica: crup) de espiracion prolongada con sibilancias/subcrepitantes (bronquiolar).",
+          "Evitar exploracion instrumentada de orofaringe si existe babeo, disfagia intensa y posicion en tripode."
+        ],
+        "diagnostic_cutoffs": [
+          "Umbral de taquipnea OMS segun edad: <2 meses >=60 rpm; 2 a 11 meses >=50 rpm; 1 a 5 anos >=40 rpm.",
+          "Meta de oximetria de pulso en bronquiolitis AAP: iniciar suplemento de O2 si SatO2 persiste <90% (<92% en altitud o alto riesgo).",
+          "Dosis estandar de Dexametasona en Crup: 0.6 mg/kg VO/IM/IV dosis unica (maximo 10-16 mg).",
+          "Observacion obligatoria post-adrenalina nebulizada: minimo 2 a 4 horas para descartar fenomeno de rebote."
+        ],
+        "red_flags": [
+          "Apneas centrales en lactantes menores de 2 meses o prematuros (puede ser la primera manifestacion de VSR).",
+          "Silencio auscultatorio con cianosis y bradicardia (agotamiento ventilatorio inminente).",
+          "Babeo continuo, aspecto toxico, voz apagada y posicion en tripode (sospecha de epiglotitis o traqueitis bacteriana: asegurar via aerea experta).",
+          "Hiponatremia por SIADH secundario a patologia respiratoria aguda."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-nelson-pediatrics-kawasaki-22e",
+    "title": "Nelson. Tratado de Pediatria: Enfermedades Exantematicas, Kawasaki e Infecciones Graves",
+    "authors_or_organization": "Kliegman RM, St. Geme JW, Blum NJ, et al. (Elsevier / AHA Pediatric Committee)",
+    "edition": "22.a Edicion",
+    "specialty": "pediatria",
+    "isbn_or_doi": "ISBN:978-0-323-88305-4",
+    "excerpts": [
+      {
+        "reference_id": "ref-nelson-kawasaki-003",
+        "source_title": "Nelson Tratado de Pediatria (22.a Ed.) & Consenso AHA en Enfermedad de Kawasaki",
+        "organization_or_organization": "Elsevier / American Heart Association",
+        "organization_or_publisher": "Elsevier / AHA",
+        "year": 2024,
+        "edition_or_version": "22.a Edicion",
+        "section_title": "Diagnostico de Enfermedad de Kawasaki Completa/Incompleta y Prevencion de Aneurismas Coronarios",
+        "page_or_doi": "Seccion Vasculitis y Fiebre Prolongada",
+        "key_recommendation": "En todo nino con fiebre alta persistente >=5 dias y >=4 de los 5 criterios mucocutaneos principales (o Kawasaki incompleto en lactantes con inflamacion sistemica), administrar inmunoglobulina intravenosa (IGIV 2 g/kg en infusion unica de 10-12 h) idealmente dentro de los primeros 10 dias junto con AAS y ecocardiograma transtoracico basal y evolutivo.",
+        "evidence_level": "Clase I, Nivel A",
+        "associated_specialty": "pediatria",
+        "associated_cases": [],
+        "anamnesis_checklist": [
+          "Documentar curva febril diaria >=5 dias refractaria a antipireticos y a antibioticos betalactamicos previos.",
+          "Interrogar aparicion secuencial de signos (muchas veces algun criterio ya remitio al momento de la consulta).",
+          "Evaluar irritabilidad extrema inconsolable (meningitis aseptica asociada muy caracteristica en lactantes).",
+          "Indagar contacto epidemiologico reciente con SARS-CoV-2 (diferenciar de MIS-C / PIMS) o estreptococo."
+        ],
+        "physical_exam_signs": [
+          "Conjuntivitis bulbar bilateral NO exudativa con respeto limbico perilimbar.",
+          "Cambios orofaringeos: labios eritematosos secos y fisurados, lengua aframbuesada e hiperemia faringea sin exudado amigdalino.",
+          "Cambios acrales: eritema palmoplantar y edema indurado doloroso en fase aguda; descamacion periungueal laminar en fase subaguda.",
+          "Exantema polimorfo no vesicular (acentuado en area del panal) y adenopatia cervical unilateral >=1.5 cm."
+        ],
+        "diagnostic_cutoffs": [
+          "Criterio clasico: Fiebre >=5 dias + >=4 de 5 signos clinicos principales (o <4 signos si ecocardiograma ya muestra dilatacion coronaria Z-score >=2.5).",
+          "Reactantes en Kawasaki incompleto: PCR >=3.0 mg/dL y/o VSG >=40 mm/h + >=3 hallazgos (anemia, plaquetas >=450,000 tras dia 7, albumina <=3.0 g/dL, TGP elevada, leucocitos >=15,000, piuria esteril >=10/campo).",
+          "IGIV estandar: 2 g/kg en infusion unica; resistencia (10-20%) si persiste o reaparece fiebre >=36 h post-infusion.",
+          "Posponer vacunas de virus vivos atenuados (SRP, varicela) durante 11 meses tras recibir IGIV."
+        ],
+        "red_flags": [
+          "Lactante menor de 6 meses con fiebre >=7 dias sin foco aunque tenga <4 signos mucocutaneos (maximo riesgo de aneurismas gigantes).",
+          "Trombocitopenia paradójica, ferritina muy elevada e hipofibrinogenemia (sospecha de Sindrome de Activacion Macrofagica).",
+          "Choque cardiogenico / Sindrome de Shock por Kawasaki o infarto agudo de miocardio por trombosis de aneurisma coronario.",
+          "Co-infeccion por influenza o varicela en paciente recibiendo dosis altas de AAS (riesgo de Sindrome de Reye)."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-tokyo-guidelines-tg18-biliary",
+    "title": "Tokyo Guidelines (TG18) & WSES: Manejo de Colecistitis Aguda, Colangitis y Sepsis Biliar",
+    "authors_or_organization": "Japanese Society of Hepato-Biliary-Pancreatic Surgery & World Society of Emergency Surgery (WSES)",
+    "edition": "Guias Internacionales TG18 / WSES",
+    "specialty": "cirugia_general",
+    "isbn_or_doi": "doi:10.1002/jhbp.512",
+    "excerpts": [
+      {
+        "reference_id": "ref-tg18-biliary-001",
+        "source_title": "Tokyo Guidelines TG18: Diagnostico y Estratificacion de Severidad en Colecistitis y Colangitis Aguda",
+        "organization_or_publisher": "TG18 Working Group / WSES",
+        "year": 2023,
+        "edition_or_version": "TG18 Consenso Quirurgico",
+        "section_title": "Graduacion de Severidad I-III, Colecistectomia Laparoscopica Temprana y Drenaje Biliar",
+        "page_or_doi": "doi:10.1002/jhbp.512",
+        "key_recommendation": "El diagnostico definitivo de colecistitis aguda exige signo local (Murphy/dolor HCD) + signo sistemico (fiebre/PCR/leucocitosis) + hallazgo de imagen. En Grado I y II aptos para cirugia, la colecistectomia laparoscopica temprana en la misma admision es el estandar; en colangitis aguda grave (Grado III con Pentada de Reynolds/disfuncion organica), priorizar reanimacion, antibioticos y descompresion biliar urgente por CPRE.",
+        "evidence_level": "Grado 1A",
+        "associated_specialty": "cirugia_general",
+        "associated_cases": [],
+        "anamnesis_checklist": [
+          "Diferenciar colico biliar simple (cede en <6 horas sin fiebre) de colecistitis aguda (dolor persistente >6 h en HCD con fiebre).",
+          "Interrogar acolia, coluria, prurito e ictericia obstructiva (sospecha de coledocolitiasis o colangitis ascendente).",
+          "Registrar epigastralgia en cinturon irradiada a dorso con vomitos (descartar pancreatitis biliar concomitante).",
+          "Evaluar riesgo anestesico ASA e indice de comorbilidad de Charlson para definir aptitud quirurgica."
+        ],
+        "physical_exam_signs": [
+          "Signo de Murphy inspiratorio positivo a la palpacion profunda en punto cistico (y Murphy ecografico).",
+          "Triada de Charcot en colangitis: fiebre con escalofrios + dolor en hipocondrio derecho + ictericia.",
+          "Pentada de Reynolds: Triada de Charcot + hipotension arterial/shock + alteracion del sensorio.",
+          "Plastron o vesicula distendida palpable en hipocondrio derecho."
+        ],
+        "diagnostic_cutoffs": [
+          "Ecografia biliar diagnostica: pared vesicular >4 mm, diametro transverso >4 cm, calculo impactado en bacinete y liquido pericolecistico.",
+          "Colecistitis Grado II (moderada TG18): leucocitos >18,000/mm3, masa palpable en HCD, duracion >72 h o inflamacion local marcada (gangrenosa/enfisematosa).",
+          "Colecistitis/Colangitis Grado III (severa): disfuncion organica (hipotension con vasopresores, GCS alterado, PaO2/FiO2 <300, Cr >2.0 mg/dL, INR >1.5 o plaquetas <100,000).",
+          "Coledoco dilatado en ecografia: >6 mm (con vesicula in situ, ajustado por edad) sugiere litiasis coledociana."
+        ],
+        "red_flags": [
+          "Gas intramural o intraluminal vesicular en paciente diabetico (colecistitis enfisematosa: alto riesgo de gangrena y perforacion).",
+          "Intentar colecistectomia abierta electiva sin descomprimir primero la via biliar en colangitis septica Grado III.",
+          "Elevacion conjunta de bilirrubina directa >4 mg/dL y calculo visible en coledoco (indicacion directa de CPRE preoperatoria).",
+          "Ileo biliar (triada de Rigler: obstruccion de intestino delgado, neumobilia y calculo ectopico)."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-wses-jerusalem-appendicitis-bowel-2024",
+    "title": "WSES Jerusalem Guidelines & Sabiston Textbook of Surgery: Abdomen Agudo Quirurgico",
+    "authors_or_organization": "World Society of Emergency Surgery (WSES) & Townsend CM (Sabiston 21.a Ed.)",
+    "edition": "Guias Jerusalen / Sabiston 21.a Ed.",
+    "specialty": "cirugia_general",
+    "isbn_or_doi": "doi:10.1186/s13017-020-00306-3",
+    "excerpts": [
+      {
+        "reference_id": "ref-wses-appendicitis-002",
+        "source_title": "WSES Jerusalem Guidelines & Sabiston: Apendicitis Aguda y Obstruccion Intestinal",
+        "organization_or_publisher": "World Society of Emergency Surgery / Elsevier",
+        "year": 2024,
+        "edition_or_version": "Guia WSES / 21.a Edicion",
+        "section_title": "Escores Clinico-Radiologicos en Apendicitis Aguda y Deteccion de Isquemia en Obstruccion Intestinal",
+        "page_or_doi": "doi:10.1186/s13017-020-00306-3",
+        "key_recommendation": "Combinar parametros clinicos y de laboratorio (escala de Alvarado / AIR / AAS) con ecografia escalonada para reducir tomografias innecesarias en jovenes; la apendicectomia laparoscopica es de eleccion tanto en apendicitis no complicada como complicada, y la analgesia opioide/paracetamol reglada NO enmascara los signos peritoneales ni retrasa el diagnostico.",
+        "evidence_level": "Grado 1A",
+        "associated_specialty": "cirugia_general",
+        "associated_cases": [],
+        "anamnesis_checklist": [
+          "Verificar cronologia de Murphy: dolor visceral periumbilical/epigastrico inicial que migra en 6-12 h a fosa iliaca derecha somatico, precediendo a los vomitos.",
+          "En mujeres en edad fertil: solicitar beta-hCG y descartar embarazo ectopico, torsion anexial o EPI.",
+          "En sospecha de obstruccion intestinal: laparotomias previas (bridas), hernias inguinocrurales irreductibles, perdida de peso/rectorragia (neoplasia colonica) y emision de gases/heces.",
+          "En adultos mayores con dolor abdominal desproporcionado al examen fisico: buscar fibrilacion auricular (isquemia mesenterica embolica)."
+        ],
+        "physical_exam_signs": [
+          "Signos clasicos en FID: McBurney, Blumberg (rebote), Rovsing (dolor en FID al comprimir FII), Psoas (retrocecal) y Obturador (pelvica).",
+          "Exploracion sistematica OBLIGATORIA de orificios herniarios (inguinales, crurales, umbilicales e incisionales) en todo cuadro obstructivo.",
+          "Tacto rectal para evaluar ampolla vacia, fecaloma impactado, sangre oculta o tumoracion rectal baja.",
+          "Auscultacion abdominal: ruidos metalicos de lucha iniciales que evolucionan a silencio abdominal en ileo paralitico o gangrena."
+        ],
+        "diagnostic_cutoffs": [
+          "Escala de Alvarado (MANTRELS, 10 pts): <=3-4 baja probabilidad, 5-6 intermedia (solicitar imagen), >=7-10 alta probabilidad.",
+          "Criterios ecograficos de apendicitis: estructura tubular ciega, aperistaltica, NO compresible, diametro externo >6 mm y apendicolito.",
+          "Profilaxis antimicrobiana preoperatoria: administrar dentro de los 60 minutos previos a la incision quirurgica.",
+          "En plastron/absceso apendicular contenido >=4 cm: drenaje percutaneo guiado + antibioticos frente a cirugia segun experiencia laparoscopica."
+        ],
+        "red_flags": [
+          "Cese brusco y transitorio del dolor seguido de fiebre alta y abdomen en tabla (perforacion visceral).",
+          "Hernia inguinocrural dolorosa, tensa, con eritema cutaneo suprayacente (hernia estrangulada: NO intentar taxis manual forzada, cirugia urgente).",
+          "Obstruccion intestinal con fiebre, taquicardia, leucocitosis marcada, acidosis lactica o líquido libre/neumatosis en TC (sufrimiento de asa).",
+          "Signo del grano de cafe hacia cuadrante superior derecho con peritonismo (volvulo de sigmoides gangrenado: contraindicada descompresion endoscopica)."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-atls-10e-trauma-pancreas",
+    "title": "ATLS (Advanced Trauma Life Support 10.a Ed.) & ACG Guidelines for Acute Pancreatitis",
+    "authors_or_organization": "American College of Surgeons (ACS Committee on Trauma) & American College of Gastroenterology",
+    "edition": "10.a Edicion ATLS / Guia ACG 2024",
+    "specialty": "cirugia_general",
+    "isbn_or_doi": "ISBN:978-0-9968267-0-9",
+    "excerpts": [
+      {
+        "reference_id": "ref-atls-acg-003",
+        "source_title": "ATLS 10.a Edicion (ACS) & Guias ACG 2024 de Pancreatitis Aguda",
+        "organization_or_publisher": "American College of Surgeons / ACG",
+        "year": 2024,
+        "edition_or_version": "ATLS 10e / ACG 2024",
+        "section_title": "Revision Primaria XABCDE en Trauma Abdominal y Reanimacion Moderada en Pancreatitis Aguda",
+        "page_or_doi": "Protocolos Quirurgicos Críticos",
+        "key_recommendation": "En trauma abdominal cerrado, el estado hemodinamico dicta la conducta: todo paciente inestable con Eco-FAST positivo requiere laparotomia exploradora inmediata y protocolo de transfusion masiva con acido tranexamico precoz (<3 h). En pancreatitis aguda, el ensayo WATERFALL respalda hidratacion moderada dirigida por metas con Lactato Ringer (evitando reanimacion agresiva masiva), nutricion oral temprana y evitar antibioticos profilacticos en necrosis esteril.",
+        "evidence_level": "Clase I, Nivel A",
+        "associated_specialty": "cirugia_general",
+        "associated_cases": [],
+        "anamnesis_checklist": [
+          "En trauma (historia AMPLIA y cinematica): velocidad de impacto, uso de cinturon, eyeccion del vehiculo, anticoagulantes y hora del evento.",
+          "En pancreatitis aguda: investigar las 2 etiologias principales (>75%: litiasis vesicular y consumo de alcohol), seguidas de hipertrigliceridemia (>1000 mg/dL), post-CPRE o farmacos.",
+          "Cuantificar tiempo desde inicio del dolor epigastrico transfictivo para interpretar correctamente amilasa vs lipasa.",
+          "Registrar comorbilidades cardiorrenales antes de indicar bolos de cristaloides."
+        ],
+        "physical_exam_signs": [
+          "Revision primaria ATLS en secuencia estricta: control de hemorragia exanguinante, Via aerea con control cervical, Ventilacion, Circulacion, Deficit neurologico y Exposicion evitando hipotermia.",
+          "Signo del cinturon de seguridad equimotico en pared abdominal (alta asociacion con lesion de viscera hueca mesenterica y fractura de Chance lumbar).",
+          "Signos de Cullen (equimosis periumbilical) y Grey Turner (equimosis en flancos) en hemorragia retroperitoneal / pancreatitis necrotizante grave.",
+          "Inestabilidad del anillo pelvico (evaluar una sola vez con suavidad y colocar faja pelvica a nivel de trocanteres mayores)."
+        ],
+        "diagnostic_cutoffs": [
+          "Diagnostico de pancreatitis aguda (Atlanta revisado, >=2 de 3): dolor tipico + lipasa/amilasa >=3 veces LSN + imagen compatible (no pedir TC de rutina en las primeras 48-72 h si el diagnostico es claro).",
+          "Hidratacion moderada WATERFALL: Lactato Ringer 1.5 mL/kg/h (precedido de bolo de 10 mL/kg solo si hay hipovolemia), reevaluando a las 12, 24, 48 y 72 h.",
+          "Pancreatitis grave (Atlanta): fallo organico persistente >48 horas (escala de Marshall modificada >=2).",
+          "Acido tranexamico en trauma hemorragico (CRASH-2): 1 g IV en 10 min + 1 g en 8 h dentro de las primeras 3 horas del trauma."
+        ],
+        "red_flags": [
+          "Trasladar al tomografo a un paciente politraumatizado hipotenso con Eco-FAST positivo.",
+          "Neumoperitoneo subdiafragmatico libre o evisceracion traumatica (indicacion absoluta de laparotomia).",
+          "Sobrecarga hidrica agresiva (>20 mL/kg bolo + 3 mL/kg/h) en pancreatitis -> duplica riesgo de congestion pulmonar y sindrome compartimental abdominal.",
+          "Presencia de gas retroperitoneal en TC tardia o deterioro septico en semana 2-4 (necrosis pancreatica infectada: manejo escalonado 'step-up')."
+        ]
+      }
+    ]
+  }
+]

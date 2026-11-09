@@ -17,14 +17,23 @@ class User(Base):
         nullable=False,
         default="Universidad Peruana Cayetano Heredia",
     )
-    stage: Mapped[str] = mapped_column(String(50), default="Internado Rotatorio 2026")
-    target_exam: Mapped[str] = mapped_column(String(50), default="ENIM-EsSalud")
+    stage: Mapped[str] = mapped_column(String(50), default="Internado Medico")
+    target_exam: Mapped[str] = mapped_column(String(50), default="ENAM")
+    career: Mapped[str] = mapped_column(String(100), default="Medicina Humana")
+    academic_year: Mapped[str] = mapped_column(String(100), default="Internado Medico")
+    primary_goal: Mapped[str] = mapped_column(String(50), default="preparar_enam")
+    initial_world: Mapped[str] = mapped_column(String(50), default="medicina_interna")
+    interest_areas: Mapped[Optional[str]] = mapped_column(Text, nullable=True, default="[]")
+    onboarding_track: Mapped[str] = mapped_column(String(30), default="ruta")
+    privacy_accepted: Mapped[bool] = mapped_column(Boolean, default=True)
     plan_tier: Mapped[str] = mapped_column(String(20), default="free")
     xp: Mapped[int] = mapped_column(Integer, default=0)
     streak_days: Mapped[int] = mapped_column(Integer, default=1)
     diagnostic_completed: Mapped[bool] = mapped_column(Boolean, default=False)
     diagnostic_score: Mapped[Optional[float]] = mapped_column(Float, nullable=True, default=None)
     aptitude_status: Mapped[Optional[str]] = mapped_column(String(50), nullable=True, default=None)
+    diagnostic_mode: Mapped[Optional[str]] = mapped_column(String(30), nullable=True, default=None)
+    diagnostic_specialty: Mapped[Optional[str]] = mapped_column(String(50), nullable=True, default=None)
     diagnostic_completed_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True, default=None)
     created_at: Mapped[datetime] = mapped_column(
         DateTime,

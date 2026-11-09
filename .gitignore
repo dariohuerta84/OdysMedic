@@ -47,3 +47,10 @@ yarn-error.log*
 *.swp
 *.swo
 .DS_Store
+
+# SQLite runtime databases
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+frontend/dist/

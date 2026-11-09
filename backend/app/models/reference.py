@@ -14,6 +14,10 @@ class ClinicalGuidelineExcerpt(BaseModel):
     evidence_level: str
     associated_specialty: str
     associated_cases: list[str] = Field(default_factory=list)
+    anamnesis_checklist: list[str] = Field(default_factory=list)
+    physical_exam_signs: list[str] = Field(default_factory=list)
+    diagnostic_cutoffs: list[str] = Field(default_factory=list)
+    red_flags: list[str] = Field(default_factory=list)
 
 
 class MedicalReferenceBook(BaseModel):

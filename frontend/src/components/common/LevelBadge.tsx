@@ -19,20 +19,20 @@ const LEVEL_MAP: Record<string, LevelConfig> = {
   'Nivel 1': {
     label: 'Nivel 1',
     subtext: 'Fundacional',
-    containerClass: 'bg-sky-50 border-sky-200 text-sky-800',
-    dotClass: 'bg-sky-500',
+    containerClass: 'bg-[#F2F7F6] border-[#DCE5E3] text-[#0B252E]',
+    dotClass: 'bg-[#0E6F65]',
   },
   'Nivel 2': {
     label: 'Nivel 2',
     subtext: 'Intermedio',
-    containerClass: 'bg-emerald-50 border-emerald-200 text-emerald-800',
-    dotClass: 'bg-emerald-500',
+    containerClass: 'bg-[#ECF6F4] border-[#CFE7E2] text-[#0E6F65]',
+    dotClass: 'bg-[#0E6F65]',
   },
   'Nivel 3': {
     label: 'Nivel 3',
     subtext: 'Avanzado',
-    containerClass: 'bg-indigo-50 border-indigo-200 text-indigo-800',
-    dotClass: 'bg-indigo-500',
+    containerClass: 'bg-[#FDF7E7] border-[#EFE0B9] text-[#7A5413]',
+    dotClass: 'bg-[#8A6116]',
   },
 };
 
@@ -46,8 +46,8 @@ export const LevelBadge: React.FC<LevelBadgeProps> = ({
   const config = LEVEL_MAP[normalizedKey];
 
   const sizeClasses = {
-    sm: 'px-2 py-0.5 text-[11px] gap-1.5',
-    md: 'px-2.5 py-1 text-xs gap-2',
+    sm: 'px-2.5 py-0.5 text-[11px] gap-1.5',
+    md: 'px-3 py-1 text-xs gap-2',
   };
 
   const dotSizes = {
@@ -57,14 +57,14 @@ export const LevelBadge: React.FC<LevelBadgeProps> = ({
 
   return (
     <span
-      className={`inline-flex items-center rounded-lg border font-mono font-medium transition-colors shadow-xs ${config.containerClass} ${sizeClasses[size]} ${className}`}
+      className={`inline-flex items-center rounded-full border font-sans font-medium transition-colors ${config.containerClass} ${sizeClasses[size]} ${className}`}
       title={`${config.label} (${config.subtext})`}
     >
       <span className={`rounded-full shrink-0 ${config.dotClass} ${dotSizes[size]}`} />
       <span>{config.label}</span>
       {showSubtext && (
-        <span className="opacity-75 text-[10px] uppercase font-sans">
-          {config.subtext}
+        <span className="opacity-80 text-[11px] font-normal">
+          · {config.subtext}
         </span>
       )}
     </span>

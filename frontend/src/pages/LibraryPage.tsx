@@ -1,22 +1,27 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Search,
   BookOpen,
   ExternalLink,
-  Play,
-  Filter,
-  CheckCircle2,
-  Calendar,
-  Layers,
-  Sparkles,
   RefreshCw,
   X,
+  Lock,
+  ClipboardList,
+  Stethoscope,
+  Activity,
+  AlertTriangle,
+  ArrowRight,
+  CheckCircle2,
 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 import { referencesApi } from '../services/api';
 import type { MedicalReference } from '../types/api';
+import fallbackBooks from '../data/medical_references_fallback.json';
 
 export interface LibraryPageProps {
   onSelectCase: (caseId: string) => void;
+  onRequireAuth?: () => void;
 }
 
 interface SpecialtyFilterOption {
@@ -25,209 +30,73 @@ interface SpecialtyFilterOption {
 }
 
 const SPECIALTY_OPTIONS: SpecialtyFilterOption[] = [
-  { id: 'todas', label: 'Todas' },
+  { id: 'todas', label: 'Todas las especialidades' },
+  { id: 'medicina_interna', label: 'Medicina Interna' },
   { id: 'nefrologia', label: 'Nefrologia' },
   { id: 'endocrinologia', label: 'Endocrinologia' },
   { id: 'neurologia', label: 'Neurologia' },
   { id: 'reumatologia', label: 'Reumatologia' },
-  { id: 'ginecologia_obstetricia', label: 'Ginecologia y Obstetricia' },
+  { id: 'ginecologia_obstetricia', label: 'Gineco-Obstetricia' },
+  { id: 'pediatria', label: 'Pediatria' },
+  { id: 'cirugia_general', label: 'Cirugia General' },
   { id: 'oftalmologia', label: 'Oftalmologia' },
 ];
 
-/**
- * High-fidelity offline fallback dataset mirroring canonical medical_references.json
- */
-const OFFLINE_REFERENCES: MedicalReference[] = [
-  {
-    id: 'ref-kdigo-ahus-001',
-    reference_id: 'ref-kdigo-ahus-001',
-    guideline_source: 'KDIGO 2024',
-    title: 'KDIGO 2024 Clinical Practice Guideline for the Management of Acute Kidney Injury and aHUS',
-    source_title: 'KDIGO 2024 Clinical Practice Guideline for the Management of Acute Kidney Injury and aHUS',
-    organization_or_publisher: 'Kidney Disease: Improving Global Outcomes (KDIGO)',
-    year: 2024,
-    edition_or_version: '2024 Guideline Update',
-    section_title: 'Diagnostic Evaluation and Initial Targeted Therapy of Thrombotic Microangiopathies and aHUS',
-    specialty_id: 'nefrologia',
-    associated_specialty: 'nefrologia',
-    pmid_doi: 'doi:10.1016/j.kisu.2024.01.002',
-    page_or_doi: 'doi:10.1016/j.kisu.2024.01.002',
-    evidence_level: 'Grade 1A',
-    key_takeaway:
-      'In patients presenting with microangiopathic hemolytic anemia, severe thrombocytopenia, and acute kidney injury, initiate prompt evaluation for ADAMTS13 activity and complement dysregulation. Prompt initiation of terminal complement C5 inhibition (eculizumab/ravulizumab) is strongly recommended once thrombotic thrombocytopenic purpura (TTP) is excluded.',
-    key_recommendation:
-      'In patients presenting with microangiopathic hemolytic anemia, severe thrombocytopenia, and acute kidney injury, initiate prompt evaluation for ADAMTS13 activity and complement dysregulation. Prompt initiation of terminal complement C5 inhibition (eculizumab/ravulizumab) is strongly recommended once thrombotic thrombocytopenic purpura (TTP) is excluded.',
-    associated_cases: ['s13256-019-2334-y', 'case-nefro-001'],
-  },
-  {
-    id: 'ref-kdigo-aki-002',
-    reference_id: 'ref-kdigo-aki-002',
-    guideline_source: 'KDIGO 2024',
-    title: 'KDIGO 2024 Clinical Practice Guideline for the Management of Acute Kidney Injury and aHUS',
-    source_title: 'KDIGO 2024 Clinical Practice Guideline for the Management of Acute Kidney Injury and aHUS',
-    organization_or_publisher: 'Kidney Disease: Improving Global Outcomes (KDIGO)',
-    year: 2024,
-    edition_or_version: '2024 Guideline Update',
-    section_title: 'Drug-Associated Acute Kidney Injury and Nephrotoxicity Management',
-    specialty_id: 'nefrologia',
-    associated_specialty: 'nefrologia',
-    pmid_doi: 'doi:10.1016/j.kisu.2024.01.003',
-    page_or_doi: 'doi:10.1016/j.kisu.2024.01.003',
-    evidence_level: 'Grade 1B',
-    key_takeaway:
-      'Discontinue potential nephrotoxic and renally cleared metabolic stressors immediately upon recognition of acute kidney injury or severe metabolic decompensation.',
-    key_recommendation:
-      'Discontinue potential nephrotoxic and renally cleared metabolic stressors immediately upon recognition of acute kidney injury or severe metabolic decompensation.',
-    associated_cases: ['s13256-022-03392-w', 'case-nefro-001'],
-  },
-  {
-    id: 'ref-ada-hyperglycemia-001',
-    reference_id: 'ref-ada-hyperglycemia-001',
-    guideline_source: 'ADA 2024',
-    title: 'ADA Standards of Care in Diabetes 2024',
-    source_title: 'ADA Standards of Care in Diabetes 2024',
-    organization_or_publisher: 'American Diabetes Association',
-    year: 2024,
-    edition_or_version: 'Standards of Care 2024',
-    section_title: 'Hospital Care, Secondary Diabetes, and Drug-Induced Severe Hyperglycemia',
-    specialty_id: 'endocrinologia',
-    associated_specialty: 'endocrinologia',
-    pmid_doi: 'doi:10.2337/dc24-S016',
-    page_or_doi: 'doi:10.2337/dc24-S016',
-    evidence_level: 'Grade A',
-    key_takeaway:
-      'Patients receiving oncologic chemotherapy (such as capecitabine or checkpoint inhibitors) who develop acute symptomatic hyperglycemia and severe electrolyte derangements (hypokalemia, hypomagnesemia) require temporary drug suspension, continuous intravenous insulin titration, and vigorous potassium repletion prior to resumption.',
-    key_recommendation:
-      'Patients receiving oncologic chemotherapy (such as capecitabine or checkpoint inhibitors) who develop acute symptomatic hyperglycemia and severe electrolyte derangements (hypokalemia, hypomagnesemia) require temporary drug suspension, continuous intravenous insulin titration, and vigorous potassium repletion prior to resumption.',
-    associated_cases: ['s13256-022-03392-w', 'case-endo-002'],
-  },
-  {
-    id: 'ref-aha-pba-001',
-    reference_id: 'ref-aha-pba-001',
-    guideline_source: 'AHA/ASA 2023',
-    title: 'AHA/ASA Guidelines for the Management of Stroke and Pseudobulbar Affect 2023',
-    source_title: 'AHA/ASA Guidelines for the Management of Stroke and Pseudobulbar Affect 2023',
-    organization_or_publisher: 'American Heart Association / American Stroke Association',
-    year: 2023,
-    edition_or_version: '2023 Stroke Rehabilitation Guidelines',
-    section_title: 'Post-Stroke Emotional Incontinence and Pseudobulbar Affect (PBA)',
-    specialty_id: 'neurologia',
-    associated_specialty: 'neurologia',
-    pmid_doi: 'doi:10.1161/STR.0000000000000438',
-    page_or_doi: 'doi:10.1161/STR.0000000000000438',
-    evidence_level: 'Class I, Level A',
-    key_takeaway:
-      'Pseudobulbar affect (PBA) characterized by involuntary, uncontrollable crying or laughing disproportionate to mood after pontine, cerebellar, or hemispheric stroke should be differentiated from post-stroke depression. Treatment with dextromethorphan/quinidine or selective serotonin reuptake inhibitors (SSRIs) such as citalopram/sertraline is recommended to alleviate affective lability and improve quality of life.',
-    key_recommendation:
-      'Pseudobulbar affect (PBA) characterized by involuntary, uncontrollable crying or laughing disproportionate to mood after pontine, cerebellar, or hemispheric stroke should be differentiated from post-stroke depression. Treatment with dextromethorphan/quinidine or selective serotonin reuptake inhibitors (SSRIs) such as citalopram/sertraline is recommended to alleviate affective lability and improve quality of life.',
-    associated_cases: ['s13256-023-04294-1', 's13256-025-05577-5', 'case-neuro-003'],
-  },
-  {
-    id: 'ref-aha-stroke-rehab-002',
-    reference_id: 'ref-aha-stroke-rehab-002',
-    guideline_source: 'AHA/ASA 2023',
-    title: 'AHA/ASA Guidelines for the Management of Stroke and Pseudobulbar Affect 2023',
-    source_title: 'AHA/ASA Guidelines for the Management of Stroke and Pseudobulbar Affect 2023',
-    organization_or_publisher: 'American Heart Association / American Stroke Association',
-    year: 2023,
-    edition_or_version: '2023 Stroke Rehabilitation Guidelines',
-    section_title: 'Long-term Motor and Cognitive Rehabilitation Following Hemorrhagic Stroke',
-    specialty_id: 'neurologia',
-    associated_specialty: 'neurologia',
-    pmid_doi: 'doi:10.1161/STR.0000000000000439',
-    page_or_doi: 'doi:10.1161/STR.0000000000000439',
-    evidence_level: 'Class I, Level B',
-    key_takeaway:
-      'Long-term motor recovery and spasticity management post-hemorrhagic stroke requires multi-disciplinary physical rehabilitation, blood pressure optimization (target < 130/80 mmHg), neurocognitive training, and structured functional assessment.',
-    key_recommendation:
-      'Long-term motor recovery and spasticity management post-hemorrhagic stroke requires multi-disciplinary physical rehabilitation, blood pressure optimization (target < 130/80 mmHg), neurocognitive training, and structured functional assessment.',
-    associated_cases: ['s13256-025-05577-5', 'case-neuro-003'],
-  },
-  {
-    id: 'ref-eular-npsle-001',
-    reference_id: 'ref-eular-npsle-001',
-    guideline_source: 'EULAR 2023',
-    title: 'EULAR/ACR 2023 Recommendations for the Management of Neuropsychiatric Systemic Lupus Erythematosus',
-    source_title: 'EULAR/ACR 2023 Recommendations for the Management of Neuropsychiatric Systemic Lupus Erythematosus',
-    organization_or_publisher: 'EULAR / ACR Taskforce',
-    year: 2023,
-    edition_or_version: '2023 Recommendations Update',
-    section_title: 'Diagnosis and Treatment of Inflammatory and Thrombotic Central NPSLE',
-    specialty_id: 'reumatologia',
-    associated_specialty: 'reumatologia',
-    pmid_doi: 'doi:10.1136/annrheumdis-2023-224762',
-    page_or_doi: 'doi:10.1136/annrheumdis-2023-224762',
-    evidence_level: 'Grade 1A',
-    key_takeaway:
-      'In young patients presenting with acute motor/speech deficits, dysarthria, and systemic autoimmune signs, prompt neuroimaging and lumbar puncture are mandatory to rule out central infections and ischemia. For inflammatory NPSLE, aggressive pulsed intravenous methylprednisolone followed by high-potency immunosuppression (intravenous cyclophosphamide or rituximab) combined with hydroxychloroquine is recommended.',
-    key_recommendation:
-      'In young patients presenting with acute motor/speech deficits, dysarthria, and systemic autoimmune signs, prompt neuroimaging and lumbar puncture are mandatory to rule out central infections and ischemia. For inflammatory NPSLE, aggressive pulsed intravenous methylprednisolone followed by high-potency immunosuppression (intravenous cyclophosphamide or rituximab) combined with hydroxychloroquine is recommended.',
-    associated_cases: ['s13256-026-05974-4'],
-  },
-  {
-    id: 'ref-acog-hypopara-001',
-    reference_id: 'ref-acog-hypopara-001',
-    guideline_source: 'ACOG / Endocrine Society 2023',
-    title: 'Endocrine Society / ACOG Guidelines for Hypoparathyroidism in Pregnancy',
-    source_title: 'Endocrine Society / ACOG Guidelines for Hypoparathyroidism in Pregnancy',
-    organization_or_publisher: 'Endocrine Society & ACOG',
-    year: 2023,
-    edition_or_version: 'Clinical Practice Guideline',
-    section_title: 'Third Trimester Maternal and Fetal Calcium Regulation in 22q11.2 Microdeletion / Primary Hypoparathyroidism',
-    specialty_id: 'ginecologia_obstetricia',
-    associated_specialty: 'ginecologia_obstetricia',
-    pmid_doi: 'doi:10.1210/clinem/dgad261',
-    page_or_doi: 'doi:10.1210/clinem/dgad261',
-    evidence_level: 'Level B',
-    key_takeaway:
-      'In pregnant patients with primary hypoparathyroidism (including 22q11.2 deletion syndrome), maintain maternal albumin-corrected calcium in the low-to-normal range (8.5-9.0 mg/dL) using oral calcium carbonate and active vitamin D (calcitriol). Avoid maternal hypercalcemia to prevent fetal parathyroid suppression and neonatal tetany, and closely monitor urinary calcium excretion.',
-    key_recommendation:
-      'In pregnant patients with primary hypoparathyroidism (including 22q11.2 deletion syndrome), maintain maternal albumin-corrected calcium in the low-to-normal range (8.5-9.0 mg/dL) using oral calcium carbonate and active vitamin D (calcitriol). Avoid maternal hypercalcemia to prevent fetal parathyroid suppression and neonatal tetany, and closely monitor urinary calcium excretion.',
-    associated_cases: ['s13256-025-05650-z'],
-  },
-  {
-    id: 'ref-aao-uveal-001',
-    reference_id: 'ref-aao-uveal-001',
-    guideline_source: 'AAO 2024',
-    title: 'AAO Preferred Practice Pattern for Uveal Diseases',
-    source_title: 'AAO Preferred Practice Pattern for Uveal Diseases',
-    organization_or_publisher: 'American Academy of Ophthalmology',
-    year: 2024,
-    edition_or_version: '2024 Guidelines',
-    section_title: 'Management of Idiopathic Uveal Effusion Syndrome and Secondary Ocular Hypertension',
-    specialty_id: 'oftalmologia',
-    associated_specialty: 'oftalmologia',
-    pmid_doi: 'doi:10.1016/j.ophtha.2023.11.014',
-    page_or_doi: 'doi:10.1016/j.ophtha.2023.11.014',
-    evidence_level: 'Level IIb',
-    key_takeaway:
-      'Uveal effusion syndrome (UES) must be differentiated from angle-closure glaucoma and Vogt-Koyanagi-Harada disease using B-scan ultrasonography, ultrasound biomicroscopy (UBM), and optical coherence tomography (OCT). Primary medical management includes topical hypotensive agents and high-dose systemic/topical corticosteroids, with surgical scleral decompression or sclerectomy reserved for refractory exudative retinal detachment.',
-    key_recommendation:
-      'Uveal effusion syndrome (UES) must be differentiated from angle-closure glaucoma and Vogt-Koyanagi-Harada disease using B-scan ultrasonography, ultrasound biomicroscopy (UBM), and optical coherence tomography (OCT). Primary medical management includes topical hypotensive agents and high-dose systemic/topical corticosteroids, with surgical scleral decompression or sclerectomy reserved for refractory exudative retinal detachment.',
-    associated_cases: ['s13256-024-04496-1'],
-  },
-  {
-    id: 'ref-figo-gtn-001',
-    reference_id: 'ref-figo-gtn-001',
-    guideline_source: 'FIGO 2024',
-    title: 'FIGO 2024 Guidelines for the Diagnosis and Management of Gestational Trophoblastic Disease',
-    source_title: 'FIGO 2024 Guidelines for the Diagnosis and Management of Gestational Trophoblastic Disease',
-    organization_or_publisher: 'International Federation of Gynecology and Obstetrics (FIGO)',
-    year: 2024,
-    edition_or_version: '2024 Guideline Update',
-    section_title: 'Metastatic Gestational Trophoblastic Neoplasia and Pulmonary Choriocarcinoma',
-    specialty_id: 'ginecologia_obstetricia',
-    associated_specialty: 'ginecologia_obstetricia',
-    pmid_doi: 'doi:10.1002/ijgo.15280',
-    page_or_doi: 'doi:10.1002/ijgo.15280',
-    evidence_level: 'Level 1A',
-    key_takeaway:
-      'In women with abnormal vaginal bleeding, hemoptysis, and pulmonary nodules following a molar or non-molar pregnancy, elevated quantitative serum beta-hCG confirms the diagnosis of metastatic choriocarcinoma without requiring biopsy, which is contraindicated due to severe bleeding risk. Prompt FIGO/WHO prognostic scoring determines whether single-agent (methotrexate) or multi-agent (EMA-CO) chemotherapy is indicated.',
-    key_recommendation:
-      'In women with abnormal vaginal bleeding, hemoptysis, and pulmonary nodules following a molar or non-molar pregnancy, elevated quantitative serum beta-hCG confirms the diagnosis of metastatic choriocarcinoma without requiring biopsy, which is contraindicated due to severe bleeding risk. Prompt FIGO/WHO prognostic scoring determines whether single-agent (methotrexate) or multi-agent (EMA-CO) chemotherapy is indicated.',
-    associated_cases: ['s13256-024-04987-9'],
-  },
-];
+const SPECIALTY_LABELS: Record<string, string> = {
+  medicina_interna: 'Medicina Interna',
+  nefrologia: 'Nefrologia',
+  endocrinologia: 'Endocrinologia',
+  neurologia: 'Neurologia',
+  reumatologia: 'Reumatologia',
+  ginecologia_obstetricia: 'Ginecologia y Obstetricia',
+  ginecologia: 'Ginecologia y Obstetricia',
+  pediatria: 'Pediatria',
+  cirugia_general: 'Cirugia General',
+  oftalmologia: 'Oftalmologia',
+};
+
+function normalizeSpecialtyKey(raw?: string): string {
+  const clean = (raw || '').trim().toLowerCase().replace(/-/g, '_');
+  if (clean === 'ginecologia') return 'ginecologia_obstetricia';
+  if (clean === 'cirugia') return 'cirugia_general';
+  return clean;
+}
+
+function buildOfflineReferences(): MedicalReference[] {
+  const list: MedicalReference[] = [];
+  const books = Array.isArray(fallbackBooks) ? fallbackBooks : [];
+  for (const b of books as any[]) {
+    const excerpts = Array.isArray(b.excerpts) ? b.excerpts : [];
+    for (const e of excerpts) {
+      list.push({
+        id: e.reference_id || b.book_id,
+        reference_id: e.reference_id,
+        specialty_id: e.associated_specialty || b.specialty || '',
+        associated_specialty: e.associated_specialty || b.specialty || '',
+        guideline_source: e.organization_or_publisher || b.authors_or_organization || 'Fuente Clinica',
+        organization_or_publisher: e.organization_or_publisher || b.authors_or_organization || '',
+        title: e.source_title || b.title || 'Guia de Practica Clinica',
+        source_title: e.source_title || b.title || '',
+        year: Number(e.year || 2024),
+        edition_or_version: e.edition_or_version || b.edition || '',
+        section_title: e.section_title || '',
+        pmid_doi: e.page_or_doi || b.isbn_or_doi || '',
+        page_or_doi: e.page_or_doi || b.isbn_or_doi || '',
+        evidence_level: e.evidence_level || '',
+        key_takeaway: e.key_recommendation || '',
+        key_recommendation: e.key_recommendation || '',
+        associated_cases: Array.isArray(e.associated_cases) ? e.associated_cases : [],
+        anamnesis_checklist: Array.isArray(e.anamnesis_checklist) ? e.anamnesis_checklist : [],
+        physical_exam_signs: Array.isArray(e.physical_exam_signs) ? e.physical_exam_signs : [],
+        diagnostic_cutoffs: Array.isArray(e.diagnostic_cutoffs) ? e.diagnostic_cutoffs : [],
+        red_flags: Array.isArray(e.red_flags) ? e.red_flags : [],
+      });
+    }
+  }
+  return list;
+}
+
+const OFFLINE_REFERENCES: MedicalReference[] = buildOfflineReferences();
 
 function resolveCitationUrl(refId?: string, title?: string): string {
   if (!refId && !title) return 'https://pubmed.ncbi.nlm.nih.gov/';
@@ -246,91 +115,31 @@ function resolveCitationUrl(refId?: string, title?: string): string {
   if (pmidMatch) {
     return `https://pubmed.ncbi.nlm.nih.gov/${pmidMatch[1]}/`;
   }
-  return `https://pubmed.ncbi.nlm.nih.gov/?term=${encodeURIComponent(clean)}`;
-}
-
-function getSpecialtyBadgeStyle(specialtyId?: string): {
-  bg: string;
-  text: string;
-  border: string;
-  label: string;
-} {
-  const norm = (specialtyId || '').toLowerCase().replace('-', '_');
-  if (norm.includes('nefro')) {
-    return {
-      bg: 'bg-sky-50',
-      text: 'text-sky-800',
-      border: 'border-sky-200',
-      label: 'Nefrologia',
-    };
-  }
-  if (norm.includes('endo')) {
-    return {
-      bg: 'bg-purple-50',
-      text: 'text-purple-800',
-      border: 'border-purple-200',
-      label: 'Endocrinologia',
-    };
-  }
-  if (norm.includes('neuro')) {
-    return {
-      bg: 'bg-amber-50',
-      text: 'text-amber-800',
-      border: 'border-amber-200',
-      label: 'Neurologia',
-    };
-  }
-  if (norm.includes('reuma')) {
-    return {
-      bg: 'bg-rose-50',
-      text: 'text-rose-800',
-      border: 'border-rose-200',
-      label: 'Reumatologia',
-    };
-  }
-  if (norm.includes('gineco') || norm.includes('obstet')) {
-    return {
-      bg: 'bg-emerald-50',
-      text: 'text-emerald-800',
-      border: 'border-emerald-200',
-      label: 'Ginecologia y Obstetricia',
-    };
-  }
-  if (norm.includes('oftalmo')) {
-    return {
-      bg: 'bg-cyan-50',
-      text: 'text-cyan-800',
-      border: 'border-cyan-200',
-      label: 'Oftalmologia',
-    };
-  }
-  return {
-    bg: 'bg-slate-50',
-    text: 'text-slate-800',
-    border: 'border-slate-200',
-    label: specialtyId || 'Clinica Medica',
-  };
+  return `https://pubmed.ncbi.nlm.nih.gov/?term=${encodeURIComponent(title || clean)}`;
 }
 
 function getFallbackCaseForSpecialty(specialtyId?: string): string {
-  const norm = (specialtyId || '').toLowerCase();
-  if (norm.includes('nefro')) return 's13256-019-2334-y';
-  if (norm.includes('endo')) return 's13256-022-03392-w';
-  if (norm.includes('neuro')) return 's13256-023-04294-1';
-  if (norm.includes('reuma')) return 's13256-026-05974-4';
-  if (norm.includes('gineco')) return 's13256-025-05650-z';
-  if (norm.includes('oftalmo')) return 's13256-024-04496-1';
-  return 's13256-019-2334-y';
+  const norm = normalizeSpecialtyKey(specialtyId);
+  if (norm === 'nefrologia') return 'case-nefro-001';
+  if (norm === 'endocrinologia') return 'case-endo-002';
+  if (norm === 'neurologia') return 'case-neuro-003';
+  if (norm === 'reumatologia') return 's13256-026-05974-4';
+  if (norm === 'ginecologia_obstetricia') return 's13256-025-05650-z';
+  if (norm === 'oftalmologia') return 's13256-024-04496-1';
+  return 'case-nefro-001';
 }
 
-export const LibraryPage: React.FC<LibraryPageProps> = ({ onSelectCase }) => {
+export const LibraryPage: React.FC<LibraryPageProps> = ({
+  onSelectCase,
+  onRequireAuth,
+}) => {
+  const { isAuthenticated } = useAuth();
   const [references, setReferences] = useState<MedicalReference[]>(OFFLINE_REFERENCES);
   const [loading, setLoading] = useState<boolean>(true);
-  const [isOfflineFallback, setIsOfflineFallback] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedSpecialty, setSelectedSpecialty] = useState<string>('todas');
+  const [activeSheetRef, setActiveSheetRef] = useState<MedicalReference | null>(null);
 
-  // Load references from API with offline fallback
   useEffect(() => {
     let isMounted = true;
 
@@ -341,17 +150,13 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({ onSelectCase }) => {
         if (isMounted) {
           if (data && data.length > 0) {
             setReferences(data);
-            setIsOfflineFallback(false);
           } else {
             setReferences(OFFLINE_REFERENCES);
-            setIsOfflineFallback(true);
           }
         }
-      } catch (err) {
-        console.warn('[LibraryPage] API no disponible, usando repositorio local offline.', err);
+      } catch {
         if (isMounted) {
           setReferences(OFFLINE_REFERENCES);
-          setIsOfflineFallback(true);
         }
       } finally {
         if (isMounted) {
@@ -361,167 +166,234 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({ onSelectCase }) => {
     }
 
     loadData();
-
     return () => {
       isMounted = false;
     };
   }, []);
 
-  // Filter references by specialty and live search query
+  useEffect(() => {
+    if (!activeSheetRef) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setActiveSheetRef(null);
+      }
+    };
+    window.addEventListener('keydown', handleKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', handleKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [activeSheetRef]);
+
+  const countsBySpecialty = useMemo(() => {
+    const counts: Record<string, number> = { todas: references.length };
+    for (const item of references) {
+      const key = normalizeSpecialtyKey(item.associated_specialty || item.specialty_id);
+      if (key) {
+        counts[key] = (counts[key] || 0) + 1;
+      }
+    }
+    return counts;
+  }, [references]);
+
   const filteredReferences = useMemo(() => {
     return references.filter((item) => {
-      // 1. Specialty filter
       if (selectedSpecialty !== 'todas') {
-        const itemSpec = (item.associated_specialty || item.specialty_id || '').toLowerCase();
-        const normSelected = selectedSpecialty.toLowerCase();
-        if (!itemSpec.includes(normSelected) && !normSelected.includes(itemSpec)) {
+        const itemSpec = normalizeSpecialtyKey(item.associated_specialty || item.specialty_id);
+        const normSelected = normalizeSpecialtyKey(selectedSpecialty);
+        if (itemSpec !== normSelected) {
           return false;
         }
       }
 
-      // 2. Search query filter
       if (!searchQuery.trim()) return true;
       const q = searchQuery.toLowerCase().trim();
 
-      const titleMatch = (item.title || item.source_title || '').toLowerCase().includes(q);
-      const sectionMatch = (item.section_title || '').toLowerCase().includes(q);
-      const sourceMatch = (item.guideline_source || item.organization_or_publisher || '').toLowerCase().includes(q);
-      const yearMatch = String(item.year || '').includes(q);
-      const takeawayMatch = (item.key_takeaway || item.key_recommendation || '').toLowerCase().includes(q);
-      const doiMatch = (item.pmid_doi || item.page_or_doi || '').toLowerCase().includes(q);
+      const haystack = [
+        item.title,
+        item.source_title,
+        item.section_title,
+        item.guideline_source,
+        item.organization_or_publisher,
+        String(item.year || ''),
+        item.key_takeaway,
+        item.key_recommendation,
+        ...(item.anamnesis_checklist || []),
+        ...(item.physical_exam_signs || []),
+        ...(item.diagnostic_cutoffs || []),
+        ...(item.red_flags || []),
+      ]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase();
 
-      return titleMatch || sectionMatch || sourceMatch || yearMatch || takeawayMatch || doiMatch;
+      return haystack.includes(q);
     });
   }, [references, selectedSpecialty, searchQuery]);
 
-  const handleTrainCase = (ref: MedicalReference) => {
+  const handleExamAction = (ref: MedicalReference) => {
+    if (!isAuthenticated) {
+      setActiveSheetRef(null);
+      onRequireAuth?.();
+      return;
+    }
+
     const candidateCase =
       (ref.associated_cases && ref.associated_cases.length > 0 && ref.associated_cases[0]) ||
       getFallbackCaseForSpecialty(ref.associated_specialty || ref.specialty_id);
+    setActiveSheetRef(null);
     onSelectCase(candidateCase);
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-in fade-in duration-300">
-      {/* Header and Context Banner */}
-      <div className="space-y-4">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-6">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-semibold bg-sky-50 text-sky-800 border border-sky-200">
-                Evidencia Indexada UPCH 2026
-              </span>
-              {isOfflineFallback && (
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-amber-50 text-amber-800 border border-amber-300">
-                  Modo Offline Local
-                </span>
-              )}
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 flex items-center gap-3">
-              <BookOpen className="w-7 h-7 text-sky-600" />
-              <span>Biblioteca de Guias Clinicas Internacionales</span>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+      {/* Editorial Header (Natural classic typography, zero boxy badges) */}
+      <header className="space-y-6 border-b border-[#E2ECE9] pb-8">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+          <div className="space-y-3 max-w-3xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#0E6F65]">
+              Compendio bibliografico y semiologico
+            </p>
+            <h1 className="font-serif text-3xl sm:text-4xl font-semibold text-[#0B252E] leading-tight">
+              Biblioteca Clinica y Recoleccion de Datos
             </h1>
-            <p className="mt-2 text-sm text-slate-600 max-w-3xl leading-relaxed">
-              Evidencia medica canonica (KDIGO, ADA, AHA/ASA, EULAR, FIGO, AAO) con recomendaciones
-              terapeuticas graduadas para fundamentar cada decision durante la guardia de emergencia.
+            <p className="text-sm sm:text-base text-[#4A5D64] leading-relaxed">
+              Consulta guias internacionales y tratados de referencia organizados por especialidad.
+              Cada fuente integra listas estructuradas de anamnesis dirigida, hallazgos del examen
+              fisico, puntos de corte diagnosticos y signos de alarma para la practica clinica.
             </p>
           </div>
 
-          <div className="flex items-center gap-3 self-start md:self-auto">
-            <div className="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-right shadow-xs">
-              <span className="block text-[10px] font-mono uppercase text-slate-500 font-semibold">
-                Total Guias
+          <div className="flex items-baseline gap-6 text-left lg:text-right shrink-0 border-t lg:border-t-0 pt-4 lg:pt-0 border-[#EDF2F0]">
+            <div>
+              <span className="block text-[11px] uppercase tracking-[0.14em] text-[#6B7D83]">
+                Fuentes indexadas
               </span>
-              <span className="text-lg font-bold font-mono text-sky-700">
+              <span className="font-serif text-3xl font-semibold text-[#0B252E]">
                 {references.length}
+              </span>
+            </div>
+            <div className="h-8 w-px bg-[#DCE5E3]" />
+            <div>
+              <span className="block text-[11px] uppercase tracking-[0.14em] text-[#6B7D83]">
+                Especialidades
+              </span>
+              <span className="font-serif text-3xl font-semibold text-[#0E6F65]">
+                9
               </span>
             </div>
           </div>
         </div>
 
-        {/* Specialty Filter Buttons */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
-          <Filter className="w-4 h-4 text-slate-500 shrink-0 ml-1 mr-1" />
+        {/* Unauthenticated Gate Notice: Reading allowed, Exams strictly require registration */}
+        {!isAuthenticated && (
+          <div className="p-4 sm:px-6 rounded-2xl bg-[#ECF6F4]/85 border border-[#CFE7E2] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-start gap-3">
+              <Lock className="w-4 h-4 text-[#0E6F65] shrink-0 mt-0.5" />
+              <p className="text-xs sm:text-sm text-[#0B252E] leading-relaxed">
+                <strong className="font-semibold">Lectura abierta, evaluacion protegida:</strong>{' '}
+                puedes revisar libremente todas las fuentes y fichas de recoleccion de datos
+                clinicos. Para rendir examenes o evaluar casos clinicos se requiere iniciar sesion
+                o registrarse.
+              </p>
+            </div>
+            {onRequireAuth && (
+              <button
+                type="button"
+                onClick={onRequireAuth}
+                className="shrink-0 px-5 py-2 rounded-full bg-[#0E6F65] hover:bg-[#0A564E] text-white text-xs font-medium transition-colors"
+              >
+                Registrarme para evaluar
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* Specialty Filter Pills */}
+        <div className="flex flex-wrap items-center gap-2">
           {SPECIALTY_OPTIONS.map((opt) => {
             const isSelected = selectedSpecialty === opt.id;
+            const count = countsBySpecialty[opt.id] ?? 0;
             return (
               <button
                 key={opt.id}
                 type="button"
                 onClick={() => setSelectedSpecialty(opt.id)}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all focus:outline-none focus:ring-1 focus:ring-sky-500 ${
+                className={`px-4 py-2 rounded-full text-xs font-medium transition-colors ${
                   isSelected
-                    ? 'bg-sky-600 text-white shadow-xs font-semibold'
-                    : 'bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-slate-200 shadow-xs'
+                    ? 'bg-[#0E6F65] text-white shadow-2xs'
+                    : 'bg-white text-[#4A5D64] hover:text-[#0B252E] hover:bg-[#F2F7F6] border border-[#DCE5E3]'
                 }`}
               >
-                {opt.label}
+                <span>{opt.label}</span>
+                <span
+                  className={`ml-1.5 text-[11px] ${
+                    isSelected ? 'text-white/80' : 'text-[#6B7D83]'
+                  }`}
+                >
+                  ({count})
+                </span>
               </button>
             );
           })}
         </div>
 
-        {/* Live Search Bar */}
-        <div className="relative">
-          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-            <Search className="w-4 h-4" />
+        {/* Search Input */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="relative flex-1">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#6B7D83]">
+              <Search className="w-4 h-4" />
+            </div>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Buscar por patologia, signo semiologico, anamnesis, punto de corte o tratado (Harrison, KDIGO, Williams, Sabiston, Nelson)..."
+              className="w-full pl-11 pr-10 py-3 rounded-full bg-white border border-[#DCE5E3] text-xs sm:text-sm text-[#0B252E] placeholder-[#8A9BA1] focus:outline-none focus:border-[#0E6F65] transition-colors"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="absolute inset-y-0 right-0 pr-4 flex items-center text-[#6B7D83] hover:text-[#0B252E]"
+                aria-label="Limpiar busqueda"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
           </div>
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Buscar por titulo, palabra clave, fuente (KDIGO, ADA, AHA), seccion o ano..."
-            className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-white border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 transition-colors shadow-xs"
-          />
-          {searchQuery && (
-            <button
-              type="button"
-              onClick={() => setSearchQuery('')}
-              className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-700"
-              aria-label="Limpiar busqueda"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          )}
-        </div>
 
-        {/* Results Counter and Indicator */}
-        <div className="flex items-center justify-between text-xs font-mono text-slate-500 px-1">
-          <span>
-            Mostrando {filteredReferences.length} de {references.length} guias registradas
+          <span className="text-xs text-[#6B7D83] shrink-0">
+            Mostrando {filteredReferences.length} de {references.length} fuentes clinicas
           </span>
-          {searchQuery && (
-            <span className="text-sky-700 font-semibold">
-              Filtro activo: &quot;{searchQuery}&quot;
-            </span>
-          )}
         </div>
-      </div>
+      </header>
 
-      {/* Grid of Clinical Guideline Cards */}
+      {/* Grid of Sources & Data-Collection Cards */}
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[1, 2, 3, 4, 5, 6].map((idx) => (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {[1, 2, 3, 4].map((idx) => (
             <div
               key={idx}
-              className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs animate-pulse space-y-4"
+              className="p-7 rounded-3xl bg-white border border-[#DCE5E3] space-y-4"
             >
-              <div className="h-4 bg-slate-100 rounded w-1/3" />
-              <div className="h-6 bg-slate-100 rounded w-4/5" />
-              <div className="h-16 bg-slate-50 rounded" />
-              <div className="h-8 bg-slate-100 rounded w-full" />
+              <div className="h-3 bg-[#F2F7F6] rounded w-1/3" />
+              <div className="h-6 bg-[#F2F7F6] rounded w-4/5" />
+              <div className="h-24 bg-[#F7FAF9] rounded-2xl" />
+              <div className="h-10 bg-[#F2F7F6] rounded-full w-full" />
             </div>
           ))}
         </div>
       ) : filteredReferences.length === 0 ? (
-        <div className="text-center py-16 px-4 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-3">
-          <BookOpen className="w-10 h-10 text-slate-400 mx-auto" />
-          <h3 className="text-base font-semibold text-slate-900">
-            No se encontraron guias clinicas
+        <div className="text-center py-16 px-4 bg-white rounded-3xl border border-[#DCE5E3] space-y-3">
+          <BookOpen className="w-9 h-9 text-[#6B7D83] mx-auto" />
+          <h3 className="font-serif text-lg font-semibold text-[#0B252E]">
+            No se encontraron fuentes para esta busqueda
           </h3>
-          <p className="text-xs text-slate-600 max-w-md mx-auto">
-            No hay referencias que coincidan con &quot;{searchQuery}&quot; en la especialidad seleccionada.
-            Intenta con otros terminos o restablece los filtros.
+          <p className="text-xs sm:text-sm text-[#4A5D64] max-w-md mx-auto">
+            Prueba con otro termino semiologico o restablece el filtro de especialidad.
           </p>
           <button
             type="button"
@@ -529,125 +401,170 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({ onSelectCase }) => {
               setSearchQuery('');
               setSelectedSpecialty('todas');
             }}
-            className="mt-2 inline-flex items-center gap-2 px-4 py-1.5 text-xs font-medium rounded-lg bg-sky-50 text-sky-800 hover:bg-sky-100 border border-sky-200 transition-colors shadow-xs"
+            className="mt-2 inline-flex items-center gap-2 px-5 py-2 text-xs font-medium rounded-full bg-[#ECF6F4] text-[#0E6F65] hover:bg-[#DFEFEA] transition-colors"
           >
             <RefreshCw className="w-3.5 h-3.5" />
-            <span>Restablecer Filtros</span>
+            <span>Ver todas las fuentes</span>
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {filteredReferences.map((ref) => {
-            const specialtyBadge = getSpecialtyBadgeStyle(
-              ref.associated_specialty || ref.specialty_id
-            );
+            const specKey = normalizeSpecialtyKey(ref.associated_specialty || ref.specialty_id);
+            const specLabel = SPECIALTY_LABELS[specKey] || ref.associated_specialty || 'Clinica Medica';
             const citationUrl = resolveCitationUrl(
               ref.pmid_doi || ref.page_or_doi,
               ref.title || ref.source_title
             );
             const takeaway = ref.key_takeaway || ref.key_recommendation || '';
             const title = ref.title || ref.source_title || 'Guia de Practica Clinica';
-            const source = ref.guideline_source || ref.organization_or_publisher || 'Evidencia Internacional';
-            const doi = ref.pmid_doi || ref.page_or_doi || '';
+            const publisher =
+              ref.organization_or_publisher || ref.guideline_source || 'Consenso Internacional';
+
+            const anamnesisList = ref.anamnesis_checklist || [];
+            const examSignsList = ref.physical_exam_signs || [];
+            const cutoffsList = ref.diagnostic_cutoffs || [];
+            const redFlagsList = ref.red_flags || [];
 
             return (
               <article
                 key={ref.id || ref.reference_id}
-                className="flex flex-col justify-between p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-sky-300 transition-all hover:shadow-md group shadow-xs"
+                className="flex flex-col justify-between p-6 sm:p-7 rounded-3xl bg-white border border-[#DCE5E3] hover:border-[#A9CEC7] transition-all"
               >
                 <div className="space-y-4">
-                  {/* Top Badges: Source, Year, Specialty */}
-                  <div className="flex items-center justify-between gap-2 flex-wrap">
-                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-sky-50 text-sky-800 border border-sky-200">
-                      {source}
-                    </span>
-                    <div className="flex items-center gap-1.5">
-                      <span
-                        className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-medium border ${specialtyBadge.bg} ${specialtyBadge.text} ${specialtyBadge.border}`}
-                      >
-                        {specialtyBadge.label}
+                  {/* Natural Classic Editorial Meta Line (No harsh rectangles) */}
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#6B7D83]">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="uppercase tracking-[0.15em] font-semibold text-[#0E6F65]">
+                        {specLabel}
                       </span>
-                      <span className="inline-flex items-center gap-1 text-[11px] font-mono text-slate-500">
-                        <Calendar className="w-3 h-3" />
-                        <span>{ref.year}</span>
-                      </span>
+                      <span>·</span>
+                      <span>{ref.year}</span>
+                      {ref.evidence_level && (
+                        <>
+                          <span>·</span>
+                          <span className="text-[#4A5D64]">
+                            Evidencia {ref.evidence_level}
+                          </span>
+                        </>
+                      )}
                     </div>
+
+                    <a
+                      href={citationUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-xs text-[#0E6F65] hover:underline"
+                    >
+                      <span>Fuente externa</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
                   </div>
 
-                  {/* Title & Section */}
-                  <div>
-                    <h2 className="text-base font-bold text-slate-900 group-hover:text-sky-700 transition-colors leading-snug">
+                  {/* Book / Guideline Title & Section */}
+                  <div className="space-y-1">
+                    <p className="text-xs text-[#6B7D83]">{publisher}</p>
+                    <h2 className="font-serif text-lg sm:text-xl font-semibold text-[#0B252E] leading-snug">
                       {title}
                     </h2>
                     {ref.section_title && (
-                      <p className="mt-1 text-xs text-slate-500 font-mono flex items-center gap-1.5">
-                        <Layers className="w-3 h-3 shrink-0 text-sky-600" />
-                        <span className="truncate">{ref.section_title}</span>
+                      <p className="text-xs sm:text-sm font-medium text-[#344850]">
+                        Capitulo / Seccion: {ref.section_title}
                       </p>
                     )}
                   </div>
 
-                  {/* Evidence Level Badge */}
-                  {ref.evidence_level && (
-                    <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-50 border border-emerald-300 text-[10px] font-mono font-semibold text-emerald-800">
-                      <CheckCircle2 className="w-3 h-3" />
-                      <span>Nivel de Evidencia: {ref.evidence_level}</span>
-                    </div>
-                  )}
-
-                  {/* Key Clinical Recommendation Takeaway */}
-                  <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
-                    <div className="flex items-center gap-1.5 text-[10px] font-mono uppercase font-bold text-sky-800">
-                      <Sparkles className="w-3 h-3 text-sky-600" />
-                      <span>Recomendacion Terapeutica Clave</span>
-                    </div>
-                    <p className="text-xs text-slate-700 leading-relaxed font-sans line-clamp-5">
+                  {/* Key Recommendation Quote */}
+                  <div className="border-l-2 border-[#0E6F65] pl-4 py-1 space-y-1">
+                    <span className="text-[11px] uppercase tracking-[0.13em] font-semibold text-[#0E6F65] block">
+                      Directriz clinica central
+                    </span>
+                    <p className="text-xs sm:text-sm text-[#344850] leading-relaxed">
                       {takeaway}
                     </p>
                   </div>
-                </div>
 
-                {/* Bottom Action Footer */}
-                <div className="pt-4 mt-4 border-t border-slate-100 space-y-2">
-                  <div className="flex items-center justify-between gap-2">
-                    {doi ? (
-                      <a
-                        href={citationUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-[11px] font-mono text-sky-700 hover:text-sky-900 hover:underline truncate max-w-[200px]"
-                        title={doi}
-                      >
-                        <span className="truncate">{doi}</span>
-                        <ExternalLink className="w-3.5 h-3.5 shrink-0" />
-                      </a>
-                    ) : (
-                      <a
-                        href={citationUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-[11px] font-mono text-slate-500 hover:text-sky-700 hover:underline"
-                      >
-                        <span>PubMed / DOI</span>
-                        <ExternalLink className="w-3.5 h-3.5 shrink-0" />
-                      </a>
+                  {/* Structured Data Collection Preview */}
+                  <div className="p-4 rounded-2xl bg-[#F7FAF9] border border-[#E7EEEC] space-y-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[11px] uppercase tracking-[0.14em] font-semibold text-[#0B252E] flex items-center gap-1.5">
+                        <ClipboardList className="w-3.5 h-3.5 text-[#0E6F65]" />
+                        <span>Protocolo de recoleccion de datos</span>
+                      </span>
+                      <span className="text-[11px] text-[#6B7D83]">
+                        {anamnesisList.length +
+                          examSignsList.length +
+                          cutoffsList.length +
+                          redFlagsList.length}{' '}
+                        criterios clinicos
+                      </span>
+                    </div>
+
+                    {anamnesisList.length > 0 && (
+                      <div className="space-y-1.5">
+                        <p className="text-[11px] font-semibold text-[#4A5D64]">
+                          Anamnesis dirigida esencial:
+                        </p>
+                        <ul className="space-y-1 text-xs text-[#344850]">
+                          {anamnesisList.slice(0, 2).map((item, idx) => (
+                            <li key={idx} className="flex items-start gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#0E6F65] mt-1.5 shrink-0" />
+                              <span className="leading-relaxed">{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     )}
 
-                    {ref.edition_or_version && (
-                      <span className="text-[10px] font-mono text-slate-400 truncate max-w-[120px]">
-                        {ref.edition_or_version}
-                      </span>
+                    {cutoffsList.length > 0 && (
+                      <div className="pt-2 border-t border-[#E2ECE9] space-y-1">
+                        <p className="text-[11px] font-semibold text-[#4A5D64]">
+                          Punto de corte clave:
+                        </p>
+                        <p className="text-xs text-[#0B252E] leading-relaxed">
+                          {cutoffsList[0]}
+                        </p>
+                      </div>
                     )}
                   </div>
+                </div>
 
-                  {/* Entrenar Caso Basado en esta Guia Button */}
+                {/* Card Footer: Open Full Data Collection Sheet + Protected Exam Action */}
+                <div className="pt-5 mt-5 border-t border-[#EDF2F0] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
                   <button
                     type="button"
-                    onClick={() => handleTrainCase(ref)}
-                    className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-sky-50 hover:bg-sky-100 border border-sky-200 text-sky-800 text-xs font-semibold tracking-wide transition-all active:scale-[0.98] shadow-xs"
+                    onClick={() => setActiveSheetRef(ref)}
+                    className="flex-1 py-2.5 px-4 rounded-full bg-[#ECF6F4] hover:bg-[#DFEFEA] text-[#0E6F65] text-xs font-semibold transition-colors flex items-center justify-center gap-2"
                   >
-                    <Play className="w-3.5 h-3.5 text-sky-600 fill-sky-600" />
-                    <span>Entrenar Caso Basado en esta Guia</span>
+                    <BookOpen className="w-3.5 h-3.5" />
+                    <span>Ver ficha de recoleccion completa</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleExamAction(ref)}
+                    className={`flex-1 py-2.5 px-4 rounded-full text-xs font-medium transition-colors flex items-center justify-center gap-2 ${
+                      isAuthenticated
+                        ? 'bg-[#0E6F65] hover:bg-[#0A564E] text-white'
+                        : 'bg-white border border-[#DCE5E3] hover:border-[#0E6F65] text-[#4A5D64] hover:text-[#0E6F65]'
+                    }`}
+                    title={
+                      isAuthenticated
+                        ? 'Evaluar razonamiento en estacion clinica vinculada'
+                        : 'El acceso a examenes requiere registro previo'
+                    }
+                  >
+                    {isAuthenticated ? (
+                      <>
+                        <span>Evaluar estacion vinculada</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </>
+                    ) : (
+                      <>
+                        <Lock className="w-3.5 h-3.5" />
+                        <span>Registrarse para evaluar</span>
+                      </>
+                    )}
                   </button>
                 </div>
               </article>
@@ -655,6 +572,194 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({ onSelectCase }) => {
           })}
         </div>
       )}
+
+      {/* Full Clinical Data Collection Sheet Modal (via createPortal) */}
+      {activeSheetRef &&
+        typeof document !== 'undefined' &&
+        createPortal(
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="library-sheet-title"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) {
+                setActiveSheetRef(null);
+              }
+            }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5 bg-[#0B252E]/55 backdrop-blur-[2px]"
+          >
+            <div className="relative w-full max-w-3xl max-h-[88dvh] flex flex-col overflow-hidden rounded-3xl bg-[#FDFCFA] border border-[#DCE5E3] shadow-2xl text-left animate-scale-in">
+              {/* Pinned Header */}
+              <header className="shrink-0 px-6 py-5 border-b border-[#E2ECE9] bg-white flex items-start justify-between gap-4">
+                <div className="space-y-1 min-w-0">
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-[#6B7D83]">
+                    <span className="uppercase tracking-[0.15em] font-semibold text-[#0E6F65]">
+                      {SPECIALTY_LABELS[
+                        normalizeSpecialtyKey(
+                          activeSheetRef.associated_specialty || activeSheetRef.specialty_id
+                        )
+                      ] || 'Especialidad Clinica'}
+                    </span>
+                    <span>·</span>
+                    <span>{activeSheetRef.year}</span>
+                    {activeSheetRef.edition_or_version && (
+                      <>
+                        <span>·</span>
+                        <span>{activeSheetRef.edition_or_version}</span>
+                      </>
+                    )}
+                  </div>
+                  <h2
+                    id="library-sheet-title"
+                    className="font-serif text-xl sm:text-2xl font-semibold text-[#0B252E] leading-snug"
+                  >
+                    {activeSheetRef.title || activeSheetRef.source_title}
+                  </h2>
+                  {activeSheetRef.section_title && (
+                    <p className="text-xs sm:text-sm text-[#4A5D64]">
+                      {activeSheetRef.section_title}
+                    </p>
+                  )}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveSheetRef(null)}
+                  aria-label="Cerrar ficha clinica"
+                  className="shrink-0 p-2 rounded-full bg-[#F2F7F6] hover:bg-[#E4EEEC] text-[#4A5D64] hover:text-[#0B252E] transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </header>
+
+              {/* Scrollable Body with the 4 Pillars of Clinical Data Collection */}
+              <div className="flex-1 overflow-y-auto px-6 py-5 space-y-5">
+                {/* Key Recommendation */}
+                <section className="p-4 sm:p-5 rounded-2xl bg-[#ECF6F4]/70 border border-[#CFE7E2] space-y-1.5">
+                  <span className="text-[11px] uppercase tracking-[0.14em] font-semibold text-[#0E6F65] block">
+                    Sintesis terapeutica y diagnostica ({activeSheetRef.evidence_level || 'Consenso'})
+                  </span>
+                  <p className="text-xs sm:text-sm text-[#0B252E] leading-relaxed">
+                    {activeSheetRef.key_recommendation || activeSheetRef.key_takeaway}
+                  </p>
+                </section>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* 1. Anamnesis Dirigida */}
+                  <section className="p-4 sm:p-5 rounded-2xl bg-white border border-[#E2ECE9] space-y-3">
+                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.13em] text-[#0E6F65]">
+                      <ClipboardList className="w-4 h-4 shrink-0" />
+                      <span>1. Anamnesis dirigida (Datos a recolectar)</span>
+                    </div>
+                    <ul className="space-y-2 text-xs sm:text-sm text-[#344850]">
+                      {(activeSheetRef.anamnesis_checklist || []).map((item, idx) => (
+                        <li key={idx} className="flex items-start gap-2.5">
+                          <CheckCircle2 className="w-4 h-4 text-[#0E6F65] shrink-0 mt-0.5" />
+                          <span className="leading-relaxed">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+
+                  {/* 2. Signos de Examen Fisico */}
+                  <section className="p-4 sm:p-5 rounded-2xl bg-white border border-[#E2ECE9] space-y-3">
+                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.13em] text-[#0E6F65]">
+                      <Stethoscope className="w-4 h-4 shrink-0" />
+                      <span>2. Examen fisico dirigido</span>
+                    </div>
+                    <ul className="space-y-2 text-xs sm:text-sm text-[#344850]">
+                      {(activeSheetRef.physical_exam_signs || []).map((item, idx) => (
+                        <li key={idx} className="flex items-start gap-2.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#0E6F65] shrink-0 mt-2" />
+                          <span className="leading-relaxed">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+
+                  {/* 3. Puntos de Corte y Escalas */}
+                  <section className="p-4 sm:p-5 rounded-2xl bg-[#FDF7E7]/65 border border-[#EFE0B9] space-y-3">
+                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.13em] text-[#8A6116]">
+                      <Activity className="w-4 h-4 shrink-0" />
+                      <span>3. Puntos de corte y criterios auxiliares</span>
+                    </div>
+                    <ul className="space-y-2 text-xs sm:text-sm text-[#344850]">
+                      {(activeSheetRef.diagnostic_cutoffs || []).map((item, idx) => (
+                        <li key={idx} className="flex items-start gap-2.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#8A6116] shrink-0 mt-2" />
+                          <span className="leading-relaxed">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+
+                  {/* 4. Signos de Alarma */}
+                  <section className="p-4 sm:p-5 rounded-2xl bg-[#FBF1F1]/75 border border-[#EED7D7] space-y-3">
+                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.13em] text-[#9E3F42]">
+                      <AlertTriangle className="w-4 h-4 shrink-0" />
+                      <span>4. Signos de alarma y derivacion critica</span>
+                    </div>
+                    <ul className="space-y-2 text-xs sm:text-sm text-[#344850]">
+                      {(activeSheetRef.red_flags || []).map((item, idx) => (
+                        <li key={idx} className="flex items-start gap-2.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#9E3F42] shrink-0 mt-2" />
+                          <span className="leading-relaxed">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                </div>
+              </div>
+
+              {/* Pinned Sticky Footer */}
+              <footer className="shrink-0 px-6 py-4 border-t border-[#E2ECE9] bg-white flex flex-col sm:flex-row items-center justify-between gap-3">
+                <a
+                  href={resolveCitationUrl(
+                    activeSheetRef.pmid_doi || activeSheetRef.page_or_doi,
+                    activeSheetRef.title || activeSheetRef.source_title
+                  )}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs font-medium text-[#0E6F65] hover:underline inline-flex items-center gap-1.5"
+                >
+                  <span>
+                    Referencia: {activeSheetRef.page_or_doi || activeSheetRef.pmid_doi || 'PubMed'}
+                  </span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+
+                <div className="flex items-center gap-2.5 w-full sm:w-auto">
+                  <button
+                    type="button"
+                    onClick={() => setActiveSheetRef(null)}
+                    className="flex-1 sm:flex-none px-4 py-2.5 rounded-full border border-[#DCE5E3] text-xs font-medium text-[#4A5D64] hover:bg-[#F2F7F6] transition-colors"
+                  >
+                    Cerrar ficha
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleExamAction(activeSheetRef)}
+                    className="flex-1 sm:flex-none px-5 py-2.5 rounded-full bg-[#0E6F65] hover:bg-[#0A564E] text-white text-xs font-medium inline-flex items-center justify-center gap-2 transition-colors"
+                  >
+                    {isAuthenticated ? (
+                      <>
+                        <span>Practicar estacion vinculada</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </>
+                    ) : (
+                      <>
+                        <Lock className="w-3.5 h-3.5" />
+                        <span>Registrarme para rendir evaluacion</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </footer>
+            </div>
+          </div>,
+          document.body
+        )}
     </div>
   );
 };

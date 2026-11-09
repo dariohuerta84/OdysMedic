@@ -7,6 +7,10 @@ class MedicalSpecialty(str, Enum):
     REUMATOLOGIA = "reumatologia"
     GINECOLOGIA_OBSTETRICIA = "ginecologia_obstetricia"
     OFTALMOLOGIA = "oftalmologia"
+    MEDICINA_INTERNA = "medicina_interna"
+    PEDIATRIA = "pediatria"
+    CIRUGIA_GENERAL = "cirugia_general"
+    MEDICINA_FAMILIAR = "medicina_familiar"
 
 class CognitiveGap(str, Enum):
     GAP_TRIAGE_SEVERITY = "GAP_TRIAGE_SEVERITY"

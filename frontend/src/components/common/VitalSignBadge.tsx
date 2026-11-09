@@ -16,32 +16,30 @@ export const VitalSignBadge: React.FC<VitalSignBadgeProps> = ({
   className = '',
 }) => {
   const containerClasses: Record<'normal' | 'warning' | 'critical', string> = {
-    normal: 'bg-slate-50 border-slate-200 text-slate-800',
-    warning: 'bg-amber-50/80 border-amber-200 text-amber-900',
-    critical: 'bg-rose-50 border-rose-200 text-rose-900 shadow-xs animate-pulse-subtle',
+    normal: 'bg-[#F2F7F6] border-[#DCE5E3] text-[#0B252E]',
+    warning: 'bg-[#FDF7E7] border-[#EFE0B9] text-[#7A5413]',
+    critical: 'bg-[#FBF1F1] border-[#EED7D7] text-[#8E3B3E]',
   };
 
-  const labelPillClasses: Record<'normal' | 'warning' | 'critical', string> = {
-    normal: 'bg-white text-slate-600 border-slate-200',
-    warning: 'bg-amber-100 text-amber-800 border-amber-200',
-    critical: 'bg-rose-100 text-rose-800 border-rose-200',
+  const labelClasses: Record<'normal' | 'warning' | 'critical', string> = {
+    normal: 'text-[#4A5D64]',
+    warning: 'text-[#8A6116]',
+    critical: 'text-[#9E3F42]',
   };
 
   return (
     <div
-      className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-md border font-mono text-xs shadow-xs transition-colors ${containerClasses[severity]} ${className}`}
-      title={`${label}: ${value}${unit ? ` ${unit}` : ''} (${severity})`}
+      className={`inline-flex items-baseline gap-1.5 px-3 py-1.5 rounded-full border font-sans text-xs transition-colors ${containerClasses[severity]} ${className}`}
+      title={`${label}: ${value}${unit ? ` ${unit}` : ''}`}
     >
-      <span
-        className={`px-1.5 py-0.5 rounded text-[10px] font-semibold tracking-wider uppercase border ${labelPillClasses[severity]}`}
-      >
-        {label}
+      <span className={`text-[11px] font-medium ${labelClasses[severity]}`}>
+        {label}:
       </span>
-      <span className="font-bold text-xs tracking-tight">
+      <span className="font-semibold text-xs tracking-tight">
         {value}
       </span>
       {unit && (
-        <span className="text-[10px] text-slate-500 font-normal ml-0.5">
+        <span className="text-[11px] opacity-75 font-normal">
           {unit}
         </span>
       )}

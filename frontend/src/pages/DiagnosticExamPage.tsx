@@ -10,10 +10,17 @@ import {
   ShieldCheck,
   Loader2,
   Check,
+  Layers,
+  Stethoscope,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { levelingApi } from '../services/api';
-import type { DiagnosticQuestion, DiagnosticResult } from '../types/api';
+import type {
+  DiagnosticQuestion,
+  DiagnosticResult,
+  DiagnosticExamMode,
+  DiagnosticSpecialtyOption,
+} from '../types/api';
 import { VitalSignBadge } from '../components/common/VitalSignBadge';
 import { CognitiveGapBadge } from '../components/common/CognitiveGapBadge';
 
@@ -21,33 +28,101 @@ export interface DiagnosticExamPageProps {
   onComplete: () => void;
 }
 
+const FALLBACK_SPECIALTIES: DiagnosticSpecialtyOption[] = [
+  {
+    id: 'medicina_interna',
+    label: 'Medicina Interna',
+    description: 'Cardiologia aguda, neumologia, infectologia y estabilizacion hemodinamica.',
+  },
+  {
+    id: 'pediatria',
+    label: 'Pediatria',
+    description: 'Reanimacion hidrica, urgencias respiratorias, infectologia e inmunologia pediatrica.',
+  },
+  {
+    id: 'ginecologia_obstetricia',
+    label: 'Gineco-Obstetricia',
+    description: 'Claves obstetricas, trastornos hipertensivos del embarazo y hemorragias.',
+  },
+  {
+    id: 'cirugia_general',
+    label: 'Cirugia General',
+    description: 'Abdomen agudo quirurgico, patologia biliar, obstruccion intestinal y trauma.',
+  },
+  {
+    id: 'medicina_familiar',
+    label: 'Medicina Familiar',
+    description: 'Control cronico integral, prevencion primaria, endocrinologia ambulatoria y salud mental.',
+  },
+  {
+    id: 'nefrologia',
+    label: 'Nefrologia y Medio Interno',
+    description: 'Trastornos acido-base, electrolitos criticos, injuria renal aguda y glomerulopatias.',
+  },
+];
+
 export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComplete }) => {
-  const { refreshUser } = useAuth();
+  const { user, refreshUser } = useAuth();
+
+  // Phase: 'select_mode' -> 'active_exam' -> 'results'
+  const [hasStartedExam, setHasStartedExam] = useState<boolean>(false);
+  const [examMode, setExamMode] = useState<DiagnosticExamMode>('general');
+  const [selectedSpecialty, setSelectedSpecialty] = useState<string>(
+    user?.initial_world || 'medicina_interna'
+  );
+  const [specialtyOptions, setSpecialtyOptions] =
+    useState<DiagnosticSpecialtyOption[]>(FALLBACK_SPECIALTIES);
+
   const [questions, setQuestions] = useState<DiagnosticQuestion[]>([]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, string>>({});
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [diagnosticResult, setDiagnosticResult] = useState<DiagnosticResult | null>(null);
 
   useEffect(() => {
-    const fetchQuestions = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const data = await levelingApi.getDiagnosticQuestions();
-        setQuestions(data);
-      } catch (err: any) {
-        console.error('[DiagnosticExamPage] Error al cargar preguntas basales:', err);
-        setError('No fue posible cargar las preguntas del examen diagnostico. Intente recargar.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    if (user?.initial_world) {
+      setSelectedSpecialty(user.initial_world);
+    }
+  }, [user?.initial_world]);
 
-    fetchQuestions();
+  useEffect(() => {
+    let mounted = true;
+    levelingApi
+      .getDiagnosticSpecialties()
+      .then((list) => {
+        if (mounted && Array.isArray(list) && list.length > 0) {
+          setSpecialtyOptions(list);
+        }
+      })
+      .catch(() => {
+        // Keep fallback list seamlessly
+      });
+    return () => {
+      mounted = false;
+    };
   }, []);
+
+  const handleBeginExam = async () => {
+    setIsLoading(true);
+    setError(null);
+    setSelectedAnswers({});
+    setCurrentIndex(0);
+    try {
+      const data = await levelingApi.getDiagnosticQuestions(
+        examMode,
+        examMode === 'specialty' ? selectedSpecialty : null
+      );
+      setQuestions(data);
+      setHasStartedExam(true);
+    } catch (err: any) {
+      console.error('[DiagnosticExamPage] Error al cargar preguntas basales:', err);
+      setError('No fue posible cargar las preguntas de evaluacion. Intenta nuevamente.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const currentQ = questions[currentIndex];
   const totalQuestions = questions.length;
@@ -66,12 +141,18 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
   const handleNext = () => {
     if (currentIndex < totalQuestions - 1) {
       setCurrentIndex((prev) => prev + 1);
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
   };
 
   const handlePrev = () => {
     if (currentIndex > 0) {
       setCurrentIndex((prev) => prev - 1);
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
   };
 
@@ -86,126 +167,292 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
     }));
 
     try {
-      const result = await levelingApi.submitDiagnosticExam(answersPayload);
+      const result = await levelingApi.submitDiagnosticExam(
+        answersPayload,
+        examMode,
+        examMode === 'specialty' ? selectedSpecialty : null
+      );
       setDiagnosticResult(result);
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
       await refreshUser();
     } catch (err: any) {
       console.error('[DiagnosticExamPage] Error al evaluar examen diagnostico:', err);
-      setError(err?.response?.data?.detail || 'Error al enviar las respuestas de la evaluacion.');
+      setError(err?.response?.data?.detail || 'Error al enviar tus respuestas.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-[70vh] flex flex-col items-center justify-center space-y-4">
-        <Loader2 className="w-8 h-8 text-sky-600 animate-spin" />
-        <p className="text-sm font-mono text-slate-600">
-          Cargando examen de autoevaluacion diagnostica...
-        </p>
-      </div>
-    );
-  }
+  // =========================================================================
+  // 1. INITIAL MODE SELECTION SCREEN (General vs Single Specialty)
+  // =========================================================================
+  if (!hasStartedExam && !diagnosticResult) {
+    const activeSpecObj = specialtyOptions.find((s) => s.id === selectedSpecialty);
 
-  if (error && questions.length === 0) {
     return (
-      <div className="min-h-[70vh] flex flex-col items-center justify-center max-w-md mx-auto p-6 text-center space-y-4">
-        <div className="w-12 h-12 rounded-full bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-600">
-          <AlertTriangle className="w-6 h-6" />
+      <div className="max-w-4xl mx-auto px-4 py-10 sm:py-14">
+        <div className="bg-white border border-[#DCE5E3] rounded-3xl p-6 sm:p-10 shadow-xs space-y-8">
+          <div className="space-y-2 border-b border-[#EDF2F0] pb-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#0E6F65]">
+              Calibracion clinica inicial
+            </p>
+            <h1 className="font-serif text-2xl sm:text-4xl font-bold text-[#0B252E]">
+              Elige como deseas rendir tu evaluacion inicial
+            </h1>
+            <p className="text-sm sm:text-base text-[#4A606A] leading-relaxed max-w-2xl">
+              Antes de activar tus indicadores de rendimiento en Mundo Clinico, selecciona entre
+              una evaluacion transversal de todas las especialidades o un examen enfocado en una
+              sola especialidad.
+            </p>
+          </div>
+
+          {/* 2 Mode Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {/* Option 1: Examen General */}
+            <button
+              type="button"
+              onClick={() => setExamMode('general')}
+              className={`relative p-6 rounded-2xl border text-left transition-all flex flex-col justify-between space-y-4 ${
+                examMode === 'general'
+                  ? 'bg-[#EAF4F2] border-[#0E6F65] shadow-xs'
+                  : 'bg-[#FDFCFA] border-[#DCE5E3] hover:border-[#9EC6BF]'
+              }`}
+            >
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="w-11 h-11 rounded-xl bg-white border border-[#D4E4E0] flex items-center justify-center text-[#0E6F65]">
+                    <Layers className="w-5 h-5" />
+                  </div>
+                  {examMode === 'general' && (
+                    <span className="w-6 h-6 rounded-full bg-[#0E6F65] text-white flex items-center justify-center">
+                      <Check className="w-3.5 h-3.5 stroke-[3]" />
+                    </span>
+                  )}
+                </div>
+
+                <div>
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#0E6F65] block">
+                    Opcion 1 · Transversal
+                  </span>
+                  <h2 className="font-serif text-xl font-bold text-[#0B252E] mt-0.5">
+                    Examen General
+                  </h2>
+                </div>
+
+                <p className="text-xs sm:text-sm text-[#4A606A] leading-relaxed">
+                  Incluye casos integrados de las principales especialidades (Medicina Interna,
+                  Nefrologia, Pediatria y Cirugia General) para medir tu perfil global.
+                </p>
+              </div>
+
+              <div className="pt-3 border-t border-[#D5E5E1] text-xs font-medium text-[#0E6F65]">
+                5 estaciones clinicas · Todas las especialidades troncales
+              </div>
+            </button>
+
+            {/* Option 2: Examen de una sola especialidad */}
+            <button
+              type="button"
+              onClick={() => setExamMode('specialty')}
+              className={`relative p-6 rounded-2xl border text-left transition-all flex flex-col justify-between space-y-4 ${
+                examMode === 'specialty'
+                  ? 'bg-[#EAF4F2] border-[#0E6F65] shadow-xs'
+                  : 'bg-[#FDFCFA] border-[#DCE5E3] hover:border-[#9EC6BF]'
+              }`}
+            >
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="w-11 h-11 rounded-xl bg-white border border-[#D4E4E0] flex items-center justify-center text-[#0E6F65]">
+                    <Stethoscope className="w-5 h-5" />
+                  </div>
+                  {examMode === 'specialty' && (
+                    <span className="w-6 h-6 rounded-full bg-[#0E6F65] text-white flex items-center justify-center">
+                      <Check className="w-3.5 h-3.5 stroke-[3]" />
+                    </span>
+                  )}
+                </div>
+
+                <div>
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#0E6F65] block">
+                    Opcion 2 · Focalizado
+                  </span>
+                  <h2 className="font-serif text-xl font-bold text-[#0B252E] mt-0.5">
+                    Examen de una sola especialidad
+                  </h2>
+                </div>
+
+                <p className="text-xs sm:text-sm text-[#4A606A] leading-relaxed">
+                  Evalua tu razonamiento clinico unicamente en la especialidad o rotacion que
+                  estes cursando en este momento.
+                </p>
+              </div>
+
+              <div className="pt-3 border-t border-[#D5E5E1] text-xs font-medium text-[#0E6F65]">
+                5 estaciones clinicas · Especialidad a eleccion
+              </div>
+            </button>
+          </div>
+
+          {/* Specialty Selector Panel when examMode === 'specialty' */}
+          {examMode === 'specialty' && (
+            <div className="p-5 sm:p-6 rounded-2xl bg-[#F2F7F6] border border-[#D7E5E2] space-y-4">
+              <div>
+                <h3 className="font-serif text-lg font-bold text-[#0B252E]">
+                  Selecciona la especialidad a evaluar
+                </h3>
+                <p className="text-xs text-[#5C737C]">
+                  {activeSpecObj?.description ||
+                    'Se presentaran 5 escenarios clinicos representativos de esta especialidad.'}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                {specialtyOptions.map((sp) => {
+                  const isCurrent = selectedSpecialty === sp.id;
+                  return (
+                    <button
+                      key={sp.id}
+                      type="button"
+                      onClick={() => setSelectedSpecialty(sp.id)}
+                      className={`px-4 py-3 rounded-xl border text-left text-xs sm:text-sm transition-colors flex items-center justify-between gap-2 ${
+                        isCurrent
+                          ? 'bg-white border-[#0E6F65] text-[#0E6F65] font-semibold shadow-2xs'
+                          : 'bg-white/70 border-[#DCE5E3] text-[#354B54] hover:bg-white'
+                      }`}
+                    >
+                      <span>{sp.label}</span>
+                      {isCurrent && <Check className="w-4 h-4 text-[#0E6F65] shrink-0" />}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {error && (
+            <div className="p-3.5 rounded-xl bg-[#FBF1F1] border border-[#EED7D7] text-[#8E3538] text-xs sm:text-sm flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 shrink-0" />
+              <span>{error}</span>
+            </div>
+          )}
+
+          <div className="pt-4 border-t border-[#EDF2F0] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <span className="text-xs text-[#6E828A]">
+              Duracion estimada: 4 a 6 minutos · Sin penalizacion por tiempo
+            </span>
+            <button
+              type="button"
+              disabled={isLoading}
+              onClick={handleBeginExam}
+              className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#0E6F65] hover:bg-[#0A564E] text-white text-sm font-medium inline-flex items-center justify-center gap-2.5 transition-colors disabled:opacity-50"
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>Preparando estaciones...</span>
+                </>
+              ) : (
+                <>
+                  <span>
+                    {examMode === 'general'
+                      ? 'Comenzar Examen General'
+                      : `Evaluar ${activeSpecObj?.label || 'Especialidad'}`}
+                  </span>
+                  <ArrowRight className="w-4 h-4" />
+                </>
+              )}
+            </button>
+          </div>
         </div>
-        <h2 className="text-lg font-bold text-slate-900">Error de Conexion</h2>
-        <p className="text-xs text-slate-600">{error}</p>
-        <button
-          type="button"
-          onClick={() => window.location.reload()}
-          className="px-4 py-2 rounded-lg bg-sky-600 text-white text-xs font-semibold hover:bg-sky-700 transition-colors"
-        >
-          Reintentar
-        </button>
       </div>
     );
   }
 
-  // Diagnostic Results Screen
+  // =========================================================================
+  // 2. DIAGNOSTIC RESULTS SCREEN
+  // =========================================================================
   if (diagnosticResult) {
     const isApto = diagnosticResult.aptitude_status === 'apto';
     const isNivelacion = diagnosticResult.aptitude_status === 'en_nivelacion';
 
     const statusBanner = isApto
       ? {
-          bg: 'bg-emerald-50 border-emerald-300 text-emerald-950',
-          badgeBg: 'bg-emerald-100 text-emerald-800 border-emerald-300',
-          title: 'APTO PARA EL EXAMEN / INTERNADO',
-          desc: 'Rendimiento clinico sobresaliente en las 5 estaciones basales. Tienes las competencias fundamentales requeridas para afrontar el internado y tu preparacion de alto rendimiento.',
+          bg: 'bg-[#ECF6F4] border-[#BFE0D9] text-[#0B252E]',
+          accent: 'text-[#0E6F65]',
+          title: 'Apto para tu etapa clinica',
+          desc: 'Demostraste solidez en las estaciones evaluadas. Tu ruta personalizada priorizara casos integradores de complejidad progresiva.',
           icon: ShieldCheck,
-          iconColor: 'text-emerald-600',
         }
       : isNivelacion
         ? {
-            bg: 'bg-amber-50 border-amber-300 text-amber-950',
-            badgeBg: 'bg-amber-100 text-amber-800 border-amber-300',
-            title: 'EN NIVELACIÓN (APTO CONDICIONAL)',
-            desc: 'Has alcanzado el umbral basal aprobatorio. Sin embargo, se identificaron brechas cognitivas puntuales que seran reforzadas de manera guiada en tu panel.',
+            bg: 'bg-[#FDF7E7] border-[#E9D7AC] text-[#0B252E]',
+            accent: 'text-[#9A6B1F]',
+            title: 'En nivelacion guiada (Apto condicional)',
+            desc: 'Cuentas con una base adecuada y detectamos brechas puntuales que reforzaremos paso a paso en Mundo Clinico.',
             icon: Brain,
-            iconColor: 'text-amber-600',
           }
         : {
-            bg: 'bg-rose-50 border-rose-300 text-rose-950',
-            badgeBg: 'bg-rose-100 text-rose-800 border-rose-300',
-            title: 'NO APTO - NIVELACIÓN PRIORITARIA REQUERIDA',
-            desc: 'Se identificaron brechas criticas en triaje vital o conducta terapeutica urgente. Tu ruta de entrenamiento adaptativa comenzara con casos clinicos de nivelacion prioritaria.',
+            bg: 'bg-[#FBF1F1] border-[#EED7D7] text-[#0B252E]',
+            accent: 'text-[#9E3F42]',
+            title: 'Nivelacion prioritaria recomendada',
+            desc: 'Identificamos oportunidades clave en estabilizacion inicial y criterio diagnostico. Tu ruta comenzara fortaleciendo estos pilares.',
             icon: AlertTriangle,
-            iconColor: 'text-rose-600',
           };
 
     const StatusIcon = statusBanner.icon;
 
     return (
-      <div className="max-w-3xl mx-auto px-4 py-10 sm:py-14 animate-fade-in">
-        <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-lg space-y-8">
-          {/* Header */}
+      <div className="max-w-3xl mx-auto px-4 py-10 sm:py-14">
+        <div className="bg-white border border-[#DCE5E3] rounded-3xl p-6 sm:p-10 shadow-sm space-y-8">
           <div className="text-center space-y-2">
-            <span className="px-3 py-1 rounded-full text-xs font-mono font-semibold uppercase tracking-wider bg-sky-50 text-sky-800 border border-sky-200">
-              Evaluacion Basal Concluida
-            </span>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Resultado de Autoevaluacion Diagnostica
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#0E6F65]">
+              Evaluacion inicial completada
+            </p>
+            <h1 className="font-serif text-2xl sm:text-4xl font-bold text-[#0B252E]">
+              Sintesis de tu desempeno basal
             </h1>
-            <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto">
-              Tu desempeno ha sido registrado en el motor adaptativo OCRI. A continuacion se detallan tus metricas reales y estado de aptitud.
+            <p className="text-xs sm:text-sm text-[#5C737C] max-w-xl mx-auto">
+              Modalidad:{' '}
+              {examMode === 'specialty'
+                ? `Especialidad unica (${
+                    specialtyOptions.find((s) => s.id === selectedSpecialty)?.label ||
+                    selectedSpecialty
+                  })`
+                : 'Examen General Transversal'}
             </p>
           </div>
 
-          {/* Aptitude Status Card */}
-          <div className={`p-6 rounded-2xl border-2 transition-all ${statusBanner.bg} shadow-xs`}>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          {/* Aptitude Summary Card */}
+          <div className={`p-6 rounded-2xl border ${statusBanner.bg}`}>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-white border border-slate-200 shadow-xs flex items-center justify-center shrink-0">
-                  <StatusIcon className={`w-7 h-7 ${statusBanner.iconColor}`} />
+                <div className="w-12 h-12 rounded-2xl bg-white border border-[#DCE5E3] flex items-center justify-center shrink-0">
+                  <StatusIcon className={`w-6 h-6 ${statusBanner.accent}`} />
                 </div>
                 <div className="space-y-1">
-                  <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase border ${statusBanner.badgeBg}`}>
-                    Estado Basal
+                  <span className={`text-xs font-semibold uppercase tracking-wider ${statusBanner.accent}`}>
+                    Diagnostico de partida
                   </span>
-                  <h3 className="text-lg sm:text-xl font-bold tracking-tight">
+                  <h2 className="font-serif text-xl font-bold text-[#0B252E]">
                     {statusBanner.title}
-                  </h3>
-                  <p className="text-xs sm:text-sm leading-relaxed opacity-90 max-w-lg">
+                  </h2>
+                  <p className="text-xs sm:text-sm text-[#4A606A] leading-relaxed max-w-lg">
                     {statusBanner.desc}
                   </p>
                 </div>
               </div>
 
-              <div className="text-right sm:border-l sm:border-slate-300 sm:pl-6 shrink-0">
-                <span className="text-[11px] font-mono uppercase block opacity-75 font-semibold">
-                  Calificacion
+              <div className="sm:text-right sm:border-l sm:border-black/10 sm:pl-6 shrink-0">
+                <span className="text-xs uppercase tracking-wider text-[#5C737C] block">
+                  Rendimiento
                 </span>
-                <div className="text-3xl sm:text-4xl font-extrabold font-mono tracking-tight">
+                <div className="font-serif text-4xl font-bold text-[#0B252E]">
                   {diagnosticResult.diagnostic_score}%
                 </div>
-                <span className="text-xs font-mono opacity-80 block">
-                  {diagnosticResult.correct_count} de {diagnosticResult.total_questions} aciertos
+                <span className="text-xs text-[#5C737C] block">
+                  {diagnosticResult.correct_count} de {diagnosticResult.total_questions} estaciones
                 </span>
               </div>
             </div>
@@ -214,12 +461,9 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
           {/* Detected Cognitive Gaps */}
           {diagnosticResult.detected_gaps.length > 0 && (
             <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <Brain className="w-4 h-4 text-sky-600" />
-                <h4 className="text-xs font-mono uppercase tracking-wider font-bold text-slate-700">
-                  Brechas Cognitivas Detectadas para Nivelacion
-                </h4>
-              </div>
+              <h3 className="font-serif text-lg font-bold text-[#0B252E]">
+                Brechas detectadas para tu ruta de refuerzo
+              </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {diagnosticResult.detected_gaps.map((gap, idx) => (
                   <CognitiveGapBadge
@@ -233,35 +477,39 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
             </div>
           )}
 
-          {/* Explanations summary per question */}
+          {/* Per-station feedback */}
           <div className="space-y-3">
-            <h4 className="text-xs font-mono uppercase tracking-wider font-bold text-slate-700">
-              Desglose de Estaciones Basales
-            </h4>
+            <h3 className="font-serif text-lg font-bold text-[#0B252E]">
+              Revision clinica por estacion
+            </h3>
             <div className="space-y-2.5">
               {diagnosticResult.details.map((detail, idx) => (
                 <div
                   key={idx}
-                  className={`p-3.5 rounded-xl border text-xs ${
+                  className={`p-4 rounded-xl border text-xs sm:text-sm ${
                     detail.is_correct
-                      ? 'bg-emerald-50/60 border-emerald-200 text-slate-800'
-                      : 'bg-rose-50/60 border-rose-200 text-slate-800'
+                      ? 'bg-[#ECF6F4]/70 border-[#CFE7E2]'
+                      : 'bg-[#FBF1F1]/70 border-[#EED7D7]'
                   }`}
                 >
-                  <div className="flex items-center justify-between font-mono font-bold mb-1">
-                    <span className="flex items-center gap-1.5">
+                  <div className="flex items-center justify-between font-semibold mb-1 text-[#0B252E]">
+                    <span className="flex items-center gap-2">
                       {detail.is_correct ? (
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                        <CheckCircle2 className="w-4 h-4 text-[#0E6F65]" />
                       ) : (
-                        <AlertTriangle className="w-4 h-4 text-rose-600" />
+                        <AlertTriangle className="w-4 h-4 text-[#9E3F42]" />
                       )}
-                      Estacion {detail.question_id}: {detail.specialty.replace('_', ' ').toUpperCase()}
+                      Estacion {idx + 1} · {detail.specialty.replace(/_/g, ' ')}
                     </span>
-                    <span className={detail.is_correct ? 'text-emerald-700' : 'text-rose-700'}>
-                      {detail.is_correct ? 'Acierto (+20%)' : 'Desviacion (0%)'}
+                    <span
+                      className={
+                        detail.is_correct ? 'text-[#0E6F65]' : 'text-[#9E3F42]'
+                      }
+                    >
+                      {detail.is_correct ? 'Criterio acertado' : 'Brecha detectada'}
                     </span>
                   </div>
-                  <p className="text-xs text-slate-600 pl-5 leading-relaxed">
+                  <p className="text-xs text-[#4A606A] pl-6 leading-relaxed">
                     {detail.explanation}
                   </p>
                 </div>
@@ -269,17 +517,16 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
             </div>
           </div>
 
-          {/* CTA to Enter Interactive Dashboard */}
-          <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="text-xs text-slate-500 font-mono">
-              +100 XP acreditados por completar la evaluacion inicial
-            </div>
+          <div className="pt-4 border-t border-[#EDF2F0] flex flex-col sm:flex-row items-center justify-between gap-4">
+            <span className="text-xs text-[#6E828A]">
+              Tu ruta en Mundo Clinico ha sido calibrada con estos resultados
+            </span>
             <button
               type="button"
               onClick={onComplete}
-              className="w-full sm:w-auto px-8 py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-sm transition-all hover:scale-[1.01]"
+              className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#0E6F65] hover:bg-[#0A564E] text-white font-medium text-sm flex items-center justify-center gap-2 transition-colors"
             >
-              <span>Ingresar al Dashboard y Comenzar Nivelacion</span>
+              <span>Ingresar a mi Mundo Clinico</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -288,63 +535,72 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
     );
   }
 
-  // Active Questions Step-by-Step Screen
+  // =========================================================================
+  // 3. ACTIVE STEP-BY-STEP EXAM SCREEN
+  // =========================================================================
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8 sm:py-12 animate-fade-in">
-      <div className="bg-white border border-slate-200 rounded-3xl p-5 sm:p-8 shadow-sm space-y-6">
-        {/* Header with Title and Progress Indicator */}
-        <div className="border-b border-slate-100 pb-5 space-y-3">
+    <div className="max-w-3xl mx-auto px-4 py-8 sm:py-12">
+      <div className="bg-white border border-[#DCE5E3] rounded-3xl p-5 sm:p-8 shadow-xs space-y-6">
+        {/* Header & Progress */}
+        <div className="border-b border-[#EDF2F0] pb-5 space-y-3">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold uppercase tracking-wider bg-sky-50 text-sky-800 border border-sky-200">
-                Paso Obligatorio de Admision
-              </span>
-              <h1 className="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight mt-1">
-                Autoevaluacion Diagnostica Inicial
+              <button
+                type="button"
+                onClick={() => setHasStartedExam(false)}
+                className="text-xs text-[#0E6F65] hover:underline inline-flex items-center gap-1 mb-1"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Cambiar modalidad de examen</span>
+              </button>
+              <h1 className="font-serif text-xl sm:text-2xl font-bold text-[#0B252E]">
+                {examMode === 'general'
+                  ? 'Examen General de Especialidades'
+                  : `Evaluacion de ${
+                      specialtyOptions.find((s) => s.id === selectedSpecialty)?.label ||
+                      'Especialidad'
+                    }`}
               </h1>
             </div>
 
-            <div className="flex items-center gap-2 font-mono text-xs text-slate-600">
-              <span className="font-bold text-sky-700">Pregunta {currentIndex + 1}</span>
-              <span>de {totalQuestions}</span>
+            <div className="text-xs font-medium text-[#5C737C]">
+              <span className="font-semibold text-[#0E6F65]">
+                Estacion {currentIndex + 1}
+              </span>{' '}
+              de {totalQuestions}
             </div>
           </div>
 
-          {/* Step Progress Bar */}
-          <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden border border-slate-200">
+          <div className="w-full bg-[#EEF3F2] h-2 rounded-full overflow-hidden">
             <div
-              className="h-full bg-sky-600 transition-all duration-300 ease-out"
-              style={{ width: `${((currentIndex + 1) / totalQuestions) * 100}%` }}
+              className="h-full bg-[#0E6F65] transition-all duration-300 ease-out"
+              style={{ width: `${((currentIndex + 1) / Math.max(totalQuestions, 1)) * 100}%` }}
             />
           </div>
         </div>
 
-        {/* Current Question Vignette */}
+        {/* Question Content */}
         {currentQ && (
           <div className="space-y-5">
-            {/* Metadata Pills */}
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-md text-xs font-mono font-medium bg-sky-50 text-sky-800 border border-sky-200">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-[#4A606A]">
+              <span className="font-semibold text-[#0E6F65]">
                 {currentQ.specialty_label}
               </span>
-              <span className="px-2.5 py-0.5 rounded-md text-xs font-mono font-medium bg-slate-100 text-slate-700 border border-slate-200">
-                {currentQ.station_type}
-              </span>
+              <span>·</span>
+              <span>{currentQ.station_type}</span>
             </div>
 
-            {/* Clinical Vignette Box */}
-            <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3 shadow-xs">
-              <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-sky-800 font-bold">
-                <Activity className="w-4 h-4 text-sky-600" />
-                <span>Vineta Clinica Inicial</span>
+            <div className="p-5 rounded-2xl bg-[#F7FAF9] border border-[#E1ECE9] space-y-3.5">
+              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#0E6F65]">
+                <Activity className="w-4 h-4" />
+                <span>Escenario clinico</span>
               </div>
-              <p className="text-xs sm:text-sm text-slate-800 leading-relaxed">
+              <p className="text-sm text-[#0B252E] leading-relaxed">
                 {currentQ.vignette}
               </p>
 
-              {/* Vital Signs Row */}
               {currentQ.vital_signs && (
-                <div className="pt-2 border-t border-slate-200/80 flex flex-wrap gap-2">
+                <div className="pt-3 border-t border-[#E1ECE9] flex flex-wrap gap-2">
                   {Object.entries(currentQ.vital_signs).map(([key, val]) => (
                     <VitalSignBadge
                       key={key}
@@ -356,14 +612,12 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
               )}
             </div>
 
-            {/* Question Prompt */}
             <div className="pt-1">
-              <h3 className="text-sm sm:text-base font-bold text-slate-900 leading-snug">
+              <h2 className="font-serif text-lg sm:text-xl font-bold text-[#0B252E] leading-snug">
                 {currentQ.question}
-              </h3>
+              </h2>
             </div>
 
-            {/* Options List */}
             <div className="space-y-3">
               {currentQ.options.map((opt, optIdx) => {
                 const isSelected = currentSelection === opt.id;
@@ -375,22 +629,28 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
                     role="button"
                     tabIndex={0}
                     onClick={() => handleSelectOption(opt.id)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        handleSelectOption(opt.id);
+                      }
+                    }}
                     className={`flex items-start gap-3.5 p-4 rounded-xl border text-left cursor-pointer transition-all ${
                       isSelected
-                        ? 'bg-sky-50 border-sky-500 shadow-xs ring-1 ring-sky-500/30'
-                        : 'bg-white border-slate-200 hover:border-sky-300 hover:bg-sky-50/30'
+                        ? 'bg-[#EAF4F2] border-[#0E6F65] shadow-2xs'
+                        : 'bg-white border-[#DCE5E3] hover:border-[#9EC6BF] hover:bg-[#F7FAF9]'
                     }`}
                   >
                     <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center font-mono text-xs font-bold shrink-0 border transition-colors ${
+                      className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 border transition-colors ${
                         isSelected
-                          ? 'bg-sky-600 text-white border-sky-600 shadow-xs'
-                          : 'bg-slate-100 text-slate-700 border-slate-200'
+                          ? 'bg-[#0E6F65] text-white border-[#0E6F65]'
+                          : 'bg-[#F2F7F6] text-[#354B54] border-[#DCE5E3]'
                       }`}
                     >
                       {isSelected ? <Check className="w-4 h-4 stroke-[3]" /> : letter}
                     </div>
-                    <div className="pt-1 flex-1 text-xs sm:text-sm text-slate-800 leading-relaxed">
+                    <div className="pt-1 flex-1 text-xs sm:text-sm text-[#0B252E] leading-relaxed">
                       {opt.text}
                     </div>
                   </div>
@@ -400,21 +660,20 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
           </div>
         )}
 
-        {/* Error notification if submission failed */}
         {error && (
-          <div className="p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
+          <div className="p-3.5 rounded-xl bg-[#FBF1F1] border border-[#EED7D7] text-[#8E3538] text-xs flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
-        {/* Footer Navigation Buttons */}
-        <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
+        {/* Navigation Footer */}
+        <div className="pt-4 border-t border-[#EDF2F0] flex items-center justify-between gap-3">
           <button
             type="button"
             disabled={currentIndex === 0 || isSubmitting}
             onClick={handlePrev}
-            className="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 text-xs font-semibold hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5 transition-colors"
+            className="px-4 py-2.5 rounded-xl border border-[#DCE5E3] text-[#354B54] text-xs sm:text-sm font-medium hover:bg-[#F2F7F6] disabled:opacity-40 flex items-center gap-1.5 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Anterior</span>
@@ -425,9 +684,9 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
               type="button"
               disabled={!currentSelection || isSubmitting}
               onClick={handleNext}
-              className="px-6 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 transition-colors shadow-xs"
+              className="px-6 py-2.5 rounded-xl bg-[#0E6F65] hover:bg-[#0A564E] text-white text-xs sm:text-sm font-medium disabled:opacity-50 flex items-center gap-1.5 transition-colors"
             >
-              <span>Siguiente</span>
+              <span>Siguiente estacion</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           ) : (
@@ -435,16 +694,16 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
               type="button"
               disabled={!allAnswered || isSubmitting}
               onClick={handleSubmit}
-              className="px-6 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs sm:text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 transition-colors shadow-xs"
+              className="px-6 py-2.5 rounded-xl bg-[#0E6F65] hover:bg-[#0A564E] text-white text-xs sm:text-sm font-medium disabled:opacity-50 flex items-center gap-2 transition-colors"
             >
               {isSubmitting ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin text-white" />
-                  <span>Calibrando Diagnostico...</span>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>Calculando tu ruta...</span>
                 </>
               ) : (
                 <>
-                  <span>Finalizar y Obtener Diagnostico</span>
+                  <span>Finalizar evaluacion</span>
                   <Award className="w-4 h-4" />
                 </>
               )}

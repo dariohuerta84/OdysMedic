@@ -46,6 +46,10 @@ class ReferenceRepository:
                     evidence_level=raw_e.get("evidence_level", "Level B"),
                     associated_specialty=raw_e.get("associated_specialty", raw_b.get("specialty", "")),
                     associated_cases=raw_e.get("associated_cases", []),
+                    anamnesis_checklist=raw_e.get("anamnesis_checklist", []),
+                    physical_exam_signs=raw_e.get("physical_exam_signs", []),
+                    diagnostic_cutoffs=raw_e.get("diagnostic_cutoffs", []),
+                    red_flags=raw_e.get("red_flags", []),
                 )
                 excerpts.append(excerpt)
                 self._all_excerpts.append(excerpt)

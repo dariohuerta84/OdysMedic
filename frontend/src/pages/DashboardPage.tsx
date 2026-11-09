@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Activity,
-  Hospital,
   Compass,
   AlertTriangle,
   CheckCircle2,
-  TrendingUp,
-  RefreshCw,
-  Sparkles,
   ClipboardCheck,
   ShieldCheck,
   Brain,
   ArrowRight,
+  BookOpen,
+  Target,
+  Stethoscope,
+  BarChart3,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { levelingApi, specialtiesApi } from '../services/api';
@@ -35,20 +34,19 @@ export interface DashboardPageProps {
   className?: string;
 }
 
-// Fallback mock data when backend is unreachable
 const DEFAULT_RADAR_SCORES: Record<CognitiveGapTag, number> = {
-  GAP_TRIAGE_SEVERITY: 88,
-  GAP_DIAGNOSTIC_REASONING: 74,
-  GAP_LAB_INTERPRETATION: 82,
-  GAP_INITIAL_MANAGEMENT: 65,
+  GAP_TRIAGE_SEVERITY: 75,
+  GAP_DIAGNOSTIC_REASONING: 70,
+  GAP_LAB_INTERPRETATION: 75,
+  GAP_INITIAL_MANAGEMENT: 68,
 };
 
 const DEFAULT_SPECIALTIES: Specialty[] = [
   {
     id: 'nefrologia',
-    name: 'Nefrologia Clinica',
+    name: 'Nefrologia y Medio Interno',
     description:
-      'Manejo integral de injuria renal aguda (KDIGO), glomerulonefritis rapidamente progresiva y desordenes acidobasicos complejos.',
+      'Abordaje estructurado de injuria renal aguda (KDIGO), microangiopatias tromboticas y trastornos hidroelectroliticos.',
     icon: 'droplets',
     is_unlocked: true,
     case_count: 8,
@@ -57,16 +55,16 @@ const DEFAULT_SPECIALTIES: Specialty[] = [
     id: 'endocrinologia',
     name: 'Endocrinologia y Metabolismo',
     description:
-      'Emergencias hiperglicemicas (CAD y EHH), tormenta tiroidea, crisis suprarrenal y desordenes hipofisiarios agudos.',
+      'Crisis hiperglucemicas agudas (CAD y EHH), tormenta tiroidea, insuficiencia suprarrenal y regulacion metabolica.',
     icon: 'activity',
     is_unlocked: true,
     case_count: 10,
   },
   {
     id: 'neurologia',
-    name: 'Neurologia y Neurocriticos',
+    name: 'Neurologia Clinica',
     description:
-      'Accidente cerebrovascular isquemico y hemorragico (tiempo-dependiente), estatus epileptico y sindrome de hipertension endocraneana.',
+      'Accidente cerebrovascular isquemico y hemorragico en ventana terapeutica, estado epileptico y deficit focal agudo.',
     icon: 'brain',
     is_unlocked: true,
     case_count: 7,
@@ -75,91 +73,39 @@ const DEFAULT_SPECIALTIES: Specialty[] = [
     id: 'reumatologia',
     name: 'Reumatologia e Inmunologia',
     description:
-      'Lupus eritematoso sistemico con compromiso organico mayor, vasculitis asociadas a ANCA y artritis por microcristales.',
+      'Lupus eritematoso sistemico con compromiso de organo mayor, vasculitis asociadas a ANCA y monoartritis aguda.',
     icon: 'shield-alert',
     is_unlocked: true,
     case_count: 6,
   },
   {
     id: 'ginecologia',
-    name: 'Ginecologia y Obstetricia Critica',
+    name: 'Ginecologia y Obstetricia',
     description:
-      'Trastornos hipertensivos del embarazo (preeclampsia severa), hemorragia postparto y sepsis puerperal.',
+      'Trastornos hipertensivos del embarazo, hemorragia obstetrica mayor, enfermedad trofoblastica y sepsis materna.',
     icon: 'baby',
     is_unlocked: true,
     case_count: 8,
   },
 ];
 
-const DEFAULT_MASTERIES: SpecialtyMastery[] = [
-  {
-    specialty_id: 'nefrologia',
-    specialty_name: 'Nefrologia',
-    mastery_score: 82,
-    level: 'Nivel 2',
-    cases_completed: 4,
-    total_cases: 8,
-  },
-  {
-    specialty_id: 'endocrinologia',
-    specialty_name: 'Endocrinologia',
-    mastery_score: 75,
-    level: 'Nivel 2',
-    cases_completed: 3,
-    total_cases: 10,
-  },
-  {
-    specialty_id: 'neurologia',
-    specialty_name: 'Neurologia',
-    mastery_score: 64,
-    level: 'Nivel 1',
-    cases_completed: 2,
-    total_cases: 7,
-  },
-  {
-    specialty_id: 'reumatologia',
-    specialty_name: 'Reumatologia',
-    mastery_score: 90,
-    level: 'Nivel 3',
-    cases_completed: 6,
-    total_cases: 6,
-  },
-  {
-    specialty_id: 'ginecologia',
-    specialty_name: 'Ginecologia',
-    mastery_score: 70,
-    level: 'Nivel 2',
-    cases_completed: 2,
-    total_cases: 8,
-  },
-];
-
-const DEFAULT_SPACED_REPETITIONS: SpacedRepetitionItem[] = [
-  {
-    case_id: 's13256-019-2334-y',
-    case_title: 'Injuria Renal Aguda KDIGO 3 por AINEs en ERC',
-    specialty_name: 'Nefrologia',
-    cycle: 'D7',
-    scheduled_date: new Date().toISOString(),
-    is_overdue: false,
-    gap_type: 'GAP_LAB_INTERPRETATION',
-  },
-  {
-    case_id: 's13256-022-03392-w',
-    case_title: 'Cetoacidosis Diabetica Severa con Hipokalemia',
-    specialty_name: 'Endocrinologia',
-    cycle: 'D21',
-    scheduled_date: new Date(Date.now() - 86400000).toISOString(),
-    is_overdue: true,
-    gap_type: 'GAP_INITIAL_MANAGEMENT',
-  },
-];
-
 const GAP_LABELS: Record<CognitiveGapTag, string> = {
-  GAP_TRIAGE_SEVERITY: 'Triaje y Gravedad',
-  GAP_DIAGNOSTIC_REASONING: 'Razonamiento Diagnostico',
-  GAP_LAB_INTERPRETATION: 'Interpretacion de Labs',
-  GAP_INITIAL_MANAGEMENT: 'Manejo Terapeutico',
+  GAP_TRIAGE_SEVERITY: 'Triaje y reconocimiento de gravedad',
+  GAP_DIAGNOSTIC_REASONING: 'Integracion clinico-diagnostica',
+  GAP_LAB_INTERPRETATION: 'Interpretacion de examenes auxiliares',
+  GAP_INITIAL_MANAGEMENT: 'Manejo terapeutico inicial',
+};
+
+const WORLD_LABELS: Record<string, string> = {
+  medicina_interna: 'Medicina Interna',
+  pediatria: 'Pediatria',
+  ginecologia_obstetricia: 'Gineco-Obstetricia',
+  cirugia_general: 'Cirugia General',
+  medicina_familiar: 'Medicina Familiar',
+  nefrologia: 'Nefrologia',
+  endocrinologia: 'Endocrinologia',
+  neurologia: 'Neurologia',
+  reumatologia: 'Reumatologia',
 };
 
 export const DashboardPage: React.FC<DashboardPageProps> = ({
@@ -171,39 +117,38 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   const { user } = useAuth();
   const [dashboard, setDashboard] = useState<LevelingDashboard | null>(null);
   const [specialties, setSpecialties] = useState<Specialty[]>(DEFAULT_SPECIALTIES);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isUsingFallback, setIsUsingFallback] = useState<boolean>(false);
-
-  const fetchDashboardData = async () => {
-    setIsLoading(true);
-    try {
-      const [dashData, specsData] = await Promise.allSettled([
-        levelingApi.getDashboard(),
-        specialtiesApi.getCatalog(),
-      ]);
-
-      if (dashData.status === 'fulfilled' && dashData.value) {
-        setDashboard(dashData.value);
-        setIsUsingFallback(false);
-      } else {
-        setIsUsingFallback(true);
-      }
-
-      if (specsData.status === 'fulfilled' && specsData.value?.length) {
-        setSpecialties(specsData.value);
-      } else {
-        setSpecialties(DEFAULT_SPECIALTIES);
-      }
-    } catch {
-      setIsUsingFallback(true);
-      setSpecialties(DEFAULT_SPECIALTIES);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   useEffect(() => {
+    let mounted = true;
+    const fetchDashboardData = async () => {
+      try {
+        const [dashData, specsData] = await Promise.allSettled([
+          levelingApi.getDashboard(),
+          specialtiesApi.getCatalog(),
+        ]);
+
+        if (!mounted) return;
+
+        if (dashData.status === 'fulfilled' && dashData.value) {
+          setDashboard(dashData.value);
+        }
+
+        if (specsData.status === 'fulfilled' && specsData.value?.length) {
+          setSpecialties(specsData.value);
+        } else {
+          setSpecialties(DEFAULT_SPECIALTIES);
+        }
+      } catch {
+        if (mounted) {
+          setSpecialties(DEFAULT_SPECIALTIES);
+        }
+      }
+    };
+
     fetchDashboardData();
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const isDiagnosticCompleted = Boolean(
@@ -219,12 +164,12 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   const aptitudeLabel =
     dashboard?.aptitude_label ??
     (aptitudeStatus === 'apto'
-      ? 'Apto para el Examen / Internado'
+      ? 'Apto para su etapa clinica'
       : aptitudeStatus === 'en_nivelacion'
-        ? 'En Nivelacion (Apto Condicional)'
+        ? 'En nivelacion guiada (Apto condicional)'
         : aptitudeStatus === 'no_apto'
-          ? 'No Apto (Refuerzo Prioritario)'
-          : 'Pendiente de Autoevaluacion');
+          ? 'Refuerzo prioritario recomendado'
+          : 'Pendiente de evaluacion inicial');
 
   const radarScores: Record<CognitiveGapTag, number> =
     dashboard?.cognitive_gap_radar || DEFAULT_RADAR_SCORES;
@@ -236,20 +181,20 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     dashboard?.total_xp ?? user?.experience_points ?? user?.xp ?? 0;
 
   const streakDays: number =
-    dashboard?.streak_days ?? user?.streak_days ?? 1;
+    dashboard?.streak_days ?? user?.streak_days ?? 0;
 
   const spacedItems: SpacedRepetitionItem[] =
     dashboard?.pending_spaced_repetitions &&
     dashboard.pending_spaced_repetitions.length > 0
       ? dashboard.pending_spaced_repetitions
-      : isUsingFallback
-        ? DEFAULT_SPACED_REPETITIONS
-        : [];
+      : [];
 
   const masteriesList: SpecialtyMastery[] =
-    dashboard?.specialty_masteries && dashboard.specialty_masteries.length > 0
+    isDiagnosticCompleted &&
+    dashboard?.specialty_masteries &&
+    dashboard.specialty_masteries.length > 0
       ? dashboard.specialty_masteries
-      : DEFAULT_MASTERIES;
+      : [];
 
   const masteriesMap = new Map<string, SpecialtyMastery>();
   masteriesList.forEach((m) => {
@@ -266,261 +211,328 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     gapEntries[0]
   );
 
-  const studentName = user?.full_name || 'Dr. Medico UPCH';
-  const universityHospital =
-    user?.university || 'Universidad Peruana Cayetano Heredia - Hospital Cayetano Heredia';
+  const firstName = (user?.full_name || 'Estudiante')
+    .replace(/^Dr\.?\s+/i, '')
+    .split(' ')[0];
+  const activeWorldKey =
+    user?.diagnostic_specialty || user?.initial_world || 'medicina_interna';
+  const activeWorldLabel =
+    WORLD_LABELS[activeWorldKey] || 'Medicina Interna';
+  const academicSubtitle = [
+    user?.career || 'Medicina Humana',
+    user?.academic_year,
+    user?.university,
+  ]
+    .filter(Boolean)
+    .join(' · ');
+
+  const handleEnterSpecialty = (specialtyId: string) => {
+    if (!isDiagnosticCompleted && onStartDiagnostic) {
+      onStartDiagnostic();
+      return;
+    }
+    onSelectSpecialty(specialtyId);
+  };
 
   return (
-    <div className={`space-y-8 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 ${className}`}>
-      {/* Top Banner: Welcome doctor & shift status */}
-      <section className="relative overflow-hidden rounded-3xl bg-white border border-slate-200 p-6 md:p-8 shadow-xs">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+    <div className={`space-y-8 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 ${className}`}>
+      {/* 1. Classic Editorial Welcome & Tu Ruta Clinica Summary (No Sincronizar button) */}
+      <section className="rounded-3xl bg-white border border-[#DCE5E3] p-6 sm:p-8 lg:p-10 space-y-7">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-[#EDF2F0]">
           <div className="space-y-2">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="px-2.5 py-1 rounded-md bg-sky-50 border border-sky-200 font-mono text-xs font-semibold text-sky-800 flex items-center gap-1.5 shadow-xs">
-                <Hospital className="w-3.5 h-3.5 text-sky-600" />
-                <span>Guardia de Medicina Interna / UPCH</span>
-              </span>
-
-              {isDiagnosticCompleted ? (
-                <span className={`px-2.5 py-1 rounded-md border font-mono text-xs font-semibold flex items-center gap-1.5 shadow-xs ${
-                  aptitudeStatus === 'apto'
-                    ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
-                    : aptitudeStatus === 'en_nivelacion'
-                      ? 'bg-amber-50 text-amber-800 border-amber-300'
-                      : 'bg-rose-50 text-rose-800 border-rose-300'
-                }`}>
-                  {aptitudeStatus === 'apto' ? (
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                  ) : aptitudeStatus === 'en_nivelacion' ? (
-                    <Brain className="w-3.5 h-3.5 text-amber-600" />
-                  ) : (
-                    <AlertTriangle className="w-3.5 h-3.5 text-rose-600" />
-                  )}
-                  <span>Diagnostico: {aptitudeLabel} ({diagnosticScore}%)</span>
-                </span>
-              ) : (
-                <span className="px-2.5 py-1 rounded-md bg-amber-50 border border-amber-300 font-mono text-xs font-semibold text-amber-800 flex items-center gap-1.5 animate-pulse shadow-xs">
-                  <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
-                  <span>Autoevaluacion Inicial Pendiente</span>
-                </span>
-              )}
-
-              {isUsingFallback && (
-                <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-slate-100 border border-slate-200 text-slate-600">
-                  Modo Demostracion Local
-                </span>
-              )}
-            </div>
-
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Bienvenido, {studentName}
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#0E6F65]">
+              Mundo Clinico · {activeWorldLabel}
+            </p>
+            <h1 className="font-serif text-3xl sm:text-4xl font-semibold text-[#0B252E]">
+              Hola, {firstName}
             </h1>
-
-            <p className="text-xs sm:text-sm text-slate-600 max-w-2xl leading-relaxed">
-              {universityHospital}. Tu desempeno diagnostico esta calibrado en
-              tiempo real por el motor OCRI para optimizar tu preparacion para el ENAM
-              y el Residentado Medico.
+            <p className="text-sm text-[#4A5D64] max-w-2xl leading-relaxed">
+              Tu esfuerzo de hoy construye el criterio medico que aplicaras manana.
+              {academicSubtitle ? ` ${academicSubtitle}.` : ''}
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3 shrink-0">
-            <button
-              type="button"
-              onClick={fetchDashboardData}
-              disabled={isLoading}
-              className="px-3.5 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-mono flex items-center gap-2 transition-all shadow-xs"
-              title="Actualizar telemetria"
-            >
-              <RefreshCw
-                className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin text-sky-600' : 'text-slate-500'}`}
-              />
-              <span>Sincronizar</span>
-            </button>
-
             {isDiagnosticCompleted ? (
               <button
                 type="button"
                 onClick={() => onSelectSpecialty('nefrologia')}
-                className="px-5 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-semibold flex items-center gap-2 transition-all shadow-xs active:scale-95"
+                className="px-6 py-3 rounded-full bg-[#0E6F65] hover:bg-[#0A564E] text-white text-xs sm:text-sm font-medium flex items-center gap-2 transition-colors shadow-xs"
               >
-                <Activity className="w-4 h-4" />
-                <span>Entrar a Guardia de Turno</span>
+                <span>Comenzar siguiente estacion</span>
+                <ArrowRight className="w-4 h-4" />
               </button>
             ) : (
               <button
                 type="button"
                 onClick={onStartDiagnostic}
-                className="px-5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold flex items-center gap-2 transition-all shadow-xs active:scale-95 animate-bounce"
+                className="px-6 py-3 rounded-full bg-[#0E6F65] hover:bg-[#0A564E] text-white text-xs sm:text-sm font-medium flex items-center gap-2 transition-colors shadow-xs"
               >
                 <ClipboardCheck className="w-4 h-4" />
-                <span>Rendir Autoevaluacion Diagnostica</span>
+                <span>Rendir evaluacion diagnostica inicial</span>
               </button>
             )}
           </div>
         </div>
-      </section>
 
-      {/* Mandatory Diagnostic Prompt Card if pending */}
-      {!isDiagnosticCompleted && (
-        <section className="p-6 rounded-2xl bg-amber-50/90 border border-amber-300 text-slate-900 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex items-start gap-3.5">
-            <div className="w-10 h-10 rounded-xl bg-white border border-amber-300 flex items-center justify-center shrink-0 text-amber-600 shadow-xs">
-              <ClipboardCheck className="w-6 h-6" />
+        {/* Tu Ruta Clinica Strip: Strictly gated on diagnostic completion */}
+        {!isDiagnosticCompleted ? (
+          <div className="p-6 sm:p-7 rounded-2xl bg-[#FDF7E7]/85 border border-[#EFE0B9] flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+            <div className="flex items-start gap-4">
+              <div className="w-11 h-11 rounded-2xl bg-white border border-[#EFE0B9] flex items-center justify-center shrink-0 text-[#8A6116]">
+                <ClipboardCheck className="w-5 h-5" />
+              </div>
+              <div className="space-y-1.5">
+                <span className="text-[11px] uppercase tracking-[0.14em] font-semibold text-[#8A6116] block">
+                  Paso previo obligatorio
+                </span>
+                <h2 className="font-serif text-xl font-semibold text-[#0B252E]">
+                  Calibra tu punto de partida antes de ver porcentajes de rendimiento
+                </h2>
+                <p className="text-xs sm:text-sm text-[#4A5D64] leading-relaxed max-w-2xl">
+                  Para ofrecerte indicadores autenticos de aptitud y detectar tus brechas reales,
+                  primero rinde tu evaluacion inicial. Podras elegir entre el Examen General de
+                  todas las especialidades o el examen de una sola especialidad.
+                </p>
+              </div>
             </div>
-            <div className="space-y-1">
-              <h3 className="text-sm sm:text-base font-bold text-amber-950">
-                Paso Requerido: Autoevaluacion Diagnostica Inicial
-              </h3>
-              <p className="text-xs text-amber-900 leading-relaxed max-w-2xl">
-                Para que tu porcentaje de rendimiento y aptitud clinica no reflejen puntuaciones arbitrarias,
-                debes rendir primero la autoevaluacion de 5 preguntas clinicas basales. Esto calibrara tu radar OCRI
-                y determinara si tu estado inicial es Apto o requiere nivelacion prioritaria.
-              </p>
+
+            <button
+              type="button"
+              onClick={onStartDiagnostic}
+              className="px-6 py-3 rounded-full bg-[#0E6F65] hover:bg-[#0A564E] text-white font-medium text-xs sm:text-sm flex items-center justify-center gap-2 shrink-0 transition-colors"
+            >
+              <span>Elegir modalidad de evaluacion</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-6">
+            {/* Top summary row: Global performance + Active world + Aptitude status */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 sm:p-5 rounded-2xl bg-[#F7FAF9] border border-[#E2ECE9]">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-full border-4 border-[#0E6F65] bg-white flex items-center justify-center shrink-0">
+                  <span className="font-serif text-base font-bold text-[#0B252E]">
+                    {diagnosticScore ?? 0}%
+                  </span>
+                </div>
+                <div>
+                  <span className="text-xs text-[#6B7D83] block">Rendimiento evaluado</span>
+                  <span className="font-serif text-base font-semibold text-[#0B252E]">
+                    {aptitudeLabel}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3.5 md:border-l md:border-[#DCE5E3] md:pl-5">
+                <div className="w-10 h-10 rounded-xl bg-white border border-[#DCE5E3] flex items-center justify-center text-[#0E6F65] shrink-0">
+                  <Stethoscope className="w-5 h-5" />
+                </div>
+                <div>
+                  <span className="text-xs text-[#6B7D83] block">Mundo clinico activo</span>
+                  <span className="font-serif text-base font-semibold text-[#0B252E]">
+                    {activeWorldLabel}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3.5 md:border-l md:border-[#DCE5E3] md:pl-5">
+                <div className="w-10 h-10 rounded-xl bg-white border border-[#DCE5E3] flex items-center justify-center text-[#0E6F65] shrink-0">
+                  {aptitudeStatus === 'apto' ? (
+                    <ShieldCheck className="w-5 h-5 text-[#0E6F65]" />
+                  ) : (
+                    <Brain className="w-5 h-5 text-[#8A6116]" />
+                  )}
+                </div>
+                <div>
+                  <span className="text-xs text-[#6B7D83] block">Modalidad diagnostica</span>
+                  <span className="font-serif text-base font-semibold text-[#0B252E]">
+                    {user?.diagnostic_mode === 'specialty'
+                      ? 'Especialidad focalizada'
+                      : 'Examen General'}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* 3 Classic Pastel Diagnostic Route Cards (Matching Reference Aesthetic) */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Pastel Rose: Brecha detectada */}
+              <div className="p-5 rounded-2xl bg-[#FBF1F1] border border-[#EED7D7] space-y-2">
+                <div className="flex items-center gap-2 text-xs font-semibold text-[#9E3F42]">
+                  <AlertTriangle className="w-4 h-4 shrink-0" />
+                  <span>Brecha prioritaria</span>
+                </div>
+                <h3 className="font-serif text-lg font-semibold text-[#0B252E]">
+                  {GAP_LABELS[weakestGap[0]]}
+                </h3>
+                <p className="text-xs text-[#4A5D64] leading-relaxed">
+                  Oportunidad detectada para reforzar la toma de decisiones estructurada sin presion
+                  de tiempo.
+                </p>
+              </div>
+
+              {/* Pastel Cream: Fortaleza / Enfoque */}
+              <div className="p-5 rounded-2xl bg-[#FDF7E7] border border-[#EFE0B9] space-y-2">
+                <div className="flex items-center gap-2 text-xs font-semibold text-[#8A6116]">
+                  <Brain className="w-4 h-4 shrink-0" />
+                  <span>Pilar consolidado</span>
+                </div>
+                <h3 className="font-serif text-lg font-semibold text-[#0B252E]">
+                  {GAP_LABELS[strongestGap[0]]}
+                </h3>
+                <p className="text-xs text-[#4A5D64] leading-relaxed">
+                  Demuestras criterio consistente al integrar hallazgos semiologicos con la conducta
+                  clinica.
+                </p>
+              </div>
+
+              {/* Pastel Sage: Siguiente paso */}
+              <div className="p-5 rounded-2xl bg-[#ECF6F4] border border-[#CFE7E2] space-y-2">
+                <div className="flex items-center gap-2 text-xs font-semibold text-[#0E6F65]">
+                  <Target className="w-4 h-4 shrink-0" />
+                  <span>Siguiente paso sugerido</span>
+                </div>
+                <h3 className="font-serif text-lg font-semibold text-[#0B252E]">
+                  Microaprendizaje + estacion
+                </h3>
+                <p className="text-xs text-[#4A5D64] leading-relaxed">
+                  Revisa la ficha semiologica clave y practica una nueva estacion adaptativa en tu
+                  ruta.
+                </p>
+              </div>
+            </div>
+
+            {/* 6-Step Pedagogical Route Footer */}
+            <div className="pt-2 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-center">
+              {[
+                { label: 'Evaluacion', icon: ClipboardCheck, active: true },
+                { label: 'Brecha', icon: AlertTriangle, active: true },
+                { label: 'Feedback', icon: CheckCircle2, active: true },
+                { label: 'Aprendizaje', icon: BookOpen, active: false },
+                { label: 'Practica', icon: Stethoscope, active: false },
+                { label: 'Reevaluacion', icon: BarChart3, active: false },
+              ].map((step) => {
+                const StepIcon = step.icon;
+                return (
+                  <div
+                    key={step.label}
+                    className="flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-[#FDFCFA] border border-[#EDF2F0]"
+                  >
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                        step.active
+                          ? 'bg-[#0E6F65] text-white'
+                          : 'bg-[#F2F7F6] text-[#4A5D64]'
+                      }`}
+                    >
+                      <StepIcon className="w-4 h-4" />
+                    </div>
+                    <span className="text-xs font-medium text-[#0B252E]">
+                      {step.label}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
           </div>
-          <button
-            type="button"
-            onClick={onStartDiagnostic}
-            className="px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-xs shrink-0 transition-all hover:scale-105"
-          >
-            <span>Iniciar Autoevaluacion (5 Casos)</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </section>
-      )}
+        )}
+      </section>
 
-      {/* Bento Grid: High-Yield Student Metrics */}
-      <section aria-label="Metricas Clave del Estudiante">
+      {/* 2. Student Metrics Row */}
+      <section aria-label="Indicadores de avance">
         <BentoStats
           level={userLevel}
           xp={userXP}
           streakDays={streakDays}
           pendingReviewsCount={spacedItems.length}
-          stageName={user?.stage || 'Internado Medico Hospitalario'}
+          stageName={user?.academic_year || user?.stage}
+          isDiagnosticCompleted={isDiagnosticCompleted}
         />
       </section>
 
-      {/* Two-Column Section: Competency Radar (Left) + Spaced Repetition (Right) */}
-      <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-        {/* Left Column: 4-Gap Competency Radar */}
-        <div className="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 flex flex-col justify-between shadow-xs">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+      {/* 3. Two-Column Section: Competency Radar (Only shown when calibrated) + Spaced Repetition */}
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+        <div className="rounded-3xl bg-white border border-[#DCE5E3] p-6 flex flex-col justify-between">
+          <div className="flex items-center justify-between pb-4 border-b border-[#EDF2F0] mb-4">
             <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-mono uppercase tracking-wider text-sky-700 font-semibold">
-                  Motor Analitico OCRI
-                </span>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono border border-sky-200 bg-sky-50 text-sky-800 font-semibold">
-                  4 Brechas Cognitivas
-                </span>
-              </div>
-              <h2 className="text-base font-bold text-slate-900 mt-1">
-                Radar de Competencia Clinica
+              <p className="text-[11px] uppercase tracking-[0.14em] text-[#0E6F65] font-semibold">
+                Perfil de competencias
+              </p>
+              <h2 className="font-serif text-lg sm:text-xl font-semibold text-[#0B252E] mt-0.5">
+                Equilibrio de razonamiento clinico
               </h2>
             </div>
 
             <div className="text-right">
-              <span className="text-[10px] font-mono text-slate-500 block uppercase font-medium">
-                {isDiagnosticCompleted ? 'Rendimiento Basal' : 'Diagnostico'}
+              <span className="text-[11px] text-[#6B7D83] block">
+                Estado
               </span>
-              <span className="text-base font-mono font-bold text-sky-700">
-                {isDiagnosticCompleted ? `${diagnosticScore ?? Math.round(dashboard?.ocri_score ?? 0)}%` : 'Pendiente'}
+              <span className="font-serif text-base font-semibold text-[#0E6F65]">
+                {isDiagnosticCompleted ? `${diagnosticScore ?? 0}% basal` : 'Sin evaluar'}
               </span>
             </div>
           </div>
 
-          {/* SVG Radar */}
-          <div className="py-2">
-            <CompetencyRadar scores={radarScores} size={360} />
-          </div>
-
-          {/* Summary of weakest vs strongest clinical gap */}
-          <div className="mt-4 pt-4 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-            {/* Strongest */}
-            <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 flex items-start gap-2.5">
-              <div className="w-6 h-6 rounded-md bg-white border border-emerald-200 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-              </div>
-              <div className="space-y-0.5 min-w-0">
-                <div className="text-[10px] uppercase font-mono font-bold text-emerald-800 tracking-wider">
-                  Fortaleza Clinica
-                </div>
-                <div className="font-semibold text-slate-900 truncate">
-                  {GAP_LABELS[strongestGap[0]]}
-                </div>
-                <div className="text-slate-600 font-mono text-[11px]">
-                  Precision: {strongestGap[1]}%
-                </div>
-              </div>
+          {isDiagnosticCompleted ? (
+            <div className="py-2">
+              <CompetencyRadar scores={radarScores} size={350} />
             </div>
-
-            {/* Weakest */}
-            <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 flex items-start gap-2.5">
-              <div className="w-6 h-6 rounded-md bg-white border border-amber-200 text-amber-600 flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
-                <AlertTriangle className="w-3.5 h-3.5" />
+          ) : (
+            <div className="py-12 px-5 text-center space-y-4 my-auto">
+              <div className="w-12 h-12 rounded-full bg-[#F2F7F6] border border-[#DCE5E3] flex items-center justify-center text-[#0E6F65] mx-auto">
+                <Brain className="w-5 h-5" />
               </div>
-              <div className="space-y-0.5 min-w-0">
-                <div className="text-[10px] uppercase font-mono font-bold text-amber-800 tracking-wider">
-                  Foco de Refuerzo
-                </div>
-                <div className="font-semibold text-slate-900 truncate">
-                  {GAP_LABELS[weakestGap[0]]}
-                </div>
-                <div className="text-slate-600 font-mono text-[11px]">
-                  Precision: {weakestGap[1]}% (Prioridad)
-                </div>
+              <div className="space-y-1.5 max-w-md mx-auto">
+                <h3 className="font-serif text-lg font-semibold text-[#0B252E]">
+                  Mapa de competencias pendiente de calibracion
+                </h3>
+                <p className="text-xs sm:text-sm text-[#4A5D64] leading-relaxed">
+                  Tus porcentajes por eje cognitivo apareceran aqui inmediatamente despues de
+                  completar tu evaluacion diagnostica inicial.
+                </p>
               </div>
+              <button
+                type="button"
+                onClick={onStartDiagnostic}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#ECF6F4] hover:bg-[#DFEFEA] text-[#0E6F65] text-xs font-semibold transition-colors"
+              >
+                <span>Iniciar evaluacion inicial</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
             </div>
-          </div>
-
-          {/* Actionable recommendation */}
-          <div className="mt-3 p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-[11px] text-slate-600 flex items-center gap-2">
-            <TrendingUp className="w-3.5 h-3.5 text-sky-600 shrink-0" />
-            <span>
-              El algoritmo inyectara mas estaciones de{' '}
-              <strong className="text-slate-900 font-semibold">
-                {GAP_LABELS[weakestGap[0]]}
-              </strong>{' '}
-              para acelerar tu ascenso de nivel.
-            </span>
-          </div>
+          )}
         </div>
 
-        {/* Right Column: Spaced Repetition Queue */}
-        <div className="h-full">
-          <SpacedRepetitionQueue
-            items={spacedItems}
-            onReview={onSelectCase}
-            className="h-full shadow-xs"
-          />
-        </div>
+        <SpacedRepetitionQueue
+          items={spacedItems}
+          onReview={onSelectCase}
+          className="h-full"
+        />
       </section>
 
-      {/* Bottom Section: Clinical Worlds (Specialties) */}
-      <section className="space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-200">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-sky-50 border border-sky-200 flex items-center justify-center text-sky-600 shadow-xs">
+      {/* 4. Clinical Worlds Grid */}
+      <section className="space-y-5">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-3 border-b border-[#E2ECE9]">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-full bg-[#ECF6F4] flex items-center justify-center text-[#0E6F65]">
               <Compass className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-slate-900 tracking-tight">
-                Mundos Clinicos (Especialidades Medicas)
+              <h2 className="font-serif text-xl sm:text-2xl font-semibold text-[#0B252E]">
+                Mundos clinicos por especialidad
               </h2>
-              <p className="text-xs text-slate-500">
-                Exploracion modular de casos estructurados bajo simulacion de guardia hospitalaria
+              <p className="text-xs sm:text-sm text-[#6B7D83]">
+                Selecciona una especialidad para practicar casos clinicos estructurados en tres estaciones
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 text-xs font-mono text-slate-500">
-            <Sparkles className="w-3.5 h-3.5 text-sky-600" />
-            <span>{specialties.length} especialidades disponibles</span>
-          </div>
+          <span className="text-xs text-[#6B7D83]">
+            {specialties.length} especialidades disponibles
+          </span>
         </div>
 
-        {/* Specialties Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {specialties.map((spec) => {
             const mastery = masteriesMap.get(spec.id.toLowerCase());
@@ -529,7 +541,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 key={spec.id}
                 specialty={spec}
                 mastery={mastery}
-                onSelect={onSelectSpecialty}
+                isDiagnosticCompleted={isDiagnosticCompleted}
+                onSelect={handleEnterSpecialty}
               />
             );
           })}

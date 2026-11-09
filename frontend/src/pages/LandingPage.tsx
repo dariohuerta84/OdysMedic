@@ -1,383 +1,227 @@
 import React, { useState } from 'react';
 import {
   ArrowRight,
-  Zap,
-  Clock,
   CheckCircle2,
-  Sparkles,
-  Compass,
-  Smartphone,
-  Coins,
+  GraduationCap,
+  BarChart2,
+  Users,
+  Stethoscope,
+  Clock,
+  BookOpen,
   ShieldCheck,
   XCircle,
+  Lock,
 } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import { StaticClinicalWorldPreview } from '../components/landing/StaticClinicalWorldPreview';
+import type { OnboardingTrack } from '../types/api';
 
 export interface LandingPageProps {
-  onStartDemo: () => void;
-  onExploreWorlds: () => void;
+  onStartRoute: (track: OnboardingTrack) => void;
+  onOpenLibrary: () => void;
 }
 
-/**
- * Animated Row 1: Hospital Shifts vs Micro-cases
- */
-const ProblemSolutionRow1: React.FC = () => {
+const ComparisonRow1: React.FC = () => {
   const { ref, isVisible } = useScrollReveal({ threshold: 0.15, triggerOnce: false });
 
   return (
-    <div
-      ref={ref}
-      className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-stretch transition-all duration-700"
-    >
-      {/* Left: The Problem (Pegado a la izquierda) */}
+    <div ref={ref} className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+      {/* Left: Hospital Shift Overload */}
       <div
-        className={`p-6 sm:p-7 rounded-3xl bg-rose-50/60 border-2 border-rose-200/80 shadow-xs flex flex-col justify-between space-y-5 transition-all duration-700 ease-out ${
-          isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'
+        className={`p-7 rounded-2xl bg-[#FBF1F1] border border-[#EED7D7] flex flex-col justify-between space-y-5 transition-all duration-700 ease-out ${
+          isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
         }`}
       >
         <div className="space-y-4">
-          <div className="flex items-center justify-between gap-2 flex-wrap">
-            <span className="px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-rose-100 text-rose-800 border border-rose-300">
-              Obstaculo #1 : La Sobrecarga Hospitalaria
+          <div className="flex items-baseline justify-between gap-3 border-b border-[#E8CECE] pb-3">
+            <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[#9E3F42]">
+              Realidad hospitalaria
             </span>
-            <span className="text-xl sm:text-2xl font-black font-mono text-rose-700">
-              36 hrs
-            </span>
+            <span className="font-serif text-2xl font-bold text-[#8E3538]">36 horas</span>
           </div>
 
-          <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 leading-snug">
-            Guardias de 36 Horas: El Agotamiento que Impide Abrir Libros
+          <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#0B252E] leading-snug">
+            Guardias extensas que agotan el tiempo de estudio tradicional
           </h3>
 
-          {/* Visual Hospital Timeline */}
-          <div className="space-y-2 pt-1">
-            <span className="text-[11px] font-mono text-slate-500 uppercase tracking-wider block font-semibold">
-              Cronograma Real de la Guardia:
-            </span>
-            <div className="grid grid-cols-4 gap-1.5 text-center text-[10px] font-mono">
-              <div className="p-2 rounded-lg bg-white border border-rose-200 text-slate-700">
-                <span className="font-bold block text-rose-700">08:00</span>
-                <span>Pase Visita</span>
+          <div className="grid grid-cols-4 gap-2 text-center text-xs">
+            {[
+              { hour: '08:00', task: 'Pase de visita' },
+              { hour: '14:00', task: 'Evoluciones' },
+              { hour: '22:00', task: 'Emergencias' },
+              { hour: '06:00', task: 'Entrega guardia' },
+            ].map((slot) => (
+              <div
+                key={slot.hour}
+                className="p-2.5 rounded-xl bg-white/85 border border-[#EED7D7]"
+              >
+                <span className="font-semibold block text-[#9E3F42]">{slot.hour}</span>
+                <span className="text-[11px] text-[#574344]">{slot.task}</span>
               </div>
-              <div className="p-2 rounded-lg bg-white border border-rose-200 text-slate-700">
-                <span className="font-bold block text-rose-700">14:00</span>
-                <span>Historias</span>
-              </div>
-              <div className="p-2 rounded-lg bg-white border border-rose-200 text-slate-700">
-                <span className="font-bold block text-rose-700">22:00</span>
-                <span>Emergencias</span>
-              </div>
-              <div className="p-2 rounded-lg bg-white border border-rose-200 text-slate-700">
-                <span className="font-bold block text-rose-700">06:00</span>
-                <span>Trauma Shock</span>
-              </div>
-            </div>
+            ))}
           </div>
 
-          {/* Visual Energy Meter */}
-          <div className="p-3.5 rounded-2xl bg-white border border-rose-200 space-y-1.5 shadow-xs">
-            <div className="flex items-center justify-between text-xs font-mono">
-              <span className="text-slate-600 font-medium">Energia cognitiva tras el turno:</span>
-              <span className="font-bold text-rose-700">8% (Fatiga Extrema)</span>
+          <div className="p-4 rounded-xl bg-white/90 border border-[#EED7D7] space-y-2">
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-[#574344]">Reserva de atencion al finalizar el turno</span>
+              <span className="font-semibold text-[#9E3F42]">8% disponible</span>
             </div>
-            <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
-              <div className="h-full bg-rose-500 rounded-full transition-all duration-1000" style={{ width: isVisible ? '8%' : '0%' }} />
+            <div className="w-full h-2 bg-[#F4E3E3] rounded-full overflow-hidden">
+              <div
+                className="h-full bg-[#B44B4E] rounded-full transition-all duration-1000"
+                style={{ width: isVisible ? '8%' : '0%' }}
+              />
             </div>
           </div>
         </div>
 
-        <p className="text-xs text-rose-950 font-medium leading-relaxed pt-2 border-t border-rose-200/60">
-          Tras 30 horas de pie en el hospital, sentarse a estudiar 4 horas al dia es biologicamente imposible.
+        <p className="text-xs sm:text-sm text-[#574344] leading-relaxed">
+          Intentar abrir tratados extensos durante cuatro horas continuas despues de una guardia resulta insostenible.
         </p>
       </div>
 
-      {/* Right: The OdyssMedic Solution (Pegado a la derecha) */}
+      {/* Right: OdyssMedic Calm Micro-Stations */}
       <div
-        className={`p-6 sm:p-7 rounded-3xl bg-sky-50/70 border-2 border-sky-300/80 shadow-xs flex flex-col justify-between space-y-5 transition-all duration-700 ease-out delay-150 ${
-          isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
+        className={`p-7 rounded-2xl bg-[#ECF6F4] border border-[#CFE7E2] flex flex-col justify-between space-y-5 transition-all duration-700 ease-out delay-150 ${
+          isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
         }`}
       >
         <div className="space-y-4">
-          <div className="flex items-center justify-between gap-2 flex-wrap">
-            <span className="px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-sky-100 text-sky-800 border border-sky-300">
-              Solucion OdyssMedic : Micro-Precision
+          <div className="flex items-baseline justify-between gap-3 border-b border-[#CBE3DE] pb-3">
+            <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[#0E6F65]">
+              Ruta OdyssMedic
             </span>
-            <span className="text-xl sm:text-2xl font-black font-mono text-sky-700">
-              5 min
-            </span>
+            <span className="font-serif text-2xl font-bold text-[#0E6F65]">5 minutos</span>
           </div>
 
-          <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 leading-snug">
-            Simulacion Clinica Adaptativa en las Pausas de Guardia
+          <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#0B252E] leading-snug">
+            Estaciones clinicas breves pensadas para tus pausas reales
           </h3>
 
-          {/* Visual Mobile Case Card */}
-          <div className="p-3.5 rounded-2xl bg-white border border-sky-200 space-y-2.5 shadow-xs">
-            <div className="flex items-center justify-between text-[11px] font-mono">
-              <span className="font-bold text-sky-800">Caso Nefrologia KDIGO 2024</span>
-              <span className="text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                Estacion 1 : Triaje
-              </span>
+          <div className="p-4 rounded-xl bg-white/95 border border-[#D5EAE6] space-y-3">
+            <div className="flex items-center justify-between text-xs">
+              <span className="font-semibold text-[#0B252E]">Estacion adaptativa · Nefrologia</span>
+              <span className="text-[#0E6F65] font-medium">Triaje hemodinamico</span>
             </div>
-            <div className="flex flex-wrap gap-1.5 text-[11px] font-mono">
-              <span className="px-2 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200 font-bold">
+            <div className="flex flex-wrap gap-2 text-xs text-[#354B54]">
+              <span className="px-2.5 py-1 rounded-full bg-[#FBF1F1] text-[#9E3F42] font-medium">
                 PA 85/55 mmHg
               </span>
-              <span className="px-2 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200 font-bold">
+              <span className="px-2.5 py-1 rounded-full bg-[#FBF1F1] text-[#9E3F42] font-medium">
                 FC 118 lpm
               </span>
-              <span className="px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
+              <span className="px-2.5 py-1 rounded-full bg-[#F2F7F6] text-[#354B54]">
                 SatO2 95%
               </span>
             </div>
-            <div className="p-2 rounded-lg bg-emerald-50/80 border border-emerald-200 text-xs text-emerald-950 font-medium flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>Expansion con cristaloides y monitorizacion de diuresis horaria</span>
+            <div className="flex items-center gap-2 text-xs text-[#1E5E56] pt-1">
+              <CheckCircle2 className="w-4 h-4 text-[#0E6F65] shrink-0" />
+              <span>Reanimacion guiada por metas y vigilancia de diuresis horaria</span>
             </div>
           </div>
 
-          {/* Visual Feasibility Meter */}
-          <div className="p-3.5 rounded-2xl bg-white border border-sky-200 space-y-1.5 shadow-xs">
-            <div className="flex items-center justify-between text-xs font-mono">
-              <span className="text-slate-600 font-medium">Viabilidad en guardia hospitalaria:</span>
-              <span className="font-bold text-sky-800">100% (3 a 5 min desde el celular)</span>
+          <div className="p-4 rounded-xl bg-white/95 border border-[#D5EAE6] space-y-2">
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-[#354B54]">Adaptabilidad al ritmo hospitalario</span>
+              <span className="font-semibold text-[#0E6F65]">100% realizable</span>
             </div>
-            <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
-              <div className="h-full bg-sky-500 rounded-full transition-all duration-1000" style={{ width: isVisible ? '100%' : '0%' }} />
+            <div className="w-full h-2 bg-[#DCECE9] rounded-full overflow-hidden">
+              <div
+                className="h-full bg-[#0E6F65] rounded-full transition-all duration-1000"
+                style={{ width: isVisible ? '100%' : '0%' }}
+              />
             </div>
           </div>
         </div>
 
-        <p className="text-xs text-sky-950 font-medium leading-relaxed pt-2 border-t border-sky-200/60">
-          Entrena casos de alta complejidad en pausas reales del turno sin alterar tu horario asistencial.
+        <p className="text-xs sm:text-sm text-[#35544F] leading-relaxed">
+          Avanzas estacion por estacion con calma, consolidando criterio diagnostico sin saturar tu jornada.
         </p>
       </div>
     </div>
   );
 };
 
-/**
- * Animated Row 2: Passive MCQ Banks vs OCRI Root Cause Engine
- */
-const ProblemSolutionRow2: React.FC = () => {
+const ComparisonRow2: React.FC = () => {
   const { ref, isVisible } = useScrollReveal({ threshold: 0.15, triggerOnce: false });
 
   return (
-    <div
-      ref={ref}
-      className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-stretch transition-all duration-700"
-    >
-      {/* Left: The Problem (Pegado a la izquierda) */}
+    <div ref={ref} className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+      {/* Left: Passive Question Banks */}
       <div
-        className={`p-6 sm:p-7 rounded-3xl bg-amber-50/60 border-2 border-amber-200/80 shadow-xs flex flex-col justify-between space-y-5 transition-all duration-700 ease-out ${
-          isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'
+        className={`p-7 rounded-2xl bg-[#FDF7E7] border border-[#EFE2BE] flex flex-col justify-between space-y-5 transition-all duration-700 ease-out ${
+          isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
         }`}
       >
         <div className="space-y-4">
-          <div className="flex items-center justify-between gap-2 flex-wrap">
-            <span className="px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-300">
-              Obstaculo #2 : La Trampa del Banco Pasivo
+          <div className="flex items-baseline justify-between gap-3 border-b border-[#E8D8AE] pb-3">
+            <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[#9A6B1F]">
+              Bancos convencionales
             </span>
-            <span className="text-xl sm:text-2xl font-black font-mono text-amber-700">
-              70% Olvido
-            </span>
+            <span className="font-serif text-2xl font-bold text-[#8A5E18]">70% olvido</span>
           </div>
 
-          <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 leading-snug">
-            Memorizar Claves sin Entender la Causa Raiz del Error
+          <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#0B252E] leading-snug">
+            Memorizar claves aisladas sin comprender el origen del error
           </h3>
 
-          {/* Visual Ebbinghaus Decline */}
-          <div className="p-3.5 rounded-2xl bg-white border border-amber-200 space-y-2 shadow-xs">
-            <div className="flex items-center justify-between text-xs font-mono">
-              <span className="text-slate-600 font-medium">Retencion a las 48 horas (Ebbinghaus):</span>
-              <span className="font-bold text-amber-800">Solo 30% retenido</span>
+          <div className="space-y-2.5 text-xs sm:text-sm text-[#5B503B]">
+            <div className="flex items-start gap-2.5 p-3 rounded-xl bg-white/90 border border-[#EFE2BE]">
+              <XCircle className="w-4 h-4 text-[#B9852D] shrink-0 mt-0.5" />
+              <span>Simulacros extensos que indican la letra correcta sin desglosar el razonamiento clinico.</span>
             </div>
-            <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
-              <div className="h-full bg-amber-500 rounded-full transition-all duration-1000" style={{ width: isVisible ? '30%' : '0%' }} />
-            </div>
-            <div className="flex items-center justify-between text-[10px] font-mono text-slate-500 pt-1">
-              <span>Dia 0 : 100%</span>
-              <span>Dia 1 : 55%</span>
-              <span className="text-amber-800 font-bold">Dia 2 : 30%</span>
-            </div>
-          </div>
-
-          {/* Problem Checklist */}
-          <div className="space-y-1.5 text-xs text-slate-700">
-            <div className="flex items-center gap-2 p-2 rounded-xl bg-white border border-amber-200/70">
-              <XCircle className="w-4 h-4 text-amber-600 shrink-0" />
-              <span>Simulacros de 100 preguntas que solo indican clave correcta sin analisis.</span>
-            </div>
-            <div className="flex items-center gap-2 p-2 rounded-xl bg-white border border-amber-200/70">
-              <XCircle className="w-4 h-4 text-amber-600 shrink-0" />
-              <span>El alumno duda ante casos clinicos con parametros modificados en el examen.</span>
+            <div className="flex items-start gap-2.5 p-3 rounded-xl bg-white/90 border border-[#EFE2BE]">
+              <XCircle className="w-4 h-4 text-[#B9852D] shrink-0 mt-0.5" />
+              <span>Inseguridad cuando un caso real modifica los signos vitales o antecedentes del paciente.</span>
             </div>
           </div>
         </div>
 
-        <p className="text-xs text-amber-950 font-medium leading-relaxed pt-2 border-t border-amber-200/60">
-          Memorizar mecanicamente letras no genera reflejos clinicos ni salva vidas en la guardia.
+        <p className="text-xs sm:text-sm text-[#5B503B] leading-relaxed">
+          La repeticion mecanica se diluye en pocos dias si no se corrige el habito diagnostico subyacente.
         </p>
       </div>
 
-      {/* Right: The OdyssMedic Solution (Pegado a la derecha) */}
+      {/* Right: Root-Cause Gap Engine */}
       <div
-        className={`p-6 sm:p-7 rounded-3xl bg-sky-50/70 border-2 border-sky-300/80 shadow-xs flex flex-col justify-between space-y-5 transition-all duration-700 ease-out delay-150 ${
-          isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
+        className={`p-7 rounded-2xl bg-[#F2F7F6] border border-[#D7E5E2] flex flex-col justify-between space-y-5 transition-all duration-700 ease-out delay-150 ${
+          isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
         }`}
       >
         <div className="space-y-4">
-          <div className="flex items-center justify-between gap-2 flex-wrap">
-            <span className="px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-sky-100 text-sky-800 border border-sky-300">
-              Solucion OdyssMedic : Motor OCRI
+          <div className="flex items-baseline justify-between gap-3 border-b border-[#D2E2DF] pb-3">
+            <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[#0E6F65]">
+              Analisis formativo OCRI
             </span>
-            <span className="text-xl sm:text-2xl font-black font-mono text-sky-700">
-              4 Brechas
-            </span>
+            <span className="font-serif text-2xl font-bold text-[#0E6F65]">4 dimensiones</span>
           </div>
 
-          <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 leading-snug">
-            Diagnostico de Causa Raiz con Microperla de 60 Segundos
+          <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#0B252E] leading-snug">
+            Deteccion precisa de tu brecha con retroalimentacion fundamentada
           </h3>
 
-          {/* Visual 4-Gap Taxonomy Radar Card */}
-          <div className="p-3.5 rounded-2xl bg-white border border-sky-200 space-y-2.5 shadow-xs">
-            <span className="text-[11px] font-mono uppercase text-sky-800 font-bold block">
-              Deteccion Inmediata de la Causa del Desvio:
-            </span>
-            <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-              <div className="p-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 flex items-center justify-between">
-                <span>Triaje Vital</span>
-                <span className="text-emerald-600 font-bold">OK</span>
-              </div>
-              <div className="p-2 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 flex items-center justify-between font-bold">
-                <span>Razonamiento</span>
-                <span className="text-amber-700">Brecha</span>
-              </div>
-              <div className="p-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 flex items-center justify-between">
-                <span>Laboratorio</span>
-                <span className="text-emerald-600 font-bold">OK</span>
-              </div>
-              <div className="p-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 flex items-center justify-between">
-                <span>Manejo</span>
-                <span className="text-emerald-600 font-bold">OK</span>
-              </div>
+          <div className="grid grid-cols-2 gap-2.5 text-xs">
+            <div className="p-3 rounded-xl bg-white border border-[#DCE5E3] flex items-center justify-between">
+              <span className="text-[#354B54]">Triaje y severidad</span>
+              <span className="font-semibold text-[#0E6F65]">Estable</span>
             </div>
-            <div className="p-2 rounded-xl bg-sky-50 border border-sky-200 text-[11px] text-sky-900 font-mono flex items-center gap-2">
-              <Sparkles className="w-3.5 h-3.5 text-sky-600 shrink-0" />
-              <span>Perla clinica KDIGO indexada para subsanar la brecha en 60 segundos.</span>
+            <div className="p-3 rounded-xl bg-[#FDF7E7] border border-[#E9D7AC] flex items-center justify-between">
+              <span className="font-semibold text-[#0B252E]">Integracion diagnostica</span>
+              <span className="font-semibold text-[#9A6B1F]">Reforzar</span>
+            </div>
+            <div className="p-3 rounded-xl bg-white border border-[#DCE5E3] flex items-center justify-between">
+              <span className="text-[#354B54]">Examenes auxiliares</span>
+              <span className="font-semibold text-[#0E6F65]">Estable</span>
+            </div>
+            <div className="p-3 rounded-xl bg-white border border-[#DCE5E3] flex items-center justify-between">
+              <span className="text-[#354B54]">Conducta inicial</span>
+              <span className="font-semibold text-[#0E6F65]">Estable</span>
             </div>
           </div>
         </div>
 
-        <p className="text-xs text-sky-950 font-medium leading-relaxed pt-2 border-t border-sky-200/60">
-          No solo sabes si fallaste: entiendes exactamente por que fallaste y como corregirlo para siempre.
-        </p>
-      </div>
-    </div>
-  );
-};
-
-/**
- * Animated Row 3: Blind Guessing vs Spaced Repetition D7 / D21
- */
-const ProblemSolutionRow3: React.FC = () => {
-  const { ref, isVisible } = useScrollReveal({ threshold: 0.15, triggerOnce: false });
-
-  return (
-    <div
-      ref={ref}
-      className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-stretch transition-all duration-700"
-    >
-      {/* Left: The Problem (Pegado a la izquierda) */}
-      <div
-        className={`p-6 sm:p-7 rounded-3xl bg-rose-50/60 border-2 border-rose-200/80 shadow-xs flex flex-col justify-between space-y-5 transition-all duration-700 ease-out ${
-          isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'
-        }`}
-      >
-        <div className="space-y-4">
-          <div className="flex items-center justify-between gap-2 flex-wrap">
-            <span className="px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-rose-100 text-rose-800 border border-rose-300">
-              Obstaculo #3 : El Descontrol del Rendimiento
-            </span>
-            <span className="text-xl sm:text-2xl font-black font-mono text-rose-700">
-              0 Certeza
-            </span>
-          </div>
-
-          <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 leading-snug">
-            Llegar al Examen de Titulacion sin Saber si Estas Realmente Apto
-          </h3>
-
-          {/* Visual Traditional Uncertainty Card */}
-          <div className="p-3.5 rounded-2xl bg-white border border-rose-200 space-y-2.5 shadow-xs">
-            <div className="flex items-center justify-between text-xs font-mono">
-              <span className="text-slate-600 font-medium">Certeza de aprobacion en ENAM:</span>
-              <span className="font-bold text-rose-700">Baja (Riesgo de reprobar)</span>
-            </div>
-            <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
-              <div className="h-full bg-rose-500 rounded-full transition-all duration-1000" style={{ width: isVisible ? '25%' : '0%' }} />
-            </div>
-            <p className="text-[11px] text-slate-600 font-mono">
-              Los estudiantes rinden examenes con dudas recurrentes en emergencias tiempo-dependientes (ACV, CAD, Shock).
-            </p>
-          </div>
-        </div>
-
-        <p className="text-xs text-rose-950 font-medium leading-relaxed pt-2 border-t border-rose-200/60">
-          La falta de seguimiento objetivo de brechas incrementa la ansiedad y la probabilidad de repetir el internado.
-        </p>
-      </div>
-
-      {/* Right: The OdyssMedic Solution (Pegado a la derecha) */}
-      <div
-        className={`p-6 sm:p-7 rounded-3xl bg-emerald-50/70 border-2 border-emerald-300/80 shadow-xs flex flex-col justify-between space-y-5 transition-all duration-700 ease-out delay-150 ${
-          isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
-        }`}
-      >
-        <div className="space-y-4">
-          <div className="flex items-center justify-between gap-2 flex-wrap">
-            <span className="px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-300">
-              Solucion OdyssMedic : Repeticion D7 / D21
-            </span>
-            <span className="text-xl sm:text-2xl font-black font-mono text-emerald-700">
-              94% Exito
-            </span>
-          </div>
-
-          <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 leading-snug">
-            Consolidacion Neural a Largo Plazo y Certificacion de Aptitud
-          </h3>
-
-          {/* Visual Neural Calendar Card */}
-          <div className="p-3.5 rounded-2xl bg-white border border-emerald-200 space-y-2.5 shadow-xs">
-            <div className="grid grid-cols-3 gap-1.5 text-center text-[10px] font-mono">
-              <div className="p-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700">
-                <span className="block font-bold text-slate-900">Dia 1</span>
-                <span>Desvio Detectado</span>
-              </div>
-              <div className="p-2 rounded-xl bg-sky-50 border border-sky-200 text-sky-800 font-bold">
-                <span className="block text-sky-900">Dia 7</span>
-                <span>Refuerzo D7</span>
-              </div>
-              <div className="p-2 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-900 font-bold">
-                <span className="block text-emerald-800">Dia 21</span>
-                <span>Consolidacion</span>
-              </div>
-            </div>
-
-            <div className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between text-xs font-mono font-bold text-emerald-900">
-              <span>Estado Basal Ganado:</span>
-              <span className="px-2 py-0.5 rounded bg-emerald-600 text-white text-[11px]">
-                Apto para el Examen
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <p className="text-xs text-emerald-950 font-medium leading-relaxed pt-2 border-t border-emerald-200/60">
-          Llega a tu examen de internado con certeza matematica y reflejos clinicos comprobados en guardia.
+        <p className="text-xs sm:text-sm text-[#354B54] leading-relaxed">
+          Cada respuesta genera una sintesis clinica respaldada por guias internacionales y agenda repaso espaciado a 7 y 21 dias.
         </p>
       </div>
     </div>
@@ -385,420 +229,420 @@ const ProblemSolutionRow3: React.FC = () => {
 };
 
 export const LandingPage: React.FC<LandingPageProps> = ({
-  onStartDemo,
-  onExploreWorlds,
+  onStartRoute,
+  onOpenLibrary,
 }) => {
   const [selectedMetricTab, setSelectedMetricTab] = useState<'tiempo' | 'retencion' | 'causa'>('tiempo');
-  const bentoSection = useScrollReveal({ threshold: 0.1, triggerOnce: false });
-  const ctaSection = useScrollReveal({ threshold: 0.15, triggerOnce: false });
+  const worldsReveal = useScrollReveal({ threshold: 0.12, triggerOnce: false });
+  const testimonialsReveal = useScrollReveal({ threshold: 0.12, triggerOnce: false });
+
+  const clinicalWorldsOverview = [
+    {
+      title: 'Medicina Interna',
+      subtitle: 'Dolor toracico, sepsis, insuficiencia cardiaca y neumologia clinica.',
+      sources: 'ESC · Surviving Sepsis · Harrison 21.a Ed.',
+      tone: 'bg-[#ECF6F4] border-[#CFE7E2]',
+    },
+    {
+      title: 'Pediatria',
+      subtitle: 'Rehidratacion Plan A/B/C, urgencias respiratorias, Kawasaki y neuroinfeccion.',
+      sources: 'OMS/MINSA · AAP · Nelson 22.a Ed.',
+      tone: 'bg-[#FDF7E7] border-[#EFE2BE]',
+    },
+    {
+      title: 'Gineco-Obstetricia',
+      subtitle: 'Claves obstetricas, preeclampsia severa, hemorragia posparto y patologia trofoblastica.',
+      sources: 'ACOG · FIGO · RCOG/CDC',
+      tone: 'bg-[#FBF1F1] border-[#EED7D7]',
+    },
+    {
+      title: 'Cirugia y Especialidades',
+      subtitle: 'Abdomen agudo, via biliar TG18, trauma ATLS, nefrologia, neurologia y reumatologia.',
+      sources: 'TG18 · WSES · ATLS 10.a Ed. · KDIGO',
+      tone: 'bg-[#F2F7F6] border-[#D7E5E2]',
+    },
+  ];
+
+  const testimonials = [
+    {
+      quote:
+        'En lugar de resolver cientos de preguntas al azar cansada despues del hospital, aqui identifico en diez minutos que mi brecha estaba en la interpretacion gasometrica.',
+      author: 'Valeria M.',
+      role: 'Interna de Medicina Humana',
+    },
+    {
+      quote:
+        'La separacion por estaciones clinicas obliga a razonar como frente a un paciente real: primero estabilizar, luego pedir el examen preciso y recien entonces tratar.',
+      author: 'Rodrigo C.',
+      role: 'Estudiante de 6to ano · Preparacion ENAM',
+    },
+    {
+      quote:
+        'Las fichas de recoleccion de datos de la Biblioteca resumen exactamente que preguntar en la anamnesis y que signos de alarma buscar en el pase de visita.',
+      author: 'Andrea L.',
+      role: 'Medica Serumista',
+    },
+  ];
 
   return (
-    <div className="relative overflow-hidden bg-slate-50 min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-20 space-y-24">
-        {/* ========================================================================= */}
-        {/* 1. HERO SECTION                                                           */}
-        {/* ========================================================================= */}
-        <section className="relative text-center space-y-7 max-w-4xl mx-auto pt-4 animate-fade-in-up">
-          {/* Institutional Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-sky-200 text-sky-800 text-xs font-mono font-semibold tracking-wide shadow-xs">
-            <span className="w-2 h-2 rounded-full bg-sky-500 animate-pulse" />
-            <span>BioIncubadora Cayetano | Proyectos de Ingenieria 2 - UPCH</span>
-          </div>
+    <div className="bg-[#FDFCFA] text-[#0B252E]">
+      {/* ===================================================================== */}
+      {/* 1. HERO SECTION (Classic Medical Editorial + Static Mundo Preview)    */}
+      {/* ===================================================================== */}
+      <section className="relative bg-gradient-to-br from-[#EEF6F4] via-[#F6FAF9] to-[#FDFCFA] border-b border-[#E3ECEA]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+            {/* Left Column: Editorial Typography & 2 Primary Actions */}
+            <div className="lg:col-span-5 space-y-6">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#4A656E]">
+                Tu potencial clinico, nuestra ruta
+              </p>
 
-          {/* Headline */}
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-tight">
-            El Simulador Clinico que Transforma el{' '}
-            <span className="text-sky-600">
-              Razonamiento Medico
-            </span>{' '}
-            Frente al Turno Hospitalario
-          </h1>
+              <h1 className="font-serif text-4xl sm:text-5xl font-bold tracking-tight leading-[1.12] text-[#0B252E]">
+                <span className="block">Entrena clinicamente.</span>
+                <span className="block">Detecta tus brechas.</span>
+                <span className="block text-[#0E6F65]">Sigue una ruta hecha para ti.</span>
+              </h1>
 
-          {/* Subtitle */}
-          <p className="text-base sm:text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
-            Entrenamiento adaptativo de precision para internos y estudiantes de medicina.
-            Diagnostica tus brechas cognitivas (OCRI) y consolida conceptos clinicos clave con
-            microperlas de 60 segundos y guias de practica clinica internacionales.
-          </p>
+              <p className="text-sm sm:text-base text-[#4A606A] leading-relaxed">
+                OdyssMedic convierte tu desempeno en una ruta de aprendizaje personalizada a
+                traves de mundos clinicos, con retroalimentacion experta, estaciones adaptativas
+                y un enfoque basado en la practica real.
+              </p>
 
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-            <button
-              type="button"
-              onClick={onStartDemo}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm tracking-wide shadow-xs transition-all active:scale-[0.98]"
-            >
-              <Zap className="w-4 h-4 fill-white" />
-              <span>Acceso Medico Demo UPCH</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
+              {/* Primary 2 Options */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2">
+                <button
+                  type="button"
+                  onClick={() => onStartRoute('ruta')}
+                  className="inline-flex items-center justify-center gap-3 px-7 py-3.5 rounded-xl bg-[#0E6F65] hover:bg-[#0A564E] text-white font-medium text-sm sm:text-base transition-colors shadow-xs"
+                >
+                  <span>Empieza tu ruta</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
 
-            <button
-              type="button"
-              onClick={onExploreWorlds}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 border border-slate-200 font-semibold text-sm transition-all shadow-xs active:scale-[0.98]"
-            >
-              <Compass className="w-4 h-4 text-sky-600" />
-              <span>Explorar Casos y Especialidades</span>
-            </button>
-          </div>
+                <button
+                  type="button"
+                  onClick={() => onStartRoute('desde_cero')}
+                  className="inline-flex items-center justify-center px-7 py-3.5 rounded-xl bg-[#EAECEB] hover:bg-[#DFE3E1] text-[#0B252E] border border-[#CFD7D5] font-medium text-sm sm:text-base transition-colors"
+                >
+                  <span>Empieza de 0</span>
+                </button>
+              </div>
 
-          {/* Trust Metrics Bar */}
-          <div className="pt-8 grid grid-cols-2 sm:grid-cols-4 gap-4 border-t border-slate-200 max-w-3xl mx-auto">
-            <div className="p-3 text-center">
-              <span className="block text-xl sm:text-2xl font-bold font-mono text-sky-700">
-                4 Brechas
-              </span>
-              <span className="text-xs text-slate-500 font-medium">Taxonomia OCRI</span>
+              {/* 3 Calm Trust Pillars */}
+              <div className="pt-5 border-t border-[#DCE7E5] grid grid-cols-3 gap-4 text-xs text-[#4A606A]">
+                <div className="flex items-start gap-2">
+                  <GraduationCap className="w-4 h-4 text-[#0E6F65] shrink-0 mt-0.5" />
+                  <span className="leading-snug">Basado en casos clinicos reales</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <BarChart2 className="w-4 h-4 text-[#0E6F65] shrink-0 mt-0.5" />
+                  <span className="leading-snug">Se adapta a tu nivel</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Users className="w-4 h-4 text-[#0E6F65] shrink-0 mt-0.5" />
+                  <span className="leading-snug">Disenado por medicos para futuros medicos</span>
+                </div>
+              </div>
             </div>
-            <div className="p-3 text-center">
-              <span className="block text-xl sm:text-2xl font-bold font-mono text-slate-900">
-                D7 / D21
-              </span>
-              <span className="text-xs text-slate-500 font-medium">Repeticion Espaciada</span>
-            </div>
-            <div className="p-3 text-center">
-              <span className="block text-xl sm:text-2xl font-bold font-mono text-sky-700">
-                60 Segundos
-              </span>
-              <span className="text-xs text-slate-500 font-medium">Microperlas de Guardia</span>
-            </div>
-            <div className="p-3 text-center">
-              <span className="block text-xl sm:text-2xl font-bold font-mono text-emerald-700">
-                100% Indexado
-              </span>
-              <span className="text-xs text-slate-500 font-medium">KDIGO, ADA, AHA/ASA</span>
+
+            {/* Right Column: Static Non-Interactive Showcase of Mundo Clinico */}
+            <div className="lg:col-span-7">
+              <StaticClinicalWorldPreview />
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ========================================================================= */}
-        {/* 2. SCROLL-ANIMATED SPLIT COMPARISON: PROBLEMATICA VS SOLUCION              */}
-        {/* Left Side: Hospital Reality | Right Side: OdyssMedic Precision            */}
-        {/* ========================================================================= */}
-        <section className="space-y-12" aria-label="Problematica hospitalaria vs Solucion OdyssMedic">
-          {/* Section Header */}
-          <div className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="px-3.5 py-1 rounded-full text-xs font-mono uppercase font-bold bg-sky-50 text-sky-800 border border-sky-200 tracking-wider">
-              El Dilema Clinico : Tiempo vs Rendimiento
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight">
-              Por Que los Alumnos No Tienen Tiempo para sus Examenes
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 space-y-24">
+        {/* ===================================================================== */}
+        {/* 2. QUIENES SOMOS & COMO FUNCIONA (Scroll-Reveal Left/Right Panels)    */}
+        {/* ===================================================================== */}
+        <section id="quienes-somos" className="space-y-12 scroll-mt-24">
+          <div className="max-w-3xl mx-auto text-center space-y-3">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#0E6F65]">
+              Quienes somos y por que existimos
+            </p>
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#0B252E] leading-tight">
+              Formacion medica serena cuando el tiempo es tu recurso mas escaso
             </h2>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-2xl mx-auto">
-              Visualiza en tiempo real como la inercia del modelo tradicional colapsa durante la guardia
-              y como la micro-precision adaptativa de OdyssMedic resuelve la falta de tiempo.
+            <p className="text-sm sm:text-base text-[#4A606A] leading-relaxed">
+              Comprendemos la exigencia de las rotaciones hospitalarias. Por eso reemplazamos
+              la sobrecarga de estudio pasivo por diagnostico cognitivo preciso y microaprendizaje clinico.
             </p>
           </div>
 
-          {/* Visual Column Headers */}
-          <div className="hidden lg:grid grid-cols-2 gap-10 max-w-5xl mx-auto text-xs font-mono font-bold uppercase tracking-wider">
-            <div className="p-3 rounded-2xl bg-rose-100/60 border border-rose-300 text-rose-800 flex items-center justify-between shadow-xs">
-              <span>Columna Izquierda: La Crisis del Tiempo Hospitalario</span>
-              <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse" />
-            </div>
-            <div className="p-3 rounded-2xl bg-sky-100/60 border border-sky-300 text-sky-800 flex items-center justify-between shadow-xs">
-              <span>Columna Derecha: La Transformacion OdyssMedic</span>
-              <span className="w-2.5 h-2.5 rounded-full bg-sky-500 animate-pulse" />
-            </div>
+          <div id="como-funciona" className="space-y-8 scroll-mt-24">
+            <ComparisonRow1 />
+            <ComparisonRow2 />
           </div>
 
-          {/* 3 Animated Rows with Scroll-Reveal Entrance and Exit */}
-          <div className="space-y-8 max-w-5xl mx-auto">
-            <ProblemSolutionRow1 />
-            <ProblemSolutionRow2 />
-            <ProblemSolutionRow3 />
-          </div>
-
-          {/* Visual Interactive Comparison Board */}
-          <div className="max-w-4xl mx-auto p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-5">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+          {/* Calm Classic Comparison Selector */}
+          <div className="max-w-4xl mx-auto p-6 sm:p-8 rounded-2xl bg-white border border-[#E3E8E6] space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#EDF2F0] pb-4">
               <div>
-                <span className="text-xs font-mono uppercase tracking-wider text-sky-700 font-bold block">
-                  Cuadro Comparativo Interactivo
-                </span>
-                <h4 className="text-base sm:text-lg font-bold text-slate-900">
-                  Selecciona la dimension de comparacion:
-                </h4>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#0E6F65]">
+                  Sintesis comparativa
+                </p>
+                <h3 className="font-serif text-lg sm:text-xl font-bold text-[#0B252E]">
+                  Explora como cambia tu preparacion diaria
+                </h3>
               </div>
 
-              {/* Selector Tabs */}
-              <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 border border-slate-200">
-                <button
-                  type="button"
-                  onClick={() => setSelectedMetricTab('tiempo')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all ${
-                    selectedMetricTab === 'tiempo'
-                      ? 'bg-white text-sky-800 shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  Tiempo
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSelectedMetricTab('retencion')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all ${
-                    selectedMetricTab === 'retencion'
-                      ? 'bg-white text-sky-800 shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  Retencion
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSelectedMetricTab('causa')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all ${
-                    selectedMetricTab === 'causa'
-                      ? 'bg-white text-sky-800 shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  Diagnostico Error
-                </button>
+              <div className="flex items-center gap-1 p-1 rounded-xl bg-[#F2F7F6] border border-[#DCE5E3]">
+                {[
+                  { id: 'tiempo' as const, label: 'Tiempo requerido' },
+                  { id: 'retencion' as const, label: 'Retencion clinica' },
+                  { id: 'causa' as const, label: 'Lectura del error' },
+                ].map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => setSelectedMetricTab(item.id)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                      selectedMetricTab === item.id
+                        ? 'bg-white text-[#0B252E] shadow-2xs font-semibold'
+                        : 'text-[#5C737C] hover:text-[#0B252E]'
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
               </div>
             </div>
 
-            {/* Scoreboard Content */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">
-              <div className="p-4 rounded-2xl bg-rose-50/60 border border-rose-200 space-y-2">
-                <span className="font-bold text-rose-800 uppercase block">Modelo Tradicional</span>
-                <span className="text-xl sm:text-2xl font-black text-rose-900 block font-mono">
-                  {selectedMetricTab === 'tiempo'
-                    ? '4 Horas Diarias'
-                    : selectedMetricTab === 'retencion'
-                      ? '30% a 48 Horas'
-                      : 'Cero Diagnostico'}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div className="p-5 rounded-xl bg-[#FBF1F1] border border-[#EED7D7] space-y-2">
+                <span className="text-xs font-semibold uppercase tracking-wider text-[#9E3F42] block">
+                  Estudio tradicional fragmentado
                 </span>
-                <p className="text-slate-600 font-sans text-xs">
+                <span className="font-serif text-2xl font-bold text-[#0B252E] block">
                   {selectedMetricTab === 'tiempo'
-                    ? 'Exige bloques continuos imposibles de encajar tras una guardia de 30 horas.'
+                    ? 'Bloques rigidos de 3 a 4 horas'
                     : selectedMetricTab === 'retencion'
-                      ? 'La memorizacion pasiva de claves se degrada aceleradamente segun la curva del olvido.'
-                      : 'Solo indica acierto o fallo, sin explicar si el error fue de triaje, dosis o examen auxiliar.'}
+                      ? '30% retenido a las 48 horas'
+                      : 'Calificacion sin causa raiz'}
+                </span>
+                <p className="text-xs sm:text-sm text-[#574344] leading-relaxed">
+                  {selectedMetricTab === 'tiempo'
+                    ? 'Dificil de sostener con regularidad durante guardias, rotaciones clinicas o internado.'
+                    : selectedMetricTab === 'retencion'
+                      ? 'La lectura pasiva sin evocacion espaciada pierde solidez frente a casos complejos.'
+                      : 'No distingue si fallaste por omitir signos de alarma, interpretar mal un examen o elegir dosis.'}
                 </p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-sky-50/70 border border-sky-300 space-y-2">
-                <span className="font-bold text-sky-800 uppercase block">Motor OdyssMedic</span>
-                <span className="text-xl sm:text-2xl font-black text-sky-900 block font-mono">
-                  {selectedMetricTab === 'tiempo'
-                    ? '3 a 5 Minutos'
-                    : selectedMetricTab === 'retencion'
-                      ? '94% con D7 / D21'
-                      : 'Causa Raiz OCRI'}
+              <div className="p-5 rounded-xl bg-[#ECF6F4] border border-[#CFE7E2] space-y-2">
+                <span className="text-xs font-semibold uppercase tracking-wider text-[#0E6F65] block">
+                  Metodo adaptativo OdyssMedic
                 </span>
-                <p className="text-slate-600 font-sans text-xs">
+                <span className="font-serif text-2xl font-bold text-[#0E6F65] block">
                   {selectedMetricTab === 'tiempo'
-                    ? 'Micro-estaciones de precision en el celular durante pausas reales de sala de guardia.'
+                    ? 'Estaciones de 3 a 5 minutos'
                     : selectedMetricTab === 'retencion'
-                      ? 'Algoritmo de repeticion espaciada que refuerza exactamente antes de que el concepto se olvide.'
-                      : 'Clasificacion inmediata en las 4 causas raiz clinicas con perla basada en guias KDIGO/ADA.'}
+                      ? 'Consolidacion guiada D7 y D21'
+                      : 'Diagnostico de brecha especifica'}
+                </span>
+                <p className="text-xs sm:text-sm text-[#35544F] leading-relaxed">
+                  {selectedMetricTab === 'tiempo'
+                    ? 'Avance constante desde laptop o telefono movil respetando tu carga asistencial.'
+                    : selectedMetricTab === 'retencion'
+                      ? 'Reevaluacion automatica en los intervalos exactos para fijar criterio clinico duradero.'
+                      : 'Identifica la brecha exacta y te conecta con guias clinicas multi-fuente verificadas.'}
                 </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* ========================================================================= */}
-        {/* 3. COMPARISON & VALUE PROPOSITION BENTO GRID (Scroll-Reveal Animated)     */}
-        {/* ========================================================================= */}
+        {/* ===================================================================== */}
+        {/* 3. MUNDOS CLINICOS OVERVIEW (Informational; Requires Registration)    */}
+        {/* ===================================================================== */}
         <section
-          ref={bentoSection.ref}
-          className={`space-y-8 transition-all duration-700 ease-out ${
-            bentoSection.isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-95'
+          id="mundos-clinicos"
+          ref={worldsReveal.ref}
+          className={`space-y-10 scroll-mt-24 transition-all duration-700 ${
+            worldsReveal.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}
+        >
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-[#E3E8E6] pb-6">
+            <div className="space-y-2 max-w-2xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#0E6F65]">
+                Estructura academica
+              </p>
+              <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#0B252E]">
+                Mundos clinicos diseñados para evolucionar contigo
+              </h2>
+              <p className="text-sm text-[#4A606A] leading-relaxed">
+                Para ingresar e interactuar con tu Mundo Clinico es necesario crear tu cuenta y
+                calibrar tu punto de partida con una evaluacion general o por especialidad.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={onOpenLibrary}
+              className="self-start md:self-auto inline-flex items-center gap-2 text-sm font-semibold text-[#0E6F65] hover:text-[#0A564E] underline underline-offset-4"
+            >
+              <BookOpen className="w-4 h-4" />
+              <span>Consultar Biblioteca Clinica abierta</span>
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {clinicalWorldsOverview.map((world) => (
+              <div
+                key={world.title}
+                className={`p-6 rounded-2xl border ${world.tone} flex flex-col justify-between space-y-5`}
+              >
+                <div className="space-y-3">
+                  <div className="w-10 h-10 rounded-full bg-white/90 border border-[#DCE5E3] flex items-center justify-center text-[#0E6F65]">
+                    <Stethoscope className="w-5 h-5" />
+                  </div>
+                  <h3 className="font-serif text-xl font-bold text-[#0B252E]">
+                    {world.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-[#4A606A] leading-relaxed">
+                    {world.subtitle}
+                  </p>
+                </div>
+
+                <div className="pt-4 border-t border-black/5 space-y-3">
+                  <p className="text-[11px] text-[#5C737C] font-medium">
+                    Fuentes: {world.sources}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => onStartRoute('ruta')}
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0E6F65] hover:text-[#0A564E]"
+                  >
+                    <Lock className="w-3.5 h-3.5" />
+                    <span>Registrarse para ingresar</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ===================================================================== */}
+        {/* 4. TESTIMONIOS                                                        */}
+        {/* ===================================================================== */}
+        <section
+          id="testimonios"
+          ref={testimonialsReveal.ref}
+          className={`space-y-10 scroll-mt-24 transition-all duration-700 ${
+            testimonialsReveal.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
           <div className="text-center max-w-2xl mx-auto space-y-2">
-            <span className="px-3 py-1 rounded-full text-xs font-mono uppercase font-semibold bg-sky-50 text-sky-800 border border-sky-200">
-              Arquitectura Cognitiva Diferencial
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-              Disenado para el Pase de Visita y la Guardia Medica
-            </h2>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              Supera la memorizacion pasiva. OdyssMedic correlaciona tus decisiones en el turno
-              con el diagnostico de brechas cognitivas para elevar tu rango de competencia.
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#0E6F65]">
+              Voces de nuestra comunidad
             </p>
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#0B252E]">
+              Claridad clinica en cada etapa de la carrera
+            </h2>
           </div>
 
-          {/* Bento Grid (4 Cards) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Card 1: Diagnostico de Brecha Cognitiva */}
-            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs hover:border-sky-300 hover:shadow-md transition-all flex flex-col justify-between space-y-4 group">
-              <div className="space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-200 flex items-center justify-center text-sky-600 shadow-xs">
-                  <ShieldCheck className="w-5 h-5" />
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 group-hover:text-sky-700 transition-colors">
-                  Deteccion de Brechas OCRI
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed font-sans">
-                  No es solo acertar o fallar. El motor clasifica tus desviaciones en 4 causas raiz:
-                  Triaje de Severidad, Razonamiento Diagnostico, Interpretacion de Laboratorio y Manejo Inicial.
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {testimonials.map((t) => (
+              <div
+                key={t.author}
+                className="p-6 sm:p-7 rounded-2xl bg-white border border-[#E3E8E6] flex flex-col justify-between space-y-5"
+              >
+                <p className="font-serif italic text-base text-[#1E3640] leading-relaxed">
+                  &ldquo;{t.quote}&rdquo;
                 </p>
-                <div className="p-2.5 rounded-lg bg-sky-50 border border-sky-200 text-xs text-sky-800 font-mono font-medium">
-                  Taxonomia adaptativa basada en analisis de incidentes clinicos.
+                <div className="pt-4 border-t border-[#EDF2F0]">
+                  <span className="block text-sm font-semibold text-[#0B252E]">
+                    {t.author}
+                  </span>
+                  <span className="block text-xs text-[#6E828A]">{t.role}</span>
                 </div>
               </div>
-              <div className="pt-3 border-t border-slate-100 text-[11px] font-mono text-sky-700 font-semibold">
-                Calibracion Basada en Evidencia
-              </div>
-            </div>
-
-            {/* Card 2: Repeticion Espaciada Neural */}
-            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs hover:border-sky-300 hover:shadow-md transition-all flex flex-col justify-between space-y-4 group">
-              <div className="space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-200 flex items-center justify-center text-sky-600 shadow-xs">
-                  <Clock className="w-5 h-5" />
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 group-hover:text-sky-700 transition-colors">
-                  Repeticion Espaciada D7 / D21
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed font-sans">
-                  Cuando fallas una estacion, OdyssMedic agenda un refuerzo tactico a los 7 y 21 dias
-                  con variaciones clinicas para consolidar memoria de largo plazo segun la curva de Ebbinghaus.
-                </p>
-                <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-700 font-mono">
-                  Ideal para el pase de visita hospitalario y la preparacion ENAM.
-                </div>
-              </div>
-              <div className="pt-3 border-t border-slate-100 text-[11px] font-mono text-sky-700 font-semibold">
-                Prescripcion Adaptativa Automatizada
-              </div>
-            </div>
-
-            {/* Card 3: Accesibilidad Inmediata en Sala */}
-            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs hover:border-sky-300 hover:shadow-md transition-all flex flex-col justify-between space-y-4 group">
-              <div className="space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 shadow-xs">
-                  <Smartphone className="w-5 h-5" />
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 group-hover:text-amber-700 transition-colors">
-                  Accesibilidad en Movil
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed font-sans">
-                  Optimizado para el ritmo de turnos de 12 y 24 horas. Interfaz responsive ultraligera
-                  disenada para smartphones en el bolsillo del mandil y laptops en sala de residentes.
-                </p>
-                <div className="flex items-center gap-2 text-xs font-mono text-slate-600">
-                  <Clock className="w-4 h-4 text-amber-600 shrink-0" />
-                  <span>Casos completables en menos de 5 minutos</span>
-                </div>
-              </div>
-              <div className="pt-3 border-t border-slate-100 text-[11px] font-mono text-amber-700 font-semibold">
-                Web App Responsive de Cero Friccion
-              </div>
-            </div>
-
-            {/* Card 4: Accesible y Cost-Effective */}
-            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs hover:border-sky-300 hover:shadow-md transition-all flex flex-col justify-between space-y-4 group">
-              <div className="space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 shadow-xs">
-                  <Coins className="w-5 h-5" />
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">
-                  Accesible y Equitativo
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed font-sans">
-                  Frente a academias comerciales que superan los USD 300 anuales, OdyssMedic propone un
-                  modelo accesible a cualquier estudiante o interno con tecnologia de vanguardia UPCH.
-                </p>
-                <div className="p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 font-mono font-semibold">
-                  Modelo equitativo para internos peruanos
-                </div>
-              </div>
-              <div className="pt-3 border-t border-slate-100 text-[11px] font-mono text-emerald-700 font-semibold">
-                Democratizacion del Razonamiento Clinico
-              </div>
-            </div>
+            ))}
           </div>
         </section>
 
-        {/* ========================================================================= */}
-        {/* 4. CALL TO ACTION STRIP (Scroll-Reveal Animated)                           */}
-        {/* ========================================================================= */}
-        <section
-          ref={ctaSection.ref}
-          className={`text-center p-8 sm:p-12 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-6 transition-all duration-700 ease-out ${
-            ctaSection.isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-95'
-          }`}
-        >
-          <div className="max-w-2xl mx-auto space-y-2">
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-              Listo para calibrar tu razonamiento clinico?
+        {/* ===================================================================== */}
+        {/* 5. FINAL EDITORIAL CTA                                                */}
+        {/* ===================================================================== */}
+        <section className="rounded-3xl bg-[#F2F7F6] border border-[#D7E5E2] p-8 sm:p-12 text-center space-y-6">
+          <div className="max-w-2xl mx-auto space-y-3">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#0E6F65]">
+              Comienza hoy
+            </p>
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#0B252E]">
+              Construye seguridad clinica antes de tu proximo examen o guardia
             </h2>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              Unete a la comunidad de internos y residentes de Cayetano Heredia que entrenan
-              con medicina de precision y aprendizaje adaptativo de alto rendimiento.
+            <p className="text-sm sm:text-base text-[#4A606A] leading-relaxed">
+              Registrate en menos de un minuto y elige si deseas rendir una evaluacion general
+              de todas las especialidades o enfocarte en una sola especialidad.
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5">
             <button
               type="button"
-              onClick={onStartDemo}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm shadow-xs transition-all active:scale-[0.98]"
+              onClick={() => onStartRoute('ruta')}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-xl bg-[#0E6F65] hover:bg-[#0A564E] text-white font-medium text-sm sm:text-base transition-colors"
             >
-              <span>Comenzar Entrenamiento Demo</span>
+              <span>Empieza tu ruta</span>
               <ArrowRight className="w-4 h-4" />
             </button>
             <button
               type="button"
-              onClick={onExploreWorlds}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 font-semibold text-sm transition-all"
+              onClick={() => onStartRoute('desde_cero')}
+              className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 rounded-xl bg-white hover:bg-[#EAECEB] text-[#0B252E] border border-[#CFD7D5] font-medium text-sm sm:text-base transition-colors"
             >
-              <span>Ver Casos y Especialidades</span>
+              <span>Empieza de 0</span>
             </button>
           </div>
         </section>
 
-        {/* ========================================================================= */}
-        {/* 5. ACADEMIC & INSTITUTIONAL FOOTER                                        */}
-        {/* ========================================================================= */}
-        <footer className="pt-10 border-t border-slate-200 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-slate-600 font-sans">
-            <div className="space-y-1.5">
-              <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold block">
-                Proyecto de Investigacion Aplicada
-              </span>
-              <p className="text-slate-900 font-bold text-sm">OdyssMedic Precision Engine</p>
-              <p className="text-slate-500">
-                Proyectos de Ingenieria 2 - BioIncubadora Cayetano
-              </p>
-              <p className="text-slate-500">
-                Universidad Peruana Cayetano Heredia (UPCH) 2026
-              </p>
-            </div>
-
-            <div className="space-y-1.5">
-              <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold block">
-                Equipo de Desarrollo
-              </span>
-              <p className="text-slate-600">
-                <span className="text-slate-900 font-medium">Autores:</span> Dario Huerta Cruz & Elvis Deiwis Pilco Cruz
-              </p>
-              <p className="text-slate-600">
-                <span className="text-slate-900 font-medium">Evaluador y Docente:</span> Mag. Noe Bazan
-              </p>
-              <p className="text-slate-500">Facultad de Ciencias e Ingenieria - UPCH</p>
-            </div>
-
-            <div className="space-y-1.5">
-              <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold block">
-                Fundamentacion Academica
-              </span>
-              <p className="text-slate-500 leading-relaxed">
-                Plataforma de simulacion clinica adaptativa basada en la integracion de RAG
-                con guias de practica clinica de referencia y modelado del proceso de razonamiento
-                diagnostico en medicina de emergencia.
-              </p>
-            </div>
+        {/* ===================================================================== */}
+        {/* 6. CLASSIC FOOTER                                                     */}
+        {/* ===================================================================== */}
+        <footer className="pt-10 border-t border-[#E3E8E6] grid grid-cols-1 md:grid-cols-3 gap-8 text-xs text-[#5C737C]">
+          <div className="space-y-2">
+            <span className="font-serif text-lg font-bold text-[#0D4A44] block">
+              OdyssMedic
+            </span>
+            <p className="leading-relaxed">
+              Plataforma de entrenamiento clinico adaptativo, deteccion de brechas de razonamiento
+              y consulta bibliografica estructurada para estudiantes de medicina y medicos en formacion.
+            </p>
           </div>
 
-          <div className="text-center pt-6 border-t border-slate-200 text-[11px] font-mono text-slate-400">
-            ODYSSMEDIC PRECISION ENGINE (C) 2026 - UNIVERSIDAD PERUANA CAYETANO HEREDIA. TODOS LOS DERECHOS RESERVADOS.
+          <div className="space-y-2">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#0B252E] block">
+              Pilares Metodologicos
+            </span>
+            <ul className="space-y-1.5">
+              <li className="flex items-center gap-2">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#0E6F65]" />
+                <span>Evaluacion inicial general o por especialidad</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <Clock className="w-3.5 h-3.5 text-[#0E6F65]" />
+                <span>Repeticion espaciada en ciclos D7 y D21</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <BookOpen className="w-3.5 h-3.5 text-[#0E6F65]" />
+                <span>Guias internacionales multi-fuente por especialidad</span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="space-y-2">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#0B252E] block">
+              Equipo y Desarrollo Academico
+            </span>
+            <p>Autores: Dario Huerta Cruz &amp; Elvis Deiwis Pilco Cruz</p>
+            <p>Asesoria metodologica: Mag. Noe Bazan</p>
+            <p className="text-[#6E828A]">Todos los derechos reservados · OdyssMedic</p>
           </div>
         </footer>
       </div>

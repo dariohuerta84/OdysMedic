@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
-import type { User, UserRole } from '../types/api';
+import type { User, RegisterRequest } from '../types/api';
 import { authApi } from '../services/api';
 
 export interface AuthContextType {
@@ -9,9 +9,8 @@ export interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (data: { email: string; password: string; full_name: string; role?: UserRole }) => Promise<void>;
+  register: (data: RegisterRequest) => Promise<void>;
   logout: () => void;
-  loginDemo: () => Promise<void>;
   refreshUser: () => Promise<void>;
 }
 
@@ -75,16 +74,21 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  const register = async (data: {
-    email: string;
-    password: string;
-    full_name: string;
-    role?: UserRole;
-  }): Promise<void> => {
+  const register = async (data: RegisterRequest): Promise<void> => {
     setIsLoading(true);
     try {
-      await authApi.register(data);
-      await login(data.email, data.password);
+      const res = await authApi.register(data);
+      const accessToken = res.access_token;
+      if (accessToken) {
+        if (typeof window !== 'undefined') {
+          localStorage.setItem(TOKEN_KEY, accessToken);
+        }
+        setToken(accessToken);
+        const currentUser = await authApi.getMe();
+        setUser(currentUser);
+      } else {
+        await login(data.email, data.password);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -96,10 +100,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
     setToken(null);
     setUser(null);
-  };
-
-  const loginDemo = async (): Promise<void> => {
-    await login('demo.medico@upch.pe', 'OdyssMed2026!');
   };
 
   const refreshUser = async (): Promise<void> => {
@@ -120,7 +120,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     login,
     register,
     logout,
-    loginDemo,
     refreshUser,
   };
 

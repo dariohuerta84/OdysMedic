@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  User,
   HeartPulse,
   FileText,
   Stethoscope,
@@ -180,9 +179,6 @@ function analyzeVitals(vitals?: VitalSigns): ParsedVital[] {
   return list;
 }
 
-/**
- * Extracts numerical laboratory value from potentially complex text strings
- */
 function parseLabValue(resultStr: string): number {
   const normalized = resultStr
     .replace(/(\d+),(\d{1,2})(?!\d)/g, '$1.$2')
@@ -191,9 +187,6 @@ function parseLabValue(resultStr: string): number {
   return match ? parseFloat(match[1]) : NaN;
 }
 
-/**
- * Normalizes initial lab results into standardized clinical table rows
- */
 function parseLabResults(initialLabs?: Record<string, any> | any[]): LabRow[] {
   if (!initialLabs) return [];
 
@@ -249,7 +242,6 @@ function parseLabResults(initialLabs?: Record<string, any> | any[]): LabRow[] {
         resultStr = String(val);
       }
 
-      // Heuristic detection based on common lab keywords and numerical thresholds
       const lowerKey = key.toLowerCase();
       const lowerRes = resultStr.toLowerCase();
 
@@ -272,7 +264,6 @@ function parseLabResults(initialLabs?: Record<string, any> | any[]): LabRow[] {
         sev = 'warning';
       }
 
-      // Numerical lab heuristics
       if (lowerKey.includes('creatinina')) {
         refStr = '0.6 - 1.2 mg/dL';
         const num = parseLabValue(resultStr);
@@ -337,9 +328,6 @@ function parseLabResults(initialLabs?: Record<string, any> | any[]): LabRow[] {
   return rows;
 }
 
-/**
- * Parses physical exam section into clinical systems
- */
 function parsePhysicalExamSystems(examText: string): Array<{ title: string; detail: string }> {
   if (!examText) return [];
 
@@ -351,22 +339,19 @@ function parsePhysicalExamSystems(examText: string): Array<{ title: string; deta
     { key: 'Neurologico', regex: /(?:Neurologico|Neurológico|Sistema nervioso)\s*:\s*/i },
   ];
 
-  // Check if text contains colon-separated systems
   const hasSystemHeaders = systemKeywords.some((item) => item.regex.test(examText));
 
   if (!hasSystemHeaders) {
-    // Return clean paragraphs
     return examText
       .split(/\n+/)
       .map((p) => p.trim())
       .filter(Boolean)
       .map((p, idx) => ({
-        title: idx === 0 ? 'Examen Fisico General' : `Hallazgo Clinico ${idx + 1}`,
+        title: idx === 0 ? 'Examen fisico general' : `Hallazgo clinico ${idx + 1}`,
         detail: p,
       }));
   }
 
-  // Tokenize by headers
   const result: Array<{ title: string; detail: string }> = [];
   const lines = examText.split(/\n|(?=(?:General|Respiratorio|Cardiovascular|Abdomen|Neurologico|Neurológico)\s*:)/i);
 
@@ -383,13 +368,13 @@ function parsePhysicalExamSystems(examText: string): Array<{ title: string; deta
       });
     } else {
       result.push({
-        title: 'Hallazgos Adicionales',
+        title: 'Hallazgos adicionales',
         detail: trimmed,
       });
     }
   });
 
-  return result.length > 0 ? result : [{ title: 'Examen Fisico', detail: examText }];
+  return result.length > 0 ? result : [{ title: 'Examen fisico', detail: examText }];
 }
 
 export const VignettePlayer: React.FC<VignettePlayerProps> = ({
@@ -409,61 +394,64 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
     ? caseDetail.anamnesis.split(/\n\s*\n|\n/).map((p) => p.trim()).filter(Boolean)
     : [];
 
+  const formattedSpecialty = caseDetail.specialty_id
+    ? caseDetail.specialty_id.replace(/_/g, ' ')
+    : null;
+
   return (
     <article
-      className={`rounded-2xl bg-white border border-slate-200 overflow-hidden shadow-xs transition-all ${className}`}
-      aria-label="Expediente Clinico y Vineta del Paciente"
+      className={`rounded-3xl bg-white border border-[#DCE5E3] overflow-hidden transition-all ${className}`}
+      aria-label="Expediente clinico del paciente"
     >
       {/* 1. Header: Patient Demographics & Chief Complaint */}
-      <header className="p-4 sm:p-6 border-b border-slate-200 bg-slate-50/60">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <header className="p-5 sm:p-7 border-b border-[#E7EEEC] bg-[#FDFCFA]">
+        <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-5">
           <div className="space-y-2">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-md bg-white border border-slate-200 font-mono text-[11px] text-slate-700 flex items-center gap-1.5 shadow-xs">
-                <User className="w-3.5 h-3.5 text-sky-600" />
-                <span>
-                  Paciente: {caseDetail.patient_age} anos | Sexo {caseDetail.patient_gender}
-                </span>
+            <div className="flex flex-wrap items-center gap-2 text-xs text-[#4A5D64]">
+              {formattedSpecialty && (
+                <>
+                  <span className="uppercase tracking-[0.16em] font-semibold text-[#0E6F65]">
+                    {formattedSpecialty}
+                  </span>
+                  <span className="text-[#9AA8AD]">·</span>
+                </>
+              )}
+              <span>
+                Paciente de {caseDetail.patient_age} anos ({caseDetail.patient_gender})
               </span>
-
-              <span className="px-2.5 py-0.5 rounded-md bg-sky-50 border border-sky-200 font-mono text-[11px] text-sky-800 font-semibold">
+              <span className="text-[#9AA8AD]">·</span>
+              <span className="text-[#6B7D83]">
                 {caseDetail.difficulty_level || 'Nivel 1'}
               </span>
-
-              {caseDetail.specialty_id && (
-                <span className="px-2.5 py-0.5 rounded-md bg-sky-100 border border-sky-200 font-mono text-[11px] text-sky-800 uppercase font-semibold">
-                  {caseDetail.specialty_id}
-                </span>
-              )}
             </div>
 
-            <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
+            <h2 className="font-serif text-xl sm:text-2xl font-semibold text-[#0B252E] leading-snug">
               {caseDetail.display_title || caseDetail.title}
             </h2>
           </div>
 
-          {/* Chief Complaint Alert Box */}
-          <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 max-w-md shadow-xs">
+          {/* Chief Complaint Soft Pastel Callout */}
+          <div className="p-4 rounded-2xl bg-[#FBF1F1]/85 border border-[#EED7D7] max-w-md shrink-0">
             <div className="flex items-start gap-2.5">
-              <ShieldAlert className="w-4 h-4 text-rose-600 shrink-0 mt-0.5 animate-pulse" />
+              <ShieldAlert className="w-4 h-4 text-[#9E3F42] shrink-0 mt-0.5" />
               <div className="space-y-0.5 min-w-0">
-                <span className="text-[10px] uppercase font-mono font-bold tracking-wider text-rose-700 block">
-                  Motivo de Ingreso / Alerta de Guardia
+                <span className="text-[10px] uppercase tracking-[0.14em] font-semibold text-[#9E3F42] block">
+                  Motivo principal de ingreso
                 </span>
-                <p className="text-xs font-semibold text-slate-900 leading-snug">
-                  {caseDetail.chief_complaint || 'Ingreso por emergencia para evaluacion clinica.'}
+                <p className="text-xs sm:text-sm font-medium text-[#0B252E] leading-relaxed">
+                  {caseDetail.chief_complaint || 'Ingreso hospitalario para valoracion clinica.'}
                 </p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* 2. Vital Signs Monospace Banner */}
-        <div className="mt-4 pt-4 border-t border-slate-200">
+        {/* 2. Vital Signs Strip */}
+        <div className="mt-5 pt-4 border-t border-[#EDF2F0]">
           <div className="flex items-center gap-2 mb-2.5">
-            <HeartPulse className="w-3.5 h-3.5 text-sky-600" />
-            <span className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-medium">
-              Constantes Fisiologicas en Triaje (Monitoreo Continuo)
+            <HeartPulse className="w-4 h-4 text-[#0E6F65]" />
+            <span className="text-[11px] uppercase tracking-[0.14em] text-[#4A5D64] font-semibold">
+              Constantes fisiologicas de ingreso
             </span>
           </div>
 
@@ -479,26 +467,26 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
                 />
               ))
             ) : (
-              <span className="text-xs font-mono text-slate-400 italic">
-                Constantes vitales no registradas al ingreso.
+              <span className="text-xs text-[#6B7D83] italic">
+                Constantes vitales no consignadas al ingreso.
               </span>
             )}
           </div>
         </div>
 
         {/* Mobile Accordion Toggle Button */}
-        <div className="mt-3 lg:hidden pt-2 flex justify-center">
+        <div className="mt-4 lg:hidden pt-2 flex justify-center">
           <button
             type="button"
             onClick={() => setIsMobileExpanded(!isMobileExpanded)}
             aria-expanded={isMobileExpanded}
             aria-controls="vignette-details-content"
-            className="w-full py-2 px-3 rounded-lg bg-white border border-slate-200 text-xs font-mono font-semibold text-sky-700 hover:bg-slate-50 flex items-center justify-center gap-2 transition-colors shadow-xs"
+            className="w-full py-2.5 px-4 rounded-full bg-[#F2F7F6] border border-[#DCE5E3] text-xs font-medium text-[#0E6F65] hover:bg-[#ECF6F4] flex items-center justify-center gap-2 transition-colors"
           >
             <span>
               {isMobileExpanded
-                ? 'Ocultar Historia Clinica Detallada'
-                : 'Ver Historia Clinica Completa / Constantes'}
+                ? 'Ocultar historia clinica detallada'
+                : 'Desplegar historia clinica y examenes'}
             </span>
             {isMobileExpanded ? (
               <ChevronUp className="w-4 h-4" />
@@ -512,40 +500,36 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
       {/* 3. Detailed Body: Anamnesis, Physical Exam, Labs */}
       <div
         id="vignette-details-content"
-        className={`p-4 sm:p-6 space-y-6 ${
+        className={`p-5 sm:p-7 space-y-6 ${
           isMobileExpanded ? 'block' : 'hidden lg:block'
         }`}
       >
-        {/* A. Anamnesis / History of Present Illness */}
-        <section className="space-y-3" aria-label="Anamnesis y Enfermedad Actual">
-          <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-sky-700">
-            <FileText className="w-4 h-4 text-sky-600" />
-            <h3 className="font-bold text-slate-900">
-              Anamnesis y Evolucion del Cuadro Clinico
+        {/* A. Anamnesis */}
+        <section className="space-y-2.5" aria-label="Anamnesis y enfermedad actual">
+          <div className="flex items-center gap-2">
+            <FileText className="w-4 h-4 text-[#0E6F65]" />
+            <h3 className="font-serif text-base sm:text-lg font-semibold text-[#0B252E]">
+              Anamnesis y evolucion del cuadro
             </h3>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2.5 text-xs sm:text-sm text-slate-700 leading-relaxed">
+          <div className="p-4 sm:p-5 rounded-2xl bg-[#F7FAF9] border border-[#E7EEEC] space-y-2.5 text-xs sm:text-sm text-[#344850] leading-relaxed">
             {anamnesisParagraphs.length > 0 ? (
-              anamnesisParagraphs.map((para, i) => (
-                <p key={i} className="text-justify sm:text-left">
-                  {para}
-                </p>
-              ))
+              anamnesisParagraphs.map((para, i) => <p key={i}>{para}</p>)
             ) : (
-              <p className="text-slate-400 italic">
-                Informacion de anamnesis pendiente de anamnesis dirigida.
+              <p className="text-[#6B7D83] italic">
+                Informacion clinica pendiente de anamnesis dirigida.
               </p>
             )}
           </div>
         </section>
 
         {/* B. Physical Examination */}
-        <section className="space-y-3" aria-label="Examen Fisico Detallado">
-          <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-sky-700">
-            <Stethoscope className="w-4 h-4 text-sky-600" />
-            <h3 className="font-bold text-slate-900">
-              Examen Fisico Dirigido por Sistemas
+        <section className="space-y-2.5" aria-label="Examen fisico detallado">
+          <div className="flex items-center gap-2">
+            <Stethoscope className="w-4 h-4 text-[#0E6F65]" />
+            <h3 className="font-serif text-base sm:text-lg font-semibold text-[#0B252E]">
+              Examen fisico por sistemas
             </h3>
           </div>
 
@@ -554,96 +538,96 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
               physicalSystems.map((item, index) => (
                 <div
                   key={index}
-                  className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1"
+                  className="p-4 rounded-2xl bg-[#FDFCFA] border border-[#E7EEEC] space-y-1"
                 >
-                  <span className="text-[11px] font-mono font-bold uppercase text-sky-800 tracking-wide">
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#0E6F65] block">
                     {item.title}
                   </span>
-                  <p className="text-xs text-slate-700 leading-normal">
+                  <p className="text-xs sm:text-sm text-[#344850] leading-relaxed">
                     {item.detail}
                   </p>
                 </div>
               ))
             ) : (
-              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-400">
-                Sin hallazgos especificos consignados en el examen fisico.
+              <div className="p-4 rounded-2xl bg-[#F7FAF9] border border-[#E7EEEC] text-xs text-[#6B7D83]">
+                Sin hallazgos adicionales consignados en el examen fisico.
               </div>
             )}
           </div>
         </section>
 
         {/* C. Initial Laboratory Findings Table */}
-        <section className="space-y-3" aria-label="Examenes de Laboratorio Iniciales">
+        <section className="space-y-2.5" aria-label="Examenes de laboratorio iniciales">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-sky-700">
-              <TestTubes className="w-4 h-4 text-sky-600" />
-              <h3 className="font-bold text-slate-900">
-                Pruebas de Laboratorio e Imagenes Iniciales
+            <div className="flex items-center gap-2">
+              <TestTubes className="w-4 h-4 text-[#0E6F65]" />
+              <h3 className="font-serif text-base sm:text-lg font-semibold text-[#0B252E]">
+                Examenes auxiliares e imagenes iniciales
               </h3>
             </div>
-            <span className="text-[11px] font-mono text-slate-500">
-              {labRows.length} parametros analizados
+            <span className="text-xs text-[#6B7D83]">
+              {labRows.length} parametros
             </span>
           </div>
 
           {labRows.length > 0 ? (
-            <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-xs">
-              <table className="w-full text-left text-xs font-mono">
-                <thead className="bg-slate-50 text-slate-600 uppercase text-[10px] tracking-wider border-b border-slate-200">
+            <div className="overflow-x-auto rounded-2xl border border-[#DCE5E3] bg-white">
+              <table className="w-full text-left text-xs font-sans">
+                <thead className="bg-[#F2F7F6] text-[#4A5D64] uppercase text-[10px] tracking-[0.12em] border-b border-[#DCE5E3]">
                   <tr>
-                    <th scope="col" className="py-2.5 px-4 font-semibold">
-                      Prueba / Parametro
+                    <th scope="col" className="py-3 px-4 font-semibold">
+                      Parametro
                     </th>
-                    <th scope="col" className="py-2.5 px-4 font-semibold">
-                      Resultado Hallado
+                    <th scope="col" className="py-3 px-4 font-semibold">
+                      Resultado
                     </th>
-                    <th scope="col" className="py-2.5 px-4 font-semibold hidden sm:table-cell">
-                      Rango Referencial
+                    <th scope="col" className="py-3 px-4 font-semibold hidden sm:table-cell">
+                      Valor referencial
                     </th>
-                    <th scope="col" className="py-2.5 px-4 font-semibold text-right">
-                      Alerta Clinica
+                    <th scope="col" className="py-3 px-4 font-semibold text-right">
+                      Estado
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-[#EDF2F0]">
                   {labRows.map((lab, idx) => {
                     const rowHighlight =
                       lab.severity === 'critical'
-                        ? 'bg-rose-50/50 text-rose-900'
+                        ? 'bg-[#FBF1F1]/45 text-[#0B252E]'
                         : lab.severity === 'warning'
-                          ? 'bg-amber-50/50 text-amber-900'
-                          : 'text-slate-800 hover:bg-slate-50/60';
+                          ? 'bg-[#FDF7E7]/50 text-[#0B252E]'
+                          : 'text-[#344850] hover:bg-[#F7FAF9]';
 
                     const badgeClass =
                       lab.severity === 'critical'
-                        ? 'bg-rose-50 text-rose-800 border-rose-200'
+                        ? 'bg-[#FBF1F1] text-[#9E3F42] border-[#EED7D7]'
                         : lab.severity === 'warning'
-                          ? 'bg-amber-50 text-amber-800 border-amber-200'
-                          : 'bg-slate-100 text-slate-600 border-slate-200';
+                          ? 'bg-[#FDF7E7] text-[#8A6116] border-[#EFE0B9]'
+                          : 'bg-[#F2F7F6] text-[#4A5D64] border-[#DCE5E3]';
 
                     return (
                       <tr key={idx} className={`transition-colors ${rowHighlight}`}>
-                        <td className="py-2.5 px-4 font-semibold text-slate-900">
+                        <td className="py-3 px-4 font-medium text-[#0B252E]">
                           {lab.test}
                         </td>
-                        <td className="py-2.5 px-4 font-bold">
+                        <td className="py-3 px-4 font-semibold">
                           {lab.result}
                         </td>
-                        <td className="py-2.5 px-4 text-slate-500 hidden sm:table-cell">
+                        <td className="py-3 px-4 text-[#6B7D83] hidden sm:table-cell">
                           {lab.reference}
                         </td>
-                        <td className="py-2.5 px-4 text-right">
+                        <td className="py-3 px-4 text-right">
                           <span
-                            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] uppercase font-bold border ${badgeClass}`}
+                            className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium border ${badgeClass}`}
                           >
                             {lab.severity === 'critical' && (
-                              <AlertCircle className="w-3 h-3 text-rose-600" />
+                              <AlertCircle className="w-3 h-3 text-[#9E3F42]" />
                             )}
                             {lab.severity === 'critical'
-                              ? 'Critico'
+                              ? 'Alterado critico'
                               : lab.severity === 'warning'
-                                ? 'Alerta'
-                                : 'Normal'}
+                                ? 'Observacion'
+                                : 'En rango'}
                           </span>
                         </td>
                       </tr>
@@ -653,8 +637,8 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
               </table>
             </div>
           ) : (
-            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-center text-xs font-mono text-slate-500">
-              No hay reportes de laboratorio adjuntos para este caso.
+            <div className="p-4 rounded-2xl bg-[#F7FAF9] border border-[#E7EEEC] text-center text-xs text-[#6B7D83]">
+              No se adjuntan reportes de laboratorio iniciales en esta estacion.
             </div>
           )}
         </section>

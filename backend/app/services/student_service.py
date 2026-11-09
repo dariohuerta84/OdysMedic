@@ -1,4 +1,5 @@
 from datetime import datetime, timezone, timedelta
+import json
 from typing import Optional, Union, List, Dict, Any
 from sqlalchemy.orm import Session
 
@@ -10,7 +11,11 @@ from app.db.models import (
     SpacedRepetitionTask,
 )
 from app.db.seeder import seed_initial_data, CARDINAL_SPECIALTIES, DEMO_USER_EMAIL
-from app.db.diagnostic_bank import DIAGNOSTIC_QUESTIONS
+from app.db.diagnostic_bank import (
+    DIAGNOSTIC_QUESTIONS,
+    SPECIALTY_ALIASES,
+    resolve_diagnostic_question_set,
+)
 from app.models.enums import (
     MedicalSpecialty,
     CognitiveGap,
@@ -76,12 +81,35 @@ class StudentService:
         password: str,
         full_name: str,
         university: str = "Universidad Peruana Cayetano Heredia",
-        stage: str = "Internado Rotatorio 2026",
-        target_exam: str = "ENIM-EsSalud",
+        stage: Optional[str] = None,
+        target_exam: Optional[str] = None,
+        career: str = "Medicina Humana",
+        academic_year: Optional[str] = None,
+        primary_goal: str = "preparar_enam",
+        initial_world: str = "medicina_interna",
+        interest_areas: Optional[List[str]] = None,
+        onboarding_track: str = "ruta",
+        privacy_accepted: bool = True,
     ) -> User:
         existing_user = db.query(User).filter_by(email=email).first()
         if existing_user:
             raise ValueError(f"User with email '{email}' is already registered")
+
+        goal_to_exam = {
+            "preparar_enam": "ENAM",
+            "rendir_rotaciones": "Rotaciones Clinicas",
+            "reforzar_medicina_interna": "Medicina Interna",
+        }
+        effective_stage = stage or academic_year or "Internado Rotatorio 2026"
+        effective_academic_year = academic_year or effective_stage
+        effective_target_exam = target_exam or (
+            goal_to_exam.get(primary_goal, "ENIM-EsSalud") if academic_year else "ENIM-EsSalud"
+        )
+        serialized_interests = json.dumps(interest_areas or [], ensure_ascii=False)
+        normalized_world = SPECIALTY_ALIASES.get(
+            (initial_world or "medicina_interna").strip().lower().replace("-", "_"),
+            "medicina_interna",
+        )
 
         password_hashed = hash_password(password)
         try:
@@ -90,8 +118,15 @@ class StudentService:
                 password_hash=password_hashed,
                 full_name=full_name,
                 university=university,
-                stage=stage,
-                target_exam=target_exam,
+                stage=effective_stage,
+                target_exam=effective_target_exam,
+                career=career or "Medicina Humana",
+                academic_year=effective_academic_year,
+                primary_goal=primary_goal or "preparar_enam",
+                initial_world=normalized_world,
+                interest_areas=serialized_interests,
+                onboarding_track=onboarding_track or "ruta",
+                privacy_accepted=bool(privacy_accepted),
                 plan_tier="free",
                 xp=0,
                 streak_days=1,
@@ -247,6 +282,13 @@ class StudentService:
             )
         )
 
+        try:
+            parsed_interests = json.loads(user.interest_areas or "[]")
+            if not isinstance(parsed_interests, list):
+                parsed_interests = []
+        except Exception:
+            parsed_interests = []
+
         return {
             "id": user.id,
             "email": user.email,
@@ -254,6 +296,12 @@ class StudentService:
             "university": user.university,
             "stage": user.stage,
             "target_exam": user.target_exam,
+            "career": getattr(user, "career", "Medicina Humana") or "Medicina Humana",
+            "academic_year": getattr(user, "academic_year", None) or user.stage,
+            "primary_goal": getattr(user, "primary_goal", "preparar_enam") or "preparar_enam",
+            "initial_world": getattr(user, "initial_world", "medicina_interna") or "medicina_interna",
+            "interest_areas": parsed_interests,
+            "onboarding_track": getattr(user, "onboarding_track", "ruta") or "ruta",
             "plan_tier": user.plan_tier,
             "xp": user.xp,
             "streak_days": user.streak_days,
@@ -261,6 +309,8 @@ class StudentService:
             "diagnostic_score": user.diagnostic_score,
             "aptitude_status": user.aptitude_status,
             "aptitude_label": aptitude_label,
+            "diagnostic_mode": getattr(user, "diagnostic_mode", None),
+            "diagnostic_specialty": getattr(user, "diagnostic_specialty", None),
             "created_at": user.created_at.isoformat() if user.created_at else None,
             "user": {
                 "id": user.id,
@@ -269,6 +319,12 @@ class StudentService:
                 "university": user.university,
                 "stage": user.stage,
                 "target_exam": user.target_exam,
+                "career": getattr(user, "career", "Medicina Humana") or "Medicina Humana",
+                "academic_year": getattr(user, "academic_year", None) or user.stage,
+                "primary_goal": getattr(user, "primary_goal", "preparar_enam") or "preparar_enam",
+                "initial_world": getattr(user, "initial_world", "medicina_interna") or "medicina_interna",
+                "interest_areas": parsed_interests,
+                "onboarding_track": getattr(user, "onboarding_track", "ruta") or "ruta",
                 "plan_tier": user.plan_tier,
                 "xp": user.xp,
                 "streak_days": user.streak_days,
@@ -276,6 +332,8 @@ class StudentService:
                 "diagnostic_score": user.diagnostic_score,
                 "aptitude_status": user.aptitude_status,
                 "aptitude_label": aptitude_label,
+                "diagnostic_mode": getattr(user, "diagnostic_mode", None),
+                "diagnostic_specialty": getattr(user, "diagnostic_specialty", None),
             },
             "specialties": specialty_profiles,
             "specialty_profiles": specialty_profiles,
@@ -291,14 +349,28 @@ class StudentService:
         db: Session,
         user_id: int,
         answers: List[Dict[str, Any]],
+        mode: str = "general",
+        specialty: Optional[str] = None,
     ) -> Dict[str, Any]:
         user = db.query(User).filter_by(id=user_id).first()
         if not user:
             raise ValueError(f"User with id {user_id} not found")
 
-        question_map = {q["id"]: q for q in DIAGNOSTIC_QUESTIONS}
+        norm_mode = (mode or "general").strip().lower()
+        if norm_mode not in ("general", "specialty"):
+            norm_mode = "general"
+
+        norm_spec: Optional[str] = None
+        if norm_mode == "specialty" and specialty:
+            norm_spec = SPECIALTY_ALIASES.get(
+                specialty.strip().lower().replace("-", "_"),
+                "medicina_interna",
+            )
+
+        selected_questions = resolve_diagnostic_question_set(mode=norm_mode, specialty=norm_spec)
+        question_map = {q["id"]: q for q in selected_questions}
         correct_count = 0
-        total_questions = len(DIAGNOSTIC_QUESTIONS)
+        total_questions = len(selected_questions)
         results_detail = []
         detected_gaps_list = []
 
@@ -354,7 +426,7 @@ class StudentService:
                     "explanation": selected_opt.get("explanation") if selected_opt else "Respuesta no seleccionada o incorrecta.",
                 })
 
-        score_pct = round((correct_count / total_questions) * 100.0, 1)
+        score_pct = round((correct_count / total_questions) * 100.0, 1) if total_questions else 0.0
 
         if score_pct >= 75.0:
             aptitude_status = "apto"
@@ -369,16 +441,26 @@ class StudentService:
         user.diagnostic_completed = True
         user.diagnostic_score = score_pct
         user.aptitude_status = aptitude_status
+        user.diagnostic_mode = norm_mode
+        user.diagnostic_specialty = norm_spec if norm_mode == "specialty" else None
         user.diagnostic_completed_at = datetime.now(timezone.utc)
         user.xp += 100
 
-        for spec_name in CARDINAL_SPECIALTIES:
+        target_mastery_specs = list(CARDINAL_SPECIALTIES)
+        if norm_mode == "specialty" and norm_spec and norm_spec not in target_mastery_specs:
+            target_mastery_specs.append(norm_spec)
+
+        for spec_name in target_mastery_specs:
             spec_questions = [r for r in results_detail if r["specialty"] == spec_name]
             if spec_questions:
                 spec_correct = sum(1 for r in spec_questions if r["is_correct"])
                 calibrated_score = round((spec_correct / len(spec_questions)) * 100.0, 1)
-            else:
+            elif norm_mode == "general":
                 calibrated_score = score_pct
+            elif spec_name == norm_spec:
+                calibrated_score = score_pct
+            else:
+                calibrated_score = 50.0
 
             mastery = db.query(StudentMastery).filter_by(user_id=user.id, specialty=spec_name).first()
             if not mastery:
@@ -403,6 +485,8 @@ class StudentService:
             "diagnostic_score": score_pct,
             "aptitude_status": aptitude_status,
             "aptitude_label": aptitude_label,
+            "diagnostic_mode": norm_mode,
+            "diagnostic_specialty": norm_spec if norm_mode == "specialty" else None,
             "correct_count": correct_count,
             "total_questions": total_questions,
             "xp_earned": 100,

@@ -11,7 +11,6 @@ import {
   Lock,
   ArrowRight,
   LucideIcon,
-  Sparkles,
 } from 'lucide-react';
 import type { Specialty, SpecialtyMastery } from '../../types/api';
 import { LevelBadge } from '../common/LevelBadge';
@@ -20,6 +19,7 @@ import { ProgressBar } from '../common/ProgressBar';
 export interface SpecialtyCardProps {
   specialty: Specialty;
   mastery?: SpecialtyMastery;
+  isDiagnosticCompleted?: boolean;
   onSelect: (specialtyId: string) => void;
   className?: string;
 }
@@ -33,79 +33,84 @@ const getSpecialtyIcon = (
   if (norm.includes('nefro')) {
     return {
       icon: Droplets,
-      accentColor: 'text-sky-600',
-      bgAccent: 'bg-sky-50',
-      borderAccent: 'border-sky-200',
+      accentColor: 'text-[#0E6F65]',
+      bgAccent: 'bg-[#ECF6F4]',
+      borderAccent: 'border-[#CFE7E2]',
     };
   }
   if (norm.includes('endo')) {
     return {
       icon: Activity,
-      accentColor: 'text-amber-600',
-      bgAccent: 'bg-amber-50',
-      borderAccent: 'border-amber-200',
+      accentColor: 'text-[#8A6116]',
+      bgAccent: 'bg-[#FDF7E7]',
+      borderAccent: 'border-[#EFE0B9]',
     };
   }
   if (norm.includes('neuro')) {
     return {
       icon: Brain,
-      accentColor: 'text-indigo-600',
-      bgAccent: 'bg-indigo-50',
-      borderAccent: 'border-indigo-200',
+      accentColor: 'text-[#0E6F65]',
+      bgAccent: 'bg-[#F2F7F6]',
+      borderAccent: 'border-[#DCE5E3]',
     };
   }
   if (norm.includes('reuma')) {
     return {
       icon: ShieldAlert,
-      accentColor: 'text-rose-600',
-      bgAccent: 'bg-rose-50',
-      borderAccent: 'border-rose-200',
+      accentColor: 'text-[#9E3F42]',
+      bgAccent: 'bg-[#FBF1F1]',
+      borderAccent: 'border-[#EED7D7]',
     };
   }
   if (norm.includes('gineco') || norm.includes('obste')) {
     return {
       icon: Baby,
-      accentColor: 'text-sky-600',
-      bgAccent: 'bg-sky-50',
-      borderAccent: 'border-sky-200',
+      accentColor: 'text-[#0E6F65]',
+      bgAccent: 'bg-[#ECF6F4]',
+      borderAccent: 'border-[#CFE7E2]',
     };
   }
   if (norm.includes('cardio')) {
     return {
       icon: Heart,
-      accentColor: 'text-rose-600',
-      bgAccent: 'bg-rose-50',
-      borderAccent: 'border-rose-200',
+      accentColor: 'text-[#9E3F42]',
+      bgAccent: 'bg-[#FBF1F1]',
+      borderAccent: 'border-[#EED7D7]',
     };
   }
   if (norm.includes('neumo') || norm.includes('pulm')) {
     return {
       icon: Wind,
-      accentColor: 'text-sky-600',
-      bgAccent: 'bg-sky-50',
-      borderAccent: 'border-sky-200',
+      accentColor: 'text-[#0E6F65]',
+      bgAccent: 'bg-[#ECF6F4]',
+      borderAccent: 'border-[#CFE7E2]',
     };
   }
 
   return {
     icon: Stethoscope,
-    accentColor: 'text-emerald-600',
-    bgAccent: 'bg-emerald-50',
-    borderAccent: 'border-emerald-200',
+    accentColor: 'text-[#0E6F65]',
+    bgAccent: 'bg-[#ECF6F4]',
+    borderAccent: 'border-[#CFE7E2]',
   };
 };
 
 const HIGH_YIELD_TOPICS: Record<string, string> = {
-  nefrologia: 'IRA / Trastornos de Potasio',
-  endocrinologia: 'CAD / Estado Hiperosmolar',
-  neurologia: 'ACV Isquemico / Sindrome Meningeo',
-  reumatologia: 'Lupus Sistemico / Artritis',
-  ginecologia: 'Preeclampsia / Hemorragia',
+  nefrologia: 'Injuria renal y medio interno',
+  endocrinologia: 'Crisis hiperglucemicas y tiroides',
+  neurologia: 'Enfermedad cerebrovascular aguda',
+  reumatologia: 'Autoinmunidad sistemica',
+  ginecologia: 'Claves obstetricas',
+  ginecologia_obstetricia: 'Claves obstetricas',
+  medicina_interna: 'Integracion clinico-diagnostica',
+  pediatria: 'Urgencias pediatricas',
+  cirugia_general: 'Abdomen agudo quirurgico',
 };
 
 export const SpecialtyCard: React.FC<SpecialtyCardProps> = ({
   specialty,
   mastery,
+  isDiagnosticCompleted = true,
   onSelect,
   className = '',
 }) => {
@@ -113,14 +118,14 @@ export const SpecialtyCard: React.FC<SpecialtyCardProps> = ({
   const Icon = iconConfig.icon;
 
   const isUnlocked = specialty.is_unlocked ?? true;
-  const casesCompleted = mastery?.cases_completed ?? 0;
+  const casesCompleted = isDiagnosticCompleted ? (mastery?.cases_completed ?? 0) : 0;
   const totalCases =
-    mastery?.total_cases || specialty.cases_count || specialty.case_count || 10;
-  const masteryScore = Math.round(mastery?.mastery_score ?? 0);
+    mastery?.total_cases || specialty.cases_count || specialty.case_count || 8;
+  const masteryScore = isDiagnosticCompleted ? Math.round(mastery?.mastery_score ?? 0) : 0;
   const currentLevel = mastery?.level ?? 'Nivel 1';
 
   const highYieldTopic =
-    HIGH_YIELD_TOPICS[specialty.id.toLowerCase()] || 'Temario ENAM / CONAREME';
+    HIGH_YIELD_TOPICS[specialty.id.toLowerCase()] || 'Casos clinicos integrados';
 
   const hasStarted = casesCompleted > 0;
   const isCompleted = casesCompleted >= totalCases && totalCases > 0;
@@ -134,59 +139,59 @@ export const SpecialtyCard: React.FC<SpecialtyCardProps> = ({
   return (
     <div
       onClick={handleClick}
-      className={`group relative rounded-xl bg-white border border-slate-200 p-5 shadow-xs flex flex-col justify-between transition-all duration-200 ${
+      className={`group relative rounded-3xl bg-white border border-[#DCE5E3] p-6 flex flex-col justify-between transition-all duration-200 ${
         isUnlocked
-          ? 'cursor-pointer hover:border-sky-300 hover:shadow-md hover:-translate-y-0.5'
-          : 'opacity-60 cursor-not-allowed border-dashed bg-slate-50'
+          ? 'cursor-pointer hover:border-[#0E6F65]/50 hover:shadow-sm'
+          : 'opacity-65 cursor-not-allowed bg-[#F2F7F6]/60'
       } ${className}`}
     >
       <div>
-        {/* Top bar: Icon, badges and lock indicator */}
-        <div className="flex items-start justify-between gap-3 mb-3">
+        <div className="flex items-start justify-between gap-3 mb-4">
           <div
-            className={`w-11 h-11 rounded-xl border flex items-center justify-center shrink-0 transition-transform group-hover:scale-105 shadow-xs ${iconConfig.bgAccent} ${iconConfig.borderAccent} ${iconConfig.accentColor}`}
+            className={`w-11 h-11 rounded-2xl border flex items-center justify-center shrink-0 ${iconConfig.bgAccent} ${iconConfig.borderAccent} ${iconConfig.accentColor}`}
           >
             <Icon className="w-5 h-5" />
           </div>
 
-          <div className="flex flex-wrap items-center gap-1.5 justify-end">
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono border border-sky-200 bg-sky-50 text-sky-800">
-              <Sparkles className="w-2.5 h-2.5" />
-              <span>{highYieldTopic}</span>
-            </span>
-
+          <div className="text-right">
             {isUnlocked ? (
-              <LevelBadge level={currentLevel} size="sm" />
+              isDiagnosticCompleted ? (
+                <LevelBadge level={currentLevel} size="sm" />
+              ) : (
+                <span className="text-[11px] text-[#6B7D83]">
+                  Pendiente de calibracion
+                </span>
+              )
             ) : (
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono border border-slate-300 bg-slate-100 text-slate-500">
-                <Lock className="w-2.5 h-2.5" />
+              <span className="inline-flex items-center gap-1 text-xs text-[#6B7D83]">
+                <Lock className="w-3 h-3" />
                 <span>Bloqueado</span>
               </span>
             )}
           </div>
         </div>
 
-        {/* Title and description */}
-        <div className="mb-4">
-          <h3 className="text-base font-bold text-slate-900 group-hover:text-sky-700 transition-colors">
+        <div className="mb-5 space-y-1.5">
+          <span className="text-[11px] uppercase tracking-[0.14em] text-[#0E6F65] font-semibold block">
+            {highYieldTopic}
+          </span>
+          <h3 className="font-serif text-lg font-semibold text-[#0B252E] group-hover:text-[#0E6F65] transition-colors">
             {specialty.name}
           </h3>
-          <p className="text-xs text-slate-600 mt-1 line-clamp-2 leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#4A5D64] line-clamp-2 leading-relaxed">
             {specialty.description}
           </p>
         </div>
       </div>
 
-      {/* Mastery, Cases count, and CTA Button */}
-      <div className="pt-3 border-t border-slate-100 space-y-3">
-        {/* Progress & metrics */}
+      <div className="pt-4 border-t border-[#EDF2F0] space-y-3.5">
         <div>
-          <div className="flex items-center justify-between text-xs font-mono mb-1.5">
-            <span className="text-slate-500 text-[11px]">
-              {casesCompleted} / {totalCases} casos resueltos
+          <div className="flex items-center justify-between text-xs mb-1.5">
+            <span className="text-[#6B7D83]">
+              {casesCompleted} de {totalCases} estaciones
             </span>
-            <span className="text-slate-900 font-semibold text-[11px]">
-              {masteryScore}% maestria
+            <span className="text-[#0B252E] font-medium">
+              {isDiagnosticCompleted ? `${masteryScore}% dominio` : 'Sin evaluar'}
             </span>
           </div>
           <ProgressBar
@@ -195,14 +200,13 @@ export const SpecialtyCard: React.FC<SpecialtyCardProps> = ({
               masteryScore >= 80
                 ? 'emerald'
                 : masteryScore >= 50
-                  ? 'cyan'
+                  ? 'teal'
                   : 'amber'
             }
             height="sm"
           />
         </div>
 
-        {/* CTA Button */}
         <button
           type="button"
           disabled={!isUnlocked}
@@ -210,27 +214,27 @@ export const SpecialtyCard: React.FC<SpecialtyCardProps> = ({
             e.stopPropagation();
             handleClick();
           }}
-          className={`w-full py-2.5 px-3.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
+          className={`w-full py-2.5 px-4 rounded-full text-xs font-medium flex items-center justify-center gap-2 transition-colors ${
             !isUnlocked
-              ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
-              : isCompleted
-                ? 'bg-white border border-sky-300 text-sky-700 hover:bg-sky-50'
-                : hasStarted
-                  ? 'bg-sky-600 hover:bg-sky-700 text-white shadow-xs'
-                  : 'bg-sky-50 hover:bg-sky-100 border border-sky-200 text-sky-800'
+              ? 'bg-[#F2F7F6] text-[#8FA1A6] cursor-not-allowed'
+              : hasStarted && !isCompleted
+                ? 'bg-[#0E6F65] hover:bg-[#0A564E] text-white'
+                : 'bg-[#ECF6F4] hover:bg-[#DFEFEA] text-[#0E6F65]'
           }`}
         >
           <span>
             {!isUnlocked
-              ? 'Guardia Bloqueada'
-              : isCompleted
-                ? 'Repasar Casos Clinicos'
-                : hasStarted
-                  ? 'Continuar Caso'
-                  : 'Iniciar Guardia Clinica'}
+              ? 'Mundo bloqueado'
+              : !isDiagnosticCompleted
+                ? 'Realizar evaluacion inicial primero'
+                : isCompleted
+                  ? 'Repasar estaciones'
+                  : hasStarted
+                    ? 'Continuar mundo clinico'
+                    : 'Explorar estaciones'}
           </span>
           {isUnlocked ? (
-            <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+            <ArrowRight className="w-3.5 h-3.5" />
           ) : (
             <Lock className="w-3.5 h-3.5" />
           )}

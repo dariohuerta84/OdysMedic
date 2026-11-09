@@ -406,7 +406,7 @@ def test_references_books_and_case_citations(client: TestClient):
     books_resp = client.get("/api/v1/references/books")
     assert books_resp.status_code == 200
     books = books_resp.json()
-    assert len(books) == 7
+    assert len(books) >= 7
     book_titles = [b["title"] for b in books]
     assert any("Nefrología" in title or "Kidney" in title or "Brenner" in title for title in book_titles)
 

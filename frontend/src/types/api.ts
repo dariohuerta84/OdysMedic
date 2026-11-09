@@ -11,30 +11,43 @@ export type CognitiveGapTag =
 
 export type UserRole = 'student' | 'intern' | 'resident' | 'specialist';
 
-export type PlanTier = 'pilot_free' | 'essential' | 'residentado_pro';
+export type PlanTier = 'pilot_free' | 'essential' | 'residentado_pro' | 'free' | 'premium';
 
 export type CompetencyLevel = 'Nivel 1' | 'Nivel 2' | 'Nivel 3';
 
 export type AptitudeStatus = 'apto' | 'en_nivelacion' | 'no_apto';
 
+export type DiagnosticExamMode = 'general' | 'specialty';
+
+export type OnboardingTrack = 'ruta' | 'desde_cero';
+
 export interface User {
   id: number | string;
   email: string;
   full_name: string;
-  role: UserRole;
+  role?: UserRole;
   plan_tier: PlanTier;
-  experience_points: number;
+  experience_points?: number;
   streak_days: number;
-  current_level: CompetencyLevel;
+  current_level?: CompetencyLevel;
   created_at: string;
   university?: string;
   stage?: string;
   target_exam?: string;
+  career?: string;
+  academic_year?: string;
+  primary_goal?: string;
+  initial_world?: string;
+  interest_areas?: string[];
+  onboarding_track?: OnboardingTrack | string;
+  privacy_accepted?: boolean;
   xp?: number;
   diagnostic_completed?: boolean;
   diagnostic_score?: number | null;
   aptitude_status?: AptitudeStatus | null;
   aptitude_label?: string | null;
+  diagnostic_mode?: DiagnosticExamMode | string | null;
+  diagnostic_specialty?: string | null;
 }
 
 export interface AuthToken {
@@ -215,6 +228,12 @@ export interface LevelingDashboard {
   university?: string;
   stage?: string;
   target_exam?: string;
+  career?: string;
+  academic_year?: string;
+  primary_goal?: string;
+  initial_world?: string;
+  interest_areas?: string[];
+  onboarding_track?: string;
   plan_tier?: PlanTier;
   xp?: number;
   user?: any;
@@ -232,6 +251,8 @@ export interface LevelingDashboard {
   diagnostic_score?: number | null;
   aptitude_status?: AptitudeStatus | null;
   aptitude_label?: string | null;
+  diagnostic_mode?: DiagnosticExamMode | string | null;
+  diagnostic_specialty?: string | null;
   pending_repetition_tasks?: any[];
   spaced_repetition_tasks?: any[];
 }
@@ -254,6 +275,10 @@ export interface MedicalReference {
   evidence_level?: string;
   associated_specialty?: string;
   associated_cases?: string[];
+  anamnesis_checklist?: string[];
+  physical_exam_signs?: string[];
+  diagnostic_cutoffs?: string[];
+  red_flags?: string[];
 }
 
 export interface LoginCredentials {
@@ -269,6 +294,19 @@ export interface RegisterRequest {
   university?: string;
   stage?: string;
   target_exam?: string;
+  career?: string;
+  academic_year?: string;
+  primary_goal?: string;
+  initial_world?: string;
+  interest_areas?: string[];
+  onboarding_track?: OnboardingTrack | string;
+  privacy_accepted?: boolean;
+}
+
+export interface DiagnosticSpecialtyOption {
+  id: string;
+  label: string;
+  description: string;
 }
 
 export interface DiagnosticOption {
@@ -294,6 +332,8 @@ export interface DiagnosticAnswerItem {
 
 export interface DiagnosticSubmissionRequest {
   answers: DiagnosticAnswerItem[];
+  mode?: DiagnosticExamMode;
+  specialty?: string | null;
 }
 
 export interface DiagnosticResultDetail {
@@ -310,10 +350,11 @@ export interface DiagnosticResult {
   diagnostic_score: number;
   aptitude_status: AptitudeStatus;
   aptitude_label: string;
+  diagnostic_mode?: DiagnosticExamMode | string;
+  diagnostic_specialty?: string | null;
   correct_count: number;
   total_questions: number;
   xp_earned: number;
   detected_gaps: string[];
   details: DiagnosticResultDetail[];
 }
-

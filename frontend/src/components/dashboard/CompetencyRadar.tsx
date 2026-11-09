@@ -20,9 +20,9 @@ const AXES: AxisDefinition[] = [
   {
     key: 'GAP_TRIAGE_SEVERITY',
     title: 'Triaje y Reconocimiento de Gravedad',
-    shortTitle: 'Triaje / Gravedad',
+    shortTitle: 'Triaje y Gravedad',
     dx: 0,
-    dy: -1, // Top
+    dy: -1,
     labelAnchor: 'middle',
   },
   {
@@ -30,15 +30,15 @@ const AXES: AxisDefinition[] = [
     title: 'Razonamiento Diagnostico Clinico',
     shortTitle: 'Razonamiento Diagnostico',
     dx: 1,
-    dy: 0, // Right
+    dy: 0,
     labelAnchor: 'start',
   },
   {
     key: 'GAP_LAB_INTERPRETATION',
-    title: 'Interpretacion de Examenes y Labs',
+    title: 'Interpretacion de Examenes y Laboratorio',
     shortTitle: 'Interpretacion de Labs',
     dx: 0,
-    dy: 1, // Bottom
+    dy: 1,
     labelAnchor: 'middle',
   },
   {
@@ -46,14 +46,14 @@ const AXES: AxisDefinition[] = [
     title: 'Manejo Terapeutico Inicial',
     shortTitle: 'Manejo Terapeutico',
     dx: -1,
-    dy: 0, // Left
+    dy: 0,
     labelAnchor: 'end',
   },
 ];
 
 export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
   scores,
-  size = 380,
+  size = 360,
   className = '',
 }) => {
   const [hoveredGap, setHoveredGap] = useState<CognitiveGapTag | null>(null);
@@ -84,39 +84,35 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
 
   return (
     <div className={`flex flex-col items-center w-full select-none ${className}`}>
-      <div className="relative w-full max-w-[420px] aspect-square flex items-center justify-center">
+      <div className="relative w-full max-w-[400px] aspect-square flex items-center justify-center">
         <svg
           viewBox={`0 0 ${size} ${size}`}
           className="w-full h-full overflow-visible"
           role="img"
-          aria-label="Radar de Competencias Clinicas OCRI de 4 Brechas"
+          aria-label="Mapa de competencias clinicas"
         >
           <defs>
-            {/* Subtle radial background gradient for light canvas */}
-            <radialGradient id="radar-bg-radial" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#E0F2FE" stopOpacity="0.5" />
-              <stop offset="70%" stopColor="#F0F9FF" stopOpacity="0.3" />
+            <radialGradient id="classic-radar-bg" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="#ECF6F4" stopOpacity="0.85" />
+              <stop offset="75%" stopColor="#F7FAF9" stopOpacity="0.5" />
               <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0.1" />
             </radialGradient>
           </defs>
 
-          {/* Background circle */}
           <circle
             cx={cx}
             cy={cy}
             r={maxRadius}
-            fill="url(#radar-bg-radial)"
-            className="transition-colors"
+            fill="url(#classic-radar-bg)"
           />
 
-          {/* Concentric diamond grid rings (25%, 50%, 75%, 100%) */}
           {rings.map((pct) => {
             const r = (pct / 100) * maxRadius;
             const pts = [
-              `${cx},${cy - r}`, // Top
-              `${cx + r},${cy}`, // Right
-              `${cx},${cy + r}`, // Bottom
-              `${cx - r},${cy}`, // Left
+              `${cx},${cy - r}`,
+              `${cx + r},${cy}`,
+              `${cx},${cy + r}`,
+              `${cx - r},${cy}`,
             ].join(' ');
 
             return (
@@ -124,19 +120,18 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
                 <polygon
                   points={pts}
                   fill="none"
-                  stroke="#E2E8F0"
+                  stroke="#DCE5E3"
                   strokeWidth={pct === 100 ? '1.5' : '1'}
                   strokeDasharray={pct === 100 ? undefined : '3 3'}
                 />
-                {/* Monospace percentage markers on top axis */}
                 <text
-                  x={cx + 4}
+                  x={cx + 5}
                   y={cy - r + 3}
-                  fill="#94A3B8"
+                  fill="#6B7D83"
                   fontSize="8.5"
-                  fontFamily="monospace"
+                  fontFamily="Inter, sans-serif"
                   textAnchor="start"
-                  className="pointer-events-none font-medium"
+                  className="pointer-events-none"
                 >
                   {pct}%
                 </text>
@@ -144,7 +139,6 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
             );
           })}
 
-          {/* Cardinal axes lines from center */}
           {AXES.map((axis) => {
             const outer = getPoint(axis, 100);
             return (
@@ -154,23 +148,21 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
                 y1={cy}
                 x2={outer.x}
                 y2={outer.y}
-                stroke="#CBD5E1"
+                stroke="#CFE0DC"
                 strokeWidth="1"
               />
             );
           })}
 
-          {/* Student scores polygon */}
           <polygon
             points={polygonPoints}
-            fill="#BAE6FD"
-            fillOpacity="0.45"
-            stroke="#0284C7"
-            strokeWidth="2.5"
+            fill="#0E6F65"
+            fillOpacity="0.16"
+            stroke="#0E6F65"
+            strokeWidth="2.2"
             className="transition-all duration-300 ease-out"
           />
 
-          {/* Vertex circles with interactive hover */}
           {AXES.map((axis) => {
             const score = Math.round(scores[axis.key] ?? 0);
             const pt = getPoint(axis, score);
@@ -188,39 +180,30 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
                 onFocus={() => setHoveredGap(axis.key)}
                 onBlur={() => setHoveredGap(null)}
               >
-                {/* Expanded invisible hit target */}
                 <circle cx={pt.x} cy={pt.y} r={16} fill="transparent" />
-
-                {/* Aura pulse ring when hovered */}
                 {isHovered && (
                   <circle
                     cx={pt.x}
                     cy={pt.y}
-                    r={11}
-                    fill="#38BDF8"
-                    fillOpacity="0.25"
-                    stroke="#0284C7"
-                    strokeWidth="1.5"
-                    className="animate-ping"
+                    r={10}
+                    fill="#0E6F65"
+                    fillOpacity="0.15"
                   />
                 )}
-
-                {/* Visible vertex dot */}
                 <circle
                   cx={pt.x}
                   cy={pt.y}
                   r={isHovered ? 6 : 4.5}
-                  fill="#0284C7"
+                  fill="#0E6F65"
                   stroke="#FFFFFF"
                   strokeWidth="2"
-                  className="transition-all duration-150 shadow-sm"
+                  className="transition-all duration-150"
                 />
               </g>
             );
           })}
 
-          {/* Cardinal labels around the 4 axes */}
-          {/* Top: GAP_TRIAGE_SEVERITY */}
+          {/* Top */}
           <g
             className="cursor-pointer"
             onMouseEnter={() => setHoveredGap('GAP_TRIAGE_SEVERITY')}
@@ -230,21 +213,21 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
               x={cx}
               y={cy - maxRadius - 24}
               textAnchor="middle"
-              className="font-sans font-semibold text-[11px] fill-slate-700 tracking-wide"
+              className="font-sans font-medium text-[11px] fill-[#344850]"
             >
-              Triaje / Gravedad
+              Triaje y Gravedad
             </text>
             <text
               x={cx}
-              y={cy - maxRadius - 10}
+              y={cy - maxRadius - 9}
               textAnchor="middle"
-              className="font-mono font-bold text-[12px] fill-sky-700"
+              className="font-serif font-semibold text-[13px] fill-[#0E6F65]"
             >
               {Math.round(scores.GAP_TRIAGE_SEVERITY ?? 0)}%
             </text>
           </g>
 
-          {/* Right: GAP_DIAGNOSTIC_REASONING */}
+          {/* Right */}
           <g
             className="cursor-pointer"
             onMouseEnter={() => setHoveredGap('GAP_DIAGNOSTIC_REASONING')}
@@ -254,7 +237,7 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
               x={cx + maxRadius + 14}
               y={cy - 6}
               textAnchor="start"
-              className="font-sans font-semibold text-[11px] fill-slate-700 tracking-wide"
+              className="font-sans font-medium text-[11px] fill-[#344850]"
             >
               Razonamiento
             </text>
@@ -262,7 +245,7 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
               x={cx + maxRadius + 14}
               y={cy + 8}
               textAnchor="start"
-              className="font-sans font-semibold text-[11px] fill-slate-700 tracking-wide"
+              className="font-sans font-medium text-[11px] fill-[#344850]"
             >
               Diagnostico
             </text>
@@ -270,13 +253,13 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
               x={cx + maxRadius + 14}
               y={cy + 24}
               textAnchor="start"
-              className="font-mono font-bold text-[12px] fill-sky-700"
+              className="font-serif font-semibold text-[13px] fill-[#0E6F65]"
             >
               {Math.round(scores.GAP_DIAGNOSTIC_REASONING ?? 0)}%
             </text>
           </g>
 
-          {/* Bottom: GAP_LAB_INTERPRETATION */}
+          {/* Bottom */}
           <g
             className="cursor-pointer"
             onMouseEnter={() => setHoveredGap('GAP_LAB_INTERPRETATION')}
@@ -286,21 +269,21 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
               x={cx}
               y={cy + maxRadius + 18}
               textAnchor="middle"
-              className="font-mono font-bold text-[12px] fill-sky-700"
+              className="font-serif font-semibold text-[13px] fill-[#0E6F65]"
             >
               {Math.round(scores.GAP_LAB_INTERPRETATION ?? 0)}%
             </text>
             <text
               x={cx}
-              y={cy + maxRadius + 32}
+              y={cy + maxRadius + 33}
               textAnchor="middle"
-              className="font-sans font-semibold text-[11px] fill-slate-700 tracking-wide"
+              className="font-sans font-medium text-[11px] fill-[#344850]"
             >
-              Interpretacion de Labs
+              Interpretacion Auxiliar
             </text>
           </g>
 
-          {/* Left: GAP_INITIAL_MANAGEMENT */}
+          {/* Left */}
           <g
             className="cursor-pointer"
             onMouseEnter={() => setHoveredGap('GAP_INITIAL_MANAGEMENT')}
@@ -310,7 +293,7 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
               x={cx - maxRadius - 14}
               y={cy - 6}
               textAnchor="end"
-              className="font-sans font-semibold text-[11px] fill-slate-700 tracking-wide"
+              className="font-sans font-medium text-[11px] fill-[#344850]"
             >
               Manejo
             </text>
@@ -318,7 +301,7 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
               x={cx - maxRadius - 14}
               y={cy + 8}
               textAnchor="end"
-              className="font-sans font-semibold text-[11px] fill-slate-700 tracking-wide"
+              className="font-sans font-medium text-[11px] fill-[#344850]"
             >
               Terapeutico
             </text>
@@ -326,38 +309,38 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
               x={cx - maxRadius - 14}
               y={cy + 24}
               textAnchor="end"
-              className="font-mono font-bold text-[12px] fill-sky-700"
+              className="font-serif font-semibold text-[13px] fill-[#0E6F65]"
             >
               {Math.round(scores.GAP_INITIAL_MANAGEMENT ?? 0)}%
             </text>
           </g>
         </svg>
 
-        {/* Central interactive HUD readout */}
+        {/* Central Readout */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="text-center px-2.5 py-1.5 rounded-lg bg-white/95 border border-slate-200 shadow-xs backdrop-blur-sm max-w-[130px]">
+          <div className="text-center px-3 py-2 rounded-2xl bg-white/95 border border-[#DCE5E3] shadow-2xs max-w-[136px]">
             {activeAxis ? (
               <>
-                <div className="text-[10px] uppercase font-mono tracking-wider text-sky-700 font-semibold truncate">
+                <div className="text-[10px] uppercase tracking-[0.12em] text-[#0E6F65] font-semibold truncate">
                   {activeAxis.shortTitle}
                 </div>
-                <div className="text-sm font-mono font-bold text-slate-900">
+                <div className="font-serif text-base font-semibold text-[#0B252E]">
                   {activeScore}%
                 </div>
-                <div className="text-[9px] text-slate-500 font-sans">
+                <div className="text-[10px] text-[#6B7D83]">
                   {activeScore! >= 80
-                    ? 'Dominio Solido'
+                    ? 'Dominio solido'
                     : activeScore! >= 60
-                      ? 'Nivel Estable'
-                      : 'Refuerzo OCRI'}
+                      ? 'En progreso'
+                      : 'Prioridad'}
                 </div>
               </>
             ) : (
               <>
-                <div className="text-[9px] font-mono uppercase tracking-wider text-slate-500 font-medium">
-                  Precision OCRI
+                <div className="text-[10px] uppercase tracking-[0.12em] text-[#6B7D83] font-medium">
+                  Promedio global
                 </div>
-                <div className="text-sm font-mono font-bold text-slate-900">
+                <div className="font-serif text-base font-semibold text-[#0B252E]">
                   {Math.round(
                     (scores.GAP_TRIAGE_SEVERITY +
                       scores.GAP_DIAGNOSTIC_REASONING +
@@ -367,17 +350,14 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
                   )}
                   %
                 </div>
-                <div className="text-[8.5px] text-slate-500 font-mono">
-                  4 Brechas
-                </div>
               </>
             )}
           </div>
         </div>
       </div>
 
-      {/* Legend and performance pills */}
-      <div className="w-full grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-slate-200 text-xs">
+      {/* Clean Legend */}
+      <div className="w-full grid grid-cols-2 gap-2.5 mt-3 pt-3 border-t border-[#EDF2F0] text-xs">
         {AXES.map((axis) => {
           const score = Math.round(scores[axis.key] ?? 0);
           const isSelected = hoveredGap === axis.key;
@@ -391,27 +371,25 @@ export const CompetencyRadar: React.FC<CompetencyRadarProps> = ({
               onClick={() =>
                 setHoveredGap(hoveredGap === axis.key ? null : axis.key)
               }
-              className={`flex items-center justify-between p-2 rounded-lg border text-left transition-all ${
+              className={`flex items-center justify-between px-3 py-2 rounded-xl border text-left transition-colors ${
                 isSelected
-                  ? 'bg-sky-50 border-sky-400 text-slate-900 shadow-xs'
-                  : 'bg-white border-slate-200 text-slate-700 hover:border-sky-200 hover:bg-slate-50'
+                  ? 'bg-[#ECF6F4] border-[#0E6F65] text-[#0B252E]'
+                  : 'bg-[#FDFCFA] border-[#E7EEEC] text-[#344850] hover:bg-[#F2F7F6]'
               }`}
             >
-              <div className="flex items-center gap-1.5 min-w-0">
+              <div className="flex items-center gap-2 min-w-0">
                 <span
                   className={`w-2 h-2 rounded-full shrink-0 ${
                     score >= 80
-                      ? 'bg-emerald-500'
+                      ? 'bg-[#0E6F65]'
                       : score >= 60
-                        ? 'bg-sky-500'
-                        : 'bg-amber-500'
+                        ? 'bg-[#8A6116]'
+                        : 'bg-[#9E3F42]'
                   }`}
                 />
-                <span className="text-[11px] truncate font-medium">
-                  {axis.shortTitle}
-                </span>
+                <span className="text-xs truncate">{axis.shortTitle}</span>
               </div>
-              <span className="font-mono text-[11px] font-semibold text-slate-900 ml-2">
+              <span className="font-semibold text-xs text-[#0B252E] ml-2">
                 {score}%
               </span>
             </button>
