@@ -21,11 +21,14 @@ import type {
   CognitiveGapTag,
   SpacedRepetitionItem,
   CompetencyLevel,
+  SimulateDaysMode,
+  SimulateDaysResponse,
 } from '../types/api';
 import { CompetencyRadar } from '../components/dashboard/CompetencyRadar';
 import { BentoStats } from '../components/dashboard/BentoStats';
 import { SpecialtyCard } from '../components/dashboard/SpecialtyCard';
 import { SpacedRepetitionQueue } from '../components/dashboard/SpacedRepetitionQueue';
+import { TimePassageSimulator } from '../components/dashboard/TimePassageSimulator';
 import { useAnimatedNumber } from '../hooks/useAnimatedNumber';
 
 export interface DashboardPageProps {
@@ -147,7 +150,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   onStartDiagnostic,
   className = '',
 }) => {
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
   const [dashboard, setDashboard] = useState<LevelingDashboard | null>(null);
   const [specialties, setSpecialties] = useState<Specialty[]>(DEFAULT_SPECIALTIES);
 
@@ -230,15 +233,19 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     totalCompletedCases += m.cases_completed || 0;
   });
 
-  // Dynamic route percentage: reflects diagnostic baseline initially and adapts as stations are practiced
+  const simulatedDaysElapsed = dashboard?.simulated_days_elapsed ?? 0;
+
+  // Dynamic route percentage: reflects diagnostic baseline initially and adapts as stations or simulated days progress
   const rawRouteScore = !isDiagnosticCompleted
     ? 0
-    : totalCompletedCases > 0 && typeof dashboard?.ocri_score === 'number'
-      ? Math.round(
-          0.45 * (diagnosticScore ?? dashboard.ocri_score) +
-            0.55 * dashboard.ocri_score
-        )
-      : Math.round(diagnosticScore ?? dashboard?.ocri_score ?? 0);
+    : simulatedDaysElapsed > 0 && typeof dashboard?.ocri_score === 'number'
+      ? Math.round(dashboard.ocri_score)
+      : totalCompletedCases > 0 && typeof dashboard?.ocri_score === 'number'
+        ? Math.round(
+            0.45 * (diagnosticScore ?? dashboard.ocri_score) +
+              0.55 * dashboard.ocri_score
+          )
+        : Math.round(diagnosticScore ?? dashboard?.ocri_score ?? 0);
 
   const animatedRouteScore = Math.round(useAnimatedNumber(rawRouteScore, 900));
   const routeTone = getRouteScoreColor(rawRouteScore);
@@ -297,6 +304,22 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
       return;
     }
     onSelectSpecialty(activeWorldKey);
+  };
+
+  const handleSimulateDays = async (
+    days: number,
+    mode: SimulateDaysMode
+  ): Promise<SimulateDaysResponse | null> => {
+    try {
+      const result = await levelingApi.simulateDays(days, mode);
+      if (result?.dashboard) {
+        setDashboard(result.dashboard);
+      }
+      await refreshUser();
+      return result;
+    } catch {
+      return null;
+    }
   };
 
   const circleRadius = 26;
@@ -605,6 +628,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           overallScore={rawRouteScore}
         />
       </section>
+
+      {/* 2B. Longitudinal Time-Passage Simulator for Single-Session Exposition */}
+      <TimePassageSimulator
+        simulatedDays={simulatedDaysElapsed}
+        simulatedDateIso={dashboard?.simulated_date_iso}
+        isDiagnosticCompleted={isDiagnosticCompleted}
+        onSimulateDays={handleSimulateDays}
+      />
 
       {/* 3. Two-Column Section: Animated Red-to-Teal Competency Radar + Adaptive Spaced Repetition */}
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">

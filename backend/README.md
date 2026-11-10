@@ -142,8 +142,12 @@ Los 7 casos clinicos reales estan anclados a guias y libros de texto canonicos:
 * `POST /api/v1/evaluation/submit`: Evaluacion retrospectiva clasica (propuesta diagnostica y terapeutica libre).
 * `GET /api/v1/evaluation/taxonomy`: Descripcion formativa de las 4 Brechas Cognitivas.
 
-### 5.5 Nivelacion Adaptativa (`/api/v1/leveling`)
-* `GET /api/v1/leveling/dashboard`: Tablero analitico del estudiante con radar OCRI en las 5 especialidades, puntaje global y cola de repaso espaciado.
+### 5.5 Nivelacion Adaptativa, Diagnostico Dual y Simulador Longitudinal (`/api/v1/leveling`)
+* `GET /api/v1/leveling/diagnostic/specialties`: Lista las especialidades habilitadas para el examen diagnostico focalizado.
+* `GET /api/v1/leveling/diagnostic/questions`: Entrega las 5 estaciones de autoevaluacion inicial (`?mode=general` o `?mode=specialty&specialty=<id>`).
+* `POST /api/v1/leveling/diagnostic/submit`: Califica el diagnostico inicial, calibra honestamente el rombo cognitivo y las especialidades (incluyendo puntajes bajos en rojo) y agenda automaticamente en `SpacedRepetitionTask` las estaciones falladas.
+* `GET /api/v1/leveling/dashboard`: Tablero analitico del estudiante con `cognitive_gap_radar` dinamico, perfiles por especialidad, `simulated_days_elapsed` y cola adaptativa de repaso espaciado.
+* `POST /api/v1/leveling/simulate-days`: Simulador longitudinal de paso del tiempo para exposiciones en una sola sesion (`mode="active_streak"` para `+1`, `+7`, `+21` dias; `mode="inactivity_decay"` para evidenciar la curva del olvido de Ebbinghaus; `mode="reset"` para volver al Dia 0).
 * `GET /api/v1/leveling/prescription/{specialty}`: Prescripcion de micro-ejercicios y nivel de dificultad recomendado para cerrar brechas en la especialidad.
 
 ### 5.6 Guias y Literatura Medica (`/api/v1/references`)

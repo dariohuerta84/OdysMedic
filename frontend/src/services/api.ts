@@ -20,6 +20,8 @@ import type {
   DiagnosticExamMode,
   DiagnosticSpecialtyOption,
   RegisterRequest,
+  SimulateDaysMode,
+  SimulateDaysResponse,
 } from '../types/api';
 
 const API_BASE_URL =
@@ -325,95 +327,115 @@ export const evaluationApi = {
 /**
  * Adaptive Leveling and OCRI Radar API
  */
+function mapRawDashboardData(d: any): LevelingDashboard {
+  const rawRadar = d.cognitive_gap_radar || {};
+  const fallbackAnchor =
+    typeof d.diagnostic_score === 'number'
+      ? Math.max(8, Math.round(d.diagnostic_score))
+      : typeof d.ocri_score === 'number'
+        ? Math.max(8, Math.round(d.ocri_score))
+        : 50;
+
+  const radarGaps: Record<CognitiveGapTag, number> = {
+    GAP_TRIAGE_SEVERITY:
+      typeof rawRadar.GAP_TRIAGE_SEVERITY === 'number'
+        ? rawRadar.GAP_TRIAGE_SEVERITY
+        : fallbackAnchor,
+    GAP_DIAGNOSTIC_REASONING:
+      typeof rawRadar.GAP_DIAGNOSTIC_REASONING === 'number'
+        ? rawRadar.GAP_DIAGNOSTIC_REASONING
+        : fallbackAnchor,
+    GAP_LAB_INTERPRETATION:
+      typeof rawRadar.GAP_LAB_INTERPRETATION === 'number'
+        ? rawRadar.GAP_LAB_INTERPRETATION
+        : fallbackAnchor,
+    GAP_INITIAL_MANAGEMENT:
+      typeof rawRadar.GAP_INITIAL_MANAGEMENT === 'number'
+        ? rawRadar.GAP_INITIAL_MANAGEMENT
+        : fallbackAnchor,
+  };
+
+  const specialtyMasteries: SpecialtyMastery[] = [];
+  const profiles = d.specialty_profiles || d.specialties || {};
+  for (const [key, val] of Object.entries<any>(profiles)) {
+    specialtyMasteries.push({
+      specialty_id: key,
+      specialty_name: key.charAt(0).toUpperCase() + key.slice(1),
+      mastery_score: val.score ?? 0,
+      level:
+        val.level === 'avanzado'
+          ? 'Nivel 3'
+          : val.level === 'competente'
+            ? 'Nivel 2'
+            : 'Nivel 1',
+      cases_completed: val.attempts ?? 0,
+      total_cases: 10,
+    });
+  }
+
+  const pendingRepetitions: SpacedRepetitionItem[] = (
+    d.pending_repetition_tasks ||
+    d.spaced_repetition_tasks ||
+    []
+  ).map((t: any) => ({
+    case_id: t.case_id,
+    case_title: t.case_title || `Estacion Clinica (${t.case_id})`,
+    specialty_name: t.specialty_name || 'Medicina Interna',
+    specialty: t.specialty || 'medicina_interna',
+    cycle: t.repetition_cycle === 'D21' ? 'D21' : 'D7',
+    scheduled_date: t.scheduled_for || new Date().toISOString(),
+    is_overdue:
+      typeof t.is_overdue === 'boolean'
+        ? t.is_overdue
+        : t.scheduled_for
+          ? new Date(t.scheduled_for) <= new Date()
+          : false,
+    days_until_due: typeof t.days_until_due === 'number' ? t.days_until_due : 0,
+    priority: t.priority || 'normal',
+    id: t.id,
+    gap_type: t.gap_type,
+    scheduled_for: t.scheduled_for,
+    repetition_cycle: t.repetition_cycle,
+    status: t.status,
+    created_at: t.created_at,
+  }));
+
+  return {
+    user_id: d.id || d.user?.id || 1,
+    current_level: (d.ocri_score >= 80
+      ? 'Nivel 3'
+      : d.ocri_score >= 50
+        ? 'Nivel 2'
+        : 'Nivel 1') as CompetencyLevel,
+    total_xp: d.xp ?? d.user?.xp ?? 0,
+    streak_days: d.streak_days ?? d.user?.streak_days ?? 0,
+    simulated_days_elapsed: d.simulated_days_elapsed ?? 0,
+    simulated_date_iso: d.simulated_date_iso,
+    cognitive_gap_radar: radarGaps,
+    specialty_masteries: specialtyMasteries,
+    pending_spaced_repetitions: pendingRepetitions,
+    ...d,
+  };
+}
+
 export const levelingApi = {
   getDashboard: async (): Promise<LevelingDashboard> => {
     const response = await api.get<any>('/leveling/dashboard');
-    const d = response.data;
+    return mapRawDashboardData(response.data);
+  },
 
-    const rawRadar = d.cognitive_gap_radar || {};
-    const fallbackAnchor =
-      typeof d.diagnostic_score === 'number'
-        ? Math.max(8, Math.round(d.diagnostic_score))
-        : typeof d.ocri_score === 'number'
-          ? Math.max(8, Math.round(d.ocri_score))
-          : 50;
-
-    const radarGaps: Record<CognitiveGapTag, number> = {
-      GAP_TRIAGE_SEVERITY:
-        typeof rawRadar.GAP_TRIAGE_SEVERITY === 'number'
-          ? rawRadar.GAP_TRIAGE_SEVERITY
-          : fallbackAnchor,
-      GAP_DIAGNOSTIC_REASONING:
-        typeof rawRadar.GAP_DIAGNOSTIC_REASONING === 'number'
-          ? rawRadar.GAP_DIAGNOSTIC_REASONING
-          : fallbackAnchor,
-      GAP_LAB_INTERPRETATION:
-        typeof rawRadar.GAP_LAB_INTERPRETATION === 'number'
-          ? rawRadar.GAP_LAB_INTERPRETATION
-          : fallbackAnchor,
-      GAP_INITIAL_MANAGEMENT:
-        typeof rawRadar.GAP_INITIAL_MANAGEMENT === 'number'
-          ? rawRadar.GAP_INITIAL_MANAGEMENT
-          : fallbackAnchor,
-    };
-
-    const specialtyMasteries: SpecialtyMastery[] = [];
-    const profiles = d.specialty_profiles || d.specialties || {};
-    for (const [key, val] of Object.entries<any>(profiles)) {
-      specialtyMasteries.push({
-        specialty_id: key,
-        specialty_name: key.charAt(0).toUpperCase() + key.slice(1),
-        mastery_score: val.score ?? 0,
-        level:
-          val.level === 'avanzado'
-            ? 'Nivel 3'
-            : val.level === 'competente'
-              ? 'Nivel 2'
-              : 'Nivel 1',
-        cases_completed: val.attempts ?? 0,
-        total_cases: 10,
-      });
-    }
-
-    const pendingRepetitions: SpacedRepetitionItem[] = (
-      d.pending_repetition_tasks ||
-      d.spaced_repetition_tasks ||
-      []
-    ).map((t: any) => ({
-      case_id: t.case_id,
-      case_title: t.case_title || `Estacion Clinica (${t.case_id})`,
-      specialty_name: t.specialty_name || 'Medicina Interna',
-      specialty: t.specialty || 'medicina_interna',
-      cycle: t.repetition_cycle === 'D21' ? 'D21' : 'D7',
-      scheduled_date: t.scheduled_for || new Date().toISOString(),
-      is_overdue:
-        typeof t.is_overdue === 'boolean'
-          ? t.is_overdue
-          : t.scheduled_for
-            ? new Date(t.scheduled_for) <= new Date()
-            : false,
-      priority: t.priority || 'normal',
-      id: t.id,
-      gap_type: t.gap_type,
-      scheduled_for: t.scheduled_for,
-      repetition_cycle: t.repetition_cycle,
-      status: t.status,
-      created_at: t.created_at,
-    }));
-
+  simulateDays: async (
+    days: number,
+    mode: SimulateDaysMode = 'active_streak'
+  ): Promise<SimulateDaysResponse> => {
+    const response = await api.post<any>('/leveling/simulate-days', {
+      days,
+      mode,
+    });
+    const raw = response.data;
     return {
-      user_id: d.id || d.user?.id || 1,
-      current_level: (d.ocri_score >= 80
-        ? 'Nivel 3'
-        : d.ocri_score >= 50
-          ? 'Nivel 2'
-          : 'Nivel 1') as CompetencyLevel,
-      total_xp: d.xp ?? d.user?.xp ?? 0,
-      streak_days: d.streak_days ?? d.user?.streak_days ?? 0,
-      cognitive_gap_radar: radarGaps,
-      specialty_masteries: specialtyMasteries,
-      pending_spaced_repetitions: pendingRepetitions,
-      ...d,
+      ...raw,
+      dashboard: mapRawDashboardData(raw.dashboard || {}),
     };
   },
 

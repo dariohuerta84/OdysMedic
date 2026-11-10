@@ -56,6 +56,7 @@ def _ensure_user_columns(target: Engine) -> None:
             ("diagnostic_mode", "VARCHAR(30)"),
             ("diagnostic_specialty", "VARCHAR(50)"),
             ("diagnostic_completed_at", "DATETIME"),
+            ("simulated_days_elapsed", "INTEGER DEFAULT 0"),
         ]
         with target.begin() as conn:
             for col_name, col_ddl in column_migrations:

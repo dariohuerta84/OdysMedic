@@ -28,6 +28,11 @@ class DiagnosticSubmitRequest(BaseModel):
     specialty: Optional[str] = None
 
 
+class SimulateDaysRequest(BaseModel):
+    days: int = 7
+    mode: Optional[str] = "active_streak"
+
+
 @router.get("/diagnostic/specialties")
 def get_diagnostic_specialties() -> List[Dict[str, str]]:
     """
@@ -79,6 +84,25 @@ def get_dashboard(
     puntajes basales, nivel de competencia, racha, XP y tareas de repeticion espaciada.
     """
     return student_service.get_student_dashboard(db, student.id)
+
+
+@router.post("/simulate-days")
+def simulate_days(
+    payload: SimulateDaysRequest,
+    student: User = Depends(get_active_student),
+    db: Session = Depends(get_db),
+) -> Dict[str, Any]:
+    """
+    Simulador longitudinal de paso del tiempo para exposiciones en vivo:
+    permite avanzar +1, +7 o +21 dias con practica constante, simular inactividad
+    (curva del olvido de Ebbinghaus) o restablecer la linea temporal al Dia 0.
+    """
+    return student_service.simulate_elapsed_days(
+        db=db,
+        user_id=student.id,
+        days=payload.days,
+        mode=payload.mode or "active_streak",
+    )
 
 
 @router.get("/prescription/{specialty}", response_model=LevelingPrescription)

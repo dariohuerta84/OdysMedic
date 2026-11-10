@@ -1,0 +1,723 @@
+[
+  {
+    "category": "caso_clinico_indexado",
+    "id": "s13256-019-2334-y",
+    "title": "Atypical hemolytic uremic syndrome: a case report",
+    "spanish_clinical_title": "Adolescente con lesión renal y anemia hemolítica",
+    "journal_or_publisher": "Journal of Medical Case Reports (BioMed Central / Springer Nature)",
+    "year": 2020,
+    "specialty": "Cardio",
+    "doi_or_isbn": "10.1186/s13256-019-2334-y",
+    "url": "https://doi.org/10.1186/s13256-019-2334-y",
+    "primary_diagnosis": {
+      "value": "Síndrome urémico hemolítico atípico",
+      "status": "reported",
+      "sources": [
+        {
+          "file": "s13256-019-2334-y.pdf",
+          "page": 3,
+          "evidence": "diagnosis of atypical hemolytic uremic syndrome."
+        }
+      ]
+    }
+  },
+  {
+    "category": "caso_clinico_indexado",
+    "id": "s13256-022-03392-w",
+    "title": "Capecitabine-induced severe diabetes and hypokalemia: a case report",
+    "spanish_clinical_title": "Debilidad y alteraciones metabólicas durante quimioterapia",
+    "journal_or_publisher": "Journal of Medical Case Reports (BioMed Central / Springer Nature)",
+    "year": 2022,
+    "specialty": "Cardio",
+    "doi_or_isbn": "10.1186/s13256-022-03392-w",
+    "url": "https://doi.org/10.1186/s13256-022-03392-w",
+    "primary_diagnosis": {
+      "value": "Diabetes e hipopotasemia asociadas a capecitabina",
+      "status": "reported",
+      "sources": [
+        {
+          "file": "s13256-022-03392-w.pdf",
+          "page": 1,
+          "evidence": "severe hyperglycemia and hypokalemia during long-term treatment with capecitabine."
+        }
+      ]
+    }
+  },
+  {
+    "category": "caso_clinico_indexado",
+    "id": "s13256-023-04294-1",
+    "title": "Emotional dysmetria after cerebellar-pontine stroke: a case report",
+    "spanish_clinical_title": "Llanto involuntario durante recuperación de un ictus",
+    "journal_or_publisher": "Journal of Medical Case Reports (BioMed Central / Springer Nature)",
+    "year": 2023,
+    "specialty": "Cardio",
+    "doi_or_isbn": "10.1186/s13256-023-04294-1",
+    "url": "https://doi.org/10.1186/s13256-023-04294-1",
+    "primary_diagnosis": {
+      "value": "Afecto pseudobulbar tras ictus cerebelopontino",
+      "status": "reported",
+      "sources": [
+        {
+          "file": "s13256-023-04294-1.pdf",
+          "page": 2,
+          "evidence": "A diagnosis of PBA was made due to her uncontrollable tearfulness."
+        }
+      ]
+    }
+  },
+  {
+    "category": "caso_clinico_indexado",
+    "id": "s13256-024-04496-1",
+    "title": "Uveal effusion syndrome: a case report",
+    "spanish_clinical_title": "Dolor ocular, presión elevada y visión borrosa",
+    "journal_or_publisher": "Journal of Medical Case Reports (BioMed Central / Springer Nature)",
+    "year": 2024,
+    "specialty": "Cardio",
+    "doi_or_isbn": "10.1186/s13256-024-04496-1",
+    "url": "https://doi.org/10.1186/s13256-024-04496-1",
+    "primary_diagnosis": {
+      "value": "Síndrome de efusión uveal",
+      "status": "reported",
+      "sources": [
+        {
+          "file": "s13256-024-04496-1.pdf",
+          "page": 1,
+          "evidence": "Uveal effusion syndrome: a case report"
+        }
+      ]
+    }
+  },
+  {
+    "category": "caso_clinico_indexado",
+    "id": "s13256-025-05577-5",
+    "title": "Anatomical and metabolic brain imaging correlation of neurological improvements following hyperbaric oxygen therapy—post-stroke recovery: a case report",
+    "spanish_clinical_title": "Secuelas motoras y cognitivas a 15 meses de un ictus",
+    "journal_or_publisher": "Journal of Medical Case Reports (BioMed Central / Springer Nature)",
+    "year": 2025,
+    "specialty": "Cardio",
+    "doi_or_isbn": "10.1186/s13256-025-05577-5",
+    "url": "https://doi.org/10.1186/s13256-025-05577-5",
+    "primary_diagnosis": {
+      "value": "Secuelas de ictus hemorrágico",
+      "status": "reported",
+      "sources": [
+        {
+          "file": "s13256-025-05577-5.pdf",
+          "page": 2,
+          "evidence": "had hemorrhagic stroke 15 months prior"
+        }
+      ]
+    }
+  },
+  {
+    "category": "caso_clinico_indexado",
+    "id": "s13256-025-05650-z",
+    "title": "Management of hypoparathyroidism during pregnancy following late maternal diagnosis of DiGeorge syndrome: a case report",
+    "spanish_clinical_title": "Hipocalcemia persistente en el tercer trimestre",
+    "journal_or_publisher": "Journal of Medical Case Reports (BioMed Central / Springer Nature)",
+    "year": 2026,
+    "specialty": "Cardio",
+    "doi_or_isbn": "10.1186/s13256-025-05650-z",
+    "url": "https://doi.org/10.1186/s13256-025-05650-z",
+    "primary_diagnosis": {
+      "value": "Hipoparatiroidismo primario asociado a síndrome de DiGeorge",
+      "status": "reported",
+      "sources": [
+        {
+          "file": "s13256-025-05650-z.pdf",
+          "page": 2,
+          "evidence": "22q11.2 deletion syndrome, confirmed by chromosomal microarray."
+        }
+      ]
+    }
+  },
+  {
+    "category": "caso_clinico_indexado",
+    "id": "s13256-026-05974-4",
+    "title": "Systemic lupus erythematosus presenting with slurred speech: a case report",
+    "spanish_clinical_title": "Adolescente con disartria y manifestaciones sistémicas",
+    "journal_or_publisher": "Journal of Medical Case Reports (BioMed Central / Springer Nature)",
+    "year": 2026,
+    "specialty": "Cardio",
+    "doi_or_isbn": "10.1186/s13256-026-05974-4",
+    "url": "https://doi.org/10.1186/s13256-026-05974-4",
+    "primary_diagnosis": {
+      "value": "Lupus eritematoso sistémico con compromiso neuropsiquiátrico",
+      "status": "reported",
+      "sources": [
+        {
+          "file": "s13256-026-05974-4.pdf",
+          "page": 2,
+          "evidence": "Treatment was initiated after confirmation of systemic lupus erythematosus with neuropsychiatric"
+        }
+      ]
+    }
+  },
+  {
+    "category": "guia_o_tratado_clinico",
+    "id": "book-kdigo-aki-ahus-2024",
+    "reference_id": "ref-kdigo-ahus-001",
+    "title": "KDIGO 2024 Clinical Practice Guideline for Acute Kidney Injury and Thrombotic Microangiopathy",
+    "section_title": "Evaluacion Diagnostica y Terapia Dirigida en Microangiopatia Trombotica y SHUa",
+    "journal_or_publisher": "Kidney Disease: Improving Global Outcomes (KDIGO) Work Group",
+    "edition": "Actualizacion Guia Practica Clinica 2024",
+    "year": 2024,
+    "specialty": "Nefrologia y Medio Interno",
+    "doi_or_isbn": "doi:10.1016/j.kisu.2024.01.002",
+    "url": "https://doi.org/10.1016/j.kisu.2024.01.002",
+    "evidence_level": "Grade 1A",
+    "key_recommendation": "Ante anemia hemolitica microangiopatica Coombs negativa, trombocitopenia e injuria renal aguda, solicitar actividad de ADAMTS13 y estudio de complemento antes de plasmaferesis; descartada la PTT (ADAMTS13 >10%), iniciar inhibicion terminal de C5 (eculizumab o ravulizumab) de forma temprana."
+  },
+  {
+    "category": "guia_o_tratado_clinico",
+    "id": "book-brenner-rector-nephrology-11e",
+    "reference_id": "ref-brenner-electrolytes-002",
+    "title": "Brenner & Rector's The Kidney: Trastornos Hidroelectroliticos y Acido-Base",
+    "section_title": "Abordaje Fisiopatologico de Disnatremias Sintomaticas e Hiperkalemia Critica",
+    "journal_or_publisher": "Yu A, Chertow GM, Luyckx V, Marsden PA, Skorecki K, Taal MW (Elsevier)",
+    "edition": "11.a Edicion",
+    "year": 2023,
+    "specialty": "Nefrologia y Medio Interno",
+    "doi_or_isbn": "ISBN:978-0-323-53265-5",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Brenner+&+Rector's+The+Kidney:+Trastornos+Hidroelectroliticos+y+Acido-Base",
+    "evidence_level": "Nivel I, Consenso Fisiologico",
+    "key_recommendation": "En hiperkalemia con cambios en el ECG, administrar gluconato de calcio al 10% endovenoso de inmediato para estabilizar la membrana miocardica, seguido de terapia redistributiva (insulina regular con dextrosa y beta-2 agonistas nebulizados) y eliminacion efectiva de potasio."
+  },
+  {
+    "category": "guia_o_tratado_clinico",
+    "id": "book-era-edta-ckd-glomerular-2024",
+    "reference_id": "ref-era-glomerular-003",
+    "title": "ERA / Sociedad Europea de Nefrologia: Consenso en Glomerulopatias y Enfermedad Renal Cronica",
+    "section_title": "Diferenciacion Sindromica Glomerular y Terapia Nefroprotectora Dual",
+    "journal_or_publisher": "European Renal Association (ERA) Immunonephrology Working Group",
+    "edition": "Guia Clinica 2024",
+    "year": 2024,
+    "specialty": "Nefrologia y Medio Interno",
+    "doi_or_isbn": "doi:10.1093/ndt/gfad254",
+    "url": "https://doi.org/10.1093/ndt/gfad254",
+    "evidence_level": "Clase I, Nivel A",
+    "key_recommendation": "En enfermedad renal cronica proteinurica (RAC >=200 mg/g), asociar inhibicion del eje renina-angiotensina a dosis maxima tolerada junto con inhibidores de SGLT2 (dapagliflozina o empagliflozina) mientras la TFGe sea >=20 mL/min/1.73m2 para retardar la progresion renal y eventos cardiovasculares."
+  },
+  {
+    "category": "guia_o_tratado_clinico",
+    "id": "book-ada-diabetes-2024",
+    "reference_id": "ref-ada-hyperglycemia-001",
+    "title": "ADA Standards of Care in Diabetes 2024-2025",
+    "section_title": "Crisis Hiperglucemicas Hospitalarias: Cetoacidosis Diabetica y Estado Hiperosmolar",
+    "journal_or_publisher": "American Diabetes Association (ADA) Professional Practice Committee",
+    "edition": "Diabetes Care Suppl. 1",
+    "year": 2024,
+    "specialty": "Endocrinologia y Metabolismo",
+    "doi_or_isbn": "doi:10.2337/dc24-S016",
+    "url": "https://doi.org/10.2337/dc24-S016",
+    "evidence_level": "Grado A",
+    "key_recommendation": "En crisis hiperglucemicas agudas o hiperglucemia secundaria a quimioterapia con alteraciones electroliticas, priorizar reanimacion con cristaloides isotonicos y verificar potasio serico >=3.3 mEq/L antes de iniciar perfusion intravenosa continua de insulina regular; reponer potasio y magnesio de forma paralela."
+  },
+  {
+    "category": "guia_o_tratado_clinico",
+    "id": "book-ata-thyroid-emergencies-2023",
+    "reference_id": "ref-ata-thyroid-002",
+    "title": "American Thyroid Association (ATA): Guias de Tirotoxicosis, Tormenta Tiroidea y Coma Mixedematoso",
+    "section_title": "Secuencia Farmacologica en Tormenta Tiroidea y Manejo del Coma Mixedematoso",
+    "journal_or_publisher": "American Thyroid Association Task Force",
+    "edition": "Compendio Clinico Actualizado",
+    "year": 2023,
+    "specialty": "Endocrinologia y Metabolismo",
+    "doi_or_isbn": "doi:10.1089/thy.2023.0112",
+    "url": "https://doi.org/10.1089/thy.2023.0112",
+    "evidence_level": "Recomendacion Fuerte, Calidad Moderada",
+    "key_recommendation": "En tormenta tiroidea (escala Burch-Wartofsky >=45), bloquear primero la sintesis hormonal con propiltiouracilo o metimazol, administrar soluciones yodadas al menos 1 hora despues de la tionamida para evitar el fenomeno de Jod-Basedow, asociar betabloqueo e hidrocortisona endovenosa."
+  },
+  {
+    "category": "guia_o_tratado_clinico",
+    "id": "book-endocrine-society-adrenal-2023",
+    "reference_id": "ref-endo-adrenal-003",
+    "title": "Endocrine Society Clinical Practice Guideline: Insuficiencia Suprarrenal Primaria y Crisis Adrenal",
+    "section_title": "Reconocimiento Temprano y Reemplazo Parenteral Inmediato en Crisis Suprarrenal",
+    "journal_or_publisher": "Bornstein SR, Allolio B, Arlt W, et al. (Endocrine Society)",
+    "edition": "Guia de Practica Clinica",
+    "year": 2023,
+    "specialty": "Endocrinologia y Metabolismo",
+    "doi_or_isbn": "doi:10.1210/jc.2015-1710",
+    "url": "https://doi.org/10.1210/jc.2015-1710",
+    "evidence_level": "Grado 1A",
+    "key_recommendation": "Ante sospecha clinica de crisis suprarrenal aguda (hipotension refractaria a fluidos, dolor abdominal e hiponatremia/hiperkalemia), no retrasar jamas el tratamiento esperando cortisol serico: administrar de inmediato hidrocortisona 100 mg en bolo IV seguida de 200 mg/24 h y solucion salina isotonica al 0.9%."
+  },
+  {
+    "category": "guia_o_tratado_clinico",
+    "id": "book-aha-stroke-pba-2023",
+    "reference_id": "ref-aha-pba-001",
+    "title": "AHA/ASA Guidelines for Acute Ischemic Stroke, Hemorrhagic Rehabilitation & Pseudobulbar Affect",
+    "section_title": "Codigo Ictus, Neurorehabilitacion y Afecto Pseudobulbar Post-ACV",
+    "journal_or_publisher": "American Heart Association / American Stroke Association (AHA/ASA)",
+    "edition": "Actualizacion Guias de ACV 2023-2024",
+    "year": 2023,
+    "specialty": "Neurologia Clinica",
+    "doi_or_isbn": "doi:10.1161/STR.0000000000000438",
+    "url": "https://doi.org/10.1161/STR.0000000000000438",
+    "evidence_level": "Clase I, Nivel A",
+    "key_recommendation": "En deficit neurologico focal agudo, realizar TC cerebral sin contraste en <20 minutos para excluir hemorragia y definir trombolisis IV (<4.5 h) o trombectomia mecanica (<24 h en oclusion de gran vaso). En fase subaguda/cronica, diferenciar el afecto pseudobulbar (llanto o risa involuntaria) de la depresion post-ictus e indicar ISRS o dextrometorfano/quinidina."
+  },
+  {
+    "category": "guia_o_tratado_clinico",
+    "id": "book-aes-ncs-status-epilepticus-2023",
+    "reference_id": "ref-aes-status-002",
+    "title": "American Epilepsy Society (AES) & Neurocritical Care Society: Guia de Estado Epileptico",
+    "section_title": "Manejo Cronometrado de Primera y Segunda Linea en Estado Epileptico",
+    "journal_or_publisher": "American Epilepsy Society / Neurocritical Care Society",
+    "edition": "Algoritmo Terapeutico Cronometrado",
+    "year": 2023,
+    "specialty": "Neurologia Clinica",
+    "doi_or_isbn": "doi:10.5698/ep.2023.1601",
+    "url": "https://doi.org/10.5698/ep.2023.1601",
+    "evidence_level": "Nivel A (Ensayo ESETT)",
+    "key_recommendation": "Toda crisis convulsiva continua >=5 minutos (o >=2 crisis sin recuperacion de conciencia interictal) define estado epileptico operativo y exige benzodiazepina parenteral a dosis plena inmediata (lorazepam IV, midazolam IM o diazepam IV), seguida de antiepileptico de segunda linea (levetiracetam, valproato o fosfenitoina) si persiste a los 10-20 minutos."
+  },
+  {
+    "category": "guia_o_tratado_clinico",
+    "id": "book-idsa-escmid-cns-infections-2024",
+    "reference_id": "ref-idsa-meningitis-003",
+    "title": "IDSA / ESCMID Guidelines for Acute Bacterial Meningitis and Viral Encephalitis",
+    "section_title": "Criterios de Neuroimagen Previa a Puncion Lumbar y Terapia Antimicrobiana Empirica",
+    "journal_or_publisher": "Infectious Diseases Society of America (IDSA) & ESCMID Study Group",
+    "edition": "Guia Conjunta Neuroinfecciones",
+    "year": 2024,
+    "specialty": "Neurologia Clinica",
+    "doi_or_isbn": "doi:10.1016/j.cmi.2023.10.018",
+    "url": "https://doi.org/10.1016/j.cmi.2023.10.018",
+    "evidence_level": "Grado A-I",
+    "key_recommendation": "En sospecha de meningitis bacteriana aguda, obtener hemocultivos e iniciar dexametasona junto con antibioterapia bactericida a dosis meningeas dentro de la primera hora; si se requiere TC craneal previa a la puncion lumbar, administrar hemocultivos + dexametasona + antibiotico ANTES de trasladar al tomografo."
+  },
+  {
+    "category": "guia_o_tratado_clinico",
+    "id": "book-eular-acr-npsle-2023",
+    "reference_id": "ref-eular-npsle-001",
+    "title": "EULAR 2023/2024 Recommendations for the Management of Systemic Lupus Erythematosus & NPSLE",
+    "section_title": "Diagnostico Diferencial e Inmunosupresion en Lupus Neuropsiquiatrico y Organo Mayor",
+    "journal_or_publisher": "European Alliance of Associations for Rheumatology (EULAR) & ACR",
+    "edition": "Actualizacion Recomendaciones EULAR",
+    "year": 2024,
+    "specialty": "Reumatologia e Inmunologia",
+    "doi_or_isbn": "doi:10.1136/annrheumdis-2023-224762",
+    "url": "https://doi.org/10.1136/annrheumdis-2023-224762",
+    "evidence_level": "Grado 1A",
+    "key_recommendation": "Todo paciente con LES debe recibir hidroxicloroquina salvo contraindicacion. Ante compromiso grave de organo vital o lupus neuropsiquiatrico inflamatorio (tras excluir infeccion del SNC y trombosis antifosfolipido), indicar pulsos endovenosos de metilprednisolona seguidos de ciclofosfamida IV, micofenolato o terapia biologica ahorradora de esteroides."
+  },
+  {
+    "category": "guia_o_tratado_clinico",
+    "id": "book-acr-septic-crystal-arthritis-2023",
+    "reference_id": "ref-acr-monoarthritis-002",
+    "title": "ACR / EULAR Clinical Guidelines: Monoartritis Aguda, Artritis Septica y Artropatias por Cristales",
+    "section_title": "Artrocentesis Diagnostica Obligatoria y Manejo Diferencial entre Sepsis Articular y Cristales",
+    "journal_or_publisher": "American College of Rheumatology (ACR) & EULAR",
+    "edition": "Guia Practica Monoartritis Aguda",
+    "year": 2023,
+    "specialty": "Reumatologia e Inmunologia",
+    "doi_or_isbn": "doi:10.1002/art.41289",
+    "url": "https://doi.org/10.1002/art.41289",
+    "evidence_level": "Clase I, Nivel A",
+    "key_recommendation": "Toda monoartritis aguda febril o inflamatoria de inicio reciente debe considerarse artritis septica hasta demostrar lo contrario mediante artrocentesis inmediata previa al inicio de antibioticos; la deteccion de cristales de urato monosodico o pirofosfato NO excluye infeccion concomitante si la tincion de Gram o el recuento celular son criticos."
+  },
+  {
+    "category": "guia_o_tratado_clinico",
+    "id": "book-kdhe-eular-anca-vasculitis-2023",
+    "reference_id": "ref-eular-vasculitis-003",
+    "title": "EULAR Recommendations for the Management of ANCA-Associated Vasculitis & Giant Cell Arteritis",
+    "section_title": "Prevencion de Ceguera Irreversible en ACG y Sindrome Pulmon-Riñon en Vasculitis ANCA",
+    "journal_or_publisher": "Hellmich B, Sanchez-Alamo B, Schirmer JH, et al. (EULAR)",
+    "edition": "Actualizacion Vasculitis Sistemicas 2023",
+    "year": 2023,
+    "specialty": "Reumatologia e Inmunologia",
+    "doi_or_isbn": "doi:10.1136/ard-2022-223764",
+    "url": "https://doi.org/10.1136/ard-2022-223764",
+    "evidence_level": "Grado 1B",
+    "key_recommendation": "En mayores de 50 anos con cefalea temporal de novo, claudicacion mandibular o amaurosis fugax sospechosa de arteritis de celulas gigantes, iniciar glucocorticoides sistemicos a dosis altas de inmediato SIN esperar la biopsia de arteria temporal ni ecografia Doppler para prevenir neuropatia optica isquemica permanente."
+  },
+  {
+    "category": "guia_o_tratado_clinico",
+    "id": "book-endocrine-acog-pregnancy-hypoparathyroid",
+    "reference_id": "ref-acog-hypopara-001",
+    "title": "ACOG Practice Bulletins & Endocrine Society Consensus: Patologia Medica y Trastornos Hipertensivos en la Gestacion",
+    "section_title": "Manejo de Preeclampsia con Criterios de Severidad y Homeostasis Calcica Materno-Fetal",
+    "journal_or_publisher": "American College of Obstetricians and Gynecologists (ACOG) & Endocrine Society",
+    "edition": "Guias Consensuadas ACOG",
+    "year": 2023,
+    "specialty": "Ginecologia y Obstetricia",
+    "doi_or_isbn": "doi:10.1210/clinem/dgad261",
+    "url": "https://doi.org/10.1210/clinem/dgad261",
+    "evidence_level": "Nivel A / Consenso",
+    "key_recommendation": "En preeclampsia con criterios de severidad, iniciar sulfato de magnesio endovenoso (Esquema Zuspan: 4 g carga + 1 g/h) para neuroprofilaxis de eclampsia y antihipertensivo agudo si PA >=160/110 mmHg. En gestantes con hipoparatiroidismo primario (ej. microdelecion 22q11.2), mantener calcio corregido entre 8.5 y 9.0 mg/dL con calcitriol y carbonato de calcio evitando hipercalcemia materna."
+  },
+  {
+    "category": "guia_o_tratado_clinico",
+    "id": "book-figo-gtn-2024",
+    "reference_id": "ref-figo-gtn-001",
+    "title": "FIGO 2024 Guidelines for Gestational Trophoblastic Disease & Postpartum Hemorrhage (E-MOTIVE)",
+    "section_title": "Neoplasia Trofoblastica Gestacional Metastasica y Paquete de Hemorragia Posparto",
+    "journal_or_publisher": "International Federation of Gynecology and Obstetrics (FIGO)",
+    "edition": "Guias Clinicas FIGO 2024",
+    "year": 2024,
+    "specialty": "Ginecologia y Obstetricia",
+    "doi_or_isbn": "doi:10.1002/ijgo.15280",
+    "url": "https://doi.org/10.1002/ijgo.15280",
+    "evidence_level": "Nivel 1A",
+    "key_recommendation": "En mujeres con antecedente de embarazo molar o a termino que presentan metrorragia, hemoptisis y nodulos pulmonares con beta-hCG cuantitativa elevada, se confirma coriocarcinoma metastasico sin biopsiar las lesiones (alto riesgo de hemorragia letal) y se inicia quimioterapia segun puntaje FIGO/OMS. En hemorragia posparto primaria, activar clave roja con uterotonicos y acido tranexamico precoz (<3 h)."
+  },
+  {
+    "category": "guia_o_tratado_clinico",
+    "id": "book-cdc-who-ectopic-pid-2024",
+    "reference_id": "ref-rcog-ectopic-003",
+    "title": "CDC & RCOG Clinical Guidelines: Embarazo Ectopico y Enfermedad Inflamatoria Pelvica",
+    "section_title": "Algoritmo Diagnostico de Gestacion de Localizacion Desconocida y Criterios Quirurgicos vs Metotrexato",
+    "journal_or_publisher": "Centers for Disease Control and Prevention (CDC) & Royal College of Obstetricians and Gynaecologists",
+    "edition": "Guia Ginecologia de Urgencias",
+    "year": 2024,
+    "specialty": "Ginecologia y Obstetricia",
+    "doi_or_isbn": "doi:10.1111/1471-0528.14338",
+    "url": "https://doi.org/10.1111/1471-0528.14338",
+    "evidence_level": "Grado A",
+    "key_recommendation": "En toda mujer en edad reproductiva con dolor pelvico agudo o sangrado vaginal, solicitar beta-hCG de forma sistematica. El embarazo ectopico roto con inestabilidad hemodinamica o hemoperitoneo significativo exige cirugia urgente (salpingectomia); el manejo medico con metotrexato se reserva estrictamente para pacientes estables sin dolor grave ni latido embrionario ectopico."
+  },
+  {
+    "category": "guia_o_tratado_clinico",
+    "id": "book-aao-uveal-ppp-2024",
+    "reference_id": "ref-aao-uveal-001",
+    "title": "AAO Preferred Practice Pattern: Enfermedades Uveales e Inflamacion Intraocular",
+    "section_title": "Uveitis Anterior Aguda, Sindrome de Efusion Uveal e Hipertension Ocular Secundaria",
+    "journal_or_publisher": "American Academy of Ophthalmology (AAO) Uveitis Panel",
+    "edition": "Preferred Practice Pattern 2024",
+    "year": 2024,
+    "specialty": "Oftalmologia y Urgencias Oculares",
+    "doi_or_isbn": "doi:10.1016/j.ophtha.2023.11.014",
+    "url": "https://doi.org/10.1016/j.ophtha.2023.11.014",
+    "evidence_level": "Nivel IIa",
+    "key_recommendation": "Diferenciar el sindrome de efusion uveal y las uveitis hipertensivas del cierre angular primario mediante biomicroscopia con lampara de hendidura, gonioscopia, ecografia modo B/UBM y OCT. El manejo combina control hipotensor ocular y corticoides topicos/sistemicos tras descartar etiologia infecciosa (herpes, toxoplasmosis, sifilis, tuberculosis)."
+  },
+  {
+    "category": "guia_o_tratado_clinico",
+    "id": "book-egs-glaucoma-angle-closure-5e",
+    "reference_id": "ref-egs-angle-closure-002",
+    "title": "European Glaucoma Society (EGS) Terminology and Guidelines for Glaucoma",
+    "section_title": "Diagnostico de Emergencia y Reduccion Rapida de PIO en Glaucoma Agudo de Angulo Cerrado",
+    "journal_or_publisher": "European Glaucoma Society (EGS)",
+    "edition": "5.a Edicion",
+    "year": 2023,
+    "specialty": "Oftalmologia y Urgencias Oculares",
+    "doi_or_isbn": "ISBN:978-88-98320-41-7",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/?term=European+Glaucoma+Society+(EGS)+Terminology+and+Guidelines+for+Glaucoma",
+    "evidence_level": "Clase I, Nivel A",
+    "key_recommendation": "El cierre angular primario agudo cursa con bloqueo pupilar, camara anterior estrecha y PIO habitualmente >40-50 mmHg; exige reduccion inmediata de la presion intraocular con acetazolamida sistemica, hipotensores topicos (betabloqueador, alfa-2 agonista, inhibidor anhidrasa carbonica) seguido de pilocarpina al descender la isquemia iridiana e iridotomia periferica laser YAG definitiva en ambos ojos."
+  },
+  {
+    "category": "guia_o_tratado_clinico",
+    "id": "book-kanski-retinal-vascular-10e",
+    "reference_id": "ref-kanski-retina-003",
+    "title": "Kanski's Clinical Ophthalmology: Urgencias Neuro-Oftalmologicas y Vasculares Retinianas",
+    "section_title": "Diferenciacion de Oclusion de Arteria Central de la Retina, Desprendimiento Retiniano y Neuritis Optica",
+    "journal_or_publisher": "Salmon JF (Elsevier)",
+    "edition": "10.a Edicion",
+    "year": 2024,
+    "specialty": "Oftalmologia y Urgencias Oculares",
+    "doi_or_isbn": "ISBN:978-0-7020-8373-0",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Kanski's+Clinical+Ophthalmology:+Urgencias+Neuro-Oftalmologicas+y+Vasculares+Retinianas",
+    "evidence_level": "Nivel I, Guia Clinica",
+    "key_recommendation": "La oclusion de la arteria central de la retina (OACR) es un equivalente de ictus isquemico agudo y requiere derivacion inmediata a unidad de ictus (estudio carotideo, cardioembolico y descarte urgente de arteritis de celulas gigantes en >50 anos). El desprendimiento de retina regmatogeno con macula aplicada ('macula-on') constituye urgencia quirurgica prioritaria para preservar la vision central."
+  },
+  {
+    "category": "guia_o_tratado_clinico",
+    "id": "book-esc-acs-pe-2024",
+    "reference_id": "ref-esc-acs-001",
+    "title": "European Society of Cardiology (ESC) Guidelines: Sindromes Coronarios Agudos e Insuficiencia Cardiaca",
+    "section_title": "Estratificacion Hemodinamica del Dolor Toracico Isquemico y Tiempos de Reperfusion",
+    "journal_or_publisher": "European Society of Cardiology (ESC) Clinical Practice Guidelines Committee",
+    "edition": "Guias ESC 2023-2024",
+    "year": 2024,
+    "specialty": "Medicina Interna y Urgencias",
+    "doi_or_isbn": "doi:10.1093/eurheartj/ehad191",
+    "url": "https://doi.org/10.1093/eurheartj/ehad191",
+    "evidence_level": "Clase I, Nivel A",
+    "key_recommendation": "Ante dolor toracico agudo sospechoso, obtener e interpretar un ECG de 12 derivadas en <=10 minutos (incluyendo V3R-V4R y V7-V9 si hay sospecha de infarto ventricular derecho o posterior). En IAMCEST, priorizar angioplastia primaria si el tiempo desde el diagnostico hasta el paso de guia es <=120 minutos; de lo contrario, iniciar fibrinolisis en <=10 minutos si no hay contraindicaciones."
+  },
+  {
+    "category": "guia_o_tratado_clinico",
+    "id": "book-surviving-sepsis-campaign-2024",
+    "reference_id": "ref-ssc-sepsis-002",
+    "title": "Surviving Sepsis Campaign: Guias Internacionales para el Manejo de la Sepsis y el Choque Septico",
+    "section_title": "Reconocimiento por Disfuncion Organica (SOFA), Antimicrobianos Tempranos y Vasopresores",
+    "journal_or_publisher": "Society of Critical Care Medicine (SCCM) & European Society of Intensive Care Medicine (ESICM)",
+    "edition": "Directrices Internacionales Vigentes",
+    "year": 2024,
+    "specialty": "Medicina Interna y Urgencias",
+    "doi_or_isbn": "doi:10.1007/s00134-021-06506-y",
+    "url": "https://doi.org/10.1007/s00134-021-06506-y",
+    "evidence_level": "Recomendacion Fuerte, Evidencia Alta",
+    "key_recommendation": "En sepsis con hipoperfusion o choque septico, extraer hemocultivos sin demorar la administracion de antimicrobianos endovenosos de amplio espectro (<1 hora), infundir al menos 30 mL/kg de cristaloides balanceados en las primeras 3 horas guiando bolos ulteriores por respuesta dinamica, e iniciar noradrenalina como vasopresor de primera linea para alcanzar PAM >=65 mmHg."
+  },
+  {
+    "category": "guia_o_tratado_clinico",
+    "id": "book-harrison-internal-medicine-21e",
+    "reference_id": "ref-harrison-pulm-003",
+    "title": "Harrison. Principios de Medicina Interna: Neumologia, Tromboembolismo e Infectologia",
+    "section_title": "Probabilidad Pre-Test en Tromboembolismo Pulmonar, Neumonia y Enfermedad Granulomatosa",
+    "journal_or_publisher": "Loscalzo J, Fauci A, Kasper D, Hauser S, Longo D, Jameson JL (McGraw-Hill)",
+    "edition": "21.a Edicion",
+    "year": 2023,
+    "specialty": "Medicina Interna y Urgencias",
+    "doi_or_isbn": "ISBN:978-1-264-26850-4",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Harrison.+Principios+de+Medicina+Interna:+Neumologia,+Tromboembolismo+e+Infectologia",
+    "evidence_level": "Clase I, Nivel A",
+    "key_recommendation": "Integrar siempre la probabilidad clinica pre-test (escala de Wells o Ginebra) antes de solicitar dimero D o angio-TC pulmonar: en probabilidad baja/intermedia un dimero D ajustado por edad negativo excluye TEP de forma segura, mientras que en probabilidad alta se procede directamente a angio-TC e inicio de anticoagulacion parenteral salvo sangrado activo."
+  },
+  {
+    "category": "guia_o_tratado_clinico",
+    "id": "book-who-minsa-pediatric-emergency-2024",
+    "reference_id": "ref-who-peds-dehydration-001",
+    "title": "OMS / MINSA: Atencion Integrada de Emergencias Pediatricas, Rehidratacion (Plan A/B/C) y Neumologia",
+    "section_title": "Clasificacion Clinica de Deshidratacion, Terapia de Rehidratacion Oral y Plan C Endovenoso",
+    "journal_or_publisher": "Organizacion Mundial de la Salud (OMS) & Ministerio de Salud (MINSA)",
+    "edition": "Guia Tecnica Pediatrica Vigente",
+    "year": 2024,
+    "specialty": "Pediatria",
+    "doi_or_isbn": "ISBN:978-92-4-154837-3",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/?term=OMS+/+MINSA:+Atencion+Integrada+de+Emergencias+Pediatricas,+Rehidratacion+(Plan+A/B/C)+y+Neumologia",
+    "evidence_level": "Grado 1A",
+    "key_recommendation": "En deshidratacion leve a moderada sin shock, la terapia de rehidratacion oral con SRO de osmolaridad reducida (75 mOsm/L Na+) es de eleccion (Plan B: 50-100 mL/kg en 4 h) junto con suplementacion de zinc. En deshidratacion grave (Plan C), reponer 100 mL/kg de solucion salina 0.9% o Lactato Ringer en dos fases ajustadas por edad (<12 meses: 30 mL/kg en 1 h + 70 mL/kg en 5 h; >=12 meses: 30 mL/kg en 30 min + 70 mL/kg en 2.5 h)."
+  },
+  {
+    "category": "guia_o_tratado_clinico",
+    "id": "book-aap-bronchiolitis-croup-2023",
+    "reference_id": "ref-aap-resp-002",
+    "title": "American Academy of Pediatrics (AAP): Guias de Practica Clinica en Bronquiolitis, Crup y Fiebre en el Lactante",
+    "section_title": "Uso Racional de Terapias en Bronquiolitis frente a Laringotraqueitis Aguda (Crup)",
+    "journal_or_publisher": "American Academy of Pediatrics (AAP) Subcommittee",
+    "edition": "Compendio Pediatrico AAP",
+    "year": 2023,
+    "specialty": "Pediatria",
+    "doi_or_isbn": "doi:10.1542/peds.2014-2742",
+    "url": "https://doi.org/10.1542/peds.2014-2742",
+    "evidence_level": "Calidad de Evidencia A / Recomendacion Fuerte",
+    "key_recommendation": "En bronquiolitis aguda (primer episodio sibilante en <24 meses), el diagnostico es clinico sin requerir radiografia ni laboratorio de rutina, y el manejo se basa en oxigeno suplementario si SatO2 <90% e hidratacion, evitando salbutamol, corticoides y antibioticos innecesarios. En crup viral, indicar dexametasona 0.6 mg/kg en todos los grados de severidad y asociar adrenalina nebulizada si hay estridor en reposo."
+  },
+  {
+    "category": "guia_o_tratado_clinico",
+    "id": "book-nelson-pediatrics-kawasaki-22e",
+    "reference_id": "ref-nelson-kawasaki-003",
+    "title": "Nelson. Tratado de Pediatria: Enfermedades Exantematicas, Kawasaki e Infecciones Graves",
+    "section_title": "Diagnostico de Enfermedad de Kawasaki Completa/Incompleta y Prevencion de Aneurismas Coronarios",
+    "journal_or_publisher": "Kliegman RM, St. Geme JW, Blum NJ, et al. (Elsevier / AHA Pediatric Committee)",
+    "edition": "22.a Edicion",
+    "year": 2024,
+    "specialty": "Pediatria",
+    "doi_or_isbn": "ISBN:978-0-323-88305-4",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Nelson.+Tratado+de+Pediatria:+Enfermedades+Exantematicas,+Kawasaki+e+Infecciones+Graves",
+    "evidence_level": "Clase I, Nivel A",
+    "key_recommendation": "En todo nino con fiebre alta persistente >=5 dias y >=4 de los 5 criterios mucocutaneos principales (o Kawasaki incompleto en lactantes con inflamacion sistemica), administrar inmunoglobulina intravenosa (IGIV 2 g/kg en infusion unica de 10-12 h) idealmente dentro de los primeros 10 dias junto con AAS y ecocardiograma transtoracico basal y evolutivo."
+  },
+  {
+    "category": "guia_o_tratado_clinico",
+    "id": "book-tokyo-guidelines-tg18-biliary",
+    "reference_id": "ref-tg18-biliary-001",
+    "title": "Tokyo Guidelines (TG18) & WSES: Manejo de Colecistitis Aguda, Colangitis y Sepsis Biliar",
+    "section_title": "Graduacion de Severidad I-III, Colecistectomia Laparoscopica Temprana y Drenaje Biliar",
+    "journal_or_publisher": "Japanese Society of Hepato-Biliary-Pancreatic Surgery & World Society of Emergency Surgery (WSES)",
+    "edition": "Guias Internacionales TG18 / WSES",
+    "year": 2023,
+    "specialty": "Cirugia General y Trauma",
+    "doi_or_isbn": "doi:10.1002/jhbp.512",
+    "url": "https://doi.org/10.1002/jhbp.512",
+    "evidence_level": "Grado 1A",
+    "key_recommendation": "El diagnostico definitivo de colecistitis aguda exige signo local (Murphy/dolor HCD) + signo sistemico (fiebre/PCR/leucocitosis) + hallazgo de imagen. En Grado I y II aptos para cirugia, la colecistectomia laparoscopica temprana en la misma admision es el estandar; en colangitis aguda grave (Grado III con Pentada de Reynolds/disfuncion organica), priorizar reanimacion, antibioticos y descompresion biliar urgente por CPRE."
+  },
+  {
+    "category": "guia_o_tratado_clinico",
+    "id": "book-wses-jerusalem-appendicitis-bowel-2024",
+    "reference_id": "ref-wses-appendicitis-002",
+    "title": "WSES Jerusalem Guidelines & Sabiston Textbook of Surgery: Abdomen Agudo Quirurgico",
+    "section_title": "Escores Clinico-Radiologicos en Apendicitis Aguda y Deteccion de Isquemia en Obstruccion Intestinal",
+    "journal_or_publisher": "World Society of Emergency Surgery (WSES) & Townsend CM (Sabiston 21.a Ed.)",
+    "edition": "Guias Jerusalen / Sabiston 21.a Ed.",
+    "year": 2024,
+    "specialty": "Cirugia General y Trauma",
+    "doi_or_isbn": "doi:10.1186/s13017-020-00306-3",
+    "url": "https://doi.org/10.1186/s13017-020-00306-3",
+    "evidence_level": "Grado 1A",
+    "key_recommendation": "Combinar parametros clinicos y de laboratorio (escala de Alvarado / AIR / AAS) con ecografia escalonada para reducir tomografias innecesarias en jovenes; la apendicectomia laparoscopica es de eleccion tanto en apendicitis no complicada como complicada, y la analgesia opioide/paracetamol reglada NO enmascara los signos peritoneales ni retrasa el diagnostico."
+  },
+  {
+    "category": "guia_o_tratado_clinico",
+    "id": "book-atls-10e-trauma-pancreas",
+    "reference_id": "ref-atls-acg-003",
+    "title": "ATLS (Advanced Trauma Life Support 10.a Ed.) & ACG Guidelines for Acute Pancreatitis",
+    "section_title": "Revision Primaria XABCDE en Trauma Abdominal y Reanimacion Moderada en Pancreatitis Aguda",
+    "journal_or_publisher": "American College of Surgeons (ACS Committee on Trauma) & American College of Gastroenterology",
+    "edition": "10.a Edicion ATLS / Guia ACG 2024",
+    "year": 2024,
+    "specialty": "Cirugia General y Trauma",
+    "doi_or_isbn": "ISBN:978-0-9968267-0-9",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/?term=ATLS+(Advanced+Trauma+Life+Support+10.a+Ed.)+&+ACG+Guidelines+for+Acute+Pancreatitis",
+    "evidence_level": "Clase I, Nivel A",
+    "key_recommendation": "En trauma abdominal cerrado, el estado hemodinamico dicta la conducta: todo paciente inestable con Eco-FAST positivo requiere laparotomia exploradora inmediata y protocolo de transfusion masiva con acido tranexamico precoz (<3 h). En pancreatitis aguda, el ensayo WATERFALL respalda hidratacion moderada dirigida por metas con Lactato Ringer (evitando reanimacion agresiva masiva), nutricion oral temprana y evitar antibioticos profilacticos en necrosis esteril."
+  },
+  {
+    "category": "fundamento_pedagogico_y_normativo",
+    "id": "ped-ebbinghaus-1885",
+    "title": "Memory: A Contribution to Experimental Psychology (Uber das Gedachtnis)",
+    "authors": "Ebbinghaus, H.",
+    "journal_or_publisher": "Teachers College, Columbia University (Reimpresion clasica, 1913 / Ann Neurosci 2013)",
+    "year": 1885,
+    "doi_or_isbn": "10.5214/ans.0972.7531.200408",
+    "url": "https://doi.org/10.5214/ans.0972.7531.200408",
+    "application": "Sustenta el modelo de decaimiento exponencial de la retencion clinica cuando transcurren dias sin practica y el simulador longitudinal de curva del olvido."
+  },
+  {
+    "category": "fundamento_pedagogico_y_normativo",
+    "id": "ped-cepeda-2006",
+    "title": "Distributed practice in verbal recall tasks: A review and quantitative synthesis",
+    "authors": "Cepeda, N. J., Pashler, H., Vul, E., Wixted, J. T., & Rohrer, D.",
+    "journal_or_publisher": "Psychological Bulletin, 132(3), 354-380",
+    "year": 2006,
+    "doi_or_isbn": "10.1037/0033-2909.132.3.354",
+    "url": "https://doi.org/10.1037/0033-2909.132.3.354",
+    "application": "Fundamenta la superioridad del repaso espaciado intervalar (ciclos D7 y D21 en OdyssMedic) frente al estudio masivo de ultima hora previo al examen."
+  },
+  {
+    "category": "fundamento_pedagogico_y_normativo",
+    "id": "ped-kerfoot-2007",
+    "title": "Spaced education improves the retention of clinical knowledge by medical students: a randomized controlled trial",
+    "authors": "Kerfoot, B. P., DeWolf, W. C., Masser, B. A., Church, P. A., & Federman, D. D.",
+    "journal_or_publisher": "Medical Education, 41(1), 23-31",
+    "year": 2007,
+    "doi_or_isbn": "10.1111/j.1365-2929.2006.02644.x",
+    "url": "https://doi.org/10.1111/j.1365-2929.2006.02644.x",
+    "application": "Evidencia experimental en estudiantes de medicina sobre casos clinicos cortos espaciados con retroalimentacion inmediata para retencion a largo plazo."
+  },
+  {
+    "category": "fundamento_pedagogico_y_normativo",
+    "id": "ped-karpicke-roediger-2008",
+    "title": "The critical importance of retrieval for learning",
+    "authors": "Karpicke, J. D., & Roediger, H. L.",
+    "journal_or_publisher": "Science, 319(5865), 966-968",
+    "year": 2008,
+    "doi_or_isbn": "10.1126/science.1152408",
+    "url": "https://doi.org/10.1126/science.1152408",
+    "application": "Sustenta la practica de recuperacion activa mediante estaciones escalonadas de toma de decisiones antes de consultar pasivamente la perla clinica."
+  },
+  {
+    "category": "fundamento_pedagogico_y_normativo",
+    "id": "ped-croskerry-2003",
+    "title": "The importance of cognitive errors in diagnosis and strategies to minimize them",
+    "authors": "Croskerry, P.",
+    "journal_or_publisher": "Academic Medicine, 78(8), 775-780",
+    "year": 2003,
+    "doi_or_isbn": "10.1097/00001888-200308000-00003",
+    "url": "https://doi.org/10.1097/00001888-200308000-00003",
+    "application": "Base directa de la taxonomia OCRI de 4 brechas cognitivas (Triaje/Severidad, Razonamiento Diagnostico, Interpretacion de Laboratorio y Manejo Inicial) y prevencion del cierre prematuro."
+  },
+  {
+    "category": "fundamento_pedagogico_y_normativo",
+    "id": "ped-bowen-2006",
+    "title": "Educational strategies to promote clinical diagnostic reasoning",
+    "authors": "Bowen, J. L.",
+    "journal_or_publisher": "New England Journal of Medicine, 355(21), 2217-2225",
+    "year": 2006,
+    "doi_or_isbn": "10.1056/NEJMra054784",
+    "url": "https://doi.org/10.1056/NEJMra054784",
+    "application": "Guia la estructura de vinetas sanitizadas, construccion de scripts de enfermedad (illness scripts) y listas de recoleccion semiologica dirigida en la Biblioteca Clinica."
+  },
+  {
+    "category": "fundamento_pedagogico_y_normativo",
+    "id": "ped-miller-1990",
+    "title": "The assessment of clinical skills/competence/performance",
+    "authors": "Miller, G. E.",
+    "journal_or_publisher": "Academic Medicine, 65(9 Suppl), S63-S67",
+    "year": 1990,
+    "doi_or_isbn": "10.1097/00001888-199009000-00045",
+    "url": "https://doi.org/10.1097/00001888-199009000-00045",
+    "application": "Marco de transicion desde 'Saber' (bancos memoristicos) hacia 'Saber como' (aplicacion contextualizada en las 3 estaciones graduadas del simulador)."
+  },
+  {
+    "category": "fundamento_pedagogico_y_normativo",
+    "id": "norm-aspefam-enam",
+    "title": "Tabla de Especificaciones y Reglamento del Examen Nacional de Medicina (ENAM)",
+    "authors": "Asociacion Peruana de Facultades de Medicina (ASPEFAM)",
+    "journal_or_publisher": "ASPEFAM - Peru",
+    "year": 2025,
+    "doi_or_isbn": "Normativa-ASPEFAM-ENAM",
+    "url": "https://www.aspefam.org.pe/",
+    "application": "Define las areas troncales de evaluacion del interno de medicina en el Peru (Medicina Interna, Pediatria, Gineco-Obstetricia, Cirugia General y Salud Publica/Urgencias)."
+  },
+  {
+    "category": "fundamento_pedagogico_y_normativo",
+    "id": "norm-conareme",
+    "title": "Estandares de Evaluacion para el Concurso Nacional de Admision al Residentado Medico",
+    "authors": "Consejo Nacional de Residentado Medico (CONAREME)",
+    "journal_or_publisher": "CONAREME - Ministerio de Salud del Peru",
+    "year": 2025,
+    "doi_or_isbn": "Normativa-CONAREME",
+    "url": "https://www.conareme.org.pe/",
+    "application": "Orienta el nivel de complejidad diagnostica y terapeutica de las estaciones Nivel 2 y Nivel 3 del prototipo."
+  },
+  {
+    "category": "ingenieria_y_diseno",
+    "id": "tech-fastapi",
+    "authors": "Ramirez, S., & FastAPI Contributors",
+    "year": 2025,
+    "title": "FastAPI Framework: High-performance asynchronous REST APIs based on OpenAPI and Python type hints",
+    "url": "https://fastapi.tiangolo.com/",
+    "application": "Arquitectura modular del backend `/api/v1`, validacion automatica y documentacion interactiva OpenAPI."
+  },
+  {
+    "category": "ingenieria_y_diseno",
+    "id": "tech-sqlalchemy",
+    "authors": "Bayer, M., & SQLAlchemy Team",
+    "year": 2025,
+    "title": "SQLAlchemy 2.0 ORM Documentation",
+    "url": "https://docs.sqlalchemy.org/en/20/",
+    "application": "Persistencia relacional transaccional de usuarios, perfiles de maestria, intentos MCQ y tareas de repeticion espaciada."
+  },
+  {
+    "category": "ingenieria_y_diseno",
+    "id": "tech-pydantic",
+    "authors": "Colvin, S., & Pydantic Team",
+    "year": 2025,
+    "title": "Pydantic V2 Data Validation Library",
+    "url": "https://docs.pydantic.dev/latest/",
+    "application": "Contratos estrictos de datos clinicos y sanitizacion de estandares de oro antes de enviar vinetas al cliente."
+  },
+  {
+    "category": "ingenieria_y_diseno",
+    "id": "tech-react-ts",
+    "authors": "Meta Open Source & Microsoft",
+    "year": 2025,
+    "title": "React 18 UI Library & TypeScript Static Type System",
+    "url": "https://react.dev/",
+    "application": "Interfaz reactiva de pagina unica (SPA), portales accesibles para modales clinicos y estado tipado."
+  },
+  {
+    "category": "ingenieria_y_diseno",
+    "id": "tech-vite-tailwind",
+    "authors": "You, E., & Tailwind Labs",
+    "year": 2025,
+    "title": "Vite 6 Frontend Tooling & Tailwind CSS Design Tokens",
+    "url": "https://vite.dev/",
+    "application": "Empaquetado rapido y sistema de tokens visuales con animaciones CSS ligeras sin sobrecarga grafica."
+  },
+  {
+    "category": "ingenieria_y_diseno",
+    "id": "design-wcag21",
+    "authors": "World Wide Web Consortium (W3C)",
+    "year": 2023,
+    "title": "Web Content Accessibility Guidelines (WCAG) 2.1",
+    "url": "https://www.w3.org/TR/WCAG21/",
+    "application": "Contraste legible sobre fondo marfil clinico (`#FDFCFA`), navegacion por teclado (`Escape`, `Tab`) y respeto a `prefers-reduced-motion`."
+  },
+  {
+    "category": "ingenieria_y_diseno",
+    "id": "design-editorial-medico",
+    "authors": "Google Fonts / Clasicos de Edicion Medica",
+    "year": 2025,
+    "title": "Sistema Tipografico Editorial Clasico: Playfair Display (Serif) + Inter (Sans-Serif)",
+    "url": "https://fonts.google.com/",
+    "application": "Inspiracion estetica clinica clasica en tonos pastel salvia, marfil y alertas semanticas carmesi/ambar/teal sin efectos neon."
+  }
+]

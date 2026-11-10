@@ -386,9 +386,11 @@ class StudentService:
 
         ocri_score = round(total_score / len(CARDINAL_SPECIALTIES), 2) if CARDINAL_SPECIALTIES else 0.0
 
+        simulated_days = int(getattr(user, "simulated_days_elapsed", 0) or 0)
         now_utc = datetime.now(timezone.utc)
+        effective_now_utc = now_utc + timedelta(days=simulated_days, minutes=2 if simulated_days > 0 else 0)
 
-        # Compute dynamic cognitive_gap_radar reflecting real diagnostic & simulator performance
+        # Compute dynamic cognitive_gap_radar reflecting real diagnostic, simulator & longitudinal state
         gap_metrics_rows = db.query(StudentGapMetric).filter_by(user_id=user_id).all()
         gap_fail_map: Dict[str, int] = {
             gm.gap_type: int(gm.fail_count or 0) for gm in gap_metrics_rows
@@ -399,11 +401,12 @@ class StudentService:
 
         if user.diagnostic_completed and user.diagnostic_score is not None:
             diag_val = float(user.diagnostic_score)
-            base_anchor = (
-                diag_val
-                if total_attempts == 0
-                else (0.55 * diag_val + 0.45 * float(ocri_score))
-            )
+            if total_attempts == 0 and simulated_days == 0:
+                base_anchor = diag_val
+            elif simulated_days > 0:
+                base_anchor = float(ocri_score)
+            else:
+                base_anchor = 0.55 * diag_val + 0.45 * float(ocri_score)
         else:
             base_anchor = float(ocri_score)
 
@@ -437,13 +440,17 @@ class StudentService:
         for t in pending_tasks:
             meta = _resolve_case_presentation_meta(t.case_id)
             is_overdue = False
+            days_until_due = 0
             if t.scheduled_for:
                 sched_utc = (
                     t.scheduled_for
                     if t.scheduled_for.tzinfo is not None
                     else t.scheduled_for.replace(tzinfo=timezone.utc)
                 )
-                is_overdue = sched_utc <= now_utc
+                is_overdue = sched_utc <= effective_now_utc
+                if not is_overdue:
+                    delta_seconds = (sched_utc - effective_now_utc).total_seconds()
+                    days_until_due = max(1, int((delta_seconds + 86399) // 86400))
 
             if is_overdue or (
                 user.diagnostic_completed
@@ -471,6 +478,7 @@ class StudentService:
                 "repetition_cycle": t.repetition_cycle,
                 "status": t.status,
                 "is_overdue": is_overdue,
+                "days_until_due": days_until_due,
                 "priority": priority,
                 "created_at": t.created_at.isoformat() if t.created_at else None,
             })
@@ -512,6 +520,8 @@ class StudentService:
             "plan_tier": user.plan_tier,
             "xp": user.xp,
             "streak_days": user.streak_days,
+            "simulated_days_elapsed": simulated_days,
+            "simulated_date_iso": effective_now_utc.isoformat(),
             "diagnostic_completed": bool(user.diagnostic_completed),
             "diagnostic_score": user.diagnostic_score,
             "aptitude_status": user.aptitude_status,
@@ -857,7 +867,9 @@ class StudentService:
                     cycle = "D7"
                     days_ahead = 7
 
-                scheduled_time = datetime.now(timezone.utc) + timedelta(days=days_ahead)
+                sim_offset_days = int(getattr(user, "simulated_days_elapsed", 0) or 0)
+                effective_base_time = datetime.now(timezone.utc) + timedelta(days=sim_offset_days)
+                scheduled_time = effective_base_time + timedelta(days=days_ahead)
                 next_rep_iso = scheduled_time.isoformat()
 
                 if existing_pending_task:
@@ -959,6 +971,283 @@ class StudentService:
         except Exception:
             db.rollback()
             raise
+
+    def simulate_elapsed_days(
+        self,
+        db: Session,
+        user_id: int,
+        days: int = 7,
+        mode: str = "active_streak",
+    ) -> Dict[str, Any]:
+        """
+        Simula el paso del tiempo en dias para demostraciones y exposiciones en vivo:
+        - active_streak: avanza N dias con constancia de estudio, activa repasos D7/D21
+          programados y consolida ligeramente la maestria clinica.
+        - inactivity_decay: avanza N dias sin repasar (Curva del Olvido de Ebbinghaus),
+          reinicia la racha a 0, reduce la retencion clinica y activa repasos urgentes.
+        - reset: restablece la linea temporal al Dia 0 y recalibra el estado base.
+        """
+        user = db.query(User).filter_by(id=user_id).first()
+        if not user:
+            raise ValueError(f"User with id {user_id} not found")
+
+        norm_mode = (mode or "active_streak").strip().lower()
+        if norm_mode not in ("active_streak", "inactivity_decay", "reset"):
+            norm_mode = "active_streak"
+
+        safe_days = max(0, min(90, int(days or 0)))
+        if norm_mode != "reset" and safe_days == 0:
+            safe_days = 7
+
+        prev_dash = self.get_student_dashboard(db, user_id)
+        prev_ocri = float(prev_dash.get("ocri_score", 0.0))
+        prev_overdue_count = sum(
+            1 for t in prev_dash.get("pending_repetition_tasks", []) if t.get("is_overdue")
+        )
+        prev_streak = int(user.streak_days or 0)
+
+        now_utc = datetime.now(timezone.utc)
+
+        try:
+            masteries = db.query(StudentMastery).filter_by(user_id=user.id).all()
+
+            if norm_mode == "reset":
+                user.simulated_days_elapsed = 0
+                user.streak_days = 1
+
+                baseline = (
+                    float(user.diagnostic_score)
+                    if user.diagnostic_completed and user.diagnostic_score is not None
+                    else 50.0
+                )
+                for m in masteries:
+                    m.mastery_score = round(baseline, 1)
+                    m.competency_level = "deficiente" if baseline < 70.0 else "competente"
+                    m.updated_at = now_utc
+
+                if user.diagnostic_completed and user.diagnostic_score is not None:
+                    if baseline >= 75.0:
+                        user.aptitude_status = "apto"
+                    elif baseline >= 50.0:
+                        user.aptitude_status = "en_nivelacion"
+                    else:
+                        user.aptitude_status = "no_apto"
+
+                # Reschedule pending tasks cleanly relative to Day 0
+                pending_rows = (
+                    db.query(SpacedRepetitionTask)
+                    .filter_by(user_id=user.id, status="pending")
+                    .order_by(SpacedRepetitionTask.id.asc())
+                    .all()
+                )
+                for idx, row in enumerate(pending_rows):
+                    if user.diagnostic_completed and (user.diagnostic_score or 0.0) < 50.0:
+                        row.scheduled_for = now_utc - timedelta(minutes=15)
+                        row.repetition_cycle = "D7"
+                    elif idx == 0:
+                        row.scheduled_for = now_utc - timedelta(minutes=10)
+                        row.repetition_cycle = "D7"
+                    else:
+                        ahead = 21 if row.repetition_cycle == "D21" else 7
+                        row.scheduled_for = now_utc + timedelta(days=ahead)
+
+                narrative = (
+                    "Linea temporal restablecida al Dia 0. Los indicadores y ciclos de "
+                    "repeticion espaciada regresaron al punto posterior al diagnostico."
+                )
+
+            elif norm_mode == "active_streak":
+                current_sim = int(getattr(user, "simulated_days_elapsed", 0) or 0)
+                new_sim = current_sim + safe_days
+                user.simulated_days_elapsed = new_sim
+                user.streak_days = max(1, prev_streak) + safe_days
+                xp_bonus = min(160, safe_days * 12)
+                user.xp = int(user.xp or 0) + xp_bonus
+
+                effective_now = now_utc + timedelta(days=new_sim)
+
+                # Retention consolidation from sustained practice
+                if safe_days >= 21:
+                    boost = 10.0
+                elif safe_days >= 7:
+                    boost = 6.0
+                else:
+                    boost = 2.5
+
+                avg_accum = 0.0
+                for m in masteries:
+                    updated_val = round(min(96.0, float(m.mastery_score or 0.0) + boost), 1)
+                    m.mastery_score = updated_val
+                    m.competency_level = (
+                        "avanzado"
+                        if updated_val >= 90.0
+                        else ("competente" if updated_val >= 75.0 else "deficiente")
+                    )
+                    m.updated_at = now_utc
+                    if m.specialty in CARDINAL_SPECIALTIES:
+                        avg_accum += updated_val
+
+                if CARDINAL_SPECIALTIES and user.diagnostic_completed:
+                    new_avg = avg_accum / len(CARDINAL_SPECIALTIES)
+                    if new_avg >= 75.0:
+                        user.aptitude_status = "apto"
+                    elif new_avg >= 50.0:
+                        user.aptitude_status = "en_nivelacion"
+                    else:
+                        user.aptitude_status = "no_apto"
+
+                # Graduate completed D7 tasks into D21 consolidation wave when reaching >= 14 simulated days
+                if safe_days >= 7 or new_sim >= 14:
+                    completed_d7 = (
+                        db.query(SpacedRepetitionTask)
+                        .filter_by(user_id=user.id, status="completed", repetition_cycle="D7")
+                        .all()
+                    )
+                    existing_pending_cases = {
+                        t.case_id
+                        for t in db.query(SpacedRepetitionTask)
+                        .filter_by(user_id=user.id, status="pending")
+                        .all()
+                    }
+                    for comp in completed_d7:
+                        if comp.case_id not in existing_pending_cases and (safe_days >= 21 or new_sim >= 21):
+                            comp.repetition_cycle = "D21"
+                            comp.status = "pending"
+                            comp.scheduled_for = effective_now - timedelta(minutes=10)
+                            existing_pending_cases.add(comp.case_id)
+
+                # Ensure at least one scheduled consolidation check appears if queue was completely empty on >= 7d jump
+                active_pending = (
+                    db.query(SpacedRepetitionTask)
+                    .filter_by(user_id=user.id, status="pending")
+                    .all()
+                )
+                if not active_pending and safe_days >= 7:
+                    weakest_spec = "medicina_interna"
+                    if masteries:
+                        weakest_spec = min(masteries, key=lambda x: x.mastery_score).specialty
+                    candidates = SPECIALTY_TO_CASE_CANDIDATES.get(
+                        weakest_spec,
+                        SPECIALTY_TO_CASE_CANDIDATES["medicina_interna"],
+                    )
+                    cycle_tag = "D21" if safe_days >= 21 or new_sim >= 21 else "D7"
+                    db.add(
+                        SpacedRepetitionTask(
+                            user_id=user.id,
+                            case_id=candidates[0],
+                            gap_type="GAP_DIAGNOSTIC_REASONING",
+                            scheduled_for=effective_now - timedelta(minutes=5),
+                            repetition_cycle=cycle_tag,
+                            status="pending",
+                        )
+                    )
+
+                cycle_label = "Ciclo D21" if safe_days >= 21 else ("Ciclo D7" if safe_days >= 7 else "seguimiento diario")
+                narrative = (
+                    f"Avance de +{safe_days} {'dia' if safe_days == 1 else 'dias'} con practica constante ({cycle_label}): "
+                    f"racha activa en {user.streak_days} dias (+{xp_bonus} pts) y activacion de repasos programados."
+                )
+
+            else:
+                # mode == "inactivity_decay" (Ebbinghaus forgetting curve)
+                current_sim = int(getattr(user, "simulated_days_elapsed", 0) or 0)
+                effective_inactive_days = max(7, safe_days)
+                new_sim = current_sim + effective_inactive_days
+                user.simulated_days_elapsed = new_sim
+                user.streak_days = 0
+
+                effective_now = now_utc + timedelta(days=new_sim)
+                decay = 22.0 if effective_inactive_days >= 14 else 12.0
+
+                avg_accum = 0.0
+                for m in masteries:
+                    decayed_val = round(max(8.0, float(m.mastery_score or 50.0) - decay), 1)
+                    m.mastery_score = decayed_val
+                    m.competency_level = (
+                        "competente" if decayed_val >= 75.0 else "deficiente"
+                    )
+                    m.updated_at = now_utc
+                    if m.specialty in CARDINAL_SPECIALTIES:
+                        avg_accum += decayed_val
+
+                if CARDINAL_SPECIALTIES and user.diagnostic_completed:
+                    new_avg = avg_accum / len(CARDINAL_SPECIALTIES)
+                    if new_avg >= 75.0:
+                        user.aptitude_status = "apto"
+                    elif new_avg >= 50.0:
+                        user.aptitude_status = "en_nivelacion"
+                    else:
+                        user.aptitude_status = "no_apto"
+
+                # Queue urgent overdue spaced repetition stations due to forgetting curve
+                active_pending = (
+                    db.query(SpacedRepetitionTask)
+                    .filter_by(user_id=user.id, status="pending")
+                    .all()
+                )
+                for p_row in active_pending:
+                    p_row.scheduled_for = effective_now - timedelta(hours=2)
+
+                existing_case_ids = {t.case_id for t in active_pending}
+                sorted_specs = sorted(masteries, key=lambda x: x.mastery_score) if masteries else []
+                target_specs = [m.specialty for m in sorted_specs[:2]] or ["nefrologia", "neurologia"]
+                gap_cycle = ["GAP_TRIAGE_SEVERITY", "GAP_INITIAL_MANAGEMENT"]
+
+                for idx_s, sp_key in enumerate(target_specs):
+                    if len(existing_case_ids) >= 3:
+                        break
+                    cands = SPECIALTY_TO_CASE_CANDIDATES.get(
+                        sp_key,
+                        SPECIALTY_TO_CASE_CANDIDATES["medicina_interna"],
+                    )
+                    picked = next((c for c in cands if c not in existing_case_ids), cands[0])
+                    if picked not in existing_case_ids:
+                        db.add(
+                            SpacedRepetitionTask(
+                                user_id=user.id,
+                                case_id=picked,
+                                gap_type=gap_cycle[idx_s % len(gap_cycle)],
+                                scheduled_for=effective_now - timedelta(hours=1 + idx_s),
+                                repetition_cycle="D21" if effective_inactive_days >= 14 else "D7",
+                                status="pending",
+                            )
+                        )
+                        existing_case_ids.add(picked)
+
+                narrative = (
+                    f"Simulacion de {effective_inactive_days} dias sin repasar (Curva de Ebbinghaus): "
+                    f"racha reiniciada a 0 dias, descenso de -{int(decay)}% en retencion clinica y "
+                    f"activacion urgente de estaciones vencidas."
+                )
+
+            db.commit()
+            db.refresh(user)
+        except Exception:
+            db.rollback()
+            raise
+
+        updated_dash = self.get_student_dashboard(db, user_id)
+        new_ocri = float(updated_dash.get("ocri_score", 0.0))
+        new_overdue_count = sum(
+            1 for t in updated_dash.get("pending_repetition_tasks", []) if t.get("is_overdue")
+        )
+
+        return {
+            "success": True,
+            "mode": norm_mode,
+            "days_applied": 0 if norm_mode == "reset" else safe_days,
+            "simulated_days_elapsed": int(user.simulated_days_elapsed or 0),
+            "simulated_date_iso": updated_dash.get("simulated_date_iso"),
+            "previous_streak_days": prev_streak,
+            "current_streak_days": int(user.streak_days or 0),
+            "previous_ocri_score": prev_ocri,
+            "current_ocri_score": new_ocri,
+            "ocri_delta": round(new_ocri - prev_ocri, 1),
+            "newly_due_reviews": max(0, new_overdue_count - prev_overdue_count),
+            "total_overdue_reviews": new_overdue_count,
+            "narrative": narrative,
+            "dashboard": updated_dash,
+        }
 
 
 student_service = StudentService()

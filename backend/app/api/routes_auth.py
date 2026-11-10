@@ -65,6 +65,7 @@ def format_user_profile(user: User) -> dict:
         "plan_tier": user.plan_tier,
         "xp": user.xp,
         "streak_days": user.streak_days,
+        "simulated_days_elapsed": int(getattr(user, "simulated_days_elapsed", 0) or 0),
         "diagnostic_completed": bool(user.diagnostic_completed),
         "diagnostic_score": user.diagnostic_score,
         "aptitude_status": user.aptitude_status,

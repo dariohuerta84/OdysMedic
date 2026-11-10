@@ -1,0 +1,184 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 390" width="100%" role="img" aria-label="Evolucion del Rombo Clinico y Simulador de Dias Pasados">
+  <defs>
+    <style>
+      .bg { fill: #FDFCFA; }
+      .panel { fill: #FFFFFF; stroke: #DCE5E3; stroke-width: 1.5; }
+      .eyebrow { font-family: 'Inter', -apple-system, sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 2px; fill: #0E6F65; }
+      .title { font-family: 'Georgia', 'Playfair Display', serif; font-size: 19px; font-weight: 700; fill: #0B252E; }
+      .axis-lbl { font-family: 'Inter', -apple-system, sans-serif; font-size: 11px; font-weight: 600; fill: #344850; }
+      .small-lbl { font-family: 'Inter', -apple-system, sans-serif; font-size: 11px; fill: #6B7D83; }
+      .grid-ring { fill: none; stroke: #E6EFED; stroke-width: 1.2; }
+      .axis-line { stroke: #DCE5E3; stroke-width: 1.2; stroke-dasharray: 3 3; }
+
+      /* Morphing diamond: Red (low score) -> Amber (leveling) -> Teal (consolidated) */
+      .morph-diamond {
+        stroke-width: 2.8;
+        stroke-linejoin: round;
+        animation: diamondEvolution 9s ease-in-out infinite;
+      }
+      .alert-halo {
+        fill: none;
+        stroke: #B6222A;
+        stroke-width: 1.8;
+        animation: redAlertPulse 9s ease-out infinite;
+      }
+      .badge-low { animation: showLow 9s infinite; }
+      .badge-mid { animation: showMid 9s infinite; }
+      .badge-high { animation: showHigh 9s infinite; }
+
+      .curve-forget {
+        fill: none;
+        stroke: #C6383E;
+        stroke-width: 2.5;
+        stroke-dasharray: 6 5;
+      }
+      .curve-spaced {
+        fill: none;
+        stroke: #0E6F65;
+        stroke-width: 3;
+        stroke-linecap: round;
+        stroke-dasharray: 560;
+        stroke-dashoffset: 560;
+        animation: drawSpacedCurve 9s ease-in-out infinite;
+      }
+      .day-scanner {
+        stroke: #0D4A44;
+        stroke-width: 1.5;
+        stroke-dasharray: 4 4;
+        animation: scanDays 9s ease-in-out infinite;
+      }
+
+      @keyframes diamondEvolution {
+        0%, 22% {
+          d: path("M 270 185 L 292 215 L 270 232 L 250 215 Z");
+          fill: rgba(182, 34, 42, 0.22);
+          stroke: #B6222A;
+        }
+        38%, 60% {
+          d: path("M 270 152 L 326 215 L 270 266 L 216 215 Z");
+          fill: rgba(174, 122, 30, 0.20);
+          stroke: #AE7A1E;
+        }
+        75%, 94% {
+          d: path("M 270 120 L 362 215 L 270 302 L 182 215 Z");
+          fill: rgba(14, 111, 101, 0.20);
+          stroke: #0E6F65;
+        }
+        100% {
+          d: path("M 270 185 L 292 215 L 270 232 L 250 215 Z");
+          fill: rgba(182, 34, 42, 0.22);
+          stroke: #B6222A;
+        }
+      }
+      @keyframes redAlertPulse {
+        0%, 22% { opacity: 0.9; r: 10; }
+        30%, 95% { opacity: 0; r: 22; }
+        100% { opacity: 0.9; r: 10; }
+      }
+      @keyframes showLow {
+        0%, 26% { opacity: 1; }
+        32%, 96% { opacity: 0; }
+        100% { opacity: 1; }
+      }
+      @keyframes showMid {
+        0%, 30% { opacity: 0; }
+        36%, 62% { opacity: 1; }
+        68%, 100% { opacity: 0; }
+      }
+      @keyframes showHigh {
+        0%, 66% { opacity: 0; }
+        72%, 94% { opacity: 1; }
+        98%, 100% { opacity: 0; }
+      }
+      @keyframes drawSpacedCurve {
+        0% { stroke-dashoffset: 560; }
+        65%, 92% { stroke-dashoffset: 0; }
+        100% { stroke-dashoffset: 560; }
+      }
+      @keyframes scanDays {
+        0%, 10% { transform: translateX(0px); }
+        45% { transform: translateX(180px); }
+        80%, 92% { transform: translateX(380px); }
+        100% { transform: translateX(0px); }
+      }
+    </style>
+  </defs>
+
+  <rect width="1120" height="390" rx="24" class="bg" />
+
+  <!-- LEFT PANEL: Dynamic Red -> Amber -> Teal Competency Diamond -->
+  <rect x="16" y="16" width="526" height="358" rx="20" class="panel" />
+  <text x="42" y="48" class="eyebrow">EQUILIBRIO DE RAZONAMIENTO CLINICO</text>
+  <text x="42" y="74" class="title">Rombo Dinamico segun Calificacion Real</text>
+
+  <!-- Status Pill Animated -->
+  <g class="badge-low">
+    <rect x="364" y="36" width="152" height="28" rx="14" fill="#FDECEC" stroke="#E8BDBD" />
+    <text x="440" y="54" text-anchor="middle" class="axis-lbl" style="fill:#B6222A;">20% · Alerta Roja</text>
+  </g>
+  <g class="badge-mid">
+    <rect x="364" y="36" width="152" height="28" rx="14" fill="#FDF7E7" stroke="#EAD8B1" />
+    <text x="440" y="54" text-anchor="middle" class="axis-lbl" style="fill:#9A6B1F;">58% · En Nivelacion</text>
+  </g>
+  <g class="badge-high">
+    <rect x="364" y="36" width="152" height="28" rx="14" fill="#ECF6F4" stroke="#B9DDD5" />
+    <text x="440" y="54" text-anchor="middle" class="axis-lbl" style="fill:#0E6F65;">88% · Consolidado</text>
+  </g>
+
+  <!-- Concentric Reference Diamonds (center 270, 215; max R=105) -->
+  <polygon points="270,110 375,215 270,320 165,215" class="grid-ring" />
+  <polygon points="270,136 349,215 270,294 191,215" class="grid-ring" />
+  <polygon points="270,162 323,215 270,268 217,215" class="grid-ring" />
+  <polygon points="270,188 297,215 270,242 243,215" class="grid-ring" />
+  <line x1="270" y1="110" x2="270" y2="320" class="axis-line" />
+  <line x1="165" y1="215" x2="375" y2="215" class="axis-line" />
+
+  <!-- Animated Polygon (Fallback polygon + CSS path morph) -->
+  <path d="M 270 152 L 326 215 L 270 266 L 216 215 Z" fill="rgba(14,111,101,0.18)" stroke="#0E6F65" class="morph-diamond" />
+  <circle cx="270" cy="185" r="10" class="alert-halo" />
+
+  <!-- Axis Labels -->
+  <text x="270" y="100" text-anchor="middle" class="axis-lbl">Triaje y Severidad</text>
+  <text x="387" y="219" text-anchor="start" class="axis-lbl">Diagnostico</text>
+  <text x="270" y="342" text-anchor="middle" class="axis-lbl">Laboratorio</text>
+  <text x="153" y="219" text-anchor="end" class="axis-lbl">Manejo Inicial</text>
+
+  <!-- RIGHT PANEL: Longitudinal Day Simulator & Ebbinghaus Curve -->
+  <rect x="562" y="16" width="542" height="358" rx="20" class="panel" />
+  <text x="588" y="48" class="eyebrow">SIMULADOR DE DIAS TRANSCURRIDOS (MODO EXPOSICION)</text>
+  <text x="588" y="74" class="title">Retencion Espaciada (D7 / D21) vs. Curva de Olvido</text>
+  <text x="588" y="96" class="small-lbl">Permite adelantar +1, +7 y +21 dias o simular inactividad durante la exposicion.</text>
+
+  <!-- Chart Axes -->
+  <line x1="628" y1="128" x2="628" y2="305" stroke="#DCE5E3" stroke-width="1.5" />
+  <line x1="628" y1="305" x2="1062" y2="305" stroke="#DCE5E3" stroke-width="1.5" />
+  <text x="618" y="136" text-anchor="end" class="small-lbl">100%</text>
+  <text x="618" y="218" text-anchor="end" class="small-lbl">50%</text>
+  <text x="618" y="304" text-anchor="end" class="small-lbl">10%</text>
+
+  <!-- Horizontal Guide 75% Competency -->
+  <line x1="628" y1="175" x2="1062" y2="175" stroke="#CFE7E2" stroke-dasharray="4 4" />
+  <text x="1060" y="168" text-anchor="end" class="small-lbl" style="fill:#0E6F65;font-weight:600;">Umbral Apto (75%)</text>
+
+  <!-- Ebbinghaus Forgetting Curve (No Review -> Red Drop) -->
+  <path d="M 640 155 Q 740 245, 860 278 T 1045 294" class="curve-forget" />
+
+  <!-- Spaced Repetition Curve (D+1, D+7, D+21 Boosts -> Teal Consolidation) -->
+  <path d="M 640 245 L 700 205 L 795 232 L 815 168 L 965 188 L 995 138 L 1050 144" class="curve-spaced" />
+
+  <!-- Animated Time Scanner Line -->
+  <line x1="640" y1="128" x2="640" y2="305" class="day-scanner" />
+
+  <!-- Day Milestones -->
+  <text x="640" y="326" text-anchor="middle" class="axis-lbl">Dia 0</text>
+  <text x="705" y="326" text-anchor="middle" class="axis-lbl">Dia +1</text>
+  <text x="815" y="326" text-anchor="middle" class="axis-lbl" style="fill:#0E6F65;">Dia +7 (D7)</text>
+  <text x="995" y="326" text-anchor="middle" class="axis-lbl" style="fill:#0D4A44;">Dia +21 (D21)</text>
+
+  <!-- Legend -->
+  <line x1="630" y1="352" x2="656" y2="352" stroke="#0E6F65" stroke-width="3" />
+  <text x="664" y="356" class="small-lbl" style="fill:#0B252E;font-weight:600;">Ruta activa con repasos D7 / D21</text>
+
+  <line x1="875" y1="352" x2="901" y2="352" stroke="#C6383E" stroke-width="2.5" stroke-dasharray="5 4" />
+  <text x="909" y="356" class="small-lbl" style="fill:#B6222A;font-weight:600;">14 dias sin practicar (Ebbinghaus)</text>
+</svg>

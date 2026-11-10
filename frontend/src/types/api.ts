@@ -207,6 +207,7 @@ export interface SpacedRepetitionItem {
   cycle: 'D7' | 'D21';
   scheduled_date: string;
   is_overdue: boolean;
+  days_until_due?: number;
   priority?: 'urgent' | 'high' | 'normal';
   id?: number;
   gap_type?: string;
@@ -216,11 +217,32 @@ export interface SpacedRepetitionItem {
   created_at?: string;
 }
 
+export type SimulateDaysMode = 'active_streak' | 'inactivity_decay' | 'reset';
+
+export interface SimulateDaysResponse {
+  success: boolean;
+  mode: SimulateDaysMode;
+  days_applied: number;
+  simulated_days_elapsed: number;
+  simulated_date_iso?: string;
+  previous_streak_days: number;
+  current_streak_days: number;
+  previous_ocri_score: number;
+  current_ocri_score: number;
+  ocri_delta: number;
+  newly_due_reviews: number;
+  total_overdue_reviews: number;
+  narrative: string;
+  dashboard: LevelingDashboard;
+}
+
 export interface LevelingDashboard {
   user_id: number;
   current_level: CompetencyLevel;
   total_xp: number;
   streak_days: number;
+  simulated_days_elapsed?: number;
+  simulated_date_iso?: string;
   cognitive_gap_radar: Record<CognitiveGapTag, number>;
   specialty_masteries: SpecialtyMastery[];
   pending_spaced_repetitions: SpacedRepetitionItem[];

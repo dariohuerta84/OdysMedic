@@ -237,7 +237,11 @@ export const SpacedRepetitionQueue: React.FC<SpacedRepetitionQueueProps> = ({
                       ) : (
                         <span className="text-[#4A5D64] inline-flex items-center gap-1">
                           <Clock className="w-3 h-3 text-[#0E6F65]" />
-                          <span>Programado en ruta</span>
+                          <span>
+                            {item.days_until_due && item.days_until_due > 0
+                              ? `Programado en ${item.days_until_due} ${item.days_until_due === 1 ? 'dia' : 'dias'}`
+                              : 'Programado en ruta'}
+                          </span>
                         </span>
                       )}
                     </div>
