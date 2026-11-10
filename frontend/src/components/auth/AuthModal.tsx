@@ -134,11 +134,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       setTab(initialMode);
       setStep(1);
       setError(null);
-      if (onboardingTrack === 'desde_cero') {
-        setAcademicYear('Ciencias Basicas (1er a 3er ano)');
-      }
     }
-  }, [isOpen, initialMode, onboardingTrack]);
+  }, [isOpen, initialMode]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -280,7 +277,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         role="dialog"
         aria-modal="true"
         aria-labelledby="auth-modal-title"
-        className={`bg-[#FDFCFA] border border-[#DCE5E3] rounded-2xl w-full relative shadow-2xl flex flex-col max-h-[90dvh] overflow-hidden transition-all ${
+        className={`bg-[#FDFCFA] border border-[#DCE5E3] rounded-2xl w-full relative shadow-2xl flex flex-col max-h-[90dvh] overflow-hidden animate-scale-in transition-all duration-300 ${
           tab === 'register' && step > 1 ? 'max-w-3xl' : 'max-w-lg'
         }`}
       >
@@ -299,9 +296,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             >
               {tab === 'login'
                 ? 'Bienvenido de vuelta'
-                : onboardingTrack === 'desde_cero'
-                  ? 'Construye tu base clinica paso a paso'
-                  : 'Personaliza tu ruta clinica'}
+                : 'Personaliza tu ruta clinica'}
             </h2>
           </div>
 
@@ -399,7 +394,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
           {/* Error Notice */}
           {error && (
-            <div className="border border-[#EBCACA] bg-[#FBF1F1] text-[#8E3538] text-xs sm:text-sm p-3.5 rounded-xl flex items-start gap-2.5">
+            <div className="border border-[#EBCACA] bg-[#FBF1F1] text-[#8E3538] text-xs sm:text-sm p-3.5 rounded-xl flex items-start gap-2.5 animate-clinical-shake">
               <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-[#B44B4E]" />
               <span className="leading-snug">{error}</span>
             </div>
@@ -409,7 +404,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           {/* LOGIN VIEW                                                        */}
           {/* ================================================================= */}
           {tab === 'login' && (
-            <form id="login-form" onSubmit={handleLoginSubmit} className="space-y-4">
+            <form id="login-form" onSubmit={handleLoginSubmit} className="space-y-4 animate-fade-in-up">
               <div>
                 <label
                   htmlFor="login-email"
@@ -464,7 +459,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           {/* REGISTER STEP 1: CUENTA PERSONAL                                  */}
           {/* ================================================================= */}
           {tab === 'register' && step === 1 && (
-            <div className="space-y-4">
+            <div className="space-y-4 animate-fade-in-up">
               <div>
                 <h3 className="font-serif text-lg font-bold text-[#0B252E]">
                   1. Tus credenciales de acceso
@@ -549,7 +544,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           {/* REGISTER STEP 2: DATOS ACADEMICOS                                 */}
           {/* ================================================================= */}
           {tab === 'register' && step === 2 && (
-            <div className="space-y-5">
+            <div className="space-y-5 animate-fade-in-up">
               <div className="flex items-start gap-3">
                 <div className="w-8 h-8 rounded-full bg-[#EAF4F2] text-[#0E6F65] font-bold text-sm flex items-center justify-center shrink-0">
                   2
@@ -681,7 +676,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           {/* REGISTER STEP 3: PREFERENCIAS INICIALES                           */}
           {/* ================================================================= */}
           {tab === 'register' && step === 3 && (
-            <div className="space-y-5">
+            <div className="space-y-5 animate-fade-in-up">
               <div className="flex items-start gap-3">
                 <div className="w-8 h-8 rounded-full bg-[#EAF4F2] text-[#0E6F65] font-bold text-sm flex items-center justify-center shrink-0">
                   3

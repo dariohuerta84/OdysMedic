@@ -14,10 +14,9 @@ import {
 } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { StaticClinicalWorldPreview } from '../components/landing/StaticClinicalWorldPreview';
-import type { OnboardingTrack } from '../types/api';
 
 export interface LandingPageProps {
-  onStartRoute: (track: OnboardingTrack) => void;
+  onStartRoute: () => void;
   onOpenLibrary: () => void;
 }
 
@@ -289,49 +288,50 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       {/* ===================================================================== */}
       {/* 1. HERO SECTION (Classic Medical Editorial + Static Mundo Preview)    */}
       {/* ===================================================================== */}
-      <section className="relative bg-gradient-to-br from-[#EEF6F4] via-[#F6FAF9] to-[#FDFCFA] border-b border-[#E3ECEA]">
+      <section className="relative bg-gradient-to-br from-[#EEF6F4] via-[#F6FAF9] to-[#FDFCFA] border-b border-[#E3ECEA] overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-            {/* Left Column: Editorial Typography & 2 Primary Actions */}
+            {/* Left Column: Editorial Typography & Primary Action */}
             <div className="lg:col-span-5 space-y-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#4A656E]">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#4A656E] animate-fade-in-up">
                 Tu potencial clinico, nuestra ruta
               </p>
 
-              <h1 className="font-serif text-4xl sm:text-5xl font-bold tracking-tight leading-[1.12] text-[#0B252E]">
+              <h1 className="font-serif text-4xl sm:text-5xl font-bold tracking-tight leading-[1.12] text-[#0B252E] animate-fade-in-up stagger-1">
                 <span className="block">Entrena clinicamente.</span>
                 <span className="block">Detecta tus brechas.</span>
                 <span className="block text-[#0E6F65]">Sigue una ruta hecha para ti.</span>
               </h1>
 
-              <p className="text-sm sm:text-base text-[#4A606A] leading-relaxed">
+              <p className="text-sm sm:text-base text-[#4A606A] leading-relaxed animate-fade-in-up stagger-2">
                 OdyssMedic convierte tu desempeno en una ruta de aprendizaje personalizada a
                 traves de mundos clinicos, con retroalimentacion experta, estaciones adaptativas
                 y un enfoque basado en la practica real.
               </p>
 
-              {/* Primary 2 Options */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2">
+              {/* Primary CTA & Open Library Access */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2 animate-fade-in-up stagger-3">
                 <button
                   type="button"
-                  onClick={() => onStartRoute('ruta')}
-                  className="inline-flex items-center justify-center gap-3 px-7 py-3.5 rounded-xl bg-[#0E6F65] hover:bg-[#0A564E] text-white font-medium text-sm sm:text-base transition-colors shadow-xs"
+                  onClick={() => onStartRoute()}
+                  className="group inline-flex items-center justify-center gap-3 px-7 py-3.5 rounded-xl bg-[#0E6F65] hover:bg-[#0A564E] active:scale-[0.99] text-white font-medium text-sm sm:text-base transition-all duration-200 shadow-xs"
                 >
                   <span>Empieza tu ruta</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
                 </button>
 
                 <button
                   type="button"
-                  onClick={() => onStartRoute('desde_cero')}
-                  className="inline-flex items-center justify-center px-7 py-3.5 rounded-xl bg-[#EAECEB] hover:bg-[#DFE3E1] text-[#0B252E] border border-[#CFD7D5] font-medium text-sm sm:text-base transition-colors"
+                  onClick={onOpenLibrary}
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white/90 hover:bg-white text-[#0B252E] border border-[#CFDAD8] hover:border-[#0E6F65]/50 font-medium text-sm sm:text-base transition-all duration-200"
                 >
-                  <span>Empieza de 0</span>
+                  <BookOpen className="w-4 h-4 text-[#0E6F65]" />
+                  <span>Explorar Biblioteca</span>
                 </button>
               </div>
 
               {/* 3 Calm Trust Pillars */}
-              <div className="pt-5 border-t border-[#DCE7E5] grid grid-cols-3 gap-4 text-xs text-[#4A606A]">
+              <div className="pt-5 border-t border-[#DCE7E5] grid grid-cols-3 gap-4 text-xs text-[#4A606A] animate-fade-in-up stagger-4">
                 <div className="flex items-start gap-2">
                   <GraduationCap className="w-4 h-4 text-[#0E6F65] shrink-0 mt-0.5" />
                   <span className="leading-snug">Basado en casos clinicos reales</span>
@@ -348,8 +348,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </div>
 
             {/* Right Column: Static Non-Interactive Showcase of Mundo Clinico */}
-            <div className="lg:col-span-7">
-              <StaticClinicalWorldPreview />
+            <div className="lg:col-span-7 animate-fade-in-up stagger-2">
+              <div className="animate-gentle-float">
+                <StaticClinicalWorldPreview />
+              </div>
             </div>
           </div>
         </div>
@@ -412,7 +414,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div key={selectedMetricTab} className="grid grid-cols-1 sm:grid-cols-2 gap-5 animate-fade-in-up">
               <div className="p-5 rounded-xl bg-[#FBF1F1] border border-[#EED7D7] space-y-2">
                 <span className="text-xs font-semibold uppercase tracking-wider text-[#9E3F42] block">
                   Estudio tradicional fragmentado
@@ -483,7 +485,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             <button
               type="button"
               onClick={onOpenLibrary}
-              className="self-start md:self-auto inline-flex items-center gap-2 text-sm font-semibold text-[#0E6F65] hover:text-[#0A564E] underline underline-offset-4"
+              className="self-start md:self-auto inline-flex items-center gap-2 text-sm font-semibold text-[#0E6F65] hover:text-[#0A564E] underline underline-offset-4 transition-colors"
             >
               <BookOpen className="w-4 h-4" />
               <span>Consultar Biblioteca Clinica abierta</span>
@@ -494,7 +496,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             {clinicalWorldsOverview.map((world) => (
               <div
                 key={world.title}
-                className={`p-6 rounded-2xl border ${world.tone} flex flex-col justify-between space-y-5`}
+                className={`p-6 rounded-2xl border ${world.tone} editorial-card-lift flex flex-col justify-between space-y-5`}
               >
                 <div className="space-y-3">
                   <div className="w-10 h-10 rounded-full bg-white/90 border border-[#DCE5E3] flex items-center justify-center text-[#0E6F65]">
@@ -514,12 +516,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   </p>
                   <button
                     type="button"
-                    onClick={() => onStartRoute('ruta')}
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0E6F65] hover:text-[#0A564E]"
+                    onClick={() => onStartRoute()}
+                    className="group inline-flex items-center gap-1.5 text-xs font-semibold text-[#0E6F65] hover:text-[#0A564E]"
                   >
                     <Lock className="w-3.5 h-3.5" />
                     <span>Registrarse para ingresar</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" />
                   </button>
                 </div>
               </div>
@@ -550,7 +552,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             {testimonials.map((t) => (
               <div
                 key={t.author}
-                className="p-6 sm:p-7 rounded-2xl bg-white border border-[#E3E8E6] flex flex-col justify-between space-y-5"
+                className="p-6 sm:p-7 rounded-2xl bg-white border border-[#E3E8E6] editorial-card-lift flex flex-col justify-between space-y-5"
               >
                 <p className="font-serif italic text-base text-[#1E3640] leading-relaxed">
                   &ldquo;{t.quote}&rdquo;
@@ -586,18 +588,19 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5">
             <button
               type="button"
-              onClick={() => onStartRoute('ruta')}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-xl bg-[#0E6F65] hover:bg-[#0A564E] text-white font-medium text-sm sm:text-base transition-colors"
+              onClick={() => onStartRoute()}
+              className="group w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-xl bg-[#0E6F65] hover:bg-[#0A564E] active:scale-[0.99] text-white font-medium text-sm sm:text-base transition-all duration-200 shadow-xs"
             >
               <span>Empieza tu ruta</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
             </button>
             <button
               type="button"
-              onClick={() => onStartRoute('desde_cero')}
-              className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 rounded-xl bg-white hover:bg-[#EAECEB] text-[#0B252E] border border-[#CFD7D5] font-medium text-sm sm:text-base transition-colors"
+              onClick={onOpenLibrary}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-white hover:bg-[#FDFCFA] text-[#0B252E] border border-[#CFD7D5] hover:border-[#0E6F65]/50 font-medium text-sm sm:text-base transition-all duration-200"
             >
-              <span>Empieza de 0</span>
+              <BookOpen className="w-4 h-4 text-[#0E6F65]" />
+              <span>Revisar Biblioteca Clinica</span>
             </button>
           </div>
         </section>

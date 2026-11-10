@@ -958,23 +958,25 @@ const MOCK_CASES_CATALOG: Record<string, MockCaseEntry> = {
   },
 };
 
+const BACKEND_TO_MOCK_FALLBACK: Record<string, string> = {
+  's13256-019-2334-y': 'case-nefro-001',
+  's13256-022-03392-w': 'case-endo-002',
+  's13256-023-04294-1': 'case-neuro-003',
+  's13256-025-05577-5': 'case-neuro-003',
+  's13256-026-05974-4': 'case-nefro-001',
+  's13256-025-05650-z': 'case-endo-002',
+  's13256-024-04496-1': 'case-neuro-003',
+  's13256-017-1522-8': 'case-endo-002',
+  's13256-018-1897-4': 'case-neuro-003',
+};
+
 export const SimulatorPage: React.FC<SimulatorPageProps> = ({
-  initialCaseId = 'case-nefro-001',
+  initialCaseId = 's13256-019-2334-y',
   onBackToDashboard,
   className = '',
 }) => {
-  // Normalize initialCaseId if matching aliases
-  const resolvedInitialId =
-    initialCaseId === 's13256-019-2334-y'
-      ? 'case-nefro-001'
-      : initialCaseId === 's13256-017-1522-8'
-        ? 'case-endo-002'
-        : initialCaseId === 's13256-018-1897-4'
-          ? 'case-neuro-003'
-          : initialCaseId;
-
   const [selectedCaseId, setSelectedCaseId] = useState<string>(
-    MOCK_CASES_CATALOG[resolvedInitialId] ? resolvedInitialId : 'case-nefro-001'
+    initialCaseId || 's13256-019-2334-y'
   );
 
   const [caseDetail, setCaseDetail] = useState<CaseDetail | null>(null);
@@ -990,11 +992,30 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isUsingFallback, setIsUsingFallback] = useState<boolean>(false);
 
-  // Timer reference to manage interval accurately
+  // Timer and modal reveal references
   const timerRef = useRef<number | null>(null);
+  const modalDelayRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (initialCaseId) {
+      setSelectedCaseId(initialCaseId);
+    }
+  }, [initialCaseId]);
+
+  useEffect(() => {
+    return () => {
+      if (modalDelayRef.current) {
+        window.clearTimeout(modalDelayRef.current);
+      }
+    };
+  }, []);
 
   // Load clinical case and stations
   const loadCaseData = async (caseId: string) => {
+    if (modalDelayRef.current) {
+      window.clearTimeout(modalDelayRef.current);
+      modalDelayRef.current = null;
+    }
     setIsLoading(true);
     setEvaluationResult(null);
     setIsModalOpen(false);
@@ -1002,6 +1023,11 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
     setCurrentStationIndex(0);
     setCompletedStations([]);
     setTimeSpentSeconds(0);
+
+    const fallbackKey =
+      MOCK_CASES_CATALOG[caseId]
+        ? caseId
+        : BACKEND_TO_MOCK_FALLBACK[caseId] || 'case-nefro-001';
 
     try {
       const [detailRes, stationsRes] = await Promise.allSettled([
@@ -1029,16 +1055,15 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
         setStations(loadedStations);
         setIsUsingFallback(false);
       } else {
-        // Fallback to high fidelity catalog
         const mockEntry =
-          MOCK_CASES_CATALOG[caseId] || MOCK_CASES_CATALOG['case-nefro-001'];
+          MOCK_CASES_CATALOG[fallbackKey] || MOCK_CASES_CATALOG['case-nefro-001'];
         setCaseDetail(mockEntry.detail);
         setStations(mockEntry.stations);
         setIsUsingFallback(true);
       }
     } catch {
       const mockEntry =
-        MOCK_CASES_CATALOG[caseId] || MOCK_CASES_CATALOG['case-nefro-001'];
+        MOCK_CASES_CATALOG[fallbackKey] || MOCK_CASES_CATALOG['case-nefro-001'];
       setCaseDetail(mockEntry.detail);
       setStations(mockEntry.stations);
       setIsUsingFallback(true);
@@ -1099,14 +1124,20 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
       });
 
       setEvaluationResult(apiResult);
-      setIsModalOpen(true);
       if (!completedStations.includes(stationNumber)) {
         setCompletedStations((prev) => [...prev, stationNumber]);
       }
+      modalDelayRef.current = window.setTimeout(() => {
+        setIsModalOpen(true);
+      }, 340);
     } catch {
       // 2. Resilient fallback evaluation from local high-yield catalog
+      const fbKey =
+        MOCK_CASES_CATALOG[selectedCaseId]
+          ? selectedCaseId
+          : BACKEND_TO_MOCK_FALLBACK[selectedCaseId] || 'case-nefro-001';
       const catalogEntry =
-        MOCK_CASES_CATALOG[selectedCaseId] || MOCK_CASES_CATALOG['case-nefro-001'];
+        MOCK_CASES_CATALOG[fbKey] || MOCK_CASES_CATALOG['case-nefro-001'];
       const stEval =
         catalogEntry.stationEvaluations[stationNumber]?.[selectedOptionId];
 
@@ -1167,10 +1198,12 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
           };
 
       setEvaluationResult(fallbackResult);
-      setIsModalOpen(true);
       if (!completedStations.includes(stationNumber)) {
         setCompletedStations((prev) => [...prev, stationNumber]);
       }
+      modalDelayRef.current = window.setTimeout(() => {
+        setIsModalOpen(true);
+      }, 340);
     } finally {
       setIsSubmitting(false);
     }
@@ -1178,6 +1211,10 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
 
   // Next Station handler
   const handleNextStation = () => {
+    if (modalDelayRef.current) {
+      window.clearTimeout(modalDelayRef.current);
+      modalDelayRef.current = null;
+    }
     setIsModalOpen(false);
     setEvaluationResult(null);
     setSelectedOptionId(null);
@@ -1230,17 +1267,29 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
             <select
               value={selectedCaseId}
               onChange={(e) => setSelectedCaseId(e.target.value)}
-              className="bg-[#FDFCFA] border border-[#DCE5E3] rounded-full px-4 py-2 text-xs font-medium text-[#0B252E] focus:outline-none focus:border-[#0E6F65] transition-colors"
+              className="bg-[#FDFCFA] border border-[#DCE5E3] rounded-full px-4 py-2 text-xs font-medium text-[#0B252E] focus:outline-none focus:border-[#0E6F65] transition-colors max-w-[260px] sm:max-w-xs truncate"
               aria-label="Selector de casos de simulacion"
             >
-              <option value="case-nefro-001">
-                Nefrologia · Falla Renal Aguda y aHUS (KDIGO)
+              <option value="s13256-019-2334-y">
+                Nefrologia · Microangiopatia Trombotica y AKI (KDIGO)
               </option>
-              <option value="case-endo-002">
-                Endocrinologia · Cetoacidosis Diabetica (ADA)
+              <option value="s13256-022-03392-w">
+                Endocrinologia · Crisis Glucemica y Electrolitos (ADA)
               </option>
-              <option value="case-neuro-003">
-                Neurologia · ACV Isquemico Agudo (AHA/ASA)
+              <option value="s13256-023-04294-1">
+                Neurologia · Ictus Isquemico en Ventana (AHA/ASA)
+              </option>
+              <option value="s13256-025-05577-5">
+                Neurologia · Hemorragia Intracerebral Aguda
+              </option>
+              <option value="s13256-026-05974-4">
+                Reumatologia · Lupus Neuropsiquiatrico (EULAR)
+              </option>
+              <option value="s13256-025-05650-z">
+                Gineco-Obstetricia · Trastorno Metabolico Gestacional
+              </option>
+              <option value="s13256-024-04496-1">
+                Oftalmologia · Urgencia e Hipertension Ocular
               </option>
             </select>
           </div>
@@ -1299,7 +1348,7 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
           {currentStation && (
             <section
               key={stationNumber}
-              className="rounded-3xl bg-white border border-[#DCE5E3] p-5 sm:p-8 space-y-6"
+              className="rounded-3xl bg-white border border-[#DCE5E3] p-5 sm:p-8 space-y-6 animate-fade-in-up"
               aria-label="Pregunta clinica y opciones de decision"
             >
               {/* Question Header */}
@@ -1322,18 +1371,46 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
                 </h3>
               </div>
 
-              {/* Options List */}
+              {/* Options List with Animated Correct / Incorrect Evaluation States */}
               <div className="space-y-3">
-                {currentStation.options.map((option, idx) => (
-                  <OptionCard
-                    key={option.id || idx}
-                    option={option}
-                    index={idx}
-                    isSelected={selectedOptionId === option.id}
-                    onSelect={() => setSelectedOptionId(option.id)}
-                    disabled={isSubmitting || evaluationResult !== null}
-                  />
-                ))}
+                {currentStation.options.map((option, idx) => {
+                  const isOptSelected = selectedOptionId === option.id;
+                  const normOptId = String(option.id || '').toLowerCase();
+                  const normCorrectId = String(
+                    evaluationResult?.correct_option_id || ''
+                  ).toLowerCase();
+
+                  let evalState:
+                    | 'idle'
+                    | 'correct'
+                    | 'incorrect'
+                    | 'revealed-correct'
+                    | 'dimmed' = 'idle';
+
+                  if (evaluationResult !== null) {
+                    if (isOptSelected && evaluationResult.is_correct) {
+                      evalState = 'correct';
+                    } else if (isOptSelected && !evaluationResult.is_correct) {
+                      evalState = 'incorrect';
+                    } else if (!isOptSelected && normCorrectId && normOptId === normCorrectId) {
+                      evalState = 'revealed-correct';
+                    } else {
+                      evalState = 'dimmed';
+                    }
+                  }
+
+                  return (
+                    <OptionCard
+                      key={option.id || idx}
+                      option={option}
+                      index={idx}
+                      isSelected={isOptSelected}
+                      onSelect={() => setSelectedOptionId(option.id)}
+                      disabled={isSubmitting || evaluationResult !== null}
+                      evaluationState={evalState}
+                    />
+                  );
+                })}
               </div>
 
               {/* Submission Action Bar */}

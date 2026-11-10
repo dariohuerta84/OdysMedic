@@ -19,7 +19,7 @@ export type AptitudeStatus = 'apto' | 'en_nivelacion' | 'no_apto';
 
 export type DiagnosticExamMode = 'general' | 'specialty';
 
-export type OnboardingTrack = 'ruta' | 'desde_cero';
+export type OnboardingTrack = 'ruta';
 
 export interface User {
   id: number | string;
@@ -203,9 +203,11 @@ export interface SpacedRepetitionItem {
   case_id: string;
   case_title: string;
   specialty_name: string;
+  specialty?: string;
   cycle: 'D7' | 'D21';
   scheduled_date: string;
   is_overdue: boolean;
+  priority?: 'urgent' | 'high' | 'normal';
   id?: number;
   gap_type?: string;
   scheduled_for?: string;

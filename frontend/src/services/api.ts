@@ -330,11 +330,31 @@ export const levelingApi = {
     const response = await api.get<any>('/leveling/dashboard');
     const d = response.data;
 
+    const rawRadar = d.cognitive_gap_radar || {};
+    const fallbackAnchor =
+      typeof d.diagnostic_score === 'number'
+        ? Math.max(8, Math.round(d.diagnostic_score))
+        : typeof d.ocri_score === 'number'
+          ? Math.max(8, Math.round(d.ocri_score))
+          : 50;
+
     const radarGaps: Record<CognitiveGapTag, number> = {
-      GAP_TRIAGE_SEVERITY: 85,
-      GAP_DIAGNOSTIC_REASONING: 78,
-      GAP_LAB_INTERPRETATION: 82,
-      GAP_INITIAL_MANAGEMENT: 70,
+      GAP_TRIAGE_SEVERITY:
+        typeof rawRadar.GAP_TRIAGE_SEVERITY === 'number'
+          ? rawRadar.GAP_TRIAGE_SEVERITY
+          : fallbackAnchor,
+      GAP_DIAGNOSTIC_REASONING:
+        typeof rawRadar.GAP_DIAGNOSTIC_REASONING === 'number'
+          ? rawRadar.GAP_DIAGNOSTIC_REASONING
+          : fallbackAnchor,
+      GAP_LAB_INTERPRETATION:
+        typeof rawRadar.GAP_LAB_INTERPRETATION === 'number'
+          ? rawRadar.GAP_LAB_INTERPRETATION
+          : fallbackAnchor,
+      GAP_INITIAL_MANAGEMENT:
+        typeof rawRadar.GAP_INITIAL_MANAGEMENT === 'number'
+          ? rawRadar.GAP_INITIAL_MANAGEMENT
+          : fallbackAnchor,
     };
 
     const specialtyMasteries: SpecialtyMastery[] = [];
@@ -361,13 +381,18 @@ export const levelingApi = {
       []
     ).map((t: any) => ({
       case_id: t.case_id,
-      case_title: `Revision: ${t.case_id}`,
-      specialty_name: t.gap_type || 'General',
-      cycle: t.repetition_cycle || 'D7',
+      case_title: t.case_title || `Estacion Clinica (${t.case_id})`,
+      specialty_name: t.specialty_name || 'Medicina Interna',
+      specialty: t.specialty || 'medicina_interna',
+      cycle: t.repetition_cycle === 'D21' ? 'D21' : 'D7',
       scheduled_date: t.scheduled_for || new Date().toISOString(),
-      is_overdue: t.scheduled_for
-        ? new Date(t.scheduled_for) < new Date()
-        : false,
+      is_overdue:
+        typeof t.is_overdue === 'boolean'
+          ? t.is_overdue
+          : t.scheduled_for
+            ? new Date(t.scheduled_for) <= new Date()
+            : false,
+      priority: t.priority || 'normal',
       id: t.id,
       gap_type: t.gap_type,
       scheduled_for: t.scheduled_for,

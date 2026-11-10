@@ -26,6 +26,7 @@ import { CompetencyRadar } from '../components/dashboard/CompetencyRadar';
 import { BentoStats } from '../components/dashboard/BentoStats';
 import { SpecialtyCard } from '../components/dashboard/SpecialtyCard';
 import { SpacedRepetitionQueue } from '../components/dashboard/SpacedRepetitionQueue';
+import { useAnimatedNumber } from '../hooks/useAnimatedNumber';
 
 export interface DashboardPageProps {
   onSelectSpecialty: (specialtyId: string) => void;
@@ -35,10 +36,10 @@ export interface DashboardPageProps {
 }
 
 const DEFAULT_RADAR_SCORES: Record<CognitiveGapTag, number> = {
-  GAP_TRIAGE_SEVERITY: 75,
-  GAP_DIAGNOSTIC_REASONING: 70,
-  GAP_LAB_INTERPRETATION: 75,
-  GAP_INITIAL_MANAGEMENT: 68,
+  GAP_TRIAGE_SEVERITY: 50,
+  GAP_DIAGNOSTIC_REASONING: 50,
+  GAP_LAB_INTERPRETATION: 50,
+  GAP_INITIAL_MANAGEMENT: 50,
 };
 
 const DEFAULT_SPECIALTIES: Specialty[] = [
@@ -79,7 +80,7 @@ const DEFAULT_SPECIALTIES: Specialty[] = [
     case_count: 6,
   },
   {
-    id: 'ginecologia',
+    id: 'ginecologia_obstetricia',
     name: 'Ginecologia y Obstetricia',
     description:
       'Trastornos hipertensivos del embarazo, hemorragia obstetrica mayor, enfermedad trofoblastica y sepsis materna.',
@@ -100,13 +101,45 @@ const WORLD_LABELS: Record<string, string> = {
   medicina_interna: 'Medicina Interna',
   pediatria: 'Pediatria',
   ginecologia_obstetricia: 'Gineco-Obstetricia',
+  ginecologia: 'Gineco-Obstetricia',
   cirugia_general: 'Cirugia General',
   medicina_familiar: 'Medicina Familiar',
   nefrologia: 'Nefrologia',
   endocrinologia: 'Endocrinologia',
   neurologia: 'Neurologia',
   reumatologia: 'Reumatologia',
+  oftalmologia: 'Oftalmologia',
 };
+
+function getRouteScoreColor(score: number): {
+  strokeHex: string;
+  textClass: string;
+  bgTintClass: string;
+  borderTintClass: string;
+} {
+  if (score < 50) {
+    return {
+      strokeHex: '#C6383E',
+      textClass: 'text-[#B6222A]',
+      bgTintClass: 'bg-[#FFF9F9]',
+      borderTintClass: 'border-[#EBCACA]',
+    };
+  }
+  if (score < 75) {
+    return {
+      strokeHex: '#B67F1E',
+      textClass: 'text-[#9A6B1F]',
+      bgTintClass: 'bg-[#FDFBF5]',
+      borderTintClass: 'border-[#EAD8B1]',
+    };
+  }
+  return {
+    strokeHex: '#0E6F65',
+    textClass: 'text-[#0E6F65]',
+    bgTintClass: 'bg-[#F7FAF9]',
+    borderTintClass: 'border-[#DCEAE6]',
+  };
+}
 
 export const DashboardPage: React.FC<DashboardPageProps> = ({
   onSelectSpecialty,
@@ -161,16 +194,6 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   const aptitudeStatus =
     dashboard?.aptitude_status ?? user?.aptitude_status ?? null;
 
-  const aptitudeLabel =
-    dashboard?.aptitude_label ??
-    (aptitudeStatus === 'apto'
-      ? 'Apto para su etapa clinica'
-      : aptitudeStatus === 'en_nivelacion'
-        ? 'En nivelacion guiada (Apto condicional)'
-        : aptitudeStatus === 'no_apto'
-          ? 'Refuerzo prioritario recomendado'
-          : 'Pendiente de evaluacion inicial');
-
   const radarScores: Record<CognitiveGapTag, number> =
     dashboard?.cognitive_gap_radar || DEFAULT_RADAR_SCORES;
 
@@ -197,25 +220,55 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
       : [];
 
   const masteriesMap = new Map<string, SpecialtyMastery>();
+  let totalCompletedCases = 0;
   masteriesList.forEach((m) => {
-    masteriesMap.set(m.specialty_id.toLowerCase(), m);
+    const normKey = m.specialty_id.toLowerCase();
+    masteriesMap.set(normKey, m);
+    if (normKey === 'ginecologia_obstetricia') {
+      masteriesMap.set('ginecologia', m);
+    }
+    totalCompletedCases += m.cases_completed || 0;
   });
 
-  const gapEntries = Object.entries(radarScores) as [CognitiveGapTag, number][];
-  const strongestGap = gapEntries.reduce(
-    (prev, curr) => (curr[1] > prev[1] ? curr : prev),
-    gapEntries[0]
-  );
-  const weakestGap = gapEntries.reduce(
-    (prev, curr) => (curr[1] < prev[1] ? curr : prev),
-    gapEntries[0]
-  );
+  // Dynamic route percentage: reflects diagnostic baseline initially and adapts as stations are practiced
+  const rawRouteScore = !isDiagnosticCompleted
+    ? 0
+    : totalCompletedCases > 0 && typeof dashboard?.ocri_score === 'number'
+      ? Math.round(
+          0.45 * (diagnosticScore ?? dashboard.ocri_score) +
+            0.55 * dashboard.ocri_score
+        )
+      : Math.round(diagnosticScore ?? dashboard?.ocri_score ?? 0);
+
+  const animatedRouteScore = Math.round(useAnimatedNumber(rawRouteScore, 900));
+  const routeTone = getRouteScoreColor(rawRouteScore);
+
+  const effectiveAptitudeLabel =
+    rawRouteScore >= 75
+      ? 'Apto para tu etapa clinica'
+      : rawRouteScore >= 50
+        ? 'En nivelacion guiada (Apto condicional)'
+        : 'No Apto · Nivelacion prioritaria requerida';
+
+  // Sort gaps from weakest to strongest so low scores honestly display multiple gaps
+  const sortedGapEntries = (
+    Object.entries(radarScores) as [CognitiveGapTag, number][]
+  ).sort((a, b) => a[1] - b[1]);
+
+  const weakestGap = sortedGapEntries[0];
+  const secondWeakestGap = sortedGapEntries[1] || sortedGapEntries[0];
+  const strongestGap = sortedGapEntries[sortedGapEntries.length - 1];
+  const hasConsolidatedPillar = strongestGap[1] >= 65;
 
   const firstName = (user?.full_name || 'Estudiante')
     .replace(/^Dr\.?\s+/i, '')
     .split(' ')[0];
   const activeWorldKey =
-    user?.diagnostic_specialty || user?.initial_world || 'medicina_interna';
+    dashboard?.diagnostic_specialty ||
+    user?.diagnostic_specialty ||
+    dashboard?.initial_world ||
+    user?.initial_world ||
+    'medicina_interna';
   const activeWorldLabel =
     WORLD_LABELS[activeWorldKey] || 'Medicina Interna';
   const academicSubtitle = [
@@ -234,10 +287,28 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     onSelectSpecialty(specialtyId);
   };
 
+  const handlePrimaryRouteAction = () => {
+    if (!isDiagnosticCompleted) {
+      onStartDiagnostic?.();
+      return;
+    }
+    if (spacedItems.length > 0) {
+      onSelectCase(spacedItems[0].case_id);
+      return;
+    }
+    onSelectSpecialty(activeWorldKey);
+  };
+
+  const circleRadius = 26;
+  const circleCircumference = 2 * Math.PI * circleRadius;
+  const circleOffset =
+    circleCircumference -
+    (Math.min(100, Math.max(4, animatedRouteScore)) / 100) * circleCircumference;
+
   return (
     <div className={`space-y-8 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 ${className}`}>
-      {/* 1. Classic Editorial Welcome & Tu Ruta Clinica Summary (No Sincronizar button) */}
-      <section className="rounded-3xl bg-white border border-[#DCE5E3] p-6 sm:p-8 lg:p-10 space-y-7">
+      {/* 1. Classic Editorial Welcome & Tu Ruta Clinica Summary */}
+      <section className="rounded-3xl bg-white border border-[#DCE5E3] p-6 sm:p-8 lg:p-10 space-y-7 animate-fade-in-up">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-[#EDF2F0]">
           <div className="space-y-2">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#0E6F65]">
@@ -256,17 +327,25 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             {isDiagnosticCompleted ? (
               <button
                 type="button"
-                onClick={() => onSelectSpecialty('nefrologia')}
-                className="px-6 py-3 rounded-full bg-[#0E6F65] hover:bg-[#0A564E] text-white text-xs sm:text-sm font-medium flex items-center gap-2 transition-colors shadow-xs"
+                onClick={handlePrimaryRouteAction}
+                className={`group px-6 py-3 rounded-full text-white text-xs sm:text-sm font-medium flex items-center gap-2 transition-all duration-200 shadow-xs ${
+                  rawRouteScore < 50
+                    ? 'bg-[#B6222A] hover:bg-[#931B22]'
+                    : 'bg-[#0E6F65] hover:bg-[#0A564E]'
+                }`}
               >
-                <span>Comenzar siguiente estacion</span>
-                <ArrowRight className="w-4 h-4" />
+                <span>
+                  {spacedItems.length > 0 && rawRouteScore < 50
+                    ? 'Reforzar estacion prioritaria'
+                    : 'Comenzar siguiente estacion'}
+                </span>
+                <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
               </button>
             ) : (
               <button
                 type="button"
                 onClick={onStartDiagnostic}
-                className="px-6 py-3 rounded-full bg-[#0E6F65] hover:bg-[#0A564E] text-white text-xs sm:text-sm font-medium flex items-center gap-2 transition-colors shadow-xs"
+                className="group px-6 py-3 rounded-full bg-[#0E6F65] hover:bg-[#0A564E] text-white text-xs sm:text-sm font-medium flex items-center gap-2 transition-all duration-200 shadow-xs"
               >
                 <ClipboardCheck className="w-4 h-4" />
                 <span>Rendir evaluacion diagnostica inicial</span>
@@ -300,26 +379,54 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             <button
               type="button"
               onClick={onStartDiagnostic}
-              className="px-6 py-3 rounded-full bg-[#0E6F65] hover:bg-[#0A564E] text-white font-medium text-xs sm:text-sm flex items-center justify-center gap-2 shrink-0 transition-colors"
+              className="group px-6 py-3 rounded-full bg-[#0E6F65] hover:bg-[#0A564E] text-white font-medium text-xs sm:text-sm flex items-center justify-center gap-2 shrink-0 transition-all duration-200"
             >
               <span>Elegir modalidad de evaluacion</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
             </button>
           </div>
         ) : (
           <div className="space-y-6">
-            {/* Top summary row: Global performance + Active world + Aptitude status */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 sm:p-5 rounded-2xl bg-[#F7FAF9] border border-[#E2ECE9]">
+            {/* Top summary row: Animated SVG Score Ring (Red / Amber / Teal) + Active world + Modality */}
+            <div
+              className={`grid grid-cols-1 md:grid-cols-3 gap-4 p-4 sm:p-5 rounded-2xl border transition-colors duration-300 ${routeTone.bgTintClass} ${routeTone.borderTintClass}`}
+            >
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-full border-4 border-[#0E6F65] bg-white flex items-center justify-center shrink-0">
-                  <span className="font-serif text-base font-bold text-[#0B252E]">
-                    {diagnosticScore ?? 0}%
+                <div className="relative w-16 h-16 flex items-center justify-center shrink-0">
+                  <svg className="w-16 h-16 -rotate-90" viewBox="0 0 64 64">
+                    <circle
+                      cx="32"
+                      cy="32"
+                      r={circleRadius}
+                      fill="#FFFFFF"
+                      stroke="#EAECEB"
+                      strokeWidth="5"
+                    />
+                    <circle
+                      cx="32"
+                      cy="32"
+                      r={circleRadius}
+                      fill="none"
+                      stroke={routeTone.strokeHex}
+                      strokeWidth="5"
+                      strokeLinecap="round"
+                      strokeDasharray={circleCircumference}
+                      strokeDashoffset={circleOffset}
+                      className="transition-all duration-500 ease-out"
+                    />
+                  </svg>
+                  <span
+                    className={`absolute font-serif text-base font-bold ${routeTone.textClass}`}
+                  >
+                    {animatedRouteScore}%
                   </span>
                 </div>
                 <div>
-                  <span className="text-xs text-[#6B7D83] block">Rendimiento evaluado</span>
-                  <span className="font-serif text-base font-semibold text-[#0B252E]">
-                    {aptitudeLabel}
+                  <span className="text-xs text-[#6B7D83] block">
+                    Rendimiento de tu ruta
+                  </span>
+                  <span className={`font-serif text-base font-semibold ${routeTone.textClass}`}>
+                    {effectiveAptitudeLabel}
                   </span>
                 </div>
               </div>
@@ -337,17 +444,19 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               </div>
 
               <div className="flex items-center gap-3.5 md:border-l md:border-[#DCE5E3] md:pl-5">
-                <div className="w-10 h-10 rounded-xl bg-white border border-[#DCE5E3] flex items-center justify-center text-[#0E6F65] shrink-0">
-                  {aptitudeStatus === 'apto' ? (
+                <div className="w-10 h-10 rounded-xl bg-white border border-[#DCE5E3] flex items-center justify-center shrink-0">
+                  {rawRouteScore >= 75 ? (
                     <ShieldCheck className="w-5 h-5 text-[#0E6F65]" />
+                  ) : rawRouteScore >= 50 ? (
+                    <Brain className="w-5 h-5 text-[#9A6B1F]" />
                   ) : (
-                    <Brain className="w-5 h-5 text-[#8A6116]" />
+                    <AlertTriangle className="w-5 h-5 text-[#B6222A]" />
                   )}
                 </div>
                 <div>
                   <span className="text-xs text-[#6B7D83] block">Modalidad diagnostica</span>
                   <span className="font-serif text-base font-semibold text-[#0B252E]">
-                    {user?.diagnostic_mode === 'specialty'
+                    {(dashboard?.diagnostic_mode || user?.diagnostic_mode) === 'specialty'
                       ? 'Especialidad focalizada'
                       : 'Examen General'}
                   </span>
@@ -355,50 +464,91 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               </div>
             </div>
 
-            {/* 3 Classic Pastel Diagnostic Route Cards (Matching Reference Aesthetic) */}
+            {/* 3 Honest Adaptive Diagnostic Route Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {/* Pastel Rose: Brecha detectada */}
-              <div className="p-5 rounded-2xl bg-[#FBF1F1] border border-[#EED7D7] space-y-2">
-                <div className="flex items-center gap-2 text-xs font-semibold text-[#9E3F42]">
-                  <AlertTriangle className="w-4 h-4 shrink-0" />
-                  <span>Brecha prioritaria</span>
+              {/* Card 1: Brecha prioritaria */}
+              <div className="p-5 rounded-2xl bg-[#FBF1F1] border border-[#EED7D7] editorial-card-lift space-y-2">
+                <div className="flex items-center justify-between gap-2 text-xs font-semibold text-[#B6222A]">
+                  <span className="inline-flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 shrink-0" />
+                    <span>Brecha prioritaria</span>
+                  </span>
+                  <span className="font-serif text-sm font-bold">{weakestGap[1]}%</span>
                 </div>
                 <h3 className="font-serif text-lg font-semibold text-[#0B252E]">
                   {GAP_LABELS[weakestGap[0]]}
                 </h3>
                 <p className="text-xs text-[#4A5D64] leading-relaxed">
-                  Oportunidad detectada para reforzar la toma de decisiones estructurada sin presion
-                  de tiempo.
+                  {weakestGap[1] < 50
+                    ? 'Requiere refuerzo inmediato en tu ruta para asegurar decisiones seguras desde el ingreso.'
+                    : 'Oportunidad puntual para afinar la toma de decisiones clinicas estructuradas.'}
                 </p>
               </div>
 
-              {/* Pastel Cream: Fortaleza / Enfoque */}
-              <div className="p-5 rounded-2xl bg-[#FDF7E7] border border-[#EFE0B9] space-y-2">
-                <div className="flex items-center gap-2 text-xs font-semibold text-[#8A6116]">
-                  <Brain className="w-4 h-4 shrink-0" />
-                  <span>Pilar consolidado</span>
+              {/* Card 2: Honest Second Gap (if low score) OR Consolidated Pillar (if >= 65%) */}
+              {hasConsolidatedPillar ? (
+                <div className="p-5 rounded-2xl bg-[#ECF6F4] border border-[#CFE7E2] editorial-card-lift space-y-2">
+                  <div className="flex items-center justify-between gap-2 text-xs font-semibold text-[#0E6F65]">
+                    <span className="inline-flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 shrink-0" />
+                      <span>Pilar consolidado</span>
+                    </span>
+                    <span className="font-serif text-sm font-bold">{strongestGap[1]}%</span>
+                  </div>
+                  <h3 className="font-serif text-lg font-semibold text-[#0B252E]">
+                    {GAP_LABELS[strongestGap[0]]}
+                  </h3>
+                  <p className="text-xs text-[#4A5D64] leading-relaxed">
+                    Demuestras criterio consistente al integrar hallazgos semiologicos con la conducta clinica.
+                  </p>
                 </div>
-                <h3 className="font-serif text-lg font-semibold text-[#0B252E]">
-                  {GAP_LABELS[strongestGap[0]]}
-                </h3>
-                <p className="text-xs text-[#4A5D64] leading-relaxed">
-                  Demuestras criterio consistente al integrar hallazgos semiologicos con la conducta
-                  clinica.
-                </p>
-              </div>
+              ) : (
+                <div className="p-5 rounded-2xl bg-[#FDF7E7] border border-[#EFE0B9] editorial-card-lift space-y-2">
+                  <div className="flex items-center justify-between gap-2 text-xs font-semibold text-[#9A6B1F]">
+                    <span className="inline-flex items-center gap-2">
+                      <Brain className="w-4 h-4 shrink-0" />
+                      <span>Segunda area por nivelar</span>
+                    </span>
+                    <span className="font-serif text-sm font-bold">{secondWeakestGap[1]}%</span>
+                  </div>
+                  <h3 className="font-serif text-lg font-semibold text-[#0B252E]">
+                    {GAP_LABELS[secondWeakestGap[0]]}
+                  </h3>
+                  <p className="text-xs text-[#4A5D64] leading-relaxed">
+                    Tu desempeno inicial muestra margen amplio de crecimiento. Hemos ajustado la dificultad a Nivel 1 fundacional.
+                  </p>
+                </div>
+              )}
 
-              {/* Pastel Sage: Siguiente paso */}
-              <div className="p-5 rounded-2xl bg-[#ECF6F4] border border-[#CFE7E2] space-y-2">
-                <div className="flex items-center gap-2 text-xs font-semibold text-[#0E6F65]">
-                  <Target className="w-4 h-4 shrink-0" />
-                  <span>Siguiente paso sugerido</span>
+              {/* Card 3: Adaptive Next Step */}
+              <div
+                onClick={handlePrimaryRouteAction}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handlePrimaryRouteAction();
+                  }
+                }}
+                className="p-5 rounded-2xl bg-[#F2F7F6] border border-[#D5E5E1] hover:border-[#0E6F65] cursor-pointer editorial-card-lift space-y-2"
+              >
+                <div className="flex items-center justify-between gap-2 text-xs font-semibold text-[#0E6F65]">
+                  <span className="inline-flex items-center gap-2">
+                    <Target className="w-4 h-4 shrink-0" />
+                    <span>Siguiente paso sugerido</span>
+                  </span>
+                  <ArrowRight className="w-4 h-4" />
                 </div>
                 <h3 className="font-serif text-lg font-semibold text-[#0B252E]">
-                  Microaprendizaje + estacion
+                  {spacedItems.length > 0
+                    ? `Resolver repaso prioritario (${spacedItems.length})`
+                    : 'Microaprendizaje + estacion'}
                 </h3>
                 <p className="text-xs text-[#4A5D64] leading-relaxed">
-                  Revisa la ficha semiologica clave y practica una nueva estacion adaptativa en tu
-                  ruta.
+                  {spacedItems.length > 0
+                    ? `Practica "${spacedItems[0].case_title}" para elevar tus indicadores en tiempo real.`
+                    : 'Revisa la ficha semiologica clave y practica una nueva estacion adaptativa en tu ruta.'}
                 </p>
               </div>
             </div>
@@ -409,18 +559,22 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 { label: 'Evaluacion', icon: ClipboardCheck, active: true },
                 { label: 'Brecha', icon: AlertTriangle, active: true },
                 { label: 'Feedback', icon: CheckCircle2, active: true },
-                { label: 'Aprendizaje', icon: BookOpen, active: false },
-                { label: 'Practica', icon: Stethoscope, active: false },
-                { label: 'Reevaluacion', icon: BarChart3, active: false },
+                { label: 'Aprendizaje', icon: BookOpen, active: spacedItems.length > 0 || totalCompletedCases > 0 },
+                { label: 'Practica', icon: Stethoscope, active: totalCompletedCases > 0 },
+                { label: 'Reevaluacion', icon: BarChart3, active: totalCompletedCases >= 3 },
               ].map((step) => {
                 const StepIcon = step.icon;
                 return (
                   <div
                     key={step.label}
-                    className="flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-[#FDFCFA] border border-[#EDF2F0]"
+                    className={`flex flex-col items-center gap-1.5 p-2.5 rounded-2xl border transition-colors ${
+                      step.active
+                        ? 'bg-[#F7FAF9] border-[#CFE7E2]'
+                        : 'bg-[#FDFCFA] border-[#EDF2F0]'
+                    }`}
                   >
                     <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                      className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
                         step.active
                           ? 'bg-[#0E6F65] text-white'
                           : 'bg-[#F2F7F6] text-[#4A5D64]'
@@ -448,10 +602,11 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           pendingReviewsCount={spacedItems.length}
           stageName={user?.academic_year || user?.stage}
           isDiagnosticCompleted={isDiagnosticCompleted}
+          overallScore={rawRouteScore}
         />
       </section>
 
-      {/* 3. Two-Column Section: Competency Radar (Only shown when calibrated) + Spaced Repetition */}
+      {/* 3. Two-Column Section: Animated Red-to-Teal Competency Radar + Adaptive Spaced Repetition */}
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
         <div className="rounded-3xl bg-white border border-[#DCE5E3] p-6 flex flex-col justify-between">
           <div className="flex items-center justify-between pb-4 border-b border-[#EDF2F0] mb-4">
@@ -466,16 +621,20 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
             <div className="text-right">
               <span className="text-[11px] text-[#6B7D83] block">
-                Estado
+                Estado actual
               </span>
-              <span className="font-serif text-base font-semibold text-[#0E6F65]">
-                {isDiagnosticCompleted ? `${diagnosticScore ?? 0}% basal` : 'Sin evaluar'}
+              <span
+                className={`font-serif text-base font-semibold ${
+                  !isDiagnosticCompleted ? 'text-[#6B7D83]' : routeTone.textClass
+                }`}
+              >
+                {isDiagnosticCompleted ? `${animatedRouteScore}% global` : 'Sin evaluar'}
               </span>
             </div>
           </div>
 
           {isDiagnosticCompleted ? (
-            <div className="py-2">
+            <div className="py-1">
               <CompetencyRadar scores={radarScores} size={350} />
             </div>
           ) : (
@@ -507,6 +666,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         <SpacedRepetitionQueue
           items={spacedItems}
           onReview={onSelectCase}
+          overallScore={rawRouteScore}
+          aptitudeStatus={aptitudeStatus}
+          isDiagnosticCompleted={isDiagnosticCompleted}
+          onStartDiagnostic={onStartDiagnostic}
           className="h-full"
         />
       </section>

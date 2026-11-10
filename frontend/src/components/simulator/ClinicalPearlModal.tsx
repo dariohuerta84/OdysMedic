@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import {
   AlertCircle,
-  CheckCircle2,
   Lightbulb,
   BookOpen,
   ExternalLink,
@@ -16,6 +15,7 @@ import {
 } from 'lucide-react';
 import type { CognitiveGapTag, MCQEvaluationResult } from '../../types/api';
 import { CognitiveGapBadge } from '../common/CognitiveGapBadge';
+import { useAnimatedNumber } from '../../hooks/useAnimatedNumber';
 
 export interface ClinicalPearlModalProps {
   isOpen: boolean;
@@ -67,6 +67,13 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
   onNextStation,
   onFinishCase,
 }) => {
+  const isCorrect = result.is_correct;
+  const xpEarned =
+    result.xp_earned ??
+    result.points_earned ??
+    (isCorrect ? 25 : 5);
+  const animatedXp = Math.round(useAnimatedNumber(isOpen ? xpEarned : 0, 700, 0));
+
   useEffect(() => {
     if (!isOpen) return;
 
@@ -89,12 +96,6 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
   if (!isOpen || typeof document === 'undefined') {
     return null;
   }
-
-  const isCorrect = result.is_correct;
-  const xpEarned =
-    result.xp_earned ??
-    result.points_earned ??
-    (isCorrect ? 25 : 5);
 
   const identifiedGap = (result.gap_tag || result.associated_gap || null) as CognitiveGapTag | null;
 
@@ -137,41 +138,97 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
           onClose();
         }
       }}
-      className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5 bg-[#0B252E]/55 backdrop-blur-[2px]"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5 bg-[#0B252E]/55 backdrop-blur-[2px] animate-fade-in"
     >
-      <div className="relative w-full max-w-2xl max-h-[86dvh] flex flex-col overflow-hidden rounded-3xl bg-[#FDFCFA] border border-[#DCE5E3] shadow-2xl text-left animate-scale-in">
-        {/* 1. Pinned Status Header (Always visible on any screen size) */}
+      <div
+        className={`relative w-full max-w-2xl max-h-[86dvh] flex flex-col overflow-hidden rounded-3xl bg-[#FDFCFA] border shadow-2xl text-left ${
+          isCorrect
+            ? 'border-[#BFE0D9] animate-correct-pop'
+            : 'border-[#E8C5C6] animate-clinical-shake'
+        }`}
+      >
+        {/* 1. Pinned Status Header with Distinct Acierto / Error Animations */}
         <header
-          className={`shrink-0 px-5 py-4 sm:px-6 sm:py-5 border-b ${
+          className={`relative overflow-hidden shrink-0 px-5 py-4 sm:px-6 sm:py-5 border-b ${
             isCorrect
-              ? 'bg-[#ECF6F4] border-[#CFE7E2]'
-              : 'bg-[#FBF1F1] border-[#EED7D7]'
+              ? 'bg-gradient-to-r from-[#E6F5F1] via-[#ECF6F4] to-[#F4FAF8] border-[#CFE7E2]'
+              : 'bg-gradient-to-r from-[#FDECEC] via-[#FBF1F1] to-[#FDF6F6] border-[#EED7D7]'
           }`}
         >
-          <div className="flex items-start justify-between gap-4">
+          {/* Subtle Classic Celebratory Rising Particles on Correct Outcome */}
+          {isCorrect && (
+            <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+              <span
+                className="absolute left-12 top-8 w-2 h-2 rounded-full bg-[#0E6F65]/40 animate-float-spark"
+                style={{ animationDelay: '60ms' }}
+              />
+              <span
+                className="absolute left-24 top-10 w-1.5 h-1.5 rounded-full bg-[#C9A96E]/65 animate-float-spark"
+                style={{ animationDelay: '180ms' }}
+              />
+              <span
+                className="absolute right-28 top-9 w-2 h-2 rounded-full bg-[#0E6F65]/35 animate-float-spark"
+                style={{ animationDelay: '120ms' }}
+              />
+              <span
+                className="absolute right-16 top-11 w-1.5 h-1.5 rounded-full bg-[#C9A96E]/60 animate-float-spark"
+                style={{ animationDelay: '260ms' }}
+              />
+            </div>
+          )}
+
+          <div className="relative flex items-start justify-between gap-4">
             <div className="flex items-start gap-3.5 min-w-0">
-              <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${
-                  isCorrect
-                    ? 'bg-white text-[#0E6F65] border border-[#CFE7E2]'
-                    : 'bg-white text-[#9E3F42] border border-[#EED7D7]'
-                }`}
-              >
-                {isCorrect ? (
-                  <CheckCircle2 className="w-5 h-5" />
-                ) : (
-                  <AlertCircle className="w-5 h-5" />
-                )}
+              {/* Animated Outcome Medallion */}
+              <div className="relative shrink-0 mt-0.5">
+                <span
+                  aria-hidden="true"
+                  className={`absolute inset-0 rounded-full animate-ring-expand pointer-events-none ${
+                    isCorrect ? 'bg-[#0E6F65]/35' : 'bg-[#C6383E]/35'
+                  }`}
+                />
+                <div
+                  className={`relative w-11 h-11 rounded-full flex items-center justify-center ${
+                    isCorrect
+                      ? 'bg-white text-[#0E6F65] border-2 border-[#0E6F65]/40 shadow-2xs'
+                      : 'bg-white text-[#B6222A] border-2 border-[#C6383E]/40 shadow-2xs'
+                  }`}
+                >
+                  {isCorrect ? (
+                    <svg
+                      className="w-5 h-5 text-[#0E6F65]"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M5 13l4 4L19 7" className="animate-check-draw" />
+                    </svg>
+                  ) : (
+                    <AlertCircle className="w-5 h-5" />
+                  )}
+                </div>
               </div>
 
               <div className="min-w-0 space-y-1">
                 <div className="flex flex-wrap items-center gap-2">
                   <span
                     className={`text-[11px] font-sans font-semibold uppercase tracking-[0.14em] ${
-                      isCorrect ? 'text-[#0E6F65]' : 'text-[#9E3F42]'
+                      isCorrect ? 'text-[#0E6F65]' : 'text-[#B6222A]'
                     }`}
                   >
-                    Estacion {stationNumber} de {totalStations} · +{xpEarned} XP
+                    Estacion {stationNumber} de {totalStations}
+                  </span>
+                  <span
+                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${
+                      isCorrect
+                        ? 'bg-white/90 border-[#BFE0D9] text-[#0E6F65]'
+                        : 'bg-white/90 border-[#EBCACA] text-[#B6222A]'
+                    }`}
+                  >
+                    +{animatedXp} XP
                   </span>
                 </div>
 
@@ -181,13 +238,13 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
                 >
                   {isCorrect
                     ? 'Decision clinica acertada'
-                    : 'Oportunidad de refuerzo clinico'}
+                    : 'Brecha detectada · Oportunidad de refuerzo'}
                 </h2>
 
                 <p className="text-xs sm:text-sm text-[#4A5D64] leading-relaxed font-sans">
                   {isCorrect
                     ? 'Conducta alineada con las recomendaciones de practica clinica y la correlacion fisiopatologica.'
-                    : 'Revisemos con calma el razonamiento fisiopatologico para consolidar esta estacion.'}
+                    : 'Revisemos con calma el razonamiento fisiopatologico para consolidar esta estacion en tu ruta.'}
                 </p>
               </div>
             </div>
@@ -196,16 +253,16 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
               type="button"
               onClick={onClose}
               aria-label="Cerrar retroalimentacion"
-              className="shrink-0 p-2 rounded-full bg-white/80 hover:bg-white text-[#4A5D64] hover:text-[#0B252E] border border-[#DCE5E3] transition-colors"
+              className="shrink-0 p-2 rounded-full bg-white/85 hover:bg-white text-[#4A5D64] hover:text-[#0B252E] border border-[#DCE5E3] transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
           </div>
 
           {!isCorrect && identifiedGap && (
-            <div className="mt-3 pt-3 border-t border-[#EED7D7]/80 flex flex-wrap items-center gap-2">
-              <span className="text-[11px] font-sans font-medium text-[#8E3B3E]">
-                Area detectada:
+            <div className="mt-3 pt-3 border-t border-[#EED7D7]/80 flex flex-wrap items-center gap-2 animate-fade-in-up stagger-1">
+              <span className="text-[11px] font-sans font-semibold text-[#8E3B3E]">
+                Area detectada para nivelacion:
               </span>
               <CognitiveGapBadge
                 gapTag={identifiedGap}
@@ -216,14 +273,18 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
           )}
         </header>
 
-        {/* 2. Scrollable Middle Body */}
+        {/* 2. Scrollable Middle Body with Staggered Editorial Reveal */}
         <div className="flex-1 overflow-y-auto px-5 py-4 sm:px-6 sm:py-5 space-y-4">
           {/* Cognitive Reasoning Analysis */}
           <section
             aria-label="Analisis del razonamiento clinico"
-            className="p-4 rounded-2xl bg-white border border-[#E7EEEC] space-y-1.5"
+            className="p-4 rounded-2xl bg-white border border-[#E7EEEC] space-y-1.5 animate-fade-in-up stagger-1"
           >
-            <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.14em] font-semibold text-[#0E6F65]">
+            <div
+              className={`flex items-center gap-2 text-[11px] uppercase tracking-[0.14em] font-semibold ${
+                isCorrect ? 'text-[#0E6F65]' : 'text-[#B6222A]'
+              }`}
+            >
               <Brain className="w-4 h-4 shrink-0" />
               <span>
                 {isCorrect
@@ -239,7 +300,7 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
           {/* Actionable Clinical Pearl */}
           <section
             aria-label="Perla clinica"
-            className="p-4 rounded-2xl bg-[#F2F7F6] border border-[#DCE5E3] space-y-1.5"
+            className="p-4 rounded-2xl bg-[#F2F7F6] border border-[#DCE5E3] space-y-1.5 animate-fade-in-up stagger-2"
           >
             <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.14em] font-semibold text-[#0E6F65]">
               <Lightbulb className="w-4 h-4 shrink-0" />
@@ -253,7 +314,7 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
           {/* Evidence Citation */}
           <section
             aria-label="Referencia bibliografica"
-            className="p-4 rounded-2xl bg-white border border-[#E7EEEC] space-y-2"
+            className="p-4 rounded-2xl bg-white border border-[#E7EEEC] space-y-2 animate-fade-in-up stagger-3"
           >
             <div className="flex items-center justify-between flex-wrap gap-2">
               <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.14em] font-semibold text-[#4A5D64]">
@@ -295,18 +356,26 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
           {/* Adaptive Route Update */}
           <section
             aria-label="Actualizacion de ruta clinica"
-            className="px-4 py-3 rounded-2xl bg-[#FDF7E7]/70 border border-[#EFE0B9] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
+            className={`px-4 py-3 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs animate-fade-in-up stagger-4 ${
+              isCorrect
+                ? 'bg-[#ECF6F4]/75 border-[#CFE7E2]'
+                : 'bg-[#FDF7E7]/80 border-[#EFE0B9]'
+            }`}
           >
             <div className="flex items-center gap-2.5 text-[#0B252E]">
-              <FileCheck2 className="w-4 h-4 text-[#8A6116] shrink-0" />
+              <FileCheck2
+                className={`w-4 h-4 shrink-0 ${
+                  isCorrect ? 'text-[#0E6F65]' : 'text-[#8A6116]'
+                }`}
+              />
               <div>
                 <span className="text-[#6B7D83] block text-[11px]">
-                  Seguimiento adaptativo
+                  Adaptacion automatica de tu ruta
                 </span>
                 <span className="font-medium">
                   {prescription.spaced_repetition_scheduled
-                    ? `Repaso espaciado ${prescription.next_review_interval || 'D7'} programado en tu ruta`
-                    : 'Dominio de estacion acreditado en tu ruta'}
+                    ? `Estacion agendada en Repasos Espaciados (${prescription.next_review_interval || 'D7'})`
+                    : 'Dominio acreditado · Repaso pendiente marcado como superado'}
                 </span>
               </div>
             </div>
@@ -320,12 +389,12 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
               </div>
 
               <div>
-                <span className="text-[#6B7D83] block text-[11px]">Variacion</span>
+                <span className="text-[#6B7D83] block text-[11px]">Impacto</span>
                 <span
                   className={`font-semibold inline-flex items-center gap-1 ${
                     prescription.mastery_delta >= 0
                       ? 'text-[#0E6F65]'
-                      : 'text-[#9E3F42]'
+                      : 'text-[#B6222A]'
                   }`}
                 >
                   {prescription.mastery_delta >= 0 ? (
@@ -351,20 +420,20 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
             className="w-full sm:w-auto px-4 py-2.5 rounded-full bg-white border border-[#DCE5E3] hover:bg-[#F2F7F6] text-[#4A5D64] hover:text-[#0B252E] text-xs sm:text-sm font-medium transition-colors flex items-center justify-center gap-2"
           >
             <FileText className="w-4 h-4" />
-            <span>Revisar caso clinico</span>
+            <span>Revisar alternativas en caso</span>
           </button>
 
           <button
             type="button"
             onClick={isFinalStation ? onFinishCase : onNextStation}
-            className="w-full sm:w-auto px-6 py-2.5 rounded-full bg-[#0E6F65] hover:bg-[#0A564E] text-white text-xs sm:text-sm font-medium flex items-center justify-center gap-2 transition-colors shadow-sm"
+            className="group w-full sm:w-auto px-6 py-2.5 rounded-full bg-[#0E6F65] hover:bg-[#0A564E] text-white text-xs sm:text-sm font-medium flex items-center justify-center gap-2 transition-all duration-200 shadow-sm"
           >
             <span>
               {isFinalStation
-                ? 'Finalizar caso y volver a Mundo Clinico'
+                ? 'Finalizar caso y actualizar mi ruta'
                 : 'Siguiente estacion clinica'}
             </span>
-            <ChevronRight className="w-4 h-4" />
+            <ChevronRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
           </button>
         </footer>
       </div>

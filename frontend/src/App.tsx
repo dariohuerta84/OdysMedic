@@ -78,7 +78,7 @@ const AppContent: React.FC = () => {
     setActiveTab('simulator');
   };
 
-  const handleStartRoute = (track: OnboardingTrack = 'ruta') => {
+  const handleStartRoute = () => {
     if (isAuthenticated) {
       if (user && !user.diagnostic_completed) {
         setActiveTab('diagnostic');
@@ -87,7 +87,7 @@ const AppContent: React.FC = () => {
       }
       return;
     }
-    openAuthModal('register', track);
+    openAuthModal('register', 'ruta');
   };
 
   const handleAuthSuccess = (destination: 'diagnostic' | 'dashboard') => {

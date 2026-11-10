@@ -250,7 +250,7 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
       {/* Editorial Header (Natural classic typography, zero boxy badges) */}
-      <header className="space-y-6 border-b border-[#E2ECE9] pb-8">
+      <header className="space-y-6 border-b border-[#E2ECE9] pb-8 animate-fade-in-up">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div className="space-y-3 max-w-3xl">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#0E6F65]">
@@ -409,7 +409,7 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {filteredReferences.map((ref) => {
+          {filteredReferences.map((ref, cardIndex) => {
             const specKey = normalizeSpecialtyKey(ref.associated_specialty || ref.specialty_id);
             const specLabel = SPECIALTY_LABELS[specKey] || ref.associated_specialty || 'Clinica Medica';
             const citationUrl = resolveCitationUrl(
@@ -429,7 +429,8 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({
             return (
               <article
                 key={ref.id || ref.reference_id}
-                className="flex flex-col justify-between p-6 sm:p-7 rounded-3xl bg-white border border-[#DCE5E3] hover:border-[#A9CEC7] transition-all"
+                style={{ animationDelay: `${Math.min(cardIndex, 7) * 45}ms` }}
+                className="editorial-card-lift animate-fade-in-up flex flex-col justify-between p-6 sm:p-7 rounded-3xl bg-white border border-[#DCE5E3] hover:border-[#A9CEC7] transition-all"
               >
                 <div className="space-y-4">
                   {/* Natural Classic Editorial Meta Line (No harsh rectangles) */}

@@ -222,7 +222,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   </button>
 
                   {isProfileDropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-64 rounded-2xl bg-white border border-[#DCE5E3] shadow-lg p-2 z-50">
+                    <div className="absolute right-0 mt-2 w-64 rounded-2xl bg-white border border-[#DCE5E3] shadow-lg p-2 z-50 animate-scale-in origin-top-right">
                       <div className="p-3 border-b border-[#EDF2F1] space-y-1">
                         <p className="font-serif text-sm font-bold text-[#0B252E] truncate">
                           {user.full_name || 'Estudiante OdyssMedic'}

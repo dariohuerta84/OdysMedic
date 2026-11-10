@@ -28,6 +28,144 @@ from app.engine.leveling_engine import (
     map_gap_to_deficiency,
 )
 from app.services.auth_service import hash_password, verify_password
+from app.services.case_service import case_repository
+
+
+SPECIALTY_DISPLAY_NAMES: Dict[str, str] = {
+    "nefrologia": "Nefrologia y Medio Interno",
+    "endocrinologia": "Endocrinologia y Metabolismo",
+    "neurologia": "Neurologia Clinica",
+    "reumatologia": "Reumatologia e Inmunologia",
+    "ginecologia_obstetricia": "Ginecologia y Obstetricia",
+    "oftalmologia": "Oftalmologia Clinica",
+    "medicina_interna": "Medicina Interna",
+    "pediatria": "Pediatria",
+    "cirugia_general": "Cirugia General",
+    "medicina_familiar": "Medicina Familiar",
+}
+
+SPECIALTY_TO_CASE_CANDIDATES: Dict[str, List[str]] = {
+    "nefrologia": [
+        "s13256-019-2334-y",
+        "s13256-022-03392-w",
+        "s13256-026-05974-4",
+        "s13256-023-04294-1",
+        "s13256-025-05650-z",
+    ],
+    "endocrinologia": [
+        "s13256-022-03392-w",
+        "s13256-025-05650-z",
+        "s13256-019-2334-y",
+        "s13256-023-04294-1",
+        "s13256-026-05974-4",
+    ],
+    "neurologia": [
+        "s13256-023-04294-1",
+        "s13256-025-05577-5",
+        "s13256-026-05974-4",
+        "s13256-019-2334-y",
+        "s13256-022-03392-w",
+    ],
+    "reumatologia": [
+        "s13256-026-05974-4",
+        "s13256-019-2334-y",
+        "s13256-025-05650-z",
+        "s13256-023-04294-1",
+        "s13256-022-03392-w",
+    ],
+    "ginecologia_obstetricia": [
+        "s13256-025-05650-z",
+        "s13256-019-2334-y",
+        "s13256-026-05974-4",
+        "s13256-022-03392-w",
+        "s13256-023-04294-1",
+    ],
+    "medicina_interna": [
+        "s13256-023-04294-1",
+        "s13256-022-03392-w",
+        "s13256-019-2334-y",
+        "s13256-026-05974-4",
+        "s13256-025-05577-5",
+    ],
+    "pediatria": [
+        "s13256-019-2334-y",
+        "s13256-022-03392-w",
+        "s13256-026-05974-4",
+        "s13256-023-04294-1",
+        "s13256-025-05650-z",
+    ],
+    "cirugia_general": [
+        "s13256-025-05577-5",
+        "s13256-024-04496-1",
+        "s13256-019-2334-y",
+        "s13256-023-04294-1",
+        "s13256-022-03392-w",
+    ],
+    "medicina_familiar": [
+        "s13256-022-03392-w",
+        "s13256-023-04294-1",
+        "s13256-025-05650-z",
+        "s13256-019-2334-y",
+        "s13256-026-05974-4",
+    ],
+}
+
+FALLBACK_CASE_TITLES: Dict[str, Dict[str, str]] = {
+    "s13256-019-2334-y": {
+        "title": "Microangiopatia Trombotica (SHUa) e Injuria Renal Aguda KDIGO 3",
+        "specialty": "nefrologia",
+    },
+    "s13256-022-03392-w": {
+        "title": "Complicacion Glucemica Severa y Desequilibrio Hidroelectrolitico",
+        "specialty": "endocrinologia",
+    },
+    "s13256-023-04294-1": {
+        "title": "Ictus Isquemico Agudo y Manejo Neurovascular en Ventana",
+        "specialty": "neurologia",
+    },
+    "s13256-024-04496-1": {
+        "title": "Urgencia Neuro-Oftalmologica e Hipertension Ocular Secundaria",
+        "specialty": "oftalmologia",
+    },
+    "s13256-025-05577-5": {
+        "title": "Evento Cerebrovascular Hemorragico y Estabilizacion Neurocritica",
+        "specialty": "neurologia",
+    },
+    "s13256-025-05650-z": {
+        "title": "Trastorno Endocrino-Metabolico Gestacional de Alto Riesgo",
+        "specialty": "ginecologia_obstetricia",
+    },
+    "s13256-026-05974-4": {
+        "title": "Lupus Eritematoso Sistemico con Compromiso de Organo Mayor",
+        "specialty": "reumatologia",
+    },
+}
+
+ALL_COGNITIVE_GAPS: List[str] = [
+    "GAP_TRIAGE_SEVERITY",
+    "GAP_DIAGNOSTIC_REASONING",
+    "GAP_LAB_INTERPRETATION",
+    "GAP_INITIAL_MANAGEMENT",
+]
+
+
+def _resolve_case_presentation_meta(case_id: str) -> Dict[str, str]:
+    full_case = case_repository.get_full_case(case_id)
+    fallback = FALLBACK_CASE_TITLES.get(case_id, {})
+    if full_case:
+        spec_slug = full_case.normalized_specialty or fallback.get("specialty", "medicina_interna")
+        title = full_case.display_title or fallback.get("title") or f"Estacion Clinica ({case_id})"
+    else:
+        spec_slug = fallback.get("specialty", "medicina_interna")
+        title = fallback.get("title") or f"Estacion Clinica ({case_id})"
+
+    return {
+        "case_title": title,
+        "specialty": spec_slug,
+        "specialty_name": SPECIALTY_DISPLAY_NAMES.get(
+            spec_slug, spec_slug.replace("_", " ").title()
+        ),
+    }
 
 
 class StudentService:
@@ -248,25 +386,94 @@ class StudentService:
 
         ocri_score = round(total_score / len(CARDINAL_SPECIALTIES), 2) if CARDINAL_SPECIALTIES else 0.0
 
+        now_utc = datetime.now(timezone.utc)
+
+        # Compute dynamic cognitive_gap_radar reflecting real diagnostic & simulator performance
+        gap_metrics_rows = db.query(StudentGapMetric).filter_by(user_id=user_id).all()
+        gap_fail_map: Dict[str, int] = {
+            gm.gap_type: int(gm.fail_count or 0) for gm in gap_metrics_rows
+        }
+        user_attempts = db.query(CaseAttempt).filter_by(user_id=user_id).all()
+        total_attempts = len(user_attempts)
+        passed_attempts = sum(1 for a in user_attempts if a.passed)
+
+        if user.diagnostic_completed and user.diagnostic_score is not None:
+            diag_val = float(user.diagnostic_score)
+            base_anchor = (
+                diag_val
+                if total_attempts == 0
+                else (0.55 * diag_val + 0.45 * float(ocri_score))
+            )
+        else:
+            base_anchor = float(ocri_score)
+
+        cognitive_gap_radar: Dict[str, int] = {}
+        for gap_key in ALL_COGNITIVE_GAPS:
+            fails = gap_fail_map.get(gap_key, 0)
+            if base_anchor <= 0.0 and passed_attempts == 0:
+                raw_axis = max(6.0, 12.0 - fails * 3.0)
+            elif fails > 0:
+                raw_axis = base_anchor - (fails * 12.0) + (passed_attempts * 4.0)
+                if base_anchor <= 40.0:
+                    raw_axis = min(raw_axis, max(12.0, base_anchor))
+            else:
+                if base_anchor >= 95.0:
+                    raw_axis = min(100.0, base_anchor)
+                elif base_anchor < 50.0:
+                    raw_axis = base_anchor + 8.0 + (passed_attempts * 5.0)
+                else:
+                    raw_axis = min(96.0, base_anchor + 8.0 + (passed_attempts * 4.0))
+
+            clamped_axis = int(round(min(100.0, max(6.0, raw_axis))))
+            cognitive_gap_radar[gap_key] = clamped_axis
+
         pending_tasks = (
             db.query(SpacedRepetitionTask)
             .filter_by(user_id=user_id, status="pending")
             .order_by(SpacedRepetitionTask.scheduled_for.asc())
             .all()
         )
-        formatted_tasks = [
-            {
+        formatted_tasks = []
+        for t in pending_tasks:
+            meta = _resolve_case_presentation_meta(t.case_id)
+            is_overdue = False
+            if t.scheduled_for:
+                sched_utc = (
+                    t.scheduled_for
+                    if t.scheduled_for.tzinfo is not None
+                    else t.scheduled_for.replace(tzinfo=timezone.utc)
+                )
+                is_overdue = sched_utc <= now_utc
+
+            if is_overdue or (
+                user.diagnostic_completed
+                and user.diagnostic_score is not None
+                and user.diagnostic_score < 50.0
+            ):
+                priority = "urgent"
+            elif (
+                user.diagnostic_completed
+                and user.diagnostic_score is not None
+                and user.diagnostic_score < 75.0
+            ):
+                priority = "high"
+            else:
+                priority = "normal"
+
+            formatted_tasks.append({
                 "id": t.id,
                 "case_id": t.case_id,
+                "case_title": meta["case_title"],
+                "specialty": meta["specialty"],
+                "specialty_name": meta["specialty_name"],
                 "gap_type": t.gap_type,
                 "scheduled_for": t.scheduled_for.isoformat() if t.scheduled_for else None,
                 "repetition_cycle": t.repetition_cycle,
                 "status": t.status,
+                "is_overdue": is_overdue,
+                "priority": priority,
                 "created_at": t.created_at.isoformat() if t.created_at else None,
-            }
-            for t in pending_tasks
-        ]
-
+            })
 
         aptitude_label = (
             "Apto para Internado / Examen"
@@ -338,6 +545,7 @@ class StudentService:
             "specialties": specialty_profiles,
             "specialty_profiles": specialty_profiles,
             "radar": radar_data,
+            "cognitive_gap_radar": cognitive_gap_radar,
             "ocri_score": ocri_score,
             "global_ocri_score": ocri_score,
             "pending_repetition_tasks": formatted_tasks,
@@ -366,6 +574,17 @@ class StudentService:
                 specialty.strip().lower().replace("-", "_"),
                 "medicina_interna",
             )
+
+        # Clean up previous diagnostic-origin gap metrics if retaking calibration
+        prior_diag_gaps = (
+            db.query(StudentGapMetric)
+            .filter_by(user_id=user.id)
+            .all()
+        )
+        for pgm in prior_diag_gaps:
+            if pgm.last_concept and pgm.last_concept.startswith("diagnostic_q"):
+                db.delete(pgm)
+        db.flush()
 
         selected_questions = resolve_diagnostic_question_set(mode=norm_mode, specialty=norm_spec)
         question_map = {q["id"]: q for q in selected_questions}
@@ -438,12 +657,13 @@ class StudentService:
             aptitude_status = "no_apto"
             aptitude_label = "No Apto - Nivelación Prioritaria Requerida"
 
+        now_utc = datetime.now(timezone.utc)
         user.diagnostic_completed = True
         user.diagnostic_score = score_pct
         user.aptitude_status = aptitude_status
         user.diagnostic_mode = norm_mode
         user.diagnostic_specialty = norm_spec if norm_mode == "specialty" else None
-        user.diagnostic_completed_at = datetime.now(timezone.utc)
+        user.diagnostic_completed_at = now_utc
         user.xp += 100
 
         target_mastery_specs = list(CARDINAL_SPECIALTIES)
@@ -451,18 +671,33 @@ class StudentService:
             target_mastery_specs.append(norm_spec)
 
         for spec_name in target_mastery_specs:
-            spec_questions = [r for r in results_detail if r["specialty"] == spec_name]
-            if spec_questions:
-                spec_correct = sum(1 for r in spec_questions if r["is_correct"])
-                calibrated_score = round((spec_correct / len(spec_questions)) * 100.0, 1)
-            elif norm_mode == "general":
-                calibrated_score = score_pct
-            elif spec_name == norm_spec:
-                calibrated_score = score_pct
-            else:
-                calibrated_score = 50.0
-
             mastery = db.query(StudentMastery).filter_by(user_id=user.id, specialty=spec_name).first()
+            spec_questions = [r for r in results_detail if r["specialty"] == spec_name]
+
+            if norm_mode == "general":
+                if score_pct in (0.0, 100.0):
+                    calibrated_score = score_pct
+                elif spec_questions:
+                    spec_correct = sum(1 for r in spec_questions if r["is_correct"])
+                    raw_spec_pct = (spec_correct / len(spec_questions)) * 100.0
+                    if len(spec_questions) == 1:
+                        calibrated_score = round(0.55 * raw_spec_pct + 0.45 * score_pct, 1)
+                    else:
+                        calibrated_score = round(raw_spec_pct, 1)
+                else:
+                    calibrated_score = score_pct
+            else:
+                # Single-specialty diagnostic mode
+                if spec_name == norm_spec:
+                    calibrated_score = score_pct
+                elif spec_questions:
+                    spec_correct = sum(1 for r in spec_questions if r["is_correct"])
+                    calibrated_score = round((spec_correct / len(spec_questions)) * 100.0, 1)
+                elif mastery and mastery.cases_completed > 0:
+                    calibrated_score = mastery.mastery_score
+                else:
+                    calibrated_score = score_pct
+
             if not mastery:
                 mastery = StudentMastery(
                     user_id=user.id,
@@ -475,7 +710,57 @@ class StudentService:
             else:
                 mastery.mastery_score = calibrated_score
                 mastery.competency_level = "deficiente" if calibrated_score < 70 else "competente"
-                mastery.updated_at = datetime.now(timezone.utc)
+                mastery.updated_at = now_utc
+
+        # Adaptively populate SpacedRepetitionTask queue from failed diagnostic stations
+        existing_pending = (
+            db.query(SpacedRepetitionTask)
+            .filter_by(user_id=user.id, status="pending")
+            .all()
+        )
+        existing_by_case = {t.case_id: t for t in existing_pending}
+        assigned_cases_in_batch = set()
+
+        failed_details = [r for r in results_detail if not r["is_correct"]]
+        for fail_idx, fail_item in enumerate(failed_details):
+            fail_spec = fail_item.get("specialty") or norm_spec or "medicina_interna"
+            fail_gap = fail_item.get("detected_gap") or "GAP_DIAGNOSTIC_REASONING"
+            candidates = SPECIALTY_TO_CASE_CANDIDATES.get(
+                fail_spec,
+                SPECIALTY_TO_CASE_CANDIDATES["medicina_interna"],
+            )
+            chosen_case_id = next(
+                (cid for cid in candidates if cid not in assigned_cases_in_batch),
+                candidates[0],
+            )
+            assigned_cases_in_batch.add(chosen_case_id)
+
+            if score_pct < 50.0:
+                # Urgent reinforcement: due immediately today (marked overdue/prioritario)
+                sched_time = now_utc - timedelta(minutes=max(5, 30 - fail_idx * 5))
+            elif fail_idx == 0:
+                # First gap in leveling mode scheduled immediately today
+                sched_time = now_utc - timedelta(minutes=10)
+            else:
+                # Subsequent gaps scheduled on D7 interval
+                sched_time = now_utc + timedelta(days=7)
+
+            if chosen_case_id in existing_by_case:
+                task_row = existing_by_case[chosen_case_id]
+                task_row.gap_type = fail_gap
+                task_row.scheduled_for = sched_time
+                task_row.repetition_cycle = "D7"
+            else:
+                task_row = SpacedRepetitionTask(
+                    user_id=user.id,
+                    case_id=chosen_case_id,
+                    gap_type=fail_gap,
+                    scheduled_for=sched_time,
+                    repetition_cycle="D7",
+                    status="pending",
+                )
+                db.add(task_row)
+                existing_by_case[chosen_case_id] = task_row
 
         db.commit()
         db.refresh(user)

@@ -44,23 +44,57 @@ h1, h2, .editorial-heading {
 
 /* Progressive Staggering Utilities */
 .stagger-1 {
-  animation-delay: 40ms;
+  animation-delay: 50ms;
 }
 
 .stagger-2 {
-  animation-delay: 80ms;
+  animation-delay: 100ms;
 }
 
 .stagger-3 {
-  animation-delay: 120ms;
+  animation-delay: 150ms;
 }
 
 .stagger-4 {
-  animation-delay: 160ms;
+  animation-delay: 200ms;
 }
 
 .stagger-5 {
-  animation-delay: 200ms;
+  animation-delay: 250ms;
+}
+
+.stagger-6 {
+  animation-delay: 300ms;
+}
+
+/* SVG Animated Checkmark & Alert Stroke Draw */
+@keyframes checkDrawKey {
+  from {
+    stroke-dashoffset: 48;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-check-draw {
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: checkDrawKey 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.08s forwards;
+}
+
+/* Tactile Editorial Card Lift */
+.editorial-card-lift {
+  transition:
+    transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.25s ease,
+    background-color 0.25s ease;
+}
+
+.editorial-card-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px -12px rgba(11, 37, 46, 0.12);
 }
 
 /* Scroll reveal transition classes */
