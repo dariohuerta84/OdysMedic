@@ -3,8 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
-from app.db.session import init_db, SessionLocal
-from app.db.seeder import seed_initial_data
+from app.db.session import ensure_db_ready
 from app.api.routes_auth import router as auth_router
 from app.api.routes_specialties import router as specialties_router
 from app.api.routes_cases import router as cases_router
@@ -16,12 +15,7 @@ from app.api.routes_references import router as references_router
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Inicializacion de base de datos relacional y siembra de datos canonicos
-    init_db()
-    db = SessionLocal()
-    try:
-        seed_initial_data(db)
-    finally:
-        db.close()
+    ensure_db_ready(force=True)
     yield
 
 
@@ -37,10 +31,11 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# Configuracion de CORS para integracion con Frontend (Next.js)
+# Configuracion de CORS para integracion con Frontend (Vite SPA / Vercel)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
+    allow_origin_regex=r"^https://.*\.vercel\.app$",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -56,6 +51,8 @@ app.include_router(references_router, prefix=settings.api_prefix)
 
 
 @app.get("/health", tags=["Salud del Sistema"])
+@app.get("/api/health", tags=["Salud del Sistema"])
+@app.get("/api/v1/health", tags=["Salud del Sistema"])
 def health_check():
     return {
         "status": "healthy",

@@ -1,4 +1,6 @@
+from pathlib import Path
 from sqlite3 import Connection as SQLite3Connection
+import threading
 from typing import Generator, Optional
 from sqlalchemy import create_engine, event, inspect, text
 from sqlalchemy.engine import Engine
@@ -6,13 +8,16 @@ from sqlalchemy.orm import DeclarativeBase, sessionmaker, Session
 from app.config import settings
 
 connect_args = {}
+engine_kwargs = {"echo": False}
 if settings.database_url.startswith("sqlite"):
     connect_args["check_same_thread"] = False
+else:
+    engine_kwargs["pool_pre_ping"] = True
 
 engine = create_engine(
     settings.database_url,
     connect_args=connect_args,
-    echo=False,
+    **engine_kwargs,
 )
 
 
@@ -34,9 +39,23 @@ class Base(DeclarativeBase):
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+_init_lock = threading.Lock()
+_db_initialized = False
+
+
+def _sqlite_db_file_missing() -> bool:
+    if not settings.database_url.startswith("sqlite:///"):
+        return False
+    db_path = settings.database_url.replace("sqlite:///", "", 1)
+    if db_path == ":memory:":
+        return False
+    return not Path(db_path).exists()
+
 
 def _ensure_user_columns(target: Engine) -> None:
     """Idempotently adds new onboarding and diagnostic columns to existing SQLite databases."""
+    if target.dialect.name != "sqlite":
+        return
     try:
         inspector = inspect(target)
         if "users" not in inspector.get_table_names():
@@ -73,7 +92,28 @@ def init_db(bind_engine: Optional[Engine] = None) -> None:
     _ensure_user_columns(target)
 
 
+def ensure_db_ready(force: bool = False) -> None:
+    """Thread-safe schema creation and idempotent canonical seeding for serverless cold starts."""
+    global _db_initialized
+    if _db_initialized and not force and not _sqlite_db_file_missing():
+        return
+
+    with _init_lock:
+        if _db_initialized and not force and not _sqlite_db_file_missing():
+            return
+        init_db()
+        from app.db.seeder import seed_initial_data
+
+        db = SessionLocal()
+        try:
+            seed_initial_data(db)
+            _db_initialized = True
+        finally:
+            db.close()
+
+
 def get_db() -> Generator[Session, None, None]:
+    ensure_db_ready()
     db = SessionLocal()
     try:
         yield db
