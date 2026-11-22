@@ -33,7 +33,7 @@ import { useAnimatedNumber } from '../hooks/useAnimatedNumber';
 
 export interface DashboardPageProps {
   onSelectSpecialty: (specialtyId: string) => void;
-  onSelectCase: (caseId: string) => void;
+  onSelectCase: (caseId: string, stationNumber?: number) => void;
   onStartDiagnostic?: () => void;
   className?: string;
 }

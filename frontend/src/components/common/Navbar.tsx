@@ -36,10 +36,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsProfileDropdownOpen(false);
       }
     };
@@ -64,7 +61,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       onSelectTab('landing');
       setTimeout(() => {
         document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
-      }, 120);
+      }, 140);
     } else {
       document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
     }
@@ -91,42 +88,42 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   const authenticatedNavItems = [
     { id: 'landing', label: 'Inicio', icon: Home },
-    { id: 'dashboard', label: 'Mundo Clinico', icon: Compass },
+    { id: 'dashboard', label: 'Ruta Clinica', icon: Compass },
     { id: 'simulator', label: 'Simulador', icon: Activity },
     { id: 'library', label: 'Biblioteca', icon: BookOpen },
   ];
 
   const publicSectionLinks = [
-    { label: 'Quienes somos', type: 'section' as const, target: 'quienes-somos' },
-    { label: 'Mundos clinicos', type: 'section' as const, target: 'mundos-clinicos' },
-    { label: 'Como funciona', type: 'section' as const, target: 'como-funciona' },
+    { label: 'Metodo OCRI-HLR', type: 'section' as const, target: 'quienes-somos' },
+    { label: 'Ruta progresiva', type: 'section' as const, target: 'como-funciona' },
+    { label: 'Unidades clinicas', type: 'section' as const, target: 'mundos-clinicos' },
     { label: 'Biblioteca', type: 'tab' as const, target: 'library' },
-    { label: 'Testimonios', type: 'section' as const, target: 'testimonios' },
+    { label: 'Comunidad', type: 'section' as const, target: 'testimonios' },
   ];
 
   return (
     <nav
       role="navigation"
       aria-label="Navegacion Principal"
-      className={`sticky top-0 z-40 w-full backdrop-blur-md bg-[#FDFCFA]/95 border-b border-[#E3E8E6] ${className}`}
+      className={`sticky top-0 z-40 w-full backdrop-blur-md bg-[#FAF9F6]/92 border-b border-[#DEDBD2] navbar-scroll-refine ${className}`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-18 py-3.5">
-          {/* Classic Brand Wordmark */}
+        <div className="flex items-center justify-between py-3.5">
+          {/* Editorial Brand Wordmark */}
           <button
             type="button"
             onClick={() => handleNavClick('landing')}
-            className="flex items-center gap-2.5 text-left focus:outline-none rounded-lg py-1 transition-opacity hover:opacity-90"
+            className="flex items-center gap-2.5 text-left focus:outline-none py-1 transition-opacity hover:opacity-85"
           >
-            <Activity className="w-5 h-5 text-[#0E6F65] stroke-[2.2]" />
-            <span className="font-serif font-bold text-xl tracking-tight text-[#0D4A44]">
+            <Activity className="w-5 h-5 text-[#0E6F65] stroke-[2]" />
+            <span className="font-serif font-bold text-xl tracking-tight text-[#0D1F26]">
               OdyssMedic
             </span>
           </button>
 
           {/* Desktop Navigation */}
           {isAuthenticated && user ? (
-            <div className="hidden md:flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-6">
               {authenticatedNavItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = activeTab === item.id;
@@ -135,13 +132,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                     key={item.id}
                     type="button"
                     onClick={() => handleNavClick(item.id)}
-                    className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm transition-colors ${
+                    className={`flex items-center gap-1.5 py-1.5 text-sm border-b-2 transition-colors ${
                       isActive
-                        ? 'bg-[#EAF4F2] text-[#0E6F65] font-semibold'
-                        : 'text-[#354B54] hover:text-[#0B252E] hover:bg-[#F2F7F6]'
+                        ? 'border-[#0E6F65] text-[#0D1F26] font-semibold'
+                        : 'border-transparent text-[#3D525A] hover:text-[#0D1F26] hover:border-[#DEDBD2]'
                     }`}
                   >
-                    <Icon className="w-4 h-4" />
+                    <Icon className="w-4 h-4 text-[#0E6F65]" />
                     <span>{item.label}</span>
                   </button>
                 );
@@ -160,10 +157,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                         ? handleNavClick(link.target)
                         : scrollToLandingSection(link.target)
                     }
-                    className={`text-sm transition-colors ${
+                    className={`text-sm py-1 border-b-2 transition-colors ${
                       isLibraryActive
-                        ? 'text-[#0E6F65] font-semibold underline underline-offset-8 decoration-[#0E6F65]/60'
-                        : 'text-[#2C424B] hover:text-[#0E6F65] font-medium'
+                        ? 'border-[#0E6F65] text-[#0D1F26] font-semibold'
+                        : 'border-transparent text-[#3D525A] hover:text-[#0E6F65] font-medium'
                     }`}
                   >
                     {link.label}
@@ -173,35 +170,36 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
           )}
 
-          {/* Right Section */}
-          <div className="hidden md:flex items-center gap-3">
+          {/* Right Section: Monospace Telemetry + Account */}
+          <div className="hidden md:flex items-center gap-4">
             {isAuthenticated && user ? (
               <>
                 {!user.diagnostic_completed && (
                   <button
                     type="button"
                     onClick={() => handleNavClick('diagnostic')}
-                    className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#FDF7E7] border border-[#E9D7AC] text-[#7D5817] hover:bg-[#F9EFD3] transition-colors text-xs font-medium"
+                    className="flex items-center gap-1.5 px-3 py-1.5 border border-[#9A6B1F]/40 bg-[#FBF5E8] text-[#9A6B1F] hover:bg-[#F5EBD2] transition-colors text-xs font-medium"
                   >
-                    <ClipboardCheck className="w-3.5 h-3.5 text-[#A87624]" />
-                    <span>Evaluacion Inicial Pendiente</span>
+                    <ClipboardCheck className="w-3.5 h-3.5" />
+                    <span>Calibracion pendiente</span>
                   </button>
                 )}
 
-                <div
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F2F7F6] text-[#354B54] text-xs font-medium"
-                  title={`Racha clinica: ${user.streak_days || 1} dias`}
-                >
-                  <Flame className="w-3.5 h-3.5 text-[#B9852D]" />
-                  <span>{user.streak_days || 1}d</span>
-                </div>
-
-                <div
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#EAF4F2] text-[#0E6F65] text-xs font-medium"
-                  title="Experiencia Clinica Acumulada"
-                >
-                  <Award className="w-3.5 h-3.5 text-[#0E6F65]" />
-                  <span>{user.experience_points ?? user.xp ?? 0} pts</span>
+                <div className="flex items-center divide-x divide-[#DEDBD2] border border-[#DEDBD2] bg-white/80 telemetry-mono text-xs">
+                  <div
+                    className="flex items-center gap-1.5 px-2.5 py-1.5 text-[#3D525A]"
+                    title={`Racha clinica: ${user.streak_days || 0} dias`}
+                  >
+                    <Flame className="w-3.5 h-3.5 text-[#9A6B1F]" />
+                    <span>{user.streak_days ?? 0}d</span>
+                  </div>
+                  <div
+                    className="flex items-center gap-1.5 px-2.5 py-1.5 text-[#0E6F65] font-medium"
+                    title="Experiencia Clinica Acumulada"
+                  >
+                    <Award className="w-3.5 h-3.5" />
+                    <span>{user.experience_points ?? user.xp ?? 0} XP</span>
+                  </div>
                 </div>
 
                 {/* User Profile Dropdown */}
@@ -210,24 +208,24 @@ export const Navbar: React.FC<NavbarProps> = ({
                     type="button"
                     onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
                     aria-expanded={isProfileDropdownOpen}
-                    className="flex items-center gap-2.5 pl-2 pr-3 py-1.5 rounded-full bg-white hover:bg-[#F2F7F6] border border-[#DCE5E3] transition-colors text-left"
+                    className="flex items-center gap-2.5 pl-1.5 pr-2.5 py-1 bg-white hover:bg-[#F3F1EC] border border-[#DEDBD2] transition-colors text-left"
                   >
-                    <div className="w-7 h-7 rounded-full bg-[#0E6F65] flex items-center justify-center text-white text-xs font-semibold">
+                    <div className="w-7 h-7 bg-[#0D1F26] flex items-center justify-center text-[#FAF9F6] font-mono text-[11px] font-semibold">
                       {getUserInitials(user.full_name)}
                     </div>
-                    <span className="text-xs font-medium text-[#0B252E] max-w-[130px] truncate">
+                    <span className="text-xs font-medium text-[#0D1F26] max-w-[130px] truncate">
                       {user.full_name || user.email}
                     </span>
-                    <ChevronDown className="w-3.5 h-3.5 text-[#6E828A]" />
+                    <ChevronDown className="w-3.5 h-3.5 text-[#64767E]" />
                   </button>
 
                   {isProfileDropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-64 rounded-2xl bg-white border border-[#DCE5E3] shadow-lg p-2 z-50 animate-scale-in origin-top-right">
-                      <div className="p-3 border-b border-[#EDF2F1] space-y-1">
-                        <p className="font-serif text-sm font-bold text-[#0B252E] truncate">
+                    <div className="absolute right-0 mt-2 w-64 bg-[#FAF9F6] border border-[#DEDBD2] shadow-md p-2 z-50 animate-scale-in origin-top-right">
+                      <div className="p-3 border-b border-[#DEDBD2] space-y-1">
+                        <p className="font-serif text-sm font-bold text-[#0D1F26] truncate">
                           {user.full_name || 'Estudiante OdyssMedic'}
                         </p>
-                        <p className="text-xs text-[#6E828A] truncate">
+                        <p className="font-mono text-[11px] text-[#64767E] truncate">
                           {user.email}
                         </p>
                         <p className="text-[11px] text-[#0E6F65] font-medium pt-1 truncate">
@@ -244,16 +242,16 @@ export const Navbar: React.FC<NavbarProps> = ({
                               setIsProfileDropdownOpen(false);
                               handleNavClick('diagnostic');
                             }}
-                            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-[#7D5817] bg-[#FDF7E7] hover:bg-[#F9EFD3] transition-colors text-left font-medium"
+                            className="w-full flex items-center gap-2.5 px-3 py-2 text-xs text-[#9A6B1F] bg-[#FBF5E8] hover:bg-[#F4E9CE] transition-colors text-left font-medium"
                           >
-                            <ClipboardCheck className="w-4 h-4 text-[#A87624]" />
-                            <span>Rendir Evaluacion Inicial</span>
+                            <ClipboardCheck className="w-4 h-4" />
+                            <span>Rendir evaluacion inicial</span>
                           </button>
                         )}
                         <button
                           type="button"
                           onClick={handleLogout}
-                          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-[#9E3F42] hover:bg-[#FBF1F1] transition-colors text-left font-medium"
+                          className="w-full flex items-center gap-2.5 px-3 py-2 text-xs text-[#A6262E] hover:bg-[#FBF0F0] transition-colors text-left font-medium"
                         >
                           <LogOut className="w-4 h-4" />
                           <span>Cerrar sesion</span>
@@ -264,13 +262,22 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </div>
               </>
             ) : (
-              <button
-                type="button"
-                onClick={() => onOpenAuth?.('login')}
-                className="px-5 py-2.5 rounded-xl bg-[#0E6F65] hover:bg-[#0A564E] transition-colors text-white text-sm font-medium shadow-2xs"
-              >
-                Ingresar
-              </button>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => onOpenAuth?.('login')}
+                  className="text-sm font-medium text-[#3D525A] hover:text-[#0D1F26] transition-colors px-2 py-1.5"
+                >
+                  Iniciar sesion
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onOpenAuth?.('register')}
+                  className="px-4 py-2 bg-[#0E6F65] hover:bg-[#0A564E] transition-colors text-[#FAF9F6] text-sm font-medium"
+                >
+                  Crear cuenta
+                </button>
+              </div>
             )}
           </div>
 
@@ -281,7 +288,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Alternar menu de navegacion"
               aria-expanded={isMobileMenuOpen}
-              className="p-2 rounded-xl text-[#354B54] hover:text-[#0B252E] hover:bg-[#F2F7F6] transition-colors"
+              className="p-2 border border-[#DEDBD2] text-[#3D525A] hover:text-[#0D1F26] hover:bg-[#F3F1EC] transition-colors"
             >
               {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -291,10 +298,10 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile Drawer */}
       {isMobileMenuOpen && (
-        <div className="md:hidden border-t border-[#E3E8E6] bg-[#FDFCFA] px-4 pt-3 pb-6 space-y-3 shadow-md">
+        <div className="md:hidden border-t border-[#DEDBD2] bg-[#FAF9F6] px-4 pt-3 pb-6 space-y-3">
           {isAuthenticated && user ? (
             <>
-              <div className="space-y-1">
+              <div className="divide-y divide-[#DEDBD2]/70">
                 {authenticatedNavItems.map((item) => {
                   const Icon = item.icon;
                   const isActive = activeTab === item.id;
@@ -303,10 +310,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                       key={item.id}
                       type="button"
                       onClick={() => handleNavClick(item.id)}
-                      className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm transition-colors text-left ${
-                        isActive
-                          ? 'bg-[#EAF4F2] text-[#0E6F65] font-semibold'
-                          : 'text-[#354B54] hover:bg-[#F2F7F6]'
+                      className={`w-full flex items-center gap-3 px-2 py-3 text-sm transition-colors text-left ${
+                        isActive ? 'text-[#0E6F65] font-semibold' : 'text-[#3D525A]'
                       }`}
                     >
                       <Icon className="w-4 h-4" />
@@ -316,13 +321,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                 })}
               </div>
 
-              <div className="pt-3 border-t border-[#E3E8E6] space-y-2.5">
-                <div className="p-3 rounded-xl bg-[#F2F7F6] space-y-1">
-                  <p className="font-serif text-sm font-bold text-[#0B252E]">
+              <div className="pt-3 border-t border-[#DEDBD2] space-y-2.5">
+                <div className="p-3 bg-[#F3F1EC] border border-[#DEDBD2] space-y-1">
+                  <p className="font-serif text-sm font-bold text-[#0D1F26]">
                     {user.full_name || user.email}
                   </p>
-                  <p className="text-xs text-[#5C737C]">
-                    {user.streak_days || 1} dias de racha · {user.experience_points ?? user.xp ?? 0} pts
+                  <p className="font-mono text-xs text-[#3D525A]">
+                    {user.streak_days ?? 0}d racha · {user.experience_points ?? user.xp ?? 0} XP
                   </p>
                 </div>
 
@@ -330,16 +335,16 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <button
                     type="button"
                     onClick={() => handleNavClick('diagnostic')}
-                    className="w-full py-2.5 rounded-xl bg-[#FDF7E7] border border-[#E9D7AC] text-[#7D5817] text-xs font-medium"
+                    className="w-full py-2.5 bg-[#FBF5E8] border border-[#9A6B1F]/40 text-[#9A6B1F] text-xs font-medium"
                   >
-                    Rendir Evaluacion Inicial
+                    Rendir evaluacion inicial
                   </button>
                 )}
 
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="w-full py-2.5 rounded-xl bg-[#FBF1F1] text-[#9E3F42] text-xs font-medium"
+                  className="w-full py-2.5 bg-[#FBF0F0] border border-[#A6262E]/30 text-[#A6262E] text-xs font-medium"
                 >
                   Cerrar sesion
                 </button>
@@ -347,7 +352,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </>
           ) : (
             <>
-              <div className="space-y-1">
+              <div className="divide-y divide-[#DEDBD2]/70">
                 {publicSectionLinks.map((link) => (
                   <button
                     key={link.label}
@@ -357,22 +362,32 @@ export const Navbar: React.FC<NavbarProps> = ({
                         ? handleNavClick(link.target)
                         : scrollToLandingSection(link.target)
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl text-sm text-[#2C424B] hover:bg-[#F2F7F6] text-left font-medium"
+                    className="w-full px-2 py-3 text-sm text-[#0D1F26] text-left font-medium"
                   >
                     {link.label}
                   </button>
                 ))}
               </div>
-              <div className="pt-3 border-t border-[#E3E8E6]">
+              <div className="pt-3 border-t border-[#DEDBD2] grid grid-cols-2 gap-2.5">
                 <button
                   type="button"
                   onClick={() => {
                     setIsMobileMenuOpen(false);
                     onOpenAuth?.('login');
                   }}
-                  className="w-full py-2.5 rounded-xl bg-[#0E6F65] hover:bg-[#0A564E] text-white text-sm font-medium"
+                  className="py-2.5 border border-[#DEDBD2] text-[#0D1F26] text-sm font-medium"
                 >
-                  Ingresar
+                  Iniciar sesion
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    onOpenAuth?.('register');
+                  }}
+                  className="py-2.5 bg-[#0E6F65] text-[#FAF9F6] text-sm font-medium"
+                >
+                  Crear cuenta
                 </button>
               </div>
             </>

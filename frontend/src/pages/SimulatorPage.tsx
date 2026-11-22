@@ -25,6 +25,7 @@ import {
 
 export interface SimulatorPageProps {
   initialCaseId?: string;
+  initialStationNumber?: number;
   onBackToDashboard: () => void;
   className?: string;
 }

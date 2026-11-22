@@ -54,14 +54,19 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const login = async (email: string, password: string): Promise<void> => {
     setIsLoading(true);
     try {
-      const res = await authApi.login(email, password);
+      const normalizedEmail = email.trim().toLowerCase();
+      const res = await authApi.login(normalizedEmail, password);
       const accessToken = res.access_token;
       if (typeof window !== 'undefined') {
         localStorage.setItem(TOKEN_KEY, accessToken);
       }
       setToken(accessToken);
-      const currentUser = await authApi.getMe();
-      setUser(currentUser);
+      if (res.user) {
+        setUser(res.user);
+      } else {
+        const currentUser = await authApi.getMe();
+        setUser(currentUser);
+      }
     } catch (error) {
       if (typeof window !== 'undefined') {
         localStorage.removeItem(TOKEN_KEY);
@@ -77,17 +82,26 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const register = async (data: RegisterRequest): Promise<void> => {
     setIsLoading(true);
     try {
-      const res = await authApi.register(data);
+      const normalizedPayload: RegisterRequest = {
+        ...data,
+        email: data.email.trim().toLowerCase(),
+      };
+      const res = await authApi.register(normalizedPayload);
       const accessToken = res.access_token;
       if (accessToken) {
         if (typeof window !== 'undefined') {
           localStorage.setItem(TOKEN_KEY, accessToken);
         }
         setToken(accessToken);
-        const currentUser = await authApi.getMe();
-        setUser(currentUser);
+        // Hydrate immediately from register response to avoid cross-instance serverless race
+        if (res.user) {
+          setUser(res.user);
+        } else {
+          const currentUser = await authApi.getMe();
+          setUser(currentUser);
+        }
       } else {
-        await login(data.email, data.password);
+        await login(normalizedPayload.email, normalizedPayload.password);
       }
     } finally {
       setIsLoading(false);

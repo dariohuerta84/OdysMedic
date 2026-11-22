@@ -13,6 +13,21 @@ import {
 
 const PROTECTED_TABS = new Set(['dashboard', 'simulator', 'diagnostic']);
 
+function runViewTransition(update: () => void) {
+  if (typeof document !== 'undefined' && 'startViewTransition' in document) {
+    const prefersReduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!prefersReduced) {
+      (document as unknown as { startViewTransition: (cb: () => void) => void }).startViewTransition(
+        update
+      );
+      return;
+    }
+  }
+  update();
+}
+
 const AppContent: React.FC = () => {
   const { user, isAuthenticated, isLoading } = useAuth();
   const [activeTab, setActiveTab] = useState<NavTabId | string>('landing');
@@ -20,6 +35,7 @@ const AppContent: React.FC = () => {
   const [authModalMode, setAuthModalMode] = useState<'login' | 'register'>('login');
   const [onboardingTrack, setOnboardingTrack] = useState<OnboardingTrack>('ruta');
   const [selectedCase, setSelectedCase] = useState<string | null>(null);
+  const [selectedStation, setSelectedStation] = useState<number | undefined>(undefined);
 
   // Enforce mandatory registration gate for Mundo Clinico, Simulator and Diagnostic
   useEffect(() => {
@@ -42,7 +58,12 @@ const AppContent: React.FC = () => {
       openAuthModal('register', 'ruta');
       return;
     }
-    setActiveTab(targetTab);
+    runViewTransition(() => {
+      if (targetTab !== 'simulator') {
+        setSelectedStation(undefined);
+      }
+      setActiveTab(targetTab);
+    });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -51,40 +72,44 @@ const AppContent: React.FC = () => {
       openAuthModal('register', 'ruta');
       return;
     }
-    if (specialtyId === 'nefrologia') {
-      setSelectedCase('s13256-019-2334-y');
-    } else if (specialtyId === 'endocrinologia') {
-      setSelectedCase('s13256-022-03392-w');
-    } else if (specialtyId === 'neurologia') {
-      setSelectedCase('s13256-023-04294-1');
-    } else if (specialtyId === 'oftalmologia') {
-      setSelectedCase('s13256-024-04496-1');
-    } else if (specialtyId === 'ginecologia_obstetricia') {
-      setSelectedCase('s13256-025-05650-z');
-    } else if (specialtyId === 'reumatologia') {
-      setSelectedCase('s13256-026-05974-4');
-    } else {
-      setSelectedCase('s13256-019-2334-y');
-    }
-    setActiveTab('simulator');
+    let nextCase = 's13256-019-2334-y';
+    if (specialtyId === 'endocrinologia') nextCase = 's13256-022-03392-w';
+    else if (specialtyId === 'neurologia') nextCase = 's13256-023-04294-1';
+    else if (specialtyId === 'oftalmologia') nextCase = 's13256-024-04496-1';
+    else if (specialtyId === 'ginecologia_obstetricia') nextCase = 's13256-025-05650-z';
+    else if (specialtyId === 'reumatologia') nextCase = 's13256-026-05974-4';
+
+    runViewTransition(() => {
+      setSelectedCase(nextCase);
+      setSelectedStation(1);
+      setActiveTab('simulator');
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleSelectCase = (caseId: string) => {
+  const handleSelectCase = (caseId: string, stationNumber?: number) => {
     if (!isAuthenticated) {
       openAuthModal('register', 'ruta');
       return;
     }
-    setSelectedCase(caseId);
-    setActiveTab('simulator');
+    runViewTransition(() => {
+      setSelectedCase(caseId);
+      setSelectedStation(stationNumber);
+      setActiveTab('simulator');
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleStartRoute = () => {
     if (isAuthenticated) {
-      if (user && !user.diagnostic_completed) {
-        setActiveTab('diagnostic');
-      } else {
-        setActiveTab('dashboard');
-      }
+      runViewTransition(() => {
+        if (user && !user.diagnostic_completed) {
+          setActiveTab('diagnostic');
+        } else {
+          setActiveTab('dashboard');
+        }
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
     openAuthModal('register', 'ruta');
@@ -92,12 +117,15 @@ const AppContent: React.FC = () => {
 
   const handleAuthSuccess = (destination: 'diagnostic' | 'dashboard') => {
     setIsAuthModalOpen(false);
-    setActiveTab(destination);
+    runViewTransition(() => {
+      setActiveTab(destination);
+    });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFCFA] text-[#0B252E] flex flex-col justify-between">
+    <div className="min-h-screen bg-[#FAF9F6] text-[#0D1F26] flex flex-col justify-between">
+      <div className="scroll-progress-hairline" aria-hidden="true" />
       <Navbar
         activeTab={activeTab}
         onSelectTab={handleNavigateTab}
@@ -105,7 +133,7 @@ const AppContent: React.FC = () => {
       />
 
       {/* Important: no persistent CSS transform on main so fixed modals align to viewport */}
-      <main className="flex-1">
+      <main className="flex-1 relative z-10">
         {activeTab === 'landing' ? (
           <LandingPage
             onStartRoute={handleStartRoute}
@@ -115,20 +143,21 @@ const AppContent: React.FC = () => {
           <DashboardPage
             onSelectSpecialty={handleSelectSpecialty}
             onSelectCase={handleSelectCase}
-            onStartDiagnostic={() => setActiveTab('diagnostic')}
+            onStartDiagnostic={() => handleNavigateTab('diagnostic')}
           />
         ) : activeTab === 'diagnostic' && isAuthenticated ? (
           <DiagnosticExamPage
-            onComplete={() => setActiveTab('dashboard')}
+            onComplete={() => handleNavigateTab('dashboard')}
           />
         ) : activeTab === 'simulator' && isAuthenticated ? (
           <SimulatorPage
             initialCaseId={selectedCase || undefined}
-            onBackToDashboard={() => setActiveTab('dashboard')}
+            initialStationNumber={selectedStation}
+            onBackToDashboard={() => handleNavigateTab('dashboard')}
           />
         ) : activeTab === 'library' ? (
           <LibraryPage
-            onSelectCase={handleSelectCase}
+            onSelectCase={(cid) => handleSelectCase(cid, 1)}
             onRequireAuth={() => openAuthModal('register', 'ruta')}
           />
         ) : null}
@@ -143,9 +172,9 @@ const AppContent: React.FC = () => {
       />
 
       {activeTab !== 'landing' && (
-        <footer className="border-t border-[#E3E8E6] py-6 px-4 text-center bg-[#FDFCFA]">
-          <p className="text-xs text-[#6E828A] tracking-wide">
-            OdyssMedic · Formacion y Razonamiento Clinico Basado en Evidencia
+        <footer className="border-t border-[#DEDBD2] py-6 px-4 text-center bg-[#FAF9F6] relative z-10">
+          <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-[#64767E]">
+            OdyssMedic · Motor OCRI-HLR · Razonamiento Clinico Basado en Evidencia
           </p>
         </footer>
       )}
