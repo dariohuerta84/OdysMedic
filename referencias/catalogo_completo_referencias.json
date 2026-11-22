@@ -658,6 +658,83 @@
     "application": "Orienta el nivel de complejidad diagnostica y terapeutica de las estaciones Nivel 2 y Nivel 3 del prototipo."
   },
   {
+    "category": "fundamento_pedagogico_y_normativo",
+    "id": "ped-settles-meeder-2016-hlr",
+    "title": "A Trainable Spaced Repetition Model for Language Learning",
+    "authors": "Settles, B., & Meeder, B.",
+    "journal_or_publisher": "Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (ACL 2016), 1848-1858",
+    "year": 2016,
+    "doi_or_isbn": "10.18653/v1/P16-1174",
+    "url": "https://doi.org/10.18653/v1/P16-1174",
+    "application": "Sustenta el modelo Half-Life Regression (HLR) de Duolingo incorporado en OCRI (p = 2^(-delta/h)) para estimar vida media de memoria clinica por especialidad y prioridad de repaso."
+  },
+  {
+    "category": "fundamento_pedagogico_y_normativo",
+    "id": "ped-ye-fsrs-2022",
+    "title": "A Stochastic Shortest Path Algorithm for Optimizing Spaced Repetition Scheduling",
+    "authors": "Ye, J., Su, J., & Cao, Y.",
+    "journal_or_publisher": "Proceedings of the 28th ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD 2022)",
+    "year": 2022,
+    "doi_or_isbn": "10.1145/3534678.3539081",
+    "url": "https://doi.org/10.1145/3534678.3539081",
+    "application": "Base matematica del modelo FSRS (Estabilidad, Dificultad y Recuperabilidad) para modular el crecimiento de la vida media y la dificultad dinamica de cada concepto clinico."
+  },
+  {
+    "category": "fundamento_pedagogico_y_normativo",
+    "id": "ped-settles-birdbrain-2020",
+    "title": "Machine Learning-Driven Language Assessment",
+    "authors": "Settles, B., LaFlair, G. T., & Hagiwara, M.",
+    "journal_or_publisher": "Transactions of the Association for Computational Linguistics (TACL), 8, 247-263",
+    "year": 2020,
+    "doi_or_isbn": "10.1162/tacl_a_00310",
+    "url": "https://doi.org/10.1162/tacl_a_00310",
+    "application": "Fundamenta el selector adaptativo de zona optima de reto (Goldilocks Zone ~78% de exito esperado mediante IRT) y la ruta progresiva por unidades."
+  },
+  {
+    "category": "fundamento_pedagogico_y_normativo",
+    "id": "ped-lubarsky-sct-2013",
+    "title": "Script concordance testing: from theory to practice: AMEE Guide No. 75",
+    "authors": "Lubarsky, S., Dory, V., Duggan, P., Gagnon, R., & Charlin, B.",
+    "journal_or_publisher": "Medical Teacher, 35(3), 184-193",
+    "year": 2013,
+    "doi_or_isbn": "10.3109/0142159X.2013.760036",
+    "url": "https://doi.org/10.3109/0142159X.2013.760036",
+    "application": "Marco psicometrico de referencia para evaluacion del razonamiento clinico bajo incertidumbre diagnostica mediante scripts de enfermedad."
+  },
+  {
+    "category": "fundamento_pedagogico_y_normativo",
+    "id": "ped-gagnon-sct-2017",
+    "title": "Evolutions in clinical reasoning assessment: The Evolving Script Concordance Test",
+    "authors": "Gagnon, R., Lubarsky, S., Lambert, C., Meterissian, S., & Charlin, B.",
+    "journal_or_publisher": "Medical Teacher, 39(7), 701-707",
+    "year": 2017,
+    "doi_or_isbn": "10.1080/0142159X.2017.1327706",
+    "url": "https://doi.org/10.1080/0142159X.2017.1327706",
+    "application": "Sustenta la progresion secuencial de hipotesis diagnosticas a medida que emergen nuevos signos vitales y pruebas auxiliares a lo largo de las 3 estaciones."
+  },
+  {
+    "category": "fundamento_pedagogico_y_normativo",
+    "id": "ped-croskerry-dual-process-2009",
+    "title": "A universal model of diagnostic reasoning",
+    "authors": "Croskerry, P.",
+    "journal_or_publisher": "Academic Medicine, 84(8), 1022-1028",
+    "year": 2009,
+    "doi_or_isbn": "10.1097/ACM.0b013e3181ace703",
+    "url": "https://doi.org/10.1097/ACM.0b013e3181ace703",
+    "application": "Modela la Teoria de Proceso Dual (Sistema 1 intuitivo vs. Sistema 2 analitico), empleada en el bono de fluidez por tiempo de respuesta y en el desbloqueo de estaciones."
+  },
+  {
+    "category": "fundamento_pedagogico_y_normativo",
+    "id": "ped-vanmerrienboer-sweller-2010",
+    "title": "Cognitive load theory in health professional education: design principles and strategies",
+    "authors": "van Merrienboer, J. J. G., & Sweller, J.",
+    "journal_or_publisher": "Medical Education, 44(1), 85-93",
+    "year": 2010,
+    "doi_or_isbn": "10.1111/j.1365-2923.2009.03498.x",
+    "url": "https://doi.org/10.1111/j.1365-2923.2009.03498.x",
+    "application": "Justifica el andamiaje progresivo de baja carga extrinseca (estaciones cortas escalonadas Nivel 1 -> Nivel 2 -> Nivel 3 -> Guardia Integradora) para internos fatigados."
+  },
+  {
     "category": "ingenieria_y_diseno",
     "id": "tech-fastapi",
     "authors": "Ramirez, S., & FastAPI Contributors",
