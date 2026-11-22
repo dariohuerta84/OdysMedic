@@ -313,3 +313,81 @@ def test_dashboard_lazily_backfills_missing_memory_traces(path_env):
     finally:
         db.close()
 
+
+def test_auxiliary_specialty_attempt_does_not_corrupt_nefrologia_trace(path_env):
+    client, SessionLocal = path_env
+    headers, user_id = _register_user(client, "oftalmo_iso@upch.pe")
+    _complete_diagnostic(client, headers, mode="general", all_correct=True)
+
+    from app.db.models import UserMemoryTrace
+    from app.services.student_service import student_service
+
+    db = SessionLocal()
+    try:
+        nefro_before = (
+            db.query(UserMemoryTrace)
+            .filter_by(user_id=user_id, concept_key="nefrologia")
+            .first()
+        )
+        assert nefro_before is not None
+        h_before = nefro_before.half_life_days
+        lapses_before = nefro_before.lapses_count
+
+        student_service.record_mcq_attempt(
+            db=db,
+            user_id=user_id,
+            case_id="s13256-024-04496-1",
+            station_number=1,
+            is_correct=False,
+            gap="GAP_TRIAGE_SEVERITY",
+            specialty="oftalmologia",
+        )
+
+        db.refresh(nefro_before)
+        assert nefro_before.half_life_days == h_before
+        assert nefro_before.lapses_count == lapses_before
+    finally:
+        db.close()
+
+
+def test_secondary_case_overdue_task_does_not_trap_neurologia_unit_after_primary_rescue(path_env):
+    from datetime import datetime, timezone, timedelta
+    from app.db.models import SpacedRepetitionTask
+    from app.services.student_service import student_service
+
+    client, SessionLocal = path_env
+    headers, user_id = _register_user(client, "neuro_rescue@upch.pe")
+    _complete_diagnostic(client, headers, mode="general", all_correct=True)
+
+    db = SessionLocal()
+    try:
+        # Pass primary neurologia case station 1
+        student_service.record_mcq_attempt(
+            db=db,
+            user_id=user_id,
+            case_id="s13256-023-04294-1",
+            station_number=1,
+            is_correct=True,
+            specialty="neurologia",
+        )
+        # Insert an overdue task specifically on neurologia's SECONDARY case
+        db.add(
+            SpacedRepetitionTask(
+                user_id=user_id,
+                case_id="s13256-025-05577-5",
+                gap_type="GAP_DIAGNOSTIC_REASONING",
+                scheduled_for=datetime.now(timezone.utc) - timedelta(days=2),
+                repetition_cycle="D7",
+                status="pending",
+            )
+        )
+        db.commit()
+    finally:
+        db.close()
+
+    resp = client.get("/api/v1/leveling/learning-path", headers=headers)
+    assert resp.status_code == 200
+    neuro_unit = next(u for u in resp.json()["units"] if u["specialty"] == "neurologia")
+    assert neuro_unit["nodes"][0]["status"] == "completed"
+    assert neuro_unit["nodes"][1]["status"] == "active"
+

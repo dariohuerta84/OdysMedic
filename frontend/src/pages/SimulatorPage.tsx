@@ -16,6 +16,7 @@ import type {
   CognitiveGapTag,
 } from '../types/api';
 import { casesApi, evaluationApi } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import {
   VignettePlayer,
   StationStepper,
@@ -977,8 +978,12 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
   onBackToDashboard,
   className = '',
 }) => {
+  const { refreshUser } = useAuth();
   const [selectedCaseId, setSelectedCaseId] = useState<string>(
     initialCaseId || 's13256-019-2334-y'
+  );
+  const [requestedStation, setRequestedStation] = useState<number>(
+    initialStationNumber ?? 1
   );
 
   const [caseDetail, setCaseDetail] = useState<CaseDetail | null>(null);
@@ -1004,7 +1009,8 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
     if (initialCaseId) {
       setSelectedCaseId(initialCaseId);
     }
-  }, [initialCaseId]);
+    setRequestedStation(initialStationNumber ?? 1);
+  }, [initialCaseId, initialStationNumber]);
 
   useEffect(() => {
     return () => {
@@ -1091,8 +1097,8 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
   };
 
   useEffect(() => {
-    loadCaseData(selectedCaseId, initialStationNumber);
-  }, [selectedCaseId, initialStationNumber]);
+    loadCaseData(selectedCaseId, requestedStation);
+  }, [selectedCaseId, requestedStation]);
 
   // Active Timer: tracks seconds spent on the current station
   useEffect(() => {
@@ -1145,6 +1151,7 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
       if (!completedStations.includes(stationNumber)) {
         setCompletedStations((prev) => [...prev, stationNumber]);
       }
+      refreshUser().catch(() => {});
       modalDelayRef.current = window.setTimeout(() => {
         setIsModalOpen(true);
       }, 340);
@@ -1284,7 +1291,10 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
             </span>
             <select
               value={selectedCaseId}
-              onChange={(e) => setSelectedCaseId(e.target.value)}
+              onChange={(e) => {
+                setRequestedStation(1);
+                setSelectedCaseId(e.target.value);
+              }}
               className="bg-[#FAF9F6] border border-[#DEDBD2] rounded-none font-mono px-4 py-2 text-xs font-medium text-[#0D1F26] focus:outline-none focus:border-[#0E6F65] transition-colors max-w-[260px] sm:max-w-xs truncate"
               aria-label="Selector de casos de simulacion"
             >

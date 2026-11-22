@@ -521,7 +521,7 @@ class StudentService:
             )
 
             passed_stations = passed_by_case.get(primary_case_id, set())
-            unit_needs_review = recall_p < 0.72 or primary_case_id in overdue_case_ids or spec in overdue_specialties
+            unit_needs_review = recall_p < 0.72 or primary_case_id in overdue_case_ids
             diag_done = bool(user.diagnostic_completed)
 
             station_specs = [
@@ -1250,8 +1250,10 @@ class StudentService:
             )
             mastery.competency_level = profile.level.value
 
-            # 4.5. Update HLR UserMemoryTrace for this specialty (additive alongside EMA/D7/D21)
-            trace_spec_key = spec_str if spec_str in CARDINAL_SPECIALTIES else CARDINAL_SPECIALTIES[0]
+            # 4.5. Update HLR UserMemoryTrace for this specialty (keep auxiliary specialties isolated from cardinal units)
+            is_cardinal = spec_str in CARDINAL_SPECIALTIES
+            trace_spec_key = spec_str
+            trace_concept_type = "specialty" if is_cardinal else "auxiliary"
             sim_offset = int(getattr(user, "simulated_days_elapsed", 0) or 0)
             trace_effective_now = datetime.now(timezone.utc) + timedelta(days=sim_offset)
             trace_row = (
@@ -1263,7 +1265,7 @@ class StudentService:
                 trace_row = UserMemoryTrace(
                     user_id=user.id,
                     concept_key=trace_spec_key,
-                    concept_type="specialty",
+                    concept_type=trace_concept_type,
                     half_life_days=initial_half_life_from_score(
                         user.diagnostic_score if user.diagnostic_completed else None
                     ),

@@ -25,6 +25,7 @@
   "rewrites": [
     { "source": "/api/(.*)", "destination": { "service": "backend" } },
     { "source": "/health", "destination": { "service": "backend" } },
+    { "source": "/portal", "destination": { "service": "backend" } },
     { "source": "/docs", "destination": { "service": "backend" } },
     { "source": "/redoc", "destination": { "service": "backend" } },
     { "source": "/openapi.json", "destination": { "service": "backend" } },

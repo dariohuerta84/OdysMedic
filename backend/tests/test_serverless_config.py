@@ -37,3 +37,18 @@ def test_root_entrypoint_and_health_endpoints():
         resp = client.get(path)
         assert resp.status_code == 200
         assert resp.json()["status"] == "healthy"
+
+
+def test_vercel_config_routes_backend_portal_and_docs():
+    import json
+    from pathlib import Path
+
+    vercel_cfg = json.loads((Path(__file__).resolve().parents[2] / "vercel.json").read_text(encoding="utf-8"))
+    backend_sources = {
+        r["source"]
+        for r in vercel_cfg.get("rewrites", [])
+        if isinstance(r.get("destination"), dict) and r["destination"].get("service") == "backend"
+    }
+    assert "/portal" in backend_sources
+    assert "/docs" in backend_sources
+    assert "/health" in backend_sources
