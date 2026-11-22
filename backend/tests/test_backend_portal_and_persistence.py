@@ -83,3 +83,33 @@ def test_health_reports_storage_mode_and_persistent_flag(client: TestClient):
     assert data["storage_mode"] in ("sqlite_local", "sqlite_ephemeral", "postgresql")
     assert isinstance(data["persistent"], bool)
     assert UserMemoryTrace.__tablename__ == "user_memory_traces"
+
+
+def test_root_content_negotiation_and_editorial_portal_and_docs(client: TestClient):
+    # 1. Default API/TestClient request keeps JSON contract
+    json_root = client.get("/")
+    assert json_root.status_code == 200
+    assert json_root.json()["health"] == "/health"
+    assert json_root.json()["docs"] == "/docs"
+
+    # 2. Browser Accept: text/html receives Editorial API Portal
+    html_root = client.get("/", headers={"Accept": "text/html,application/xhtml+xml"})
+    assert html_root.status_code == 200
+    assert "text/html" in html_root.headers.get("content-type", "")
+    assert "OdyssMedic" in html_root.text
+    assert "Source Serif 4" in html_root.text
+    assert "OCRI" in html_root.text
+    assert "/docs" in html_root.text
+
+    # 3. Dedicated /portal route displays storage_mode
+    portal = client.get("/portal")
+    assert portal.status_code == 200
+    assert "text/html" in portal.headers.get("content-type", "")
+    assert get_storage_status()["storage_mode"] in portal.text
+
+    # 4. Styled editorial Swagger UI at /docs
+    docs = client.get("/docs")
+    assert docs.status_code == 200
+    assert "swagger-ui" in docs.text.lower()
+    assert "#FAF9F6" in docs.text
+    assert "#0E6F65" in docs.text
