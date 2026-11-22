@@ -266,7 +266,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const modalDialog = (
     <div
       role="presentation"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-[#0B252E]/45 backdrop-blur-xs"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-[#0D1F26]/45 backdrop-blur-xs"
       onClick={(e) => {
         if (e.target === e.currentTarget && !isSubmitting) {
           onClose();
@@ -277,7 +277,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         role="dialog"
         aria-modal="true"
         aria-labelledby="auth-modal-title"
-        className={`bg-[#FDFCFA] border border-[#DCE5E3] rounded-2xl w-full relative shadow-2xl flex flex-col max-h-[90dvh] overflow-hidden animate-scale-in transition-all duration-300 ${
+        className={`bg-[#FAF9F6] border border-[#DEDBD2] rounded-sm w-full relative shadow-2xl flex flex-col max-h-[90dvh] overflow-hidden animate-scale-in transition-all duration-300 ${
           tab === 'register' && step > 1 ? 'max-w-3xl' : 'max-w-lg'
         }`}
       >
@@ -292,7 +292,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             </div>
             <h2
               id="auth-modal-title"
-              className="font-serif text-xl sm:text-2xl font-bold text-[#0B252E]"
+              className="font-serif text-xl sm:text-2xl font-bold text-[#0D1F26]"
             >
               {tab === 'login'
                 ? 'Bienvenido de vuelta'
@@ -304,7 +304,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             type="button"
             onClick={onClose}
             disabled={isSubmitting}
-            className="p-2 rounded-xl text-[#6E828A] hover:text-[#0B252E] hover:bg-[#F2F7F6] transition-colors disabled:opacity-50"
+            className="p-2 rounded-xl text-[#6E828A] hover:text-[#0D1F26] hover:bg-[#F3F1EC] transition-colors disabled:opacity-50"
             aria-label="Cerrar ventana"
           >
             <X className="w-5 h-5" />
@@ -314,7 +314,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         {/* Scrollable Content Body */}
         <div className="px-6 py-5 overflow-y-auto flex-1 space-y-5">
           {/* Mode Switcher */}
-          <div className="flex rounded-xl bg-[#F2F7F6] p-1 border border-[#DCE5E3]">
+          <div className="flex rounded-xl bg-[#F3F1EC] p-1 border border-[#DEDBD2]">
             <button
               type="button"
               onClick={() => {
@@ -323,8 +323,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               }}
               className={`flex-1 py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors ${
                 tab === 'login'
-                  ? 'bg-white text-[#0B252E] shadow-2xs font-semibold'
-                  : 'text-[#5C737C] hover:text-[#0B252E]'
+                  ? 'bg-white text-[#0D1F26] shadow-2xs font-semibold'
+                  : 'text-[#5C737C] hover:text-[#0D1F26]'
               }`}
             >
               Ingresar a mi cuenta
@@ -337,8 +337,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               }}
               className={`flex-1 py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors ${
                 tab === 'register'
-                  ? 'bg-white text-[#0B252E] shadow-2xs font-semibold'
-                  : 'text-[#5C737C] hover:text-[#0B252E]'
+                  ? 'bg-white text-[#0D1F26] shadow-2xs font-semibold'
+                  : 'text-[#5C737C] hover:text-[#0D1F26]'
               }`}
             >
               Crear cuenta nueva
@@ -372,7 +372,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       <span
                         className={`text-xs hidden sm:inline ${
                           isCurrent
-                            ? 'font-semibold text-[#0B252E]'
+                            ? 'font-semibold text-[#0D1F26]'
                             : 'text-[#6E828A]'
                         }`}
                       >
@@ -382,7 +382,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     {idx < 2 && (
                       <div
                         className={`flex-1 h-px ${
-                          step > s.num ? 'bg-[#0E6F65]/50' : 'bg-[#DCE5E3]'
+                          step > s.num ? 'bg-[#0E6F65]/50' : 'bg-[#DEDBD2]'
                         }`}
                       />
                     )}
@@ -424,7 +424,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="nombre@universidad.edu.pe"
-                    className="w-full pl-10 pr-4 py-2.5 bg-white border border-[#CFDAD8] rounded-xl text-sm text-[#0B252E] placeholder-[#94A6AC] focus:outline-none focus:border-[#0E6F65]"
+                    className="w-full pl-10 pr-4 py-2.5 bg-white border border-[#CFDAD8] rounded-xl text-sm text-[#0D1F26] placeholder-[#94A6AC] focus:outline-none focus:border-[#0E6F65]"
                   />
                 </div>
               </div>
@@ -448,7 +448,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Ingresa tu contrasena"
-                    className="w-full pl-10 pr-4 py-2.5 bg-white border border-[#CFDAD8] rounded-xl text-sm text-[#0B252E] placeholder-[#94A6AC] focus:outline-none focus:border-[#0E6F65]"
+                    className="w-full pl-10 pr-4 py-2.5 bg-white border border-[#CFDAD8] rounded-xl text-sm text-[#0D1F26] placeholder-[#94A6AC] focus:outline-none focus:border-[#0E6F65]"
                   />
                 </div>
               </div>
@@ -461,7 +461,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           {tab === 'register' && step === 1 && (
             <div className="space-y-4 animate-fade-in-up">
               <div>
-                <h3 className="font-serif text-lg font-bold text-[#0B252E]">
+                <h3 className="font-serif text-lg font-bold text-[#0D1F26]">
                   1. Tus credenciales de acceso
                 </h3>
                 <p className="text-xs sm:text-sm text-[#5C737C]">
@@ -487,7 +487,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="Ej. Camila Paredes"
-                    className="w-full pl-10 pr-4 py-2.5 bg-white border border-[#CFDAD8] rounded-xl text-sm text-[#0B252E] placeholder-[#94A6AC] focus:outline-none focus:border-[#0E6F65]"
+                    className="w-full pl-10 pr-4 py-2.5 bg-white border border-[#CFDAD8] rounded-xl text-sm text-[#0D1F26] placeholder-[#94A6AC] focus:outline-none focus:border-[#0E6F65]"
                   />
                 </div>
               </div>
@@ -510,7 +510,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="correo@universidad.edu.pe"
-                    className="w-full pl-10 pr-4 py-2.5 bg-white border border-[#CFDAD8] rounded-xl text-sm text-[#0B252E] placeholder-[#94A6AC] focus:outline-none focus:border-[#0E6F65]"
+                    className="w-full pl-10 pr-4 py-2.5 bg-white border border-[#CFDAD8] rounded-xl text-sm text-[#0D1F26] placeholder-[#94A6AC] focus:outline-none focus:border-[#0E6F65]"
                   />
                 </div>
               </div>
@@ -533,7 +533,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Minimo 6 caracteres"
-                    className="w-full pl-10 pr-4 py-2.5 bg-white border border-[#CFDAD8] rounded-xl text-sm text-[#0B252E] placeholder-[#94A6AC] focus:outline-none focus:border-[#0E6F65]"
+                    className="w-full pl-10 pr-4 py-2.5 bg-white border border-[#CFDAD8] rounded-xl text-sm text-[#0D1F26] placeholder-[#94A6AC] focus:outline-none focus:border-[#0E6F65]"
                   />
                 </div>
               </div>
@@ -550,7 +550,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   2
                 </div>
                 <div>
-                  <h3 className="font-serif text-lg font-bold text-[#0B252E]">
+                  <h3 className="font-serif text-lg font-bold text-[#0D1F26]">
                     Datos academicos
                   </h3>
                   <p className="text-xs sm:text-sm text-[#5C737C]">
@@ -562,7 +562,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               {/* 3 Selects Row */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                 <div>
-                  <label className="flex items-center gap-1.5 text-xs font-semibold text-[#0B252E] mb-1.5">
+                  <label className="flex items-center gap-1.5 text-xs font-semibold text-[#0D1F26] mb-1.5">
                     <Building2 className="w-3.5 h-3.5 text-[#0E6F65]" />
                     <span>
                       Universidad <span className="text-[#B44B4E]">*</span>
@@ -571,7 +571,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   <select
                     value={university}
                     onChange={(e) => setUniversity(e.target.value)}
-                    className="w-full px-3 py-2.5 bg-white border border-[#CFDAD8] rounded-xl text-xs sm:text-sm text-[#0B252E] focus:outline-none focus:border-[#0E6F65]"
+                    className="w-full px-3 py-2.5 bg-white border border-[#CFDAD8] rounded-xl text-xs sm:text-sm text-[#0D1F26] focus:outline-none focus:border-[#0E6F65]"
                   >
                     <option value="">Selecciona tu universidad</option>
                     {UNIVERSITIES.map((u) => (
@@ -583,7 +583,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 </div>
 
                 <div>
-                  <label className="flex items-center gap-1.5 text-xs font-semibold text-[#0B252E] mb-1.5">
+                  <label className="flex items-center gap-1.5 text-xs font-semibold text-[#0D1F26] mb-1.5">
                     <GraduationCap className="w-3.5 h-3.5 text-[#0E6F65]" />
                     <span>
                       Carrera <span className="text-[#B44B4E]">*</span>
@@ -592,7 +592,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   <select
                     value={career}
                     onChange={(e) => setCareer(e.target.value)}
-                    className="w-full px-3 py-2.5 bg-white border border-[#CFDAD8] rounded-xl text-xs sm:text-sm text-[#0B252E] focus:outline-none focus:border-[#0E6F65]"
+                    className="w-full px-3 py-2.5 bg-white border border-[#CFDAD8] rounded-xl text-xs sm:text-sm text-[#0D1F26] focus:outline-none focus:border-[#0E6F65]"
                   >
                     {CAREERS.map((c) => (
                       <option key={c} value={c}>
@@ -603,7 +603,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 </div>
 
                 <div>
-                  <label className="flex items-center gap-1.5 text-xs font-semibold text-[#0B252E] mb-1.5">
+                  <label className="flex items-center gap-1.5 text-xs font-semibold text-[#0D1F26] mb-1.5">
                     <Calendar className="w-3.5 h-3.5 text-[#0E6F65]" />
                     <span>
                       Ano o etapa academica <span className="text-[#B44B4E]">*</span>
@@ -612,7 +612,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   <select
                     value={academicYear}
                     onChange={(e) => setAcademicYear(e.target.value)}
-                    className="w-full px-3 py-2.5 bg-white border border-[#CFDAD8] rounded-xl text-xs sm:text-sm text-[#0B252E] focus:outline-none focus:border-[#0E6F65]"
+                    className="w-full px-3 py-2.5 bg-white border border-[#CFDAD8] rounded-xl text-xs sm:text-sm text-[#0D1F26] focus:outline-none focus:border-[#0E6F65]"
                   >
                     <option value="">Selecciona tu ano</option>
                     {ACADEMIC_YEARS.map((yr) => (
@@ -626,7 +626,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
               {/* Objetivo Principal Cards */}
               <div className="space-y-2.5">
-                <label className="flex items-center gap-1.5 text-xs font-semibold text-[#0B252E]">
+                <label className="flex items-center gap-1.5 text-xs font-semibold text-[#0D1F26]">
                   <Target className="w-3.5 h-3.5 text-[#0E6F65]" />
                   <span>
                     Objetivo principal <span className="text-[#B44B4E]">*</span>
@@ -645,14 +645,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                         className={`relative p-3.5 rounded-xl border text-left transition-all flex items-start gap-3 ${
                           selected
                             ? 'bg-[#EAF4F2] border-[#0E6F65] shadow-2xs'
-                            : 'bg-white border-[#DCE5E3] hover:border-[#9EC6BF]'
+                            : 'bg-white border-[#DEDBD2] hover:border-[#9EC6BF]'
                         }`}
                       >
                         <div className="w-9 h-9 rounded-lg bg-white border border-[#D5E4E1] flex items-center justify-center text-[#0E6F65] shrink-0 mt-0.5">
                           <Icon className="w-4 h-4" />
                         </div>
                         <div className="pr-4">
-                          <span className="block text-xs font-bold text-[#0B252E] leading-snug">
+                          <span className="block text-xs font-bold text-[#0D1F26] leading-snug">
                             {g.title}
                           </span>
                           <span className="block text-[11px] text-[#5C737C] leading-snug mt-0.5">
@@ -682,7 +682,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   3
                 </div>
                 <div>
-                  <h3 className="font-serif text-lg font-bold text-[#0B252E]">
+                  <h3 className="font-serif text-lg font-bold text-[#0D1F26]">
                     Preferencias iniciales
                   </h3>
                   <p className="text-xs sm:text-sm text-[#5C737C]">
@@ -693,7 +693,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
               {/* Mundo clinico inicial */}
               <div className="space-y-2">
-                <label className="block text-xs font-semibold text-[#0B252E]">
+                <label className="block text-xs font-semibold text-[#0D1F26]">
                   Mundo clinico inicial <span className="text-[#B44B4E]">*</span>
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
@@ -707,7 +707,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                         className={`relative px-3 py-3 rounded-xl border text-left transition-all flex items-center justify-between gap-1.5 ${
                           selected
                             ? 'bg-[#EAF4F2] border-[#0E6F65] text-[#0E6F65] font-semibold'
-                            : 'bg-white border-[#DCE5E3] text-[#2C424B] hover:border-[#9EC6BF]'
+                            : 'bg-white border-[#DEDBD2] text-[#2C424B] hover:border-[#9EC6BF]'
                         }`}
                       >
                         <span className="text-xs leading-tight">{w.label}</span>
@@ -724,7 +724,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
               {/* Areas de interes (opcional) */}
               <div className="space-y-2">
-                <label className="block text-xs font-semibold text-[#0B252E]">
+                <label className="block text-xs font-semibold text-[#0D1F26]">
                   Areas de interes (opcional)
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -739,7 +739,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                         className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border text-xs transition-colors ${
                           active
                             ? 'bg-[#EAF4F2] border-[#0E6F65] text-[#0E6F65] font-semibold'
-                            : 'bg-white border-[#DCE5E3] text-[#354B54] hover:bg-[#F2F7F6]'
+                            : 'bg-white border-[#DEDBD2] text-[#354B54] hover:bg-[#F3F1EC]'
                         }`}
                       >
                         <span>{area.label}</span>
@@ -752,7 +752,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
               {/* Privacy & Security Box */}
               <div className="rounded-xl bg-[#EAF4F2] border border-[#CFE3DF] p-3.5 grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
-                <label className="sm:col-span-7 flex items-start gap-2.5 cursor-pointer text-xs text-[#0B252E]">
+                <label className="sm:col-span-7 flex items-start gap-2.5 cursor-pointer text-xs text-[#0D1F26]">
                   <input
                     type="checkbox"
                     checked={privacyAccepted}
@@ -827,7 +827,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   setError(null);
                   setStep(1);
                 }}
-                className="px-4 py-2.5 rounded-xl border border-[#DCE5E3] text-[#354B54] hover:bg-[#F2F7F6] text-xs sm:text-sm font-medium inline-flex items-center gap-1.5"
+                className="px-4 py-2.5 rounded-xl border border-[#DEDBD2] text-[#354B54] hover:bg-[#F3F1EC] text-xs sm:text-sm font-medium inline-flex items-center gap-1.5"
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span>Anterior</span>
@@ -852,7 +852,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   setError(null);
                   setStep(2);
                 }}
-                className="px-4 py-2.5 rounded-xl border border-[#DCE5E3] text-[#354B54] hover:bg-[#F2F7F6] text-xs sm:text-sm font-medium inline-flex items-center justify-center gap-1.5"
+                className="px-4 py-2.5 rounded-xl border border-[#DEDBD2] text-[#354B54] hover:bg-[#F3F1EC] text-xs sm:text-sm font-medium inline-flex items-center justify-center gap-1.5"
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span>Anterior</span>

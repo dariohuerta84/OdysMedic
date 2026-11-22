@@ -16,7 +16,7 @@ export const VitalSignBadge: React.FC<VitalSignBadgeProps> = ({
   className = '',
 }) => {
   const containerClasses: Record<'normal' | 'warning' | 'critical', string> = {
-    normal: 'bg-[#F2F7F6] border-[#DCE5E3] text-[#0B252E]',
+    normal: 'bg-[#F3F1EC] border-[#DEDBD2] text-[#0D1F26]',
     warning: 'bg-[#FDF7E7] border-[#EFE0B9] text-[#7A5413]',
     critical: 'bg-[#FBF1F1] border-[#EED7D7] text-[#8E3B3E]',
   };
@@ -29,7 +29,7 @@ export const VitalSignBadge: React.FC<VitalSignBadgeProps> = ({
 
   return (
     <div
-      className={`inline-flex items-baseline gap-1.5 px-3 py-1.5 rounded-full border font-sans text-xs transition-colors ${containerClasses[severity]} ${className}`}
+      className={`inline-flex items-baseline gap-1.5 px-3 py-1.5 rounded-none font-mono border font-sans text-xs transition-colors ${containerClasses[severity]} ${className}`}
       title={`${label}: ${value}${unit ? ` ${unit}` : ''}`}
     >
       <span className={`text-[11px] font-medium ${labelClasses[severity]}`}>

@@ -973,6 +973,7 @@ const BACKEND_TO_MOCK_FALLBACK: Record<string, string> = {
 
 export const SimulatorPage: React.FC<SimulatorPageProps> = ({
   initialCaseId = 's13256-019-2334-y',
+  initialStationNumber,
   onBackToDashboard,
   className = '',
 }) => {
@@ -982,7 +983,9 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
 
   const [caseDetail, setCaseDetail] = useState<CaseDetail | null>(null);
   const [stations, setStations] = useState<MCQStation[]>([]);
-  const [currentStationIndex, setCurrentStationIndex] = useState<number>(0);
+  const [currentStationIndex, setCurrentStationIndex] = useState<number>(
+    Math.max(0, (initialStationNumber ?? 1) - 1)
+  );
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [timeSpentSeconds, setTimeSpentSeconds] = useState<number>(0);
@@ -1012,7 +1015,7 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
   }, []);
 
   // Load clinical case and stations
-  const loadCaseData = async (caseId: string) => {
+  const loadCaseData = async (caseId: string, requestedStation?: number) => {
     if (modalDelayRef.current) {
       window.clearTimeout(modalDelayRef.current);
       modalDelayRef.current = null;
@@ -1021,7 +1024,6 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
     setEvaluationResult(null);
     setIsModalOpen(false);
     setSelectedOptionId(null);
-    setCurrentStationIndex(0);
     setCompletedStations([]);
     setTimeSpentSeconds(0);
 
@@ -1052,21 +1054,36 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
       }
 
       if (loadedDetail && loadedStations.length > 0) {
+        const targetIdx = Math.max(
+          0,
+          Math.min(loadedStations.length - 1, (requestedStation ?? 1) - 1)
+        );
         setCaseDetail(loadedDetail);
         setStations(loadedStations);
+        setCurrentStationIndex(targetIdx);
         setIsUsingFallback(false);
       } else {
         const mockEntry =
           MOCK_CASES_CATALOG[fallbackKey] || MOCK_CASES_CATALOG['case-nefro-001'];
+        const targetIdx = Math.max(
+          0,
+          Math.min(mockEntry.stations.length - 1, (requestedStation ?? 1) - 1)
+        );
         setCaseDetail(mockEntry.detail);
         setStations(mockEntry.stations);
+        setCurrentStationIndex(targetIdx);
         setIsUsingFallback(true);
       }
     } catch {
       const mockEntry =
         MOCK_CASES_CATALOG[fallbackKey] || MOCK_CASES_CATALOG['case-nefro-001'];
+      const targetIdx = Math.max(
+        0,
+        Math.min(mockEntry.stations.length - 1, (requestedStation ?? 1) - 1)
+      );
       setCaseDetail(mockEntry.detail);
       setStations(mockEntry.stations);
+      setCurrentStationIndex(targetIdx);
       setIsUsingFallback(true);
     } finally {
       setIsLoading(false);
@@ -1074,8 +1091,8 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
   };
 
   useEffect(() => {
-    loadCaseData(selectedCaseId);
-  }, [selectedCaseId]);
+    loadCaseData(selectedCaseId, initialStationNumber);
+  }, [selectedCaseId, initialStationNumber]);
 
   // Active Timer: tracks seconds spent on the current station
   useEffect(() => {
@@ -1243,17 +1260,17 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
 
   return (
     <div
-      className={`min-h-screen bg-[#FDFCFA] text-[#0B252E] flex flex-col justify-between py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full space-y-6 ${
+      className={`min-h-screen bg-[#FAF9F6] text-[#0D1F26] flex flex-col justify-between py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full space-y-6 ${
         evaluationResult !== null && !isModalOpen ? 'pb-28 sm:pb-24' : ''
       } ${className}`}
     >
       {/* 1. Header Toolbar: Back navigation, Case Switcher, Live Timer */}
-      <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:px-6 rounded-2xl bg-white border border-[#DCE5E3]">
+      <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:px-6 rounded-sm bg-white border border-[#DEDBD2]">
         <div className="flex flex-wrap items-center gap-3">
           <button
             type="button"
             onClick={onBackToDashboard}
-            className="px-4 py-2 rounded-full bg-[#F2F7F6] border border-[#DCE5E3] hover:bg-[#ECF6F4] text-[#0B252E] text-xs font-medium flex items-center gap-2 transition-colors"
+            className="px-4 py-2 rounded-none font-mono bg-[#F3F1EC] border border-[#DEDBD2] hover:bg-[#ECF6F4] text-[#0D1F26] text-xs font-medium flex items-center gap-2 transition-colors"
             title="Volver a Mundo Clinico"
           >
             <ArrowLeft className="w-4 h-4 text-[#0E6F65]" />
@@ -1268,7 +1285,7 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
             <select
               value={selectedCaseId}
               onChange={(e) => setSelectedCaseId(e.target.value)}
-              className="bg-[#FDFCFA] border border-[#DCE5E3] rounded-full px-4 py-2 text-xs font-medium text-[#0B252E] focus:outline-none focus:border-[#0E6F65] transition-colors max-w-[260px] sm:max-w-xs truncate"
+              className="bg-[#FAF9F6] border border-[#DEDBD2] rounded-none font-mono px-4 py-2 text-xs font-medium text-[#0D1F26] focus:outline-none focus:border-[#0E6F65] transition-colors max-w-[260px] sm:max-w-xs truncate"
               aria-label="Selector de casos de simulacion"
             >
               <option value="s13256-019-2334-y">
@@ -1305,7 +1322,7 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
           )}
 
           <div
-            className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#F2F7F6] border border-[#DCE5E3] text-[#0B252E] text-xs"
+            className="flex items-center gap-2 px-4 py-1.5 rounded-none font-mono bg-[#F3F1EC] border border-[#DEDBD2] text-[#0D1F26] text-xs"
             title="Tiempo dedicado a la estacion actual"
           >
             <Clock className="w-3.5 h-3.5 text-[#0E6F65]" />
@@ -1329,7 +1346,7 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
 
       {/* 3. Main Workspace: Vignette Player + Question / Option Decision Area */}
       {isLoading || !caseDetail ? (
-        <div className="p-16 rounded-3xl bg-white border border-[#DCE5E3] text-center space-y-4">
+        <div className="p-16 rounded-sm bg-white border border-[#DEDBD2] text-center space-y-4">
           <RefreshCw className="w-7 h-7 text-[#0E6F65] animate-spin mx-auto" />
           <p className="text-sm text-[#4A5D64]">
             Preparando expediente clinico y constantes de ingreso...
@@ -1349,11 +1366,11 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
           {currentStation && (
             <section
               key={stationNumber}
-              className="rounded-3xl bg-white border border-[#DCE5E3] p-5 sm:p-8 space-y-6 animate-fade-in-up"
+              className="rounded-sm bg-white border border-[#DEDBD2] p-5 sm:p-8 space-y-6 animate-fade-in-up"
               aria-label="Pregunta clinica y opciones de decision"
             >
               {/* Question Header */}
-              <div className="space-y-2 border-b border-[#EDF2F0] pb-5">
+              <div className="space-y-2 border-b border-[#ECEAE3] pb-5">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center gap-2 text-xs text-[#0E6F65] uppercase tracking-[0.14em] font-semibold">
                     <HelpCircle className="w-4 h-4 text-[#0E6F65]" />
@@ -1367,7 +1384,7 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
                   </span>
                 </div>
 
-                <h3 className="font-serif text-lg sm:text-xl font-semibold text-[#0B252E] leading-relaxed">
+                <h3 className="font-serif text-lg sm:text-xl font-semibold text-[#0D1F26] leading-relaxed">
                   {currentStation.clinical_question}
                 </h3>
               </div>
@@ -1415,7 +1432,7 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
               </div>
 
               {/* Submission Action Bar */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-[#EDF2F0]">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-[#ECEAE3]">
                 <div className="text-xs text-[#4A5D64] flex items-center gap-2">
                   <span
                     className={`w-2 h-2 rounded-full ${
@@ -1443,11 +1460,11 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
                     isSubmitting ||
                     evaluationResult !== null
                   }
-                  className={`w-full sm:w-auto px-7 py-3 rounded-full font-medium text-xs sm:text-sm flex items-center justify-center gap-2.5 transition-colors ${
+                  className={`w-full sm:w-auto px-7 py-3 rounded-none font-mono font-medium text-xs sm:text-sm flex items-center justify-center gap-2.5 transition-colors ${
                     !selectedOptionId ||
                     isSubmitting ||
                     evaluationResult !== null
-                      ? 'bg-[#F2F7F6] text-[#8FA1A6] border border-[#DCE5E3] cursor-not-allowed'
+                      ? 'bg-[#F3F1EC] text-[#8FA1A6] border border-[#DEDBD2] cursor-not-allowed'
                       : 'bg-[#0E6F65] hover:bg-[#0A564E] text-white shadow-xs'
                   }`}
                 >
@@ -1478,7 +1495,7 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
       {evaluationResult !== null && !isModalOpen && (
         <aside
           aria-label="Barra de accion de estacion evaluada"
-          className="fixed bottom-0 left-0 right-0 z-40 bg-[#FDFCFA]/95 border-t border-[#DCE5E3] shadow-lg backdrop-blur-sm px-4 py-3.5 sm:px-6 transition-all"
+          className="fixed bottom-0 left-0 right-0 z-40 bg-[#FAF9F6]/95 border-t border-[#DEDBD2] shadow-lg backdrop-blur-sm px-4 py-3.5 sm:px-6 transition-all"
         >
           <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="flex items-center gap-3">
@@ -1488,7 +1505,7 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
                 }`}
               />
               <div>
-                <span className="font-serif text-sm font-semibold text-[#0B252E] block">
+                <span className="font-serif text-sm font-semibold text-[#0D1F26] block">
                   Estacion evaluada · Decision registrada
                 </span>
                 <span className="text-xs text-[#4A5D64]">
@@ -1503,7 +1520,7 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
               <button
                 type="button"
                 onClick={() => setIsModalOpen(true)}
-                className="flex-1 sm:flex-none px-4 py-2.5 rounded-full bg-white hover:bg-[#F2F7F6] border border-[#DCE5E3] text-xs sm:text-sm font-medium text-[#0B252E] flex items-center justify-center gap-2 transition-colors"
+                className="flex-1 sm:flex-none px-4 py-2.5 rounded-none font-mono bg-white hover:bg-[#F3F1EC] border border-[#DEDBD2] text-xs sm:text-sm font-medium text-[#0D1F26] flex items-center justify-center gap-2 transition-colors"
               >
                 <Lightbulb className="w-4 h-4 text-[#0E6F65] shrink-0" />
                 <span>Ver retroalimentacion</span>
@@ -1516,7 +1533,7 @@ export const SimulatorPage: React.FC<SimulatorPageProps> = ({
                     ? handleNextStation
                     : onBackToDashboard
                 }
-                className="flex-1 sm:flex-none px-6 py-2.5 rounded-full bg-[#0E6F65] hover:bg-[#0A564E] text-white text-xs sm:text-sm font-medium flex items-center justify-center gap-2 transition-colors"
+                className="flex-1 sm:flex-none px-6 py-2.5 rounded-none font-mono bg-[#0E6F65] hover:bg-[#0A564E] text-white text-xs sm:text-sm font-medium flex items-center justify-center gap-2 transition-colors"
               >
                 <span>
                   {currentStationIndex < stations.length - 1

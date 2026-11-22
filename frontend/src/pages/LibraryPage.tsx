@@ -256,7 +256,7 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#0E6F65]">
               Compendio bibliografico y semiologico
             </p>
-            <h1 className="font-serif text-3xl sm:text-4xl font-semibold text-[#0B252E] leading-tight">
+            <h1 className="font-serif text-3xl sm:text-4xl font-semibold text-[#0D1F26] leading-tight">
               Biblioteca Clinica y Recoleccion de Datos
             </h1>
             <p className="text-sm sm:text-base text-[#4A5D64] leading-relaxed">
@@ -266,16 +266,16 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({
             </p>
           </div>
 
-          <div className="flex items-baseline gap-6 text-left lg:text-right shrink-0 border-t lg:border-t-0 pt-4 lg:pt-0 border-[#EDF2F0]">
+          <div className="flex items-baseline gap-6 text-left lg:text-right shrink-0 border-t lg:border-t-0 pt-4 lg:pt-0 border-[#ECEAE3]">
             <div>
               <span className="block text-[11px] uppercase tracking-[0.14em] text-[#6B7D83]">
                 Fuentes indexadas
               </span>
-              <span className="font-serif text-3xl font-semibold text-[#0B252E]">
+              <span className="font-serif text-3xl font-semibold text-[#0D1F26]">
                 {references.length}
               </span>
             </div>
-            <div className="h-8 w-px bg-[#DCE5E3]" />
+            <div className="h-8 w-px bg-[#DEDBD2]" />
             <div>
               <span className="block text-[11px] uppercase tracking-[0.14em] text-[#6B7D83]">
                 Especialidades
@@ -289,10 +289,10 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({
 
         {/* Unauthenticated Gate Notice: Reading allowed, Exams strictly require registration */}
         {!isAuthenticated && (
-          <div className="p-4 sm:px-6 rounded-2xl bg-[#ECF6F4]/85 border border-[#CFE7E2] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="p-4 sm:px-6 rounded-sm bg-[#ECF6F4]/85 border border-[#CFE7E2] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-start gap-3">
               <Lock className="w-4 h-4 text-[#0E6F65] shrink-0 mt-0.5" />
-              <p className="text-xs sm:text-sm text-[#0B252E] leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#0D1F26] leading-relaxed">
                 <strong className="font-semibold">Lectura abierta, evaluacion protegida:</strong>{' '}
                 puedes revisar libremente todas las fuentes y fichas de recoleccion de datos
                 clinicos. Para rendir examenes o evaluar casos clinicos se requiere iniciar sesion
@@ -303,7 +303,7 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({
               <button
                 type="button"
                 onClick={onRequireAuth}
-                className="shrink-0 px-5 py-2 rounded-full bg-[#0E6F65] hover:bg-[#0A564E] text-white text-xs font-medium transition-colors"
+                className="shrink-0 px-5 py-2 rounded-none font-mono bg-[#0E6F65] hover:bg-[#0A564E] text-white text-xs font-medium transition-colors"
               >
                 Registrarme para evaluar
               </button>
@@ -321,10 +321,10 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({
                 key={opt.id}
                 type="button"
                 onClick={() => setSelectedSpecialty(opt.id)}
-                className={`px-4 py-2 rounded-full text-xs font-medium transition-colors ${
+                className={`px-4 py-2 rounded-none font-mono text-xs font-medium transition-colors ${
                   isSelected
                     ? 'bg-[#0E6F65] text-white shadow-2xs'
-                    : 'bg-white text-[#4A5D64] hover:text-[#0B252E] hover:bg-[#F2F7F6] border border-[#DCE5E3]'
+                    : 'bg-white text-[#4A5D64] hover:text-[#0D1F26] hover:bg-[#F3F1EC] border border-[#DEDBD2]'
                 }`}
               >
                 <span>{opt.label}</span>
@@ -351,13 +351,13 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Buscar por patologia, signo semiologico, anamnesis, punto de corte o tratado (Harrison, KDIGO, Williams, Sabiston, Nelson)..."
-              className="w-full pl-11 pr-10 py-3 rounded-full bg-white border border-[#DCE5E3] text-xs sm:text-sm text-[#0B252E] placeholder-[#8A9BA1] focus:outline-none focus:border-[#0E6F65] transition-colors"
+              className="w-full pl-11 pr-10 py-3 rounded-full bg-white border border-[#DEDBD2] text-xs sm:text-sm text-[#0D1F26] placeholder-[#8A9BA1] focus:outline-none focus:border-[#0E6F65] transition-colors"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="absolute inset-y-0 right-0 pr-4 flex items-center text-[#6B7D83] hover:text-[#0B252E]"
+                className="absolute inset-y-0 right-0 pr-4 flex items-center text-[#6B7D83] hover:text-[#0D1F26]"
                 aria-label="Limpiar busqueda"
               >
                 <X className="w-4 h-4" />
@@ -377,19 +377,19 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({
           {[1, 2, 3, 4].map((idx) => (
             <div
               key={idx}
-              className="p-7 rounded-3xl bg-white border border-[#DCE5E3] space-y-4"
+              className="p-7 rounded-sm bg-white border border-[#DEDBD2] space-y-4"
             >
-              <div className="h-3 bg-[#F2F7F6] rounded w-1/3" />
-              <div className="h-6 bg-[#F2F7F6] rounded w-4/5" />
-              <div className="h-24 bg-[#F7FAF9] rounded-2xl" />
-              <div className="h-10 bg-[#F2F7F6] rounded-full w-full" />
+              <div className="h-3 bg-[#F3F1EC] rounded w-1/3" />
+              <div className="h-6 bg-[#F3F1EC] rounded w-4/5" />
+              <div className="h-24 bg-[#F7FAF9] rounded-sm" />
+              <div className="h-10 bg-[#F3F1EC] rounded-full w-full" />
             </div>
           ))}
         </div>
       ) : filteredReferences.length === 0 ? (
-        <div className="text-center py-16 px-4 bg-white rounded-3xl border border-[#DCE5E3] space-y-3">
+        <div className="text-center py-16 px-4 bg-white rounded-sm border border-[#DEDBD2] space-y-3">
           <BookOpen className="w-9 h-9 text-[#6B7D83] mx-auto" />
-          <h3 className="font-serif text-lg font-semibold text-[#0B252E]">
+          <h3 className="font-serif text-lg font-semibold text-[#0D1F26]">
             No se encontraron fuentes para esta busqueda
           </h3>
           <p className="text-xs sm:text-sm text-[#4A5D64] max-w-md mx-auto">
@@ -430,7 +430,7 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({
               <article
                 key={ref.id || ref.reference_id}
                 style={{ animationDelay: `${Math.min(cardIndex, 7) * 45}ms` }}
-                className="editorial-card-lift animate-fade-in-up flex flex-col justify-between p-6 sm:p-7 rounded-3xl bg-white border border-[#DCE5E3] hover:border-[#A9CEC7] transition-all"
+                className="editorial-card-lift animate-fade-in-up flex flex-col justify-between p-6 sm:p-7 rounded-sm bg-white border border-[#DEDBD2] hover:border-[#A9CEC7] transition-all"
               >
                 <div className="space-y-4">
                   {/* Natural Classic Editorial Meta Line (No harsh rectangles) */}
@@ -465,7 +465,7 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({
                   {/* Book / Guideline Title & Section */}
                   <div className="space-y-1">
                     <p className="text-xs text-[#6B7D83]">{publisher}</p>
-                    <h2 className="font-serif text-lg sm:text-xl font-semibold text-[#0B252E] leading-snug">
+                    <h2 className="font-serif text-lg sm:text-xl font-semibold text-[#0D1F26] leading-snug">
                       {title}
                     </h2>
                     {ref.section_title && (
@@ -486,9 +486,9 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({
                   </div>
 
                   {/* Structured Data Collection Preview */}
-                  <div className="p-4 rounded-2xl bg-[#F7FAF9] border border-[#E7EEEC] space-y-3">
+                  <div className="p-4 rounded-sm bg-[#F7FAF9] border border-[#E7EEEC] space-y-3">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-[11px] uppercase tracking-[0.14em] font-semibold text-[#0B252E] flex items-center gap-1.5">
+                      <span className="text-[11px] uppercase tracking-[0.14em] font-semibold text-[#0D1F26] flex items-center gap-1.5">
                         <ClipboardList className="w-3.5 h-3.5 text-[#0E6F65]" />
                         <span>Protocolo de recoleccion de datos</span>
                       </span>
@@ -522,7 +522,7 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({
                         <p className="text-[11px] font-semibold text-[#4A5D64]">
                           Punto de corte clave:
                         </p>
-                        <p className="text-xs text-[#0B252E] leading-relaxed">
+                        <p className="text-xs text-[#0D1F26] leading-relaxed">
                           {cutoffsList[0]}
                         </p>
                       </div>
@@ -531,7 +531,7 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({
                 </div>
 
                 {/* Card Footer: Open Full Data Collection Sheet + Protected Exam Action */}
-                <div className="pt-5 mt-5 border-t border-[#EDF2F0] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
+                <div className="pt-5 mt-5 border-t border-[#ECEAE3] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
                   <button
                     type="button"
                     onClick={() => setActiveSheetRef(ref)}
@@ -547,7 +547,7 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({
                     className={`flex-1 py-2.5 px-4 rounded-full text-xs font-medium transition-colors flex items-center justify-center gap-2 ${
                       isAuthenticated
                         ? 'bg-[#0E6F65] hover:bg-[#0A564E] text-white'
-                        : 'bg-white border border-[#DCE5E3] hover:border-[#0E6F65] text-[#4A5D64] hover:text-[#0E6F65]'
+                        : 'bg-white border border-[#DEDBD2] hover:border-[#0E6F65] text-[#4A5D64] hover:text-[#0E6F65]'
                     }`}
                     title={
                       isAuthenticated
@@ -587,9 +587,9 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({
                 setActiveSheetRef(null);
               }
             }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5 bg-[#0B252E]/55 backdrop-blur-[2px]"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5 bg-[#0D1F26]/55 backdrop-blur-[2px]"
           >
-            <div className="relative w-full max-w-3xl max-h-[88dvh] flex flex-col overflow-hidden rounded-3xl bg-[#FDFCFA] border border-[#DCE5E3] shadow-2xl text-left animate-scale-in">
+            <div className="relative w-full max-w-3xl max-h-[88dvh] flex flex-col overflow-hidden rounded-sm bg-[#FAF9F6] border border-[#DEDBD2] shadow-2xl text-left animate-scale-in">
               {/* Pinned Header */}
               <header className="shrink-0 px-6 py-5 border-b border-[#E2ECE9] bg-white flex items-start justify-between gap-4">
                 <div className="space-y-1 min-w-0">
@@ -612,7 +612,7 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({
                   </div>
                   <h2
                     id="library-sheet-title"
-                    className="font-serif text-xl sm:text-2xl font-semibold text-[#0B252E] leading-snug"
+                    className="font-serif text-xl sm:text-2xl font-semibold text-[#0D1F26] leading-snug"
                   >
                     {activeSheetRef.title || activeSheetRef.source_title}
                   </h2>
@@ -627,7 +627,7 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({
                   type="button"
                   onClick={() => setActiveSheetRef(null)}
                   aria-label="Cerrar ficha clinica"
-                  className="shrink-0 p-2 rounded-full bg-[#F2F7F6] hover:bg-[#E4EEEC] text-[#4A5D64] hover:text-[#0B252E] transition-colors"
+                  className="shrink-0 p-2 rounded-full bg-[#F3F1EC] hover:bg-[#E4EEEC] text-[#4A5D64] hover:text-[#0D1F26] transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -636,18 +636,18 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({
               {/* Scrollable Body with the 4 Pillars of Clinical Data Collection */}
               <div className="flex-1 overflow-y-auto px-6 py-5 space-y-5">
                 {/* Key Recommendation */}
-                <section className="p-4 sm:p-5 rounded-2xl bg-[#ECF6F4]/70 border border-[#CFE7E2] space-y-1.5">
+                <section className="p-4 sm:p-5 rounded-sm bg-[#ECF6F4]/70 border border-[#CFE7E2] space-y-1.5">
                   <span className="text-[11px] uppercase tracking-[0.14em] font-semibold text-[#0E6F65] block">
                     Sintesis terapeutica y diagnostica ({activeSheetRef.evidence_level || 'Consenso'})
                   </span>
-                  <p className="text-xs sm:text-sm text-[#0B252E] leading-relaxed">
+                  <p className="text-xs sm:text-sm text-[#0D1F26] leading-relaxed">
                     {activeSheetRef.key_recommendation || activeSheetRef.key_takeaway}
                   </p>
                 </section>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* 1. Anamnesis Dirigida */}
-                  <section className="p-4 sm:p-5 rounded-2xl bg-white border border-[#E2ECE9] space-y-3">
+                  <section className="p-4 sm:p-5 rounded-sm bg-white border border-[#E2ECE9] space-y-3">
                     <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.13em] text-[#0E6F65]">
                       <ClipboardList className="w-4 h-4 shrink-0" />
                       <span>1. Anamnesis dirigida (Datos a recolectar)</span>
@@ -663,7 +663,7 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({
                   </section>
 
                   {/* 2. Signos de Examen Fisico */}
-                  <section className="p-4 sm:p-5 rounded-2xl bg-white border border-[#E2ECE9] space-y-3">
+                  <section className="p-4 sm:p-5 rounded-sm bg-white border border-[#E2ECE9] space-y-3">
                     <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.13em] text-[#0E6F65]">
                       <Stethoscope className="w-4 h-4 shrink-0" />
                       <span>2. Examen fisico dirigido</span>
@@ -679,7 +679,7 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({
                   </section>
 
                   {/* 3. Puntos de Corte y Escalas */}
-                  <section className="p-4 sm:p-5 rounded-2xl bg-[#FDF7E7]/65 border border-[#EFE0B9] space-y-3">
+                  <section className="p-4 sm:p-5 rounded-sm bg-[#FDF7E7]/65 border border-[#EFE0B9] space-y-3">
                     <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.13em] text-[#8A6116]">
                       <Activity className="w-4 h-4 shrink-0" />
                       <span>3. Puntos de corte y criterios auxiliares</span>
@@ -695,7 +695,7 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({
                   </section>
 
                   {/* 4. Signos de Alarma */}
-                  <section className="p-4 sm:p-5 rounded-2xl bg-[#FBF1F1]/75 border border-[#EED7D7] space-y-3">
+                  <section className="p-4 sm:p-5 rounded-sm bg-[#FBF1F1]/75 border border-[#EED7D7] space-y-3">
                     <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.13em] text-[#9E3F42]">
                       <AlertTriangle className="w-4 h-4 shrink-0" />
                       <span>4. Signos de alarma y derivacion critica</span>
@@ -733,7 +733,7 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({
                   <button
                     type="button"
                     onClick={() => setActiveSheetRef(null)}
-                    className="flex-1 sm:flex-none px-4 py-2.5 rounded-full border border-[#DCE5E3] text-xs font-medium text-[#4A5D64] hover:bg-[#F2F7F6] transition-colors"
+                    className="flex-1 sm:flex-none px-4 py-2.5 rounded-none font-mono border border-[#DEDBD2] text-xs font-medium text-[#4A5D64] hover:bg-[#F3F1EC] transition-colors"
                   >
                     Cerrar ficha
                   </button>
@@ -741,7 +741,7 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({
                   <button
                     type="button"
                     onClick={() => handleExamAction(activeSheetRef)}
-                    className="flex-1 sm:flex-none px-5 py-2.5 rounded-full bg-[#0E6F65] hover:bg-[#0A564E] text-white text-xs font-medium inline-flex items-center justify-center gap-2 transition-colors"
+                    className="flex-1 sm:flex-none px-5 py-2.5 rounded-none font-mono bg-[#0E6F65] hover:bg-[#0A564E] text-white text-xs font-medium inline-flex items-center justify-center gap-2 transition-colors"
                   >
                     {isAuthenticated ? (
                       <>

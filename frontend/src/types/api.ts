@@ -236,6 +236,58 @@ export interface SimulateDaysResponse {
   dashboard: LevelingDashboard;
 }
 
+export type LearningPathNodeStatus = 'locked' | 'active' | 'completed' | 'needs_review';
+
+export interface LearningPathNode {
+  node_id: string;
+  order: number;
+  node_type: 'triage' | 'labs' | 'management' | 'checkpoint' | string;
+  title: string;
+  case_id: string;
+  station_id: number;
+  difficulty_label: string;
+  status: LearningPathNodeStatus;
+  recall_probability: number;
+  xp_reward: number;
+  specialty?: string;
+  specialty_name?: string;
+  unit_index?: number;
+}
+
+export interface LearningPathUnit {
+  unit_index: number;
+  specialty: string;
+  specialty_name: string;
+  primary_case_id: string;
+  mastery_score: number;
+  half_life_days: number;
+  recall_probability: number;
+  difficulty_index: number;
+  hlr_next_review_days: number;
+  goldilocks_tier: string;
+  completed_nodes: number;
+  total_nodes: number;
+  is_priority: boolean;
+  nodes: LearningPathNode[];
+}
+
+export interface HLRSummary {
+  average_half_life_days: number;
+  average_recall_probability: number;
+  goldilocks_target_tier: string;
+  weakest_retention_specialty: string;
+  weakest_retention_probability: number;
+  model_references: string[];
+}
+
+export interface ProgressiveLearningPath {
+  units: LearningPathUnit[];
+  active_node: LearningPathNode | null;
+  hlr_summary: HLRSummary;
+  total_nodes: number;
+  completed_nodes: number;
+}
+
 export interface LevelingDashboard {
   user_id: number;
   current_level: CompetencyLevel;
@@ -246,6 +298,8 @@ export interface LevelingDashboard {
   cognitive_gap_radar: Record<CognitiveGapTag, number>;
   specialty_masteries: SpecialtyMastery[];
   pending_spaced_repetitions: SpacedRepetitionItem[];
+  hlr_summary?: HLRSummary;
+  learning_path?: ProgressiveLearningPath;
   id?: number;
   email?: string;
   full_name?: string;

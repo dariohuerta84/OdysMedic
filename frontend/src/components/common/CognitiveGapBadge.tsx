@@ -61,7 +61,7 @@ const GAP_DEFINITIONS: Record<string, GapConfig> = {
     description:
       'Protocolos de estabilizacion, farmacoterapia guiada por evidencia y seguimiento clinico.',
     icon: ShieldPlus,
-    containerClass: 'bg-[#F2F7F6] border-[#DCE5E3] text-[#0B252E]',
+    containerClass: 'bg-[#F3F1EC] border-[#DEDBD2] text-[#0D1F26]',
     iconClass: 'text-[#0E6F65]',
   },
   GAP_THERAPEUTIC_MANAGEMENT: {
@@ -69,7 +69,7 @@ const GAP_DEFINITIONS: Record<string, GapConfig> = {
     description:
       'Protocolos de estabilizacion, farmacoterapia guiada por evidencia y seguimiento clinico.',
     icon: ShieldPlus,
-    containerClass: 'bg-[#F2F7F6] border-[#DCE5E3] text-[#0B252E]',
+    containerClass: 'bg-[#F3F1EC] border-[#DEDBD2] text-[#0D1F26]',
     iconClass: 'text-[#0E6F65]',
   },
 };
@@ -84,7 +84,7 @@ export const CognitiveGapBadge: React.FC<CognitiveGapBadgeProps> = ({
     title: gapTag,
     description: 'Area de razonamiento clinico evaluada en la ruta formativa.',
     icon: AlertTriangle,
-    containerClass: 'bg-[#F2F7F6] border-[#DCE5E3] text-[#4A5D64]',
+    containerClass: 'bg-[#F3F1EC] border-[#DEDBD2] text-[#4A5D64]',
     iconClass: 'text-[#0E6F65]',
   };
 
@@ -108,7 +108,7 @@ export const CognitiveGapBadge: React.FC<CognitiveGapBadgeProps> = ({
   if (showDescription) {
     return (
       <div
-        className={`rounded-2xl border p-4 transition-all ${config.containerClass} ${className}`}
+        className={`rounded-sm border p-4 transition-all ${config.containerClass} ${className}`}
       >
         <div className="flex items-center gap-2 mb-1.5 font-semibold text-xs">
           <Icon className={`${sizeClasses[size].icon} shrink-0 ${config.iconClass}`} />

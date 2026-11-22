@@ -22,6 +22,7 @@ import type {
   RegisterRequest,
   SimulateDaysMode,
   SimulateDaysResponse,
+  ProgressiveLearningPath,
 } from '../types/api';
 
 const DEFAULT_API_BASE_URL = import.meta.env.PROD
@@ -417,6 +418,8 @@ function mapRawDashboardData(d: any): LevelingDashboard {
     cognitive_gap_radar: radarGaps,
     specialty_masteries: specialtyMasteries,
     pending_spaced_repetitions: pendingRepetitions,
+    hlr_summary: d.hlr_summary,
+    learning_path: d.learning_path,
     ...d,
   };
 }
@@ -425,6 +428,11 @@ export const levelingApi = {
   getDashboard: async (): Promise<LevelingDashboard> => {
     const response = await api.get<any>('/leveling/dashboard');
     return mapRawDashboardData(response.data);
+  },
+
+  getLearningPath: async (): Promise<ProgressiveLearningPath> => {
+    const response = await api.get<ProgressiveLearningPath>('/leveling/learning-path');
+    return response.data;
   },
 
   simulateDays: async (

@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  Flame,
-  Award,
-  Compass,
-  RotateCw,
-} from 'lucide-react';
-import type { CompetencyLevel } from '../../types/api';
-import { LevelBadge } from '../common/LevelBadge';
-import { ProgressBar } from '../common/ProgressBar';
+import type { CompetencyLevel, HLRSummary } from '../../types/api';
 import { useAnimatedNumber } from '../../hooks/useAnimatedNumber';
 
 export interface BentoStatsProps {
@@ -18,6 +10,7 @@ export interface BentoStatsProps {
   stageName?: string;
   isDiagnosticCompleted?: boolean;
   overallScore?: number | null;
+  hlrSummary?: HLRSummary | null;
   className?: string;
 }
 
@@ -26,208 +19,103 @@ export const BentoStats: React.FC<BentoStatsProps> = ({
   xp,
   streakDays,
   pendingReviewsCount,
-  stageName,
   isDiagnosticCompleted = false,
   overallScore = null,
+  hlrSummary = null,
   className = '',
 }) => {
-  const animatedXp = Math.round(useAnimatedNumber(xp, 850));
-  const animatedStreak = Math.round(useAnimatedNumber(streakDays, 650));
-  const animatedPending = Math.round(useAnimatedNumber(pendingReviewsCount, 650));
+  const animatedXp = Math.round(useAnimatedNumber(xp, 800));
+  const animatedStreak = Math.round(useAnimatedNumber(streakDays, 600));
+  const animatedPending = Math.round(useAnimatedNumber(pendingReviewsCount, 600));
+  const animatedScore = Math.round(useAnimatedNumber(overallScore ?? 0, 850));
 
-  const xpThresholds = {
-    'Nivel 1': { min: 0, next: 1000, nextLevel: 'Nivel 2' },
-    'Nivel 2': { min: 1000, next: 3000, nextLevel: 'Nivel 3' },
-    'Nivel 3': { min: 3000, next: 5000, nextLevel: 'Especialista' },
-  };
+  const avgRecallPct = hlrSummary
+    ? Math.round(hlrSummary.average_recall_probability * 100)
+    : 100;
+  const avgHalfLife = hlrSummary ? hlrSummary.average_half_life_days.toFixed(1) : '4.0';
 
-  const currentTier = xpThresholds[level] || xpThresholds['Nivel 1'];
-  const progressToNext = Math.min(
-    100,
-    Math.max(
-      0,
-      Math.round(
-        ((xp - currentTier.min) / (currentTier.next - currentTier.min)) * 100
-      )
-    )
-  );
+  const scoreColor = !isDiagnosticCompleted
+    ? 'text-[#64767E]'
+    : animatedScore < 50
+      ? 'text-[#A6262E]'
+      : animatedScore < 75
+        ? 'text-[#9A6B1F]'
+        : 'text-[#0E6F65]';
 
-  const xpRemaining = Math.max(0, currentTier.next - xp);
-
-  const defaultStage =
-    level === 'Nivel 3'
-      ? 'Internado / Preparacion avanzada'
-      : level === 'Nivel 2'
-        ? 'Ciencias clinicas y rotaciones'
-        : 'Ruta formativa inicial';
-
-  const resolvedStage = stageName || defaultStage;
-  const isCriticalRoute =
-    isDiagnosticCompleted && typeof overallScore === 'number' && overallScore < 50;
+  const recallColor =
+    avgRecallPct < 55
+      ? 'text-[#A6262E]'
+      : avgRecallPct < 75
+        ? 'text-[#9A6B1F]'
+        : 'text-[#0E6F65]';
 
   return (
     <div
-      className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full ${className}`}
+      className={`grid grid-cols-2 lg:grid-cols-5 border-t border-b border-[#DEDBD2] divide-y lg:divide-y-0 lg:divide-x divide-[#DEDBD2] bg-[#FAF9F6] ${className}`}
     >
-      {/* Card 1: Nivel Clinico */}
-      <div className="p-5 rounded-3xl bg-white border border-[#DCE5E3] editorial-card-lift flex flex-col justify-between animate-fade-in-up stagger-1">
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-[11px] uppercase tracking-[0.14em] text-[#6B7D83] font-semibold">
-            Nivel formativo
-          </span>
-          <div className="w-8 h-8 rounded-full bg-[#ECF6F4] flex items-center justify-center text-[#0E6F65]">
-            <Award className="w-4 h-4" />
-          </div>
+      {/* 1. Indice OCRI */}
+      <div className="py-5 pr-4 lg:px-5 first:lg:pl-0 space-y-1">
+        <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#64767E] block">
+          Indice OCRI
+        </span>
+        <div className={`font-serif text-3xl font-bold telemetry-mono ${scoreColor}`}>
+          {isDiagnosticCompleted ? `${animatedScore}%` : '--'}
         </div>
-
-        <div className="space-y-2">
-          {isDiagnosticCompleted ? (
-            <LevelBadge level={level} size="md" showSubtext />
-          ) : (
-            <span className="font-serif text-lg font-semibold text-[#4A5D64] block">
-              Por calibrar
-            </span>
-          )}
-          <p className="text-xs text-[#4A5D64]">
-            {resolvedStage}
-          </p>
-        </div>
-
-        <div className="mt-4 pt-3 border-t border-[#EDF2F0] flex items-center justify-between text-[11px] text-[#6B7D83]">
-          <span>Estado de ruta</span>
-          <span
-            className={`font-semibold ${
-              !isDiagnosticCompleted
-                ? 'text-[#6B7D83]'
-                : isCriticalRoute
-                  ? 'text-[#B6222A]'
-                  : 'text-[#0E6F65]'
-            }`}
-          >
-            {!isDiagnosticCompleted
-              ? 'Pendiente de evaluacion'
-              : isCriticalRoute
-                ? 'Nivelacion prioritaria'
-                : 'Calibrada'}
-          </span>
-        </div>
+        <span className="text-xs text-[#3D525A] block">
+          {isDiagnosticCompleted ? level : 'Sin calibrar'}
+        </span>
       </div>
 
-      {/* Card 2: Progreso acumulado */}
-      <div className="p-5 rounded-3xl bg-white border border-[#DCE5E3] editorial-card-lift flex flex-col justify-between animate-fade-in-up stagger-2">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-[11px] uppercase tracking-[0.14em] text-[#6B7D83] font-semibold">
-            Experiencia clinica
-          </span>
-          <div className="w-8 h-8 rounded-full bg-[#ECF6F4] flex items-center justify-center text-[#0E6F65]">
-            <Compass className="w-4 h-4" />
-          </div>
+      {/* 2. Retencion Media HLR */}
+      <div className="py-5 pl-4 lg:px-5 space-y-1 border-l border-[#DEDBD2] lg:border-l">
+        <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#64767E] block">
+          Retencion HLR (p)
+        </span>
+        <div className={`font-serif text-3xl font-bold telemetry-mono ${recallColor}`}>
+          {isDiagnosticCompleted ? `${avgRecallPct}%` : '--'}
         </div>
-
-        <div className="my-1">
-          <div className="font-serif text-2xl font-semibold text-[#0B252E]">
-            {animatedXp.toLocaleString()}{' '}
-            <span className="text-xs font-sans font-medium text-[#0E6F65]">
-              XP
-            </span>
-          </div>
-          <div className="mt-2.5">
-            <ProgressBar
-              progress={progressToNext}
-              color="teal"
-              height="sm"
-            />
-          </div>
-        </div>
-
-        <div className="mt-4 pt-3 border-t border-[#EDF2F0] flex items-center justify-between text-[11px] text-[#6B7D83]">
-          <span>Siguiente etapa: {currentTier.nextLevel}</span>
-          <span>
-            {xpRemaining > 0 ? `${xpRemaining} XP` : 'Completado'}
-          </span>
-        </div>
+        <span className="font-mono text-[11px] text-[#64767E] block">
+          Vida media h = {avgHalfLife}d
+        </span>
       </div>
 
-      {/* Card 3: Constancia de estudio */}
-      <div className="p-5 rounded-3xl bg-white border border-[#DCE5E3] editorial-card-lift flex flex-col justify-between animate-fade-in-up stagger-3">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-[11px] uppercase tracking-[0.14em] text-[#6B7D83] font-semibold">
-            Constancia de practica
-          </span>
-          <div className="w-8 h-8 rounded-full bg-[#FDF7E7] flex items-center justify-center text-[#8A6116]">
-            <Flame className="w-4 h-4" />
-          </div>
+      {/* 3. Dificultad Optima Goldilocks */}
+      <div className="py-5 pr-4 lg:px-5 space-y-1">
+        <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#64767E] block">
+          Zona Goldilocks
+        </span>
+        <div className="font-serif text-lg font-bold text-[#0D1F26] leading-tight pt-1">
+          {hlrSummary?.goldilocks_target_tier || level}
         </div>
-
-        <div className="my-1 space-y-1">
-          <div className="font-serif text-2xl font-semibold text-[#0B252E] flex items-baseline gap-2">
-            <span>{animatedStreak}</span>
-            <span className="text-xs font-sans font-normal text-[#4A5D64]">
-              {streakDays === 1 ? 'dia activo' : 'dias consecutivos'}
-            </span>
-          </div>
-          <p className="text-xs text-[#6B7D83]">
-            {streakDays > 0
-              ? 'Ritmo sostenido sin sobrecarga'
-              : 'Comienza hoy una estacion breve'}
-          </p>
-        </div>
-
-        <div className="mt-4 pt-3 border-t border-[#EDF2F0] flex items-center justify-between text-[11px] text-[#6B7D83]">
-          <span>Habito clinico</span>
-          <span className="text-[#8A6116] font-medium">
-            {streakDays >= 7 ? 'Consolidado' : 'En construccion'}
-          </span>
-        </div>
+        <span className="text-xs text-[#64767E] block">Objetivo IRT ~78% exito</span>
       </div>
 
-      {/* Card 4: Repasos Espaciados */}
-      <div className="p-5 rounded-3xl bg-white border border-[#DCE5E3] editorial-card-lift flex flex-col justify-between animate-fade-in-up stagger-4">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-[11px] uppercase tracking-[0.14em] text-[#6B7D83] font-semibold">
-            Repasos programados
-          </span>
-          <div
-            className={`w-8 h-8 rounded-full flex items-center justify-center ${
-              pendingReviewsCount > 0
-                ? 'bg-[#FBF1F1] text-[#B6222A]'
-                : 'bg-[#ECF6F4] text-[#0E6F65]'
-            }`}
-          >
-            <RotateCw className="w-4 h-4" />
-          </div>
+      {/* 4. Racha y Repasos */}
+      <div className="py-5 pl-4 lg:px-5 space-y-1 border-l border-[#DEDBD2] lg:border-l">
+        <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#64767E] block">
+          Constancia / Cola
+        </span>
+        <div className="font-serif text-3xl font-bold telemetry-mono text-[#0D1F26]">
+          {animatedStreak}d
         </div>
+        <span
+          className={`font-mono text-[11px] block ${
+            animatedPending > 0 ? 'text-[#9A6B1F]' : 'text-[#0E6F65]'
+          }`}
+        >
+          {animatedPending} {animatedPending === 1 ? 'repaso pendiente' : 'repasos pendientes'}
+        </span>
+      </div>
 
-        <div className="my-1 space-y-1">
-          <div className="font-serif text-2xl font-semibold text-[#0B252E] flex items-baseline gap-2">
-            <span className={pendingReviewsCount > 0 ? 'text-[#B6222A]' : ''}>
-              {animatedPending}
-            </span>
-            <span className="text-xs font-sans font-normal text-[#4A5D64]">
-              {pendingReviewsCount === 1 ? 'estacion pendiente' : 'estaciones pendientes'}
-            </span>
-          </div>
-          <p className="text-xs text-[#6B7D83]">
-            {pendingReviewsCount > 0
-              ? isCriticalRoute
-                ? 'Refuerzo inmediato activado por brechas'
-                : 'Refuerzo intervalar D7 / D21 sugerido'
-              : 'Sin repasos atrasados en tu ruta'}
-          </p>
+      {/* 5. Experiencia Clinica */}
+      <div className="col-span-2 lg:col-span-1 py-5 lg:pl-5 space-y-1">
+        <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#64767E] block">
+          Experiencia Clinica
+        </span>
+        <div className="font-serif text-3xl font-bold telemetry-mono text-[#0E6F65]">
+          {animatedXp.toLocaleString()}
         </div>
-
-        <div className="mt-4 pt-3 border-t border-[#EDF2F0] flex items-center justify-between text-[11px] text-[#6B7D83]">
-          <span>Memoria a largo plazo</span>
-          <span
-            className={
-              pendingReviewsCount > 0
-                ? 'text-[#B6222A] font-semibold'
-                : 'text-[#0E6F65] font-medium'
-            }
-          >
-            {pendingReviewsCount > 0 ? 'Prioritario hoy' : 'Al dia'}
-          </span>
-        </div>
+        <span className="font-mono text-[11px] text-[#64767E] block">Puntos XP acumulados</span>
       </div>
     </div>
   );

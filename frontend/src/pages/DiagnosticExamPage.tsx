@@ -197,12 +197,12 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
 
     return (
       <div className="max-w-4xl mx-auto px-4 py-10 sm:py-14">
-        <div className="bg-white border border-[#DCE5E3] rounded-3xl p-6 sm:p-10 shadow-xs space-y-8 animate-fade-in-up">
-          <div className="space-y-2 border-b border-[#EDF2F0] pb-6">
+        <div className="bg-white border border-[#DEDBD2] rounded-sm p-6 sm:p-10 shadow-xs space-y-8 animate-fade-in-up">
+          <div className="space-y-2 border-b border-[#ECEAE3] pb-6">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#0E6F65]">
               Calibracion clinica inicial
             </p>
-            <h1 className="font-serif text-2xl sm:text-4xl font-bold text-[#0B252E]">
+            <h1 className="font-serif text-2xl sm:text-4xl font-bold text-[#0D1F26]">
               Elige como deseas rendir tu evaluacion inicial
             </h1>
             <p className="text-sm sm:text-base text-[#4A606A] leading-relaxed max-w-2xl">
@@ -218,10 +218,10 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
             <button
               type="button"
               onClick={() => setExamMode('general')}
-              className={`relative p-6 rounded-2xl border text-left editorial-card-lift flex flex-col justify-between space-y-4 ${
+              className={`relative p-6 rounded-sm border text-left editorial-card-lift flex flex-col justify-between space-y-4 ${
                 examMode === 'general'
                   ? 'bg-[#EAF4F2] border-[#0E6F65] shadow-xs'
-                  : 'bg-[#FDFCFA] border-[#DCE5E3] hover:border-[#9EC6BF]'
+                  : 'bg-[#FAF9F6] border-[#DEDBD2] hover:border-[#9EC6BF]'
               }`}
             >
               <div className="space-y-3">
@@ -240,7 +240,7 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
                   <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#0E6F65] block">
                     Opcion 1 · Transversal
                   </span>
-                  <h2 className="font-serif text-xl font-bold text-[#0B252E] mt-0.5">
+                  <h2 className="font-serif text-xl font-bold text-[#0D1F26] mt-0.5">
                     Examen General
                   </h2>
                 </div>
@@ -260,10 +260,10 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
             <button
               type="button"
               onClick={() => setExamMode('specialty')}
-              className={`relative p-6 rounded-2xl border text-left editorial-card-lift flex flex-col justify-between space-y-4 ${
+              className={`relative p-6 rounded-sm border text-left editorial-card-lift flex flex-col justify-between space-y-4 ${
                 examMode === 'specialty'
                   ? 'bg-[#EAF4F2] border-[#0E6F65] shadow-xs'
-                  : 'bg-[#FDFCFA] border-[#DCE5E3] hover:border-[#9EC6BF]'
+                  : 'bg-[#FAF9F6] border-[#DEDBD2] hover:border-[#9EC6BF]'
               }`}
             >
               <div className="space-y-3">
@@ -282,7 +282,7 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
                   <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#0E6F65] block">
                     Opcion 2 · Focalizado
                   </span>
-                  <h2 className="font-serif text-xl font-bold text-[#0B252E] mt-0.5">
+                  <h2 className="font-serif text-xl font-bold text-[#0D1F26] mt-0.5">
                     Examen de una sola especialidad
                   </h2>
                 </div>
@@ -301,9 +301,9 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
 
           {/* Specialty Selector Panel when examMode === 'specialty' */}
           {examMode === 'specialty' && (
-            <div className="p-5 sm:p-6 rounded-2xl bg-[#F2F7F6] border border-[#D7E5E2] space-y-4 animate-fade-in-up">
+            <div className="p-5 sm:p-6 rounded-sm bg-[#F3F1EC] border border-[#D7E5E2] space-y-4 animate-fade-in-up">
               <div>
-                <h3 className="font-serif text-lg font-bold text-[#0B252E]">
+                <h3 className="font-serif text-lg font-bold text-[#0D1F26]">
                   Selecciona la especialidad a evaluar
                 </h3>
                 <p className="text-xs text-[#5C737C]">
@@ -323,7 +323,7 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
                       className={`px-4 py-3 rounded-xl border text-left text-xs sm:text-sm transition-all flex items-center justify-between gap-2 ${
                         isCurrent
                           ? 'bg-white border-[#0E6F65] text-[#0E6F65] font-semibold shadow-2xs'
-                          : 'bg-white/70 border-[#DCE5E3] text-[#354B54] hover:bg-white'
+                          : 'bg-white/70 border-[#DEDBD2] text-[#354B54] hover:bg-white'
                       }`}
                     >
                       <span>{sp.label}</span>
@@ -342,7 +342,7 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
             </div>
           )}
 
-          <div className="pt-4 border-t border-[#EDF2F0] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="pt-4 border-t border-[#ECEAE3] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <span className="text-xs text-[#6E828A]">
               Duracion estimada: 4 a 6 minutos · Sin penalizacion por tiempo
             </span>
@@ -383,7 +383,7 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
 
     const statusBanner = isApto
       ? {
-          bg: 'bg-[#ECF6F4] border-[#BFE0D9] text-[#0B252E]',
+          bg: 'bg-[#ECF6F4] border-[#BFE0D9] text-[#0D1F26]',
           accent: 'text-[#0E6F65]',
           strokeHex: '#0E6F65',
           title: 'Apto para tu etapa clinica',
@@ -392,7 +392,7 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
         }
       : isNivelacion
         ? {
-            bg: 'bg-[#FDF7E7] border-[#E9D7AC] text-[#0B252E]',
+            bg: 'bg-[#FDF7E7] border-[#E9D7AC] text-[#0D1F26]',
             accent: 'text-[#9A6B1F]',
             strokeHex: '#B67F1E',
             title: 'En nivelacion guiada (Apto condicional)',
@@ -400,7 +400,7 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
             icon: Brain,
           }
         : {
-            bg: 'bg-[#FDECEC] border-[#E8C5C6] text-[#0B252E]',
+            bg: 'bg-[#FDECEC] border-[#E8C5C6] text-[#0D1F26]',
             accent: 'text-[#B6222A]',
             strokeHex: '#C6383E',
             title: 'Nivelacion prioritaria requerida',
@@ -417,12 +417,12 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
 
     return (
       <div className="max-w-3xl mx-auto px-4 py-10 sm:py-14">
-        <div className="bg-white border border-[#DCE5E3] rounded-3xl p-6 sm:p-10 shadow-sm space-y-8 animate-fade-in-up">
+        <div className="bg-white border border-[#DEDBD2] rounded-sm p-6 sm:p-10 shadow-sm space-y-8 animate-fade-in-up">
           <div className="text-center space-y-2">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#0E6F65]">
               Evaluacion inicial completada
             </p>
-            <h1 className="font-serif text-2xl sm:text-4xl font-bold text-[#0B252E]">
+            <h1 className="font-serif text-2xl sm:text-4xl font-bold text-[#0D1F26]">
               Sintesis de tu desempeno basal
             </h1>
             <p className="text-xs sm:text-sm text-[#5C737C] max-w-xl mx-auto">
@@ -438,7 +438,7 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
 
           {/* Animated Aptitude Summary Card */}
           <div
-            className={`p-6 rounded-2xl border ${statusBanner.bg} ${
+            className={`p-6 rounded-sm border ${statusBanner.bg} ${
               isApto ? 'animate-correct-pop' : !isNivelacion ? 'animate-clinical-shake' : ''
             }`}
           >
@@ -447,7 +447,7 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
                 <div className="relative shrink-0">
                   <span
                     aria-hidden="true"
-                    className={`absolute inset-0 rounded-2xl animate-ring-expand pointer-events-none ${
+                    className={`absolute inset-0 rounded-sm animate-ring-expand pointer-events-none ${
                       isApto
                         ? 'bg-[#0E6F65]/25'
                         : isNivelacion
@@ -455,7 +455,7 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
                           : 'bg-[#C6383E]/30'
                     }`}
                   />
-                  <div className="relative w-12 h-12 rounded-2xl bg-white border border-[#DCE5E3] flex items-center justify-center">
+                  <div className="relative w-12 h-12 rounded-sm bg-white border border-[#DEDBD2] flex items-center justify-center">
                     <StatusIcon className={`w-6 h-6 ${statusBanner.accent}`} />
                   </div>
                 </div>
@@ -463,7 +463,7 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
                   <span className={`text-xs font-semibold uppercase tracking-wider ${statusBanner.accent}`}>
                     Diagnostico de partida
                   </span>
-                  <h2 className="font-serif text-xl font-bold text-[#0B252E]">
+                  <h2 className="font-serif text-xl font-bold text-[#0D1F26]">
                     {statusBanner.title}
                   </h2>
                   <p className="text-xs sm:text-sm text-[#4A606A] leading-relaxed max-w-lg">
@@ -513,7 +513,7 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
           {/* Detected Cognitive Gaps */}
           {diagnosticResult.detected_gaps.length > 0 && (
             <div className="space-y-3 animate-fade-in-up stagger-1">
-              <h3 className="font-serif text-lg font-bold text-[#0B252E]">
+              <h3 className="font-serif text-lg font-bold text-[#0D1F26]">
                 Brechas detectadas para tu ruta de refuerzo
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -531,7 +531,7 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
 
           {/* Staggered Per-Station Animated Feedback */}
           <div className="space-y-3">
-            <h3 className="font-serif text-lg font-bold text-[#0B252E]">
+            <h3 className="font-serif text-lg font-bold text-[#0D1F26]">
               Revision clinica por estacion
             </h3>
             <div className="space-y-2.5">
@@ -545,7 +545,7 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
                       : 'bg-[#FDECEC]/75 border-[#E8C5C6]'
                   }`}
                 >
-                  <div className="flex items-center justify-between font-semibold mb-1.5 text-[#0B252E]">
+                  <div className="flex items-center justify-between font-semibold mb-1.5 text-[#0D1F26]">
                     <span className="flex items-center gap-2.5">
                       {detail.is_correct ? (
                         <span className="w-5 h-5 rounded-full bg-[#0E6F65] text-white flex items-center justify-center shrink-0">
@@ -586,7 +586,7 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
             </div>
           </div>
 
-          <div className="pt-4 border-t border-[#EDF2F0] flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="pt-4 border-t border-[#ECEAE3] flex flex-col sm:flex-row items-center justify-between gap-4">
             <span className="text-xs text-[#6E828A]">
               Tu rombo de competencias y tu cola de repasos espaciados ya reflejan este resultado
             </span>
@@ -609,9 +609,9 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
   // =========================================================================
   return (
     <div className="max-w-3xl mx-auto px-4 py-8 sm:py-12">
-      <div className="bg-white border border-[#DCE5E3] rounded-3xl p-5 sm:p-8 shadow-xs space-y-6">
+      <div className="bg-white border border-[#DEDBD2] rounded-sm p-5 sm:p-8 shadow-xs space-y-6">
         {/* Header & Progress */}
-        <div className="border-b border-[#EDF2F0] pb-5 space-y-3">
+        <div className="border-b border-[#ECEAE3] pb-5 space-y-3">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <button
@@ -622,7 +622,7 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Cambiar modalidad de examen</span>
               </button>
-              <h1 className="font-serif text-xl sm:text-2xl font-bold text-[#0B252E]">
+              <h1 className="font-serif text-xl sm:text-2xl font-bold text-[#0D1F26]">
                 {examMode === 'general'
                   ? 'Examen General de Especialidades'
                   : `Evaluacion de ${
@@ -659,12 +659,12 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
               <span>{currentQ.station_type}</span>
             </div>
 
-            <div className="p-5 rounded-2xl bg-[#F7FAF9] border border-[#E1ECE9] space-y-3.5">
+            <div className="p-5 rounded-sm bg-[#F7FAF9] border border-[#E1ECE9] space-y-3.5">
               <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#0E6F65]">
                 <Activity className="w-4 h-4" />
                 <span>Escenario clinico</span>
               </div>
-              <p className="text-sm text-[#0B252E] leading-relaxed">
+              <p className="text-sm text-[#0D1F26] leading-relaxed">
                 {currentQ.vignette}
               </p>
 
@@ -682,7 +682,7 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
             </div>
 
             <div className="pt-1">
-              <h2 className="font-serif text-lg sm:text-xl font-bold text-[#0B252E] leading-snug">
+              <h2 className="font-serif text-lg sm:text-xl font-bold text-[#0D1F26] leading-snug">
                 {currentQ.question}
               </h2>
             </div>
@@ -707,19 +707,19 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
                     className={`flex items-start gap-3.5 p-4 rounded-xl border text-left cursor-pointer transition-all duration-200 ${
                       isSelected
                         ? 'bg-[#EAF4F2] border-[#0E6F65] shadow-2xs scale-[1.005]'
-                        : 'bg-white border-[#DCE5E3] hover:border-[#9EC6BF] hover:bg-[#F7FAF9]'
+                        : 'bg-white border-[#DEDBD2] hover:border-[#9EC6BF] hover:bg-[#F7FAF9]'
                     }`}
                   >
                     <div
                       className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 border transition-all duration-200 ${
                         isSelected
                           ? 'bg-[#0E6F65] text-white border-[#0E6F65]'
-                          : 'bg-[#F2F7F6] text-[#354B54] border-[#DCE5E3]'
+                          : 'bg-[#F3F1EC] text-[#354B54] border-[#DEDBD2]'
                       }`}
                     >
                       {isSelected ? <Check className="w-4 h-4 stroke-[3]" /> : letter}
                     </div>
-                    <div className="pt-1 flex-1 text-xs sm:text-sm text-[#0B252E] leading-relaxed">
+                    <div className="pt-1 flex-1 text-xs sm:text-sm text-[#0D1F26] leading-relaxed">
                       {opt.text}
                     </div>
                   </div>
@@ -737,12 +737,12 @@ export const DiagnosticExamPage: React.FC<DiagnosticExamPageProps> = ({ onComple
         )}
 
         {/* Navigation Footer */}
-        <div className="pt-4 border-t border-[#EDF2F0] flex items-center justify-between gap-3">
+        <div className="pt-4 border-t border-[#ECEAE3] flex items-center justify-between gap-3">
           <button
             type="button"
             disabled={currentIndex === 0 || isSubmitting}
             onClick={handlePrev}
-            className="px-4 py-2.5 rounded-xl border border-[#DCE5E3] text-[#354B54] text-xs sm:text-sm font-medium hover:bg-[#F2F7F6] disabled:opacity-40 flex items-center gap-1.5 transition-colors"
+            className="px-4 py-2.5 rounded-xl border border-[#DEDBD2] text-[#354B54] text-xs sm:text-sm font-medium hover:bg-[#F3F1EC] disabled:opacity-40 flex items-center gap-1.5 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Anterior</span>

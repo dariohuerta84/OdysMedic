@@ -48,10 +48,10 @@ export const OptionCard: React.FC<OptionCardProps> = ({
           : evaluationState === 'dimmed'
             ? 'opacity-55 cursor-default border-[#E7EEEC] bg-[#F7FAF9]'
             : disabled
-              ? 'opacity-65 cursor-not-allowed border-[#E7EEEC] bg-[#F2F7F6]/60'
+              ? 'opacity-65 cursor-not-allowed border-[#E7EEEC] bg-[#F3F1EC]/60'
               : isSelected
                 ? 'bg-[#ECF6F4] border-[#0E6F65] shadow-xs'
-                : 'bg-white border-[#DCE5E3] hover:border-[#9EC6BF] hover:bg-[#F7FAF9] cursor-pointer';
+                : 'bg-white border-[#DEDBD2] hover:border-[#9EC6BF] hover:bg-[#F7FAF9] cursor-pointer';
 
   const badgeStyle =
     evaluationState === 'correct'
@@ -62,7 +62,7 @@ export const OptionCard: React.FC<OptionCardProps> = ({
           ? 'bg-[#ECF6F4] border-[#0E6F65] text-[#0E6F65]'
           : isSelected
             ? 'bg-[#0E6F65] border-[#0E6F65] text-white'
-            : 'bg-[#F2F7F6] border-[#DCE5E3] text-[#354B54] group-hover:border-[#0E6F65] group-hover:text-[#0E6F65] group-hover:bg-white';
+            : 'bg-[#F3F1EC] border-[#DEDBD2] text-[#354B54] group-hover:border-[#0E6F65] group-hover:text-[#0E6F65] group-hover:bg-white';
 
   return (
     <div
@@ -74,7 +74,7 @@ export const OptionCard: React.FC<OptionCardProps> = ({
         if (!disabled) onSelect();
       }}
       onKeyDown={handleKeyDown}
-      className={`group relative flex items-start gap-3.5 sm:gap-4 p-4 sm:p-5 rounded-2xl border text-left transition-all duration-200 select-none focus:outline-none focus:ring-2 focus:ring-[#0E6F65]/30 ${containerStyle} ${className}`}
+      className={`group relative flex items-start gap-3.5 sm:gap-4 p-4 sm:p-5 rounded-sm border text-left transition-all duration-200 select-none focus:outline-none focus:ring-2 focus:ring-[#0E6F65]/30 ${containerStyle} ${className}`}
     >
       {/* Letter / Outcome Medallion */}
       <div className="relative shrink-0">
@@ -118,8 +118,8 @@ export const OptionCard: React.FC<OptionCardProps> = ({
         <p
           className={`text-xs sm:text-sm leading-relaxed font-sans transition-colors ${
             evaluationState === 'correct' || evaluationState === 'incorrect' || isSelected
-              ? 'text-[#0B252E] font-medium'
-              : 'text-[#344850] group-hover:text-[#0B252E]'
+              ? 'text-[#0D1F26] font-medium'
+              : 'text-[#344850] group-hover:text-[#0D1F26]'
           }`}
         >
           {option.text}

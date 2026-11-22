@@ -138,10 +138,10 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
           onClose();
         }
       }}
-      className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5 bg-[#0B252E]/55 backdrop-blur-[2px] animate-fade-in"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5 bg-[#0D1F26]/55 backdrop-blur-[2px] animate-fade-in"
     >
       <div
-        className={`relative w-full max-w-2xl max-h-[86dvh] flex flex-col overflow-hidden rounded-3xl bg-[#FDFCFA] border shadow-2xl text-left ${
+        className={`relative w-full max-w-2xl max-h-[86dvh] flex flex-col overflow-hidden rounded-sm bg-[#FAF9F6] border shadow-2xl text-left ${
           isCorrect
             ? 'border-[#BFE0D9] animate-correct-pop'
             : 'border-[#E8C5C6] animate-clinical-shake'
@@ -222,7 +222,7 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
                     Estacion {stationNumber} de {totalStations}
                   </span>
                   <span
-                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${
+                    className={`inline-flex items-center px-2.5 py-0.5 rounded-none font-mono text-[11px] font-semibold border ${
                       isCorrect
                         ? 'bg-white/90 border-[#BFE0D9] text-[#0E6F65]'
                         : 'bg-white/90 border-[#EBCACA] text-[#B6222A]'
@@ -234,7 +234,7 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
 
                 <h2
                   id="pearl-modal-title"
-                  className="font-serif text-lg sm:text-xl font-semibold text-[#0B252E] leading-snug"
+                  className="font-serif text-lg sm:text-xl font-semibold text-[#0D1F26] leading-snug"
                 >
                   {isCorrect
                     ? 'Decision clinica acertada'
@@ -253,7 +253,7 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
               type="button"
               onClick={onClose}
               aria-label="Cerrar retroalimentacion"
-              className="shrink-0 p-2 rounded-full bg-white/85 hover:bg-white text-[#4A5D64] hover:text-[#0B252E] border border-[#DCE5E3] transition-colors"
+              className="shrink-0 p-2 rounded-full bg-white/85 hover:bg-white text-[#4A5D64] hover:text-[#0D1F26] border border-[#DEDBD2] transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
@@ -278,7 +278,7 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
           {/* Cognitive Reasoning Analysis */}
           <section
             aria-label="Analisis del razonamiento clinico"
-            className="p-4 rounded-2xl bg-white border border-[#E7EEEC] space-y-1.5 animate-fade-in-up stagger-1"
+            className="p-4 rounded-sm bg-white border border-[#E7EEEC] space-y-1.5 animate-fade-in-up stagger-1"
           >
             <div
               className={`flex items-center gap-2 text-[11px] uppercase tracking-[0.14em] font-semibold ${
@@ -300,13 +300,13 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
           {/* Actionable Clinical Pearl */}
           <section
             aria-label="Perla clinica"
-            className="p-4 rounded-2xl bg-[#F2F7F6] border border-[#DCE5E3] space-y-1.5 animate-fade-in-up stagger-2"
+            className="p-4 rounded-sm bg-[#F3F1EC] border border-[#DEDBD2] space-y-1.5 animate-fade-in-up stagger-2"
           >
             <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.14em] font-semibold text-[#0E6F65]">
               <Lightbulb className="w-4 h-4 shrink-0" />
               <span>Perla clinica clave</span>
             </div>
-            <p className="text-xs sm:text-sm text-[#0B252E] leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#0D1F26] leading-relaxed">
               {clinicalPearl}
             </p>
           </section>
@@ -314,7 +314,7 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
           {/* Evidence Citation */}
           <section
             aria-label="Referencia bibliografica"
-            className="p-4 rounded-2xl bg-white border border-[#E7EEEC] space-y-2 animate-fade-in-up stagger-3"
+            className="p-4 rounded-sm bg-white border border-[#E7EEEC] space-y-2 animate-fade-in-up stagger-3"
           >
             <div className="flex items-center justify-between flex-wrap gap-2">
               <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.14em] font-semibold text-[#4A5D64]">
@@ -330,7 +330,7 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
             </div>
 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
-              <p className="font-serif font-medium text-sm text-[#0B252E]">
+              <p className="font-serif font-medium text-sm text-[#0D1F26]">
                 {medRef.title} ({medRef.year})
               </p>
               {citationUrl && (
@@ -356,13 +356,13 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
           {/* Adaptive Route Update */}
           <section
             aria-label="Actualizacion de ruta clinica"
-            className={`px-4 py-3 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs animate-fade-in-up stagger-4 ${
+            className={`px-4 py-3 rounded-sm border flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs animate-fade-in-up stagger-4 ${
               isCorrect
                 ? 'bg-[#ECF6F4]/75 border-[#CFE7E2]'
                 : 'bg-[#FDF7E7]/80 border-[#EFE0B9]'
             }`}
           >
-            <div className="flex items-center gap-2.5 text-[#0B252E]">
+            <div className="flex items-center gap-2.5 text-[#0D1F26]">
               <FileCheck2
                 className={`w-4 h-4 shrink-0 ${
                   isCorrect ? 'text-[#0E6F65]' : 'text-[#8A6116]'
@@ -383,7 +383,7 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
             <div className="flex items-center gap-5 sm:justify-end">
               <div>
                 <span className="text-[#6B7D83] block text-[11px]">Nivel</span>
-                <span className="font-semibold text-[#0B252E]">
+                <span className="font-semibold text-[#0D1F26]">
                   {prescription.new_level || 'Nivel 1'}
                 </span>
               </div>
@@ -417,7 +417,7 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="w-full sm:w-auto px-4 py-2.5 rounded-full bg-white border border-[#DCE5E3] hover:bg-[#F2F7F6] text-[#4A5D64] hover:text-[#0B252E] text-xs sm:text-sm font-medium transition-colors flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-4 py-2.5 rounded-none font-mono bg-white border border-[#DEDBD2] hover:bg-[#F3F1EC] text-[#4A5D64] hover:text-[#0D1F26] text-xs sm:text-sm font-medium transition-colors flex items-center justify-center gap-2"
           >
             <FileText className="w-4 h-4" />
             <span>Revisar alternativas en caso</span>
@@ -426,7 +426,7 @@ export const ClinicalPearlModal: React.FC<ClinicalPearlModalProps> = ({
           <button
             type="button"
             onClick={isFinalStation ? onFinishCase : onNextStation}
-            className="group w-full sm:w-auto px-6 py-2.5 rounded-full bg-[#0E6F65] hover:bg-[#0A564E] text-white text-xs sm:text-sm font-medium flex items-center justify-center gap-2 transition-all duration-200 shadow-sm"
+            className="group w-full sm:w-auto px-6 py-2.5 rounded-none font-mono bg-[#0E6F65] hover:bg-[#0A564E] text-white text-xs sm:text-sm font-medium flex items-center justify-center gap-2 transition-all duration-200 shadow-sm"
           >
             <span>
               {isFinalStation

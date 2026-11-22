@@ -19,7 +19,7 @@ const LEVEL_MAP: Record<string, LevelConfig> = {
   'Nivel 1': {
     label: 'Nivel 1',
     subtext: 'Fundacional',
-    containerClass: 'bg-[#F2F7F6] border-[#DCE5E3] text-[#0B252E]',
+    containerClass: 'bg-[#F3F1EC] border-[#DEDBD2] text-[#0D1F26]',
     dotClass: 'bg-[#0E6F65]',
   },
   'Nivel 2': {

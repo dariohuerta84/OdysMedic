@@ -400,11 +400,11 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
 
   return (
     <article
-      className={`rounded-3xl bg-white border border-[#DCE5E3] overflow-hidden transition-all ${className}`}
+      className={`rounded-sm bg-white border border-[#DEDBD2] overflow-hidden transition-all ${className}`}
       aria-label="Expediente clinico del paciente"
     >
       {/* 1. Header: Patient Demographics & Chief Complaint */}
-      <header className="p-5 sm:p-7 border-b border-[#E7EEEC] bg-[#FDFCFA]">
+      <header className="p-5 sm:p-7 border-b border-[#E7EEEC] bg-[#FAF9F6]">
         <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-5">
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-2 text-xs text-[#4A5D64]">
@@ -425,20 +425,20 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
               </span>
             </div>
 
-            <h2 className="font-serif text-xl sm:text-2xl font-semibold text-[#0B252E] leading-snug">
+            <h2 className="font-serif text-xl sm:text-2xl font-semibold text-[#0D1F26] leading-snug">
               {caseDetail.display_title || caseDetail.title}
             </h2>
           </div>
 
           {/* Chief Complaint Soft Pastel Callout */}
-          <div className="p-4 rounded-2xl bg-[#FBF1F1]/85 border border-[#EED7D7] max-w-md shrink-0">
+          <div className="p-4 rounded-sm bg-[#FBF1F1]/85 border border-[#EED7D7] max-w-md shrink-0">
             <div className="flex items-start gap-2.5">
               <ShieldAlert className="w-4 h-4 text-[#9E3F42] shrink-0 mt-0.5" />
               <div className="space-y-0.5 min-w-0">
                 <span className="text-[10px] uppercase tracking-[0.14em] font-semibold text-[#9E3F42] block">
                   Motivo principal de ingreso
                 </span>
-                <p className="text-xs sm:text-sm font-medium text-[#0B252E] leading-relaxed">
+                <p className="text-xs sm:text-sm font-medium text-[#0D1F26] leading-relaxed">
                   {caseDetail.chief_complaint || 'Ingreso hospitalario para valoracion clinica.'}
                 </p>
               </div>
@@ -447,7 +447,7 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
         </div>
 
         {/* 2. Vital Signs Strip */}
-        <div className="mt-5 pt-4 border-t border-[#EDF2F0]">
+        <div className="mt-5 pt-4 border-t border-[#ECEAE3]">
           <div className="flex items-center gap-2 mb-2.5">
             <HeartPulse className="w-4 h-4 text-[#0E6F65]" />
             <span className="text-[11px] uppercase tracking-[0.14em] text-[#4A5D64] font-semibold">
@@ -481,7 +481,7 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
             onClick={() => setIsMobileExpanded(!isMobileExpanded)}
             aria-expanded={isMobileExpanded}
             aria-controls="vignette-details-content"
-            className="w-full py-2.5 px-4 rounded-full bg-[#F2F7F6] border border-[#DCE5E3] text-xs font-medium text-[#0E6F65] hover:bg-[#ECF6F4] flex items-center justify-center gap-2 transition-colors"
+            className="w-full py-2.5 px-4 rounded-full bg-[#F3F1EC] border border-[#DEDBD2] text-xs font-medium text-[#0E6F65] hover:bg-[#ECF6F4] flex items-center justify-center gap-2 transition-colors"
           >
             <span>
               {isMobileExpanded
@@ -508,12 +508,12 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
         <section className="space-y-2.5" aria-label="Anamnesis y enfermedad actual">
           <div className="flex items-center gap-2">
             <FileText className="w-4 h-4 text-[#0E6F65]" />
-            <h3 className="font-serif text-base sm:text-lg font-semibold text-[#0B252E]">
+            <h3 className="font-serif text-base sm:text-lg font-semibold text-[#0D1F26]">
               Anamnesis y evolucion del cuadro
             </h3>
           </div>
 
-          <div className="p-4 sm:p-5 rounded-2xl bg-[#F7FAF9] border border-[#E7EEEC] space-y-2.5 text-xs sm:text-sm text-[#344850] leading-relaxed">
+          <div className="p-4 sm:p-5 rounded-sm bg-[#F7FAF9] border border-[#E7EEEC] space-y-2.5 text-xs sm:text-sm text-[#344850] leading-relaxed">
             {anamnesisParagraphs.length > 0 ? (
               anamnesisParagraphs.map((para, i) => <p key={i}>{para}</p>)
             ) : (
@@ -528,7 +528,7 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
         <section className="space-y-2.5" aria-label="Examen fisico detallado">
           <div className="flex items-center gap-2">
             <Stethoscope className="w-4 h-4 text-[#0E6F65]" />
-            <h3 className="font-serif text-base sm:text-lg font-semibold text-[#0B252E]">
+            <h3 className="font-serif text-base sm:text-lg font-semibold text-[#0D1F26]">
               Examen fisico por sistemas
             </h3>
           </div>
@@ -538,7 +538,7 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
               physicalSystems.map((item, index) => (
                 <div
                   key={index}
-                  className="p-4 rounded-2xl bg-[#FDFCFA] border border-[#E7EEEC] space-y-1"
+                  className="p-4 rounded-sm bg-[#FAF9F6] border border-[#E7EEEC] space-y-1"
                 >
                   <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#0E6F65] block">
                     {item.title}
@@ -549,7 +549,7 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
                 </div>
               ))
             ) : (
-              <div className="p-4 rounded-2xl bg-[#F7FAF9] border border-[#E7EEEC] text-xs text-[#6B7D83]">
+              <div className="p-4 rounded-sm bg-[#F7FAF9] border border-[#E7EEEC] text-xs text-[#6B7D83]">
                 Sin hallazgos adicionales consignados en el examen fisico.
               </div>
             )}
@@ -561,7 +561,7 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <TestTubes className="w-4 h-4 text-[#0E6F65]" />
-              <h3 className="font-serif text-base sm:text-lg font-semibold text-[#0B252E]">
+              <h3 className="font-serif text-base sm:text-lg font-semibold text-[#0D1F26]">
                 Examenes auxiliares e imagenes iniciales
               </h3>
             </div>
@@ -571,9 +571,9 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
           </div>
 
           {labRows.length > 0 ? (
-            <div className="overflow-x-auto rounded-2xl border border-[#DCE5E3] bg-white">
+            <div className="overflow-x-auto rounded-sm border border-[#DEDBD2] bg-white">
               <table className="w-full text-left text-xs font-sans">
-                <thead className="bg-[#F2F7F6] text-[#4A5D64] uppercase text-[10px] tracking-[0.12em] border-b border-[#DCE5E3]">
+                <thead className="bg-[#F3F1EC] text-[#4A5D64] uppercase text-[10px] tracking-[0.12em] border-b border-[#DEDBD2]">
                   <tr>
                     <th scope="col" className="py-3 px-4 font-semibold">
                       Parametro
@@ -589,13 +589,13 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#EDF2F0]">
+                <tbody className="divide-y divide-[#ECEAE3]">
                   {labRows.map((lab, idx) => {
                     const rowHighlight =
                       lab.severity === 'critical'
-                        ? 'bg-[#FBF1F1]/45 text-[#0B252E]'
+                        ? 'bg-[#FBF1F1]/45 text-[#0D1F26]'
                         : lab.severity === 'warning'
-                          ? 'bg-[#FDF7E7]/50 text-[#0B252E]'
+                          ? 'bg-[#FDF7E7]/50 text-[#0D1F26]'
                           : 'text-[#344850] hover:bg-[#F7FAF9]';
 
                     const badgeClass =
@@ -603,11 +603,11 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
                         ? 'bg-[#FBF1F1] text-[#9E3F42] border-[#EED7D7]'
                         : lab.severity === 'warning'
                           ? 'bg-[#FDF7E7] text-[#8A6116] border-[#EFE0B9]'
-                          : 'bg-[#F2F7F6] text-[#4A5D64] border-[#DCE5E3]';
+                          : 'bg-[#F3F1EC] text-[#4A5D64] border-[#DEDBD2]';
 
                     return (
                       <tr key={idx} className={`transition-colors ${rowHighlight}`}>
-                        <td className="py-3 px-4 font-medium text-[#0B252E]">
+                        <td className="py-3 px-4 font-medium text-[#0D1F26]">
                           {lab.test}
                         </td>
                         <td className="py-3 px-4 font-semibold">
@@ -618,7 +618,7 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
                         </td>
                         <td className="py-3 px-4 text-right">
                           <span
-                            className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium border ${badgeClass}`}
+                            className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-none font-mono text-[11px] font-medium border ${badgeClass}`}
                           >
                             {lab.severity === 'critical' && (
                               <AlertCircle className="w-3 h-3 text-[#9E3F42]" />
@@ -637,7 +637,7 @@ export const VignettePlayer: React.FC<VignettePlayerProps> = ({
               </table>
             </div>
           ) : (
-            <div className="p-4 rounded-2xl bg-[#F7FAF9] border border-[#E7EEEC] text-center text-xs text-[#6B7D83]">
+            <div className="p-4 rounded-sm bg-[#F7FAF9] border border-[#E7EEEC] text-center text-xs text-[#6B7D83]">
               No se adjuntan reportes de laboratorio iniciales en esta estacion.
             </div>
           )}
