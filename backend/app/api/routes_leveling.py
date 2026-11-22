@@ -81,9 +81,21 @@ def get_dashboard(
 ) -> Dict[str, Any]:
     """
     Retorna el panel analitico del estudiante con radar OCRI de las 5 especialidades cardinales,
-    puntajes basales, nivel de competencia, racha, XP y tareas de repeticion espaciada.
+    puntajes basales, nivel de competencia, racha, XP, telemetria HLR, ruta progresiva y tareas espaciadas.
     """
     return student_service.get_student_dashboard(db, student.id)
+
+
+@router.get("/learning-path")
+def get_learning_path(
+    student: User = Depends(get_active_student),
+    db: Session = Depends(get_db),
+) -> Dict[str, Any]:
+    """
+    Retorna la Ruta Clinica Progresiva (5 Unidades x 4 Nodos) con desbloqueo secuencial,
+    probabilidad de recuerdo Half-Life Regression (HLR) y dificultad Goldilocks/IRT.
+    """
+    return student_service.build_progressive_learning_path(db, student.id)
 
 
 @router.post("/simulate-days")

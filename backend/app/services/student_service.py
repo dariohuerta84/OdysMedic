@@ -9,6 +9,7 @@ from app.db.models import (
     StudentGapMetric,
     CaseAttempt,
     SpacedRepetitionTask,
+    UserMemoryTrace,
 )
 from app.db.seeder import seed_initial_data, CARDINAL_SPECIALTIES, DEMO_USER_EMAIL
 from app.db.diagnostic_bank import (
@@ -26,6 +27,14 @@ from app.engine.leveling_engine import (
     calculate_specialty_competency,
     generate_leveling_prescription,
     map_gap_to_deficiency,
+)
+from app.engine.hlr_scheduler import (
+    MODEL_CITATIONS,
+    initial_half_life_from_score,
+    compute_recall_probability,
+    compute_hlr_next_review_days,
+    update_memory_trace,
+    select_goldilocks_tier,
 )
 from app.services.auth_service import hash_password, verify_password
 from app.services.case_service import case_repository
@@ -276,6 +285,7 @@ class StudentService:
             db.add(user)
             db.flush()
 
+            now_utc = datetime.now(timezone.utc)
             for spec in CARDINAL_SPECIALTIES:
                 mastery = StudentMastery(
                     user_id=user.id,
@@ -285,6 +295,18 @@ class StudentService:
                     cases_completed=0,
                 )
                 db.add(mastery)
+                db.add(
+                    UserMemoryTrace(
+                        user_id=user.id,
+                        concept_key=spec,
+                        concept_type="specialty",
+                        half_life_days=4.0,
+                        difficulty_index=0.5,
+                        reps_count=0,
+                        lapses_count=0,
+                        last_practiced_at=now_utc,
+                    )
+                )
 
             db.commit()
             db.refresh(user)
@@ -362,6 +384,265 @@ class StudentService:
         if mastery.updated_at:
             profile.last_evaluated = mastery.updated_at
         return profile
+
+    def ensure_memory_traces(self, db: Session, user: User) -> List[UserMemoryTrace]:
+        """Lazily ensures all 5 cardinal specialty HLR memory traces exist for the user."""
+        existing_rows = (
+            db.query(UserMemoryTrace)
+            .filter_by(user_id=user.id)
+            .all()
+        )
+        by_key = {row.concept_key: row for row in existing_rows}
+        created_any = False
+        now_utc = datetime.now(timezone.utc)
+        base_h = initial_half_life_from_score(
+            user.diagnostic_score if user.diagnostic_completed else None
+        )
+
+        for spec in CARDINAL_SPECIALTIES:
+            if spec not in by_key:
+                row = UserMemoryTrace(
+                    user_id=user.id,
+                    concept_key=spec,
+                    concept_type="specialty",
+                    half_life_days=base_h,
+                    difficulty_index=0.5,
+                    reps_count=0,
+                    lapses_count=0,
+                    last_practiced_at=now_utc,
+                )
+                db.add(row)
+                by_key[spec] = row
+                created_any = True
+
+        if created_any:
+            db.commit()
+            for spec in CARDINAL_SPECIALTIES:
+                db.refresh(by_key[spec])
+
+        return [by_key[spec] for spec in CARDINAL_SPECIALTIES]
+
+    def _resolve_priority_cardinal_specialty(self, user: User) -> Optional[str]:
+        """Maps diagnostic_specialty or initial_world (including non-cardinal worlds) to a cardinal unit."""
+        raw_spec = (
+            getattr(user, "diagnostic_specialty", None)
+            or getattr(user, "initial_world", None)
+            or ""
+        ).strip().lower().replace("-", "_")
+        if not raw_spec:
+            return None
+        normalized = SPECIALTY_ALIASES.get(raw_spec, raw_spec)
+        if normalized in CARDINAL_SPECIALTIES:
+            return normalized
+        candidates = SPECIALTY_TO_CASE_CANDIDATES.get(normalized, [])
+        if candidates:
+            meta = _resolve_case_presentation_meta(candidates[0])
+            mapped = meta.get("specialty")
+            if mapped in CARDINAL_SPECIALTIES:
+                return mapped
+        return None
+
+    def build_progressive_learning_path(self, db: Session, user_id: int) -> Dict[str, Any]:
+        """
+        Builds the 5-Unit x 4-Node progressive clinical path backed by HLR memory traces,
+        Goldilocks/IRT tiering, and strict sequential station unlock rules.
+        """
+        user = db.query(User).filter_by(id=user_id).first()
+        if not user:
+            raise ValueError(f"User with id {user_id} not found")
+
+        traces = self.ensure_memory_traces(db, user)
+        trace_by_spec = {t.concept_key: t for t in traces}
+
+        simulated_days = int(getattr(user, "simulated_days_elapsed", 0) or 0)
+        now_utc = datetime.now(timezone.utc)
+        effective_now_utc = now_utc + timedelta(
+            days=simulated_days,
+            minutes=2 if simulated_days > 0 else 0,
+        )
+
+        # Load mastery, attempts, and pending overdue tasks once
+        masteries = {
+            m.specialty: m
+            for m in db.query(StudentMastery).filter_by(user_id=user.id).all()
+        }
+        passed_attempts = (
+            db.query(CaseAttempt)
+            .filter_by(user_id=user.id, passed=True)
+            .all()
+        )
+        passed_by_case: Dict[str, set] = {}
+        for att in passed_attempts:
+            passed_by_case.setdefault(att.case_id, set()).add(int(att.station_id or 1))
+
+        pending_tasks = (
+            db.query(SpacedRepetitionTask)
+            .filter_by(user_id=user.id, status="pending")
+            .all()
+        )
+        overdue_case_ids: set = set()
+        overdue_specialties: set = set()
+        for t in pending_tasks:
+            if t.scheduled_for:
+                sched_utc = (
+                    t.scheduled_for
+                    if t.scheduled_for.tzinfo is not None
+                    else t.scheduled_for.replace(tzinfo=timezone.utc)
+                )
+                if sched_utc <= effective_now_utc:
+                    overdue_case_ids.add(t.case_id)
+                    meta = _resolve_case_presentation_meta(t.case_id)
+                    overdue_specialties.add(meta["specialty"])
+
+        has_critical_triage_gap = (
+            db.query(StudentGapMetric)
+            .filter_by(user_id=user.id, gap_type=CognitiveGap.GAP_TRIAGE_SEVERITY.value)
+            .filter(StudentGapMetric.fail_count > 0)
+            .first()
+            is not None
+        )
+
+        priority_spec = self._resolve_priority_cardinal_specialty(user)
+        unit_candidates: List[Dict[str, Any]] = []
+
+        for spec in CARDINAL_SPECIALTIES:
+            trace = trace_by_spec[spec]
+            last_p = trace.last_practiced_at or now_utc
+            last_p_utc = last_p if last_p.tzinfo is not None else last_p.replace(tzinfo=timezone.utc)
+            delta_days = max(0.0, (effective_now_utc - last_p_utc).total_seconds() / 86400.0)
+            recall_p = compute_recall_probability(delta_days, trace.half_life_days)
+            m_row = masteries.get(spec)
+            mastery_score = round(float(m_row.mastery_score), 1) if m_row else 50.0
+            primary_case_id = SPECIALTY_TO_CASE_CANDIDATES.get(spec, ["s13256-019-2334-y"])[0]
+            goldilocks = select_goldilocks_tier(
+                mastery_score=mastery_score,
+                recall_probability=recall_p,
+                critical_safety_flag=has_critical_triage_gap and mastery_score < 60.0,
+            )
+
+            passed_stations = passed_by_case.get(primary_case_id, set())
+            unit_needs_review = recall_p < 0.72 or primary_case_id in overdue_case_ids or spec in overdue_specialties
+            diag_done = bool(user.diagnostic_completed)
+
+            station_specs = [
+                (1, "triage", "Estacion 1 · Triaje y Estabilizacion", "Nivel 1 (Fundacional)", 1, 25),
+                (2, "labs", "Estacion 2 · Diagnostico y Examenes", "Nivel 2 (Intermedio)", 2, 35),
+                (3, "management", "Estacion 3 · Conducta Inicial", "Nivel 3 (Avanzado)", 3, 45),
+                (4, "checkpoint", "Guardia Integradora · Sello de Unidad", goldilocks["label"], 1, 60),
+            ]
+
+            nodes: List[Dict[str, Any]] = []
+            for order_idx, node_type, title, diff_lbl, station_num, xp_reward in station_specs:
+                if not diag_done:
+                    node_status = "locked"
+                elif order_idx == 1:
+                    if 1 in passed_stations:
+                        node_status = "needs_review" if unit_needs_review else "completed"
+                    else:
+                        node_status = "needs_review" if recall_p < 0.72 else "active"
+                elif order_idx == 2:
+                    if 1 not in passed_stations:
+                        node_status = "locked"
+                    elif 2 in passed_stations:
+                        node_status = "needs_review" if unit_needs_review else "completed"
+                    else:
+                        node_status = "needs_review" if recall_p < 0.72 else "active"
+                elif order_idx == 3:
+                    if 2 not in passed_stations:
+                        node_status = "locked"
+                    elif 3 in passed_stations:
+                        node_status = "needs_review" if unit_needs_review else "completed"
+                    else:
+                        node_status = "needs_review" if recall_p < 0.72 else "active"
+                else:
+                    # Node 4 (Guardia Integradora): strictly requires stations 1, 2, AND 3 passed
+                    if {1, 2, 3}.issubset(passed_stations):
+                        node_status = "needs_review" if unit_needs_review else "completed"
+                    else:
+                        node_status = "locked"
+
+                node_suffix = "cp" if order_idx == 4 else f"s{order_idx}"
+                nodes.append({
+                    "node_id": f"{spec}-{node_suffix}",
+                    "order": order_idx,
+                    "node_type": node_type,
+                    "title": title,
+                    "case_id": primary_case_id,
+                    "station_id": station_num,
+                    "difficulty_label": diff_lbl,
+                    "status": node_status,
+                    "recall_probability": recall_p,
+                    "xp_reward": xp_reward,
+                })
+
+            unit_completed = sum(1 for n in nodes if n["status"] == "completed")
+            unit_candidates.append({
+                "specialty": spec,
+                "specialty_name": SPECIALTY_DISPLAY_NAMES.get(spec, spec.title()),
+                "primary_case_id": primary_case_id,
+                "mastery_score": mastery_score,
+                "half_life_days": round(float(trace.half_life_days), 2),
+                "recall_probability": recall_p,
+                "difficulty_index": round(float(trace.difficulty_index), 3),
+                "hlr_next_review_days": compute_hlr_next_review_days(trace.half_life_days),
+                "goldilocks_tier": goldilocks["label"],
+                "completed_nodes": unit_completed,
+                "total_nodes": 4,
+                "is_priority": False,
+                "nodes": nodes,
+                "_sort_key": (
+                    0 if (priority_spec and spec == priority_spec) else 1,
+                    round(mastery_score * 0.6 + recall_p * 40.0, 2),
+                    CARDINAL_SPECIALTIES.index(spec),
+                ),
+            })
+
+        unit_candidates.sort(key=lambda item: item["_sort_key"])
+        units: List[Dict[str, Any]] = []
+        for idx, item in enumerate(unit_candidates, start=1):
+            item.pop("_sort_key", None)
+            item["unit_index"] = idx
+            item["is_priority"] = idx == 1
+            units.append(item)
+
+        active_node = None
+        for u in units:
+            for n in u["nodes"]:
+                if n["status"] in ("needs_review", "active"):
+                    active_node = {
+                        **n,
+                        "specialty": u["specialty"],
+                        "specialty_name": u["specialty_name"],
+                        "unit_index": u["unit_index"],
+                    }
+                    break
+            if active_node:
+                break
+
+        avg_h = round(sum(u["half_life_days"] for u in units) / len(units), 2) if units else 4.0
+        avg_p = round(sum(u["recall_probability"] for u in units) / len(units), 4) if units else 1.0
+        avg_m = sum(u["mastery_score"] for u in units) / len(units) if units else 50.0
+        weakest_unit = min(units, key=lambda u: (u["recall_probability"], u["mastery_score"]))
+        global_goldilocks = select_goldilocks_tier(
+            mastery_score=avg_m,
+            recall_probability=avg_p,
+            critical_safety_flag=has_critical_triage_gap and avg_m < 60.0,
+        )
+
+        return {
+            "units": units,
+            "active_node": active_node,
+            "hlr_summary": {
+                "average_half_life_days": avg_h,
+                "average_recall_probability": avg_p,
+                "goldilocks_target_tier": global_goldilocks["label"],
+                "weakest_retention_specialty": weakest_unit["specialty"],
+                "weakest_retention_probability": weakest_unit["recall_probability"],
+                "model_references": MODEL_CITATIONS,
+            },
+            "total_nodes": sum(u["total_nodes"] for u in units),
+            "completed_nodes": sum(u["completed_nodes"] for u in units),
+        }
 
     def get_student_dashboard(self, db: Session, user_id: int) -> Dict[str, Any]:
         user = db.query(User).filter_by(id=user_id).first()
@@ -511,6 +792,8 @@ class StudentService:
         except Exception:
             parsed_interests = []
 
+        learning_path_data = self.build_progressive_learning_path(db, user_id)
+
         return {
             "id": user.id,
             "email": user.email,
@@ -567,6 +850,8 @@ class StudentService:
             "global_ocri_score": ocri_score,
             "pending_repetition_tasks": formatted_tasks,
             "spaced_repetition_tasks": formatted_tasks,
+            "hlr_summary": learning_path_data["hlr_summary"],
+            "learning_path": learning_path_data,
         }
 
     def submit_diagnostic_exam(
@@ -779,6 +1064,34 @@ class StudentService:
                 db.add(task_row)
                 existing_by_case[chosen_case_id] = task_row
 
+        # Calibrate HLR memory traces for the 5 cardinal specialties from diagnostic baseline
+        calibrated_h0 = initial_half_life_from_score(score_pct)
+        diag_now_utc = datetime.now(timezone.utc)
+        existing_traces = {
+            tr.concept_key: tr
+            for tr in db.query(UserMemoryTrace).filter_by(user_id=user.id).all()
+        }
+        for spec_key in CARDINAL_SPECIALTIES:
+            tr = existing_traces.get(spec_key)
+            if tr:
+                tr.half_life_days = calibrated_h0
+                tr.difficulty_index = 0.65 if score_pct < 50.0 else (0.5 if score_pct < 75.0 else 0.35)
+                tr.last_practiced_at = diag_now_utc
+                tr.updated_at = diag_now_utc
+            else:
+                db.add(
+                    UserMemoryTrace(
+                        user_id=user.id,
+                        concept_key=spec_key,
+                        concept_type="specialty",
+                        half_life_days=calibrated_h0,
+                        difficulty_index=0.65 if score_pct < 50.0 else (0.5 if score_pct < 75.0 else 0.35),
+                        reps_count=0,
+                        lapses_count=0,
+                        last_practiced_at=diag_now_utc,
+                    )
+                )
+
         db.commit()
         db.refresh(user)
 
@@ -937,6 +1250,47 @@ class StudentService:
             )
             mastery.competency_level = profile.level.value
 
+            # 4.5. Update HLR UserMemoryTrace for this specialty (additive alongside EMA/D7/D21)
+            trace_spec_key = spec_str if spec_str in CARDINAL_SPECIALTIES else CARDINAL_SPECIALTIES[0]
+            sim_offset = int(getattr(user, "simulated_days_elapsed", 0) or 0)
+            trace_effective_now = datetime.now(timezone.utc) + timedelta(days=sim_offset)
+            trace_row = (
+                db.query(UserMemoryTrace)
+                .filter_by(user_id=user.id, concept_key=trace_spec_key)
+                .first()
+            )
+            if not trace_row:
+                trace_row = UserMemoryTrace(
+                    user_id=user.id,
+                    concept_key=trace_spec_key,
+                    concept_type="specialty",
+                    half_life_days=initial_half_life_from_score(
+                        user.diagnostic_score if user.diagnostic_completed else None
+                    ),
+                    difficulty_index=0.5,
+                    reps_count=0,
+                    lapses_count=0,
+                    last_practiced_at=trace_effective_now,
+                )
+                db.add(trace_row)
+                db.flush()
+
+            hlr_updated = update_memory_trace(
+                half_life_days=trace_row.half_life_days,
+                difficulty_index=trace_row.difficulty_index,
+                passed=is_correct,
+                gap_type=gap_str,
+                response_time_ms=response_time_ms,
+            )
+            trace_row.half_life_days = float(hlr_updated["half_life_days"])
+            trace_row.difficulty_index = float(hlr_updated["difficulty_index"])
+            if is_correct:
+                trace_row.reps_count = int(trace_row.reps_count or 0) + 1
+            else:
+                trace_row.lapses_count = int(trace_row.lapses_count or 0) + 1
+            trace_row.last_practiced_at = trace_effective_now
+            trace_row.updated_at = datetime.now(timezone.utc)
+
             # 5. Generate LevelingPrescription
             effective_gap = gap if gap is not None else CognitiveGap.GAP_DIAGNOSTIC_REASONING
             prescription = generate_leveling_prescription(
@@ -1017,6 +1371,7 @@ class StudentService:
 
         try:
             masteries = db.query(StudentMastery).filter_by(user_id=user.id).all()
+            traces = self.ensure_memory_traces(db, user)
 
             if norm_mode == "reset":
                 user.simulated_days_elapsed = 0
@@ -1031,6 +1386,15 @@ class StudentService:
                     m.mastery_score = round(baseline, 1)
                     m.competency_level = "deficiente" if baseline < 70.0 else "competente"
                     m.updated_at = now_utc
+
+                reset_h0 = initial_half_life_from_score(
+                    baseline if user.diagnostic_completed else None
+                )
+                for tr in traces:
+                    tr.half_life_days = reset_h0
+                    tr.difficulty_index = 0.5
+                    tr.last_practiced_at = now_utc
+                    tr.updated_at = now_utc
 
                 if user.diagnostic_completed and user.diagnostic_score is not None:
                     if baseline >= 75.0:
@@ -1150,6 +1514,39 @@ class StudentService:
                     )
 
                 cycle_label = "Ciclo D21" if safe_days >= 21 else ("Ciclo D7" if safe_days >= 7 else "seguimiento diario")
+                # Coherent HLR trace update during active_streak:
+                # Practiced priority specialties grow half-life & stay fresh (p >= 0.80);
+                # Unpracticed gap/pending-review specialties retain prior last_practiced_at so recall decays naturally.
+                priority_spec = self._resolve_priority_cardinal_specialty(user) or CARDINAL_SPECIALTIES[0]
+                pending_specs_set = set()
+                for pt in (
+                    db.query(SpacedRepetitionTask)
+                    .filter_by(user_id=user.id, status="pending")
+                    .all()
+                ):
+                    pending_specs_set.add(_resolve_case_presentation_meta(pt.case_id)["specialty"])
+
+                unpracticed_gap_specs = {
+                    tr.concept_key
+                    for tr in traces
+                    if tr.concept_key != priority_spec
+                    and (int(tr.lapses_count or 0) > 0 or tr.concept_key in pending_specs_set)
+                }
+                if not unpracticed_gap_specs and safe_days >= 7 and len(traces) > 1:
+                    non_priority = [tr.concept_key for tr in traces if tr.concept_key != priority_spec]
+                    if non_priority:
+                        unpracticed_gap_specs.add(non_priority[-1])
+
+                h_factor = 1.65 if safe_days >= 21 else (1.35 if safe_days >= 7 else 1.15)
+                for tr in traces:
+                    if tr.concept_key in unpracticed_gap_specs:
+                        # Leave last_practiced_at untouched so recall decays naturally across elapsed days
+                        continue
+                    tr.half_life_days = round(min(90.0, max(2.0, float(tr.half_life_days or 4.0) * h_factor)), 2)
+                    tr.difficulty_index = round(max(0.15, float(tr.difficulty_index or 0.5) - 0.03), 3)
+                    tr.last_practiced_at = effective_now
+                    tr.updated_at = now_utc
+
                 narrative = (
                     f"Avance de +{safe_days} {'dia' if safe_days == 1 else 'dias'} con practica constante ({cycle_label}): "
                     f"racha activa en {user.streak_days} dias (+{xp_bonus} pts) y activacion de repasos programados."
@@ -1220,6 +1617,11 @@ class StudentService:
                             )
                         )
                         existing_case_ids.add(picked)
+
+                # Compress half-life slightly and leave last_practiced_at untouched so HLR recall decays sharply
+                for tr in traces:
+                    tr.half_life_days = round(max(1.5, float(tr.half_life_days or 4.0) * 0.85), 2)
+                    tr.updated_at = now_utc
 
                 narrative = (
                     f"Simulacion de {effective_inactive_days} dias sin repasar (Curva de Ebbinghaus): "
