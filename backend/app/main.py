@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
-from app.db.session import ensure_db_ready
+from app.db.session import ensure_db_ready, get_storage_status
 from app.api.routes_auth import router as auth_router
 from app.api.routes_specialties import router as specialties_router
 from app.api.routes_cases import router as cases_router
@@ -54,10 +54,13 @@ app.include_router(references_router, prefix=settings.api_prefix)
 @app.get("/api/health", tags=["Salud del Sistema"])
 @app.get("/api/v1/health", tags=["Salud del Sistema"])
 def health_check():
+    storage = get_storage_status()
     return {
         "status": "healthy",
         "service": settings.app_name,
         "version": settings.app_version,
+        "storage_mode": storage["storage_mode"],
+        "persistent": storage["persistent"],
     }
 
 

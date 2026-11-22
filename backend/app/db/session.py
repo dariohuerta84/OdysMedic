@@ -52,15 +52,29 @@ def _sqlite_db_file_missing() -> bool:
     return not Path(db_path).exists()
 
 
+def get_storage_status() -> dict[str, object]:
+    """Reports active persistence backend so operators can distinguish Postgres vs ephemeral /tmp SQLite."""
+    url = (settings.database_url or "").strip().lower()
+    if url.startswith("postgresql") or url.startswith("postgres"):
+        return {"storage_mode": "postgresql", "persistent": True}
+    if "/tmp/" in url or ":memory:" in url:
+        return {"storage_mode": "sqlite_ephemeral", "persistent": False}
+    return {"storage_mode": "sqlite_local", "persistent": True}
+
+
 def _ensure_user_columns(target: Engine) -> None:
-    """Idempotently adds new onboarding and diagnostic columns to existing SQLite databases."""
-    if target.dialect.name != "sqlite":
+    """Idempotently adds onboarding, diagnostic, and simulation columns across SQLite and PostgreSQL."""
+    dialect = target.dialect.name
+    if dialect not in ("sqlite", "postgresql"):
         return
     try:
         inspector = inspect(target)
         if "users" not in inspector.get_table_names():
             return
         existing_cols = {col["name"] for col in inspector.get_columns("users")}
+        bool_true = "TRUE" if dialect == "postgresql" else "1"
+        bool_false = "FALSE" if dialect == "postgresql" else "0"
+        dt_type = "TIMESTAMP WITH TIME ZONE" if dialect == "postgresql" else "DATETIME"
         column_migrations = [
             ("career", "VARCHAR(100) DEFAULT 'Medicina Humana'"),
             ("academic_year", "VARCHAR(100) DEFAULT 'Internado Medico'"),
@@ -68,19 +82,22 @@ def _ensure_user_columns(target: Engine) -> None:
             ("initial_world", "VARCHAR(50) DEFAULT 'medicina_interna'"),
             ("interest_areas", "TEXT DEFAULT '[]'"),
             ("onboarding_track", "VARCHAR(30) DEFAULT 'ruta'"),
-            ("privacy_accepted", "BOOLEAN DEFAULT 1"),
-            ("diagnostic_completed", "BOOLEAN DEFAULT 0"),
+            ("privacy_accepted", f"BOOLEAN DEFAULT {bool_true}"),
+            ("diagnostic_completed", f"BOOLEAN DEFAULT {bool_false}"),
             ("diagnostic_score", "FLOAT"),
             ("aptitude_status", "VARCHAR(50)"),
             ("diagnostic_mode", "VARCHAR(30)"),
             ("diagnostic_specialty", "VARCHAR(50)"),
-            ("diagnostic_completed_at", "DATETIME"),
+            ("diagnostic_completed_at", dt_type),
             ("simulated_days_elapsed", "INTEGER DEFAULT 0"),
         ]
         with target.begin() as conn:
             for col_name, col_ddl in column_migrations:
                 if col_name not in existing_cols:
-                    conn.execute(text(f"ALTER TABLE users ADD COLUMN {col_name} {col_ddl}"))
+                    if dialect == "postgresql":
+                        conn.execute(text(f"ALTER TABLE users ADD COLUMN IF NOT EXISTS {col_name} {col_ddl}"))
+                    else:
+                        conn.execute(text(f"ALTER TABLE users ADD COLUMN {col_name} {col_ddl}"))
     except Exception:
         pass
 

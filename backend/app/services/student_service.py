@@ -229,9 +229,13 @@ class StudentService:
         onboarding_track: str = "ruta",
         privacy_accepted: bool = True,
     ) -> User:
-        existing_user = db.query(User).filter_by(email=email).first()
+        normalized_email = (email or "").strip().lower()
+        if not normalized_email:
+            raise ValueError("Email is required")
+
+        existing_user = db.query(User).filter_by(email=normalized_email).first()
         if existing_user:
-            raise ValueError(f"User with email '{email}' is already registered")
+            raise ValueError(f"User with email '{normalized_email}' is already registered")
 
         goal_to_exam = {
             "preparar_enam": "ENAM",
@@ -252,7 +256,7 @@ class StudentService:
         password_hashed = hash_password(password)
         try:
             user = User(
-                email=email,
+                email=normalized_email,
                 password_hash=password_hashed,
                 full_name=full_name,
                 university=university,
@@ -290,7 +294,10 @@ class StudentService:
             raise
 
     def authenticate_user(self, db: Session, email: str, password: str) -> Optional[User]:
-        user = db.query(User).filter_by(email=email).first()
+        normalized_email = (email or "").strip().lower()
+        user = db.query(User).filter_by(email=normalized_email).first()
+        if not user and email and email != normalized_email:
+            user = db.query(User).filter_by(email=email).first()
         if not user:
             return None
         if not verify_password(password, user.password_hash):

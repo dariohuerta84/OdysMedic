@@ -61,6 +61,11 @@ class User(Base):
         back_populates="user",
         cascade="all, delete-orphan",
     )
+    memory_traces: Mapped[List["UserMemoryTrace"]] = relationship(
+        "UserMemoryTrace",
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
 
 
 class StudentMastery(Base):
@@ -170,3 +175,33 @@ class SpacedRepetitionTask(Base):
     )
 
     user: Mapped["User"] = relationship("User", back_populates="repetition_tasks")
+
+
+class UserMemoryTrace(Base):
+    __tablename__ = "user_memory_traces"
+    __table_args__ = (UniqueConstraint("user_id", "concept_key", name="uq_user_memory_concept"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    user_id: Mapped[int] = mapped_column(
+        Integer,
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    concept_key: Mapped[str] = mapped_column(String(100), nullable=False)
+    concept_type: Mapped[str] = mapped_column(String(30), default="specialty")
+    half_life_days: Mapped[float] = mapped_column(Float, default=4.0)
+    difficulty_index: Mapped[float] = mapped_column(Float, default=0.5)
+    reps_count: Mapped[int] = mapped_column(Integer, default=0)
+    lapses_count: Mapped[int] = mapped_column(Integer, default=0)
+    last_practiced_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=lambda: datetime.now(timezone.utc),
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc),
+    )
+
+    user: Mapped["User"] = relationship("User", back_populates="memory_traces")
