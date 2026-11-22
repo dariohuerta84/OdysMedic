@@ -112,25 +112,30 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-start">
             {/* Left Column: High-Contrast Editorial Anchor */}
             <div className="lg:col-span-6 space-y-7">
-              <div className="flex items-center gap-3 animate-fade-in-up">
-                <span className="h-px w-8 bg-[#0E6F65]" aria-hidden="true" />
-                <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#0E6F65]">
+              <div className="flex items-center gap-3">
+                <span className="h-px w-8 bg-[#0E6F65] hero-rule-reveal" aria-hidden="true" />
+                <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#0E6F65] hero-text-reveal">
                   Motor Clinico OCRI-HLR · Evidencia Indexada
                 </p>
               </div>
 
-              <h1 className="font-serif text-4xl sm:text-5xl lg:text-[3.4rem] font-bold tracking-tight leading-[1.08] text-[#0D1F26] animate-fade-in-up stagger-1">
-                Razonamiento clinico progresivo, calibrado al ritmo de tu guardia.
+              <h1 className="font-serif text-4xl sm:text-5xl lg:text-[3.4rem] font-bold tracking-tight leading-[1.08] text-[#0D1F26]">
+                <span className="block hero-text-reveal stagger-1">
+                  Razonamiento clinico progresivo,
+                </span>
+                <span className="block hero-text-reveal stagger-2 text-[#0E6F65]">
+                  calibrado al ritmo de tu guardia.
+                </span>
               </h1>
 
-              <p className="text-base text-[#3D525A] leading-relaxed max-w-[60ch] animate-fade-in-up stagger-2">
+              <p className="text-base text-[#3D525A] leading-relaxed max-w-[60ch] hero-block-reveal stagger-3">
                 OdyssMedic diagnostica la causa cognitiva de cada fallo clinico y organiza tu
                 preparacion en unidades secuenciales con vida media de memoria personalizada
                 (Half-Life Regression) y casos arbitrados reales.
               </p>
 
               {/* Actions */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-1 animate-fade-in-up stagger-3">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-1 hero-block-reveal stagger-4">
                 <button
                   type="button"
                   onClick={onStartRoute}
@@ -151,7 +156,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               </div>
 
               {/* Editorial Telemetry Strip (Unboxed 1px Hairlines) */}
-              <div className="pt-8 border-t border-[#DEDBD2] grid grid-cols-3 gap-6 animate-fade-in-up stagger-4">
+              <div className="pt-8 border-t border-[#DEDBD2] grid grid-cols-3 gap-6 hero-block-reveal stagger-5">
                 <div>
                   <span className="telemetry-mono text-xl sm:text-2xl font-semibold text-[#0D1F26] block">
                     57
@@ -180,8 +185,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </div>
 
             {/* Right Column: Non-Interactive Editorial Specimen of the Progressive Path */}
-            <div className="lg:col-span-6 bg-[#F3F1EC]/75 border border-[#DEDBD2] p-6 sm:p-8 space-y-6 animate-fade-in-up stagger-2">
-              <div className="flex items-baseline justify-between gap-4 border-b border-[#DEDBD2] pb-4">
+            <div className="lg:col-span-6 bg-[#F3F1EC]/75 border border-[#DEDBD2] p-6 sm:p-8 space-y-6 hero-block-reveal stagger-2">
+              <div className="flex items-baseline justify-between gap-4 border-b border-[#DEDBD2] pb-4 hero-text-reveal stagger-3">
                 <div>
                   <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-[#64767E]">
                     Unidad 01 · Muestra de Ruta Progresiva
@@ -202,10 +207,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   className="absolute left-[11px] top-3 bottom-3 w-px bg-[#DEDBD2]"
                   aria-hidden="true"
                 />
-                {PROGRESSIVE_PATH_PREVIEW.map((node) => (
+                {PROGRESSIVE_PATH_PREVIEW.map((node, nodeIdx) => (
                   <div
                     key={node.code}
-                    className="relative flex items-start justify-between gap-4 pb-4 border-b border-[#DEDBD2]/70 last:border-b-0 last:pb-0"
+                    style={{ animationDelay: `${260 + nodeIdx * 95}ms` }}
+                    className="relative flex items-start justify-between gap-4 pb-4 border-b border-[#DEDBD2]/70 last:border-b-0 last:pb-0 hero-block-reveal"
                   >
                     {/* Node Marker on Spine */}
                     <span
