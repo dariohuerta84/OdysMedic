@@ -30,7 +30,8 @@ interface SpecialtyFilterOption {
 }
 
 const SPECIALTY_OPTIONS: SpecialtyFilterOption[] = [
-  { id: 'todas', label: 'Todas las especialidades' },
+  { id: 'todas', label: 'Todas las especialidades (34 fuentes)' },
+  { id: 'motor_ocri_educacion', label: 'Motor OCRI y Ciencia Cognitiva (7 nuevas)' },
   { id: 'medicina_interna', label: 'Medicina Interna' },
   { id: 'nefrologia', label: 'Nefrologia' },
   { id: 'endocrinologia', label: 'Endocrinologia' },
@@ -43,6 +44,7 @@ const SPECIALTY_OPTIONS: SpecialtyFilterOption[] = [
 ];
 
 const SPECIALTY_LABELS: Record<string, string> = {
+  motor_ocri_educacion: 'Motor OCRI y Ciencia Cognitiva',
   medicina_interna: 'Medicina Interna',
   nefrologia: 'Nefrologia',
   endocrinologia: 'Endocrinologia',

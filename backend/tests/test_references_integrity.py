@@ -29,3 +29,10 @@ def test_references_catalog_contains_57_sources_and_new_ocri_models():
         assert doi in ped_md
         assert doi in bib
     assert "57" in readme
+
+    # Verify the live API/Biblioteca dataset also exposes the 7 new OCRI/cognitive sources (27 + 7 = 34)
+    api_refs = json.loads((ROOT / "backend" / "data" / "medical_references.json").read_text(encoding="utf-8"))
+    assert len(api_refs) == 34
+    api_text = json.dumps(api_refs)
+    for doi in REQUIRED_NEW_DOIS:
+        assert doi in api_text

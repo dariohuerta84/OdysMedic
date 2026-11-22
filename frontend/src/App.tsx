@@ -44,6 +44,30 @@ const AppContent: React.FC = () => {
     }
   }, [isLoading, isAuthenticated, activeTab]);
 
+  // Fallback scroll progress variable for browsers without native animation-timeline: scroll()
+  useEffect(() => {
+    if (typeof window === 'undefined' || typeof CSS === 'undefined') return;
+    if (CSS.supports && CSS.supports('animation-timeline: scroll()')) return;
+
+    let rafId = 0;
+    const updateProgress = () => {
+      const doc = document.documentElement;
+      const maxScroll = Math.max(1, doc.scrollHeight - window.innerHeight);
+      const ratio = Math.min(1, Math.max(0, window.scrollY / maxScroll));
+      doc.style.setProperty('--scroll-progress', String(ratio));
+      rafId = 0;
+    };
+    const onScroll = () => {
+      if (!rafId) rafId = window.requestAnimationFrame(updateProgress);
+    };
+    updateProgress();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      if (rafId) window.cancelAnimationFrame(rafId);
+    };
+  }, []);
+
   const openAuthModal = (
     mode: 'login' | 'register' = 'login',
     track: OnboardingTrack = 'ruta'

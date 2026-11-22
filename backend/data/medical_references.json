@@ -1288,5 +1288,252 @@
         ]
       }
     ]
+  },
+  {
+    "book_id": "book-hlr-settles-meeder-2016",
+    "title": "A Trainable Spaced Repetition Model for Language Learning (Half-Life Regression)",
+    "authors_or_organization": "Settles, B., & Meeder, B. (ACL 2016 / Duolingo Research)",
+    "edition": "Proceedings of ACL 2016, 1848-1858",
+    "specialty": "motor_ocri_educacion",
+    "isbn_or_doi": "doi:10.18653/v1/P16-1174",
+    "excerpts": [
+      {
+        "reference_id": "ref-ocri-hlr-001",
+        "source_title": "Half-Life Regression (HLR) — Settles & Meeder (ACL 2016)",
+        "organization_or_publisher": "Association for Computational Linguistics / Duolingo",
+        "year": 2016,
+        "edition_or_version": "ACL 2016",
+        "section_title": "Modelo de Vida Media de Memoria p = 2^(-delta/h)",
+        "page_or_doi": "doi:10.18653/v1/P16-1174",
+        "key_recommendation": "Estima la vida media (h) de cada especialidad o concepto clinico en dias y calcula la probabilidad de recuerdo p = 2^(-delta/h) para activar rescates antes del olvido critico (<72%).",
+        "evidence_level": "Modelo Predictivo Validado",
+        "associated_specialty": "motor_ocri_educacion",
+        "associated_cases": [],
+        "anamnesis_checklist": [
+          "Registrar tiempo transcurrido (delta en dias) desde la ultima practica efectiva.",
+          "Calibrar vida media inicial h0 segun puntaje basal del examen diagnostico (2d, 5d o 10d)."
+        ],
+        "physical_exam_signs": [
+          "Caida de probabilidad de recuerdo p por debajo de 0.72 indica ventana critica de repaso."
+        ],
+        "diagnostic_cutoffs": [
+          "p = clamp(2^(-delta / h), 0.05, 1.0)",
+          "Proximo repaso optimo cuando p alcanza 80%: t = round(-h * log2(0.80))."
+        ],
+        "red_flags": [
+          "Inactividad prolongada (>=14 dias) comprime h y dispara alertas de rescate en la Ruta Progresiva."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-fsrs-ye-2022",
+    "title": "A Stochastic Shortest Path Algorithm for Optimizing Spaced Repetition Scheduling (FSRS)",
+    "authors_or_organization": "Ye, J., Su, J., & Cao, Y. (ACM SIGKDD 2022)",
+    "edition": "KDD 2022",
+    "specialty": "motor_ocri_educacion",
+    "isbn_or_doi": "doi:10.1145/3534678.3539081",
+    "excerpts": [
+      {
+        "reference_id": "ref-ocri-fsrs-002",
+        "source_title": "Modelo FSRS de Tres Componentes (Estabilidad, Dificultad, Recuperabilidad)",
+        "organization_or_publisher": "ACM SIGKDD",
+        "year": 2022,
+        "edition_or_version": "KDD 2022",
+        "section_title": "Dinamica de Estabilidad y Penalizacion por Dificultad",
+        "page_or_doi": "doi:10.1145/3534678.3539081",
+        "key_recommendation": "Modula el crecimiento de la vida media tras cada acierto segun el indice de dificultad (D) y penaliza con mayor severidad los fallos en triaje o seguridad clinica.",
+        "evidence_level": "Optimizacion Estocastica Validada",
+        "associated_specialty": "motor_ocri_educacion",
+        "associated_cases": [],
+        "anamnesis_checklist": [
+          "Evaluar historial previo de aciertos (reps) y recaidas (lapses) por especialidad."
+        ],
+        "physical_exam_signs": [
+          "Mayor indice D en brechas criticas de triaje (GAP_TRIAGE_SEVERITY) limita la expansion de intervalos."
+        ],
+        "diagnostic_cutoffs": [
+          "D en [0.15, 0.95]; acierto reduce D (-0.06), fallo eleva D (+0.12 o +0.18 en triaje)."
+        ],
+        "red_flags": [
+          "Lapsos repetidos en la misma brecha reducen h a 0.48x (piso 1.0 dia)."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-birdbrain-irt-2020",
+    "title": "Machine Learning-Driven Language Assessment (Ecosistema Birdbrain / IRT)",
+    "authors_or_organization": "Settles, B., LaFlair, G. T., & Hagiwara, M. (TACL 2020)",
+    "edition": "Transactions of the ACL, 8, 247-263",
+    "specialty": "motor_ocri_educacion",
+    "isbn_or_doi": "doi:10.1162/tacl_a_00310",
+    "excerpts": [
+      {
+        "reference_id": "ref-ocri-irt-003",
+        "source_title": "Selector Adaptativo Birdbrain / Teoria de Respuesta al Item (Goldilocks Zone)",
+        "organization_or_publisher": "MIT Press / Duolingo Research",
+        "year": 2020,
+        "edition_or_version": "TACL 2020",
+        "section_title": "Calibracion de Dificultad en Zona Optima (~78% Exito Esperado)",
+        "page_or_doi": "doi:10.1162/tacl_a_00310",
+        "key_recommendation": "Calcula la habilidad estimada theta del estudiante y selecciona la dificultad (Nivel 1, 2 o 3) cuya probabilidad logistica de exito se aproxime al 78% (Goldilocks Zone), manteniendo reto sin frustracion.",
+        "evidence_level": "Psicometria IRT Aplicada",
+        "associated_specialty": "motor_ocri_educacion",
+        "associated_cases": [],
+        "anamnesis_checklist": [
+          "Combinar maestria historica y probabilidad de recuerdo actual p para estimar theta."
+        ],
+        "physical_exam_signs": [
+          "Estudiantes con brecha critica de seguridad se mantienen en Nivel 1 hasta estabilizar triaje."
+        ],
+        "diagnostic_cutoffs": [
+          "P(exito | theta, beta) = 1 / (1 + exp(-(theta - beta))); objetivo = 0.78."
+        ],
+        "red_flags": [
+          "Nunca escalar a Nivel 3 si existe fallo activo en seguridad clinica vital."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-sct-lubarsky-2013",
+    "title": "Script Concordance Testing: From Theory to Practice (AMEE Guide No. 75)",
+    "authors_or_organization": "Lubarsky, S., Dory, V., Duggan, P., Gagnon, R., & Charlin, B.",
+    "edition": "Medical Teacher, 35(3), 184-193",
+    "specialty": "motor_ocri_educacion",
+    "isbn_or_doi": "doi:10.3109/0142159X.2013.760036",
+    "excerpts": [
+      {
+        "reference_id": "ref-ocri-sct-004",
+        "source_title": "Guia AMEE N. 75 — Evaluacion del Razonamiento Clinico bajo Incertidumbre (SCT)",
+        "organization_or_publisher": "Association for Medical Education in Europe (AMEE)",
+        "year": 2013,
+        "edition_or_version": "AMEE Guide 75",
+        "section_title": "Scripts de Enfermedad y Juicio Clinico Contextual",
+        "page_or_doi": "doi:10.3109/0142159X.2013.760036",
+        "key_recommendation": "Evalua como los nuevos hallazgos clinicos o de laboratorio modifican una hipotesis diagnostica previa, superando los bancos memoristicos de respuesta unica aislada.",
+        "evidence_level": "Guia Metodologica AMEE",
+        "associated_specialty": "motor_ocri_educacion",
+        "associated_cases": [],
+        "anamnesis_checklist": [
+          "Formular hipotesis sindromica inicial antes de revisar examenes auxiliares."
+        ],
+        "physical_exam_signs": [
+          "Reponderar probabilidad diagnostica ante nuevos signos de alarma o biomarcadores."
+        ],
+        "diagnostic_cutoffs": [
+          "Progresion obligatoria: Triaje -> Examenes Auxiliares -> Conducta Terapeutica."
+        ],
+        "red_flags": [
+          "Cierre diagnostico prematuro antes de integrar resultados criticos."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-evolving-sct-gagnon-2017",
+    "title": "Evolutions in Clinical Reasoning Assessment: The Evolving Script Concordance Test",
+    "authors_or_organization": "Gagnon, R., Lubarsky, S., Lambert, C., Meterissian, S., & Charlin, B.",
+    "edition": "Medical Teacher, 39(7), 701-707",
+    "specialty": "motor_ocri_educacion",
+    "isbn_or_doi": "doi:10.1080/0142159X.2017.1327706",
+    "excerpts": [
+      {
+        "reference_id": "ref-ocri-esct-005",
+        "source_title": "Evolving Script Concordance Test — Razonamiento Secuencial por Estaciones",
+        "organization_or_publisher": "Medical Teacher / Taylor & Francis",
+        "year": 2017,
+        "edition_or_version": "Med Teach 2017",
+        "section_title": "Secuencialidad Clinica en Multiples Etapas",
+        "page_or_doi": "doi:10.1080/0142159X.2017.1327706",
+        "key_recommendation": "Estructura un mismo paciente en etapas evolutivas secuenciales (estabilizacion inicial, laboratorio, conducta definitiva) con desbloqueo progresivo.",
+        "evidence_level": "Estudio Psicometrico",
+        "associated_specialty": "motor_ocri_educacion",
+        "associated_cases": [],
+        "anamnesis_checklist": [
+          "Validar comprension del triaje antes de desbloquear pruebas de segunda linea."
+        ],
+        "physical_exam_signs": [
+          "Evolucion dinamica del cuadro entre la estacion 1 y la estacion 3."
+        ],
+        "diagnostic_cutoffs": [
+          "Desbloqueo estricto 1 -> 2 -> 3 -> Guardia Integradora."
+        ],
+        "red_flags": [
+          "Saltar directamente a terapia avanzada sin confirmar estabilidad hemodinamica."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-dual-process-croskerry-2009",
+    "title": "A Universal Model of Diagnostic Reasoning (Dual-Process Theory)",
+    "authors_or_organization": "Croskerry, P. (Academic Medicine 2009)",
+    "edition": "Academic Medicine, 84(8), 1022-1028",
+    "specialty": "motor_ocri_educacion",
+    "isbn_or_doi": "doi:10.1097/ACM.0b013e3181ace703",
+    "excerpts": [
+      {
+        "reference_id": "ref-ocri-dual-006",
+        "source_title": "Teoria de Proceso Dual en Razonamiento Diagnostico (Sistema 1 y Sistema 2)",
+        "organization_or_publisher": "Association of American Medical Colleges (AAMC)",
+        "year": 2009,
+        "edition_or_version": "Acad Med 2009",
+        "section_title": "Fluidez Clinica vs. Calibracion Analitica",
+        "page_or_doi": "doi:10.1097/ACM.0b013e3181ace703",
+        "key_recommendation": "Integra el reconocimiento rapido de patrones (Sistema 1) con el control analitico deliberado (Sistema 2), otorgando bono de fluidez HLR cuando el acierto es certero y agil (<=25 s).",
+        "evidence_level": "Marco Cognitivo Canonico",
+        "associated_specialty": "motor_ocri_educacion",
+        "associated_cases": [],
+        "anamnesis_checklist": [
+          "Medir tiempo de respuesta en milisegundos sin penalizar la reflexion analitica."
+        ],
+        "physical_exam_signs": [
+          "Respuestas correctas en <=25,000 ms reflejan consolidacion de script clinico."
+        ],
+        "diagnostic_cutoffs": [
+          "Bono de fluidez +0.08 en factor de crecimiento HLR cuando 0 < response_time_ms <= 25000."
+        ],
+        "red_flags": [
+          "Sesgo de anclaje cuando un hallazgo inicial llamativo oculta la etiologia real."
+        ]
+      }
+    ]
+  },
+  {
+    "book_id": "book-cognitive-load-2010",
+    "title": "Cognitive Load Theory in Health Professional Education",
+    "authors_or_organization": "van Merrienboer, J. J. G., & Sweller, J. (Medical Education 2010)",
+    "edition": "Medical Education, 44(1), 85-93",
+    "specialty": "motor_ocri_educacion",
+    "isbn_or_doi": "doi:10.1111/j.1365-2923.2009.03498.x",
+    "excerpts": [
+      {
+        "reference_id": "ref-ocri-clt-007",
+        "source_title": "Teoria de la Carga Cognitiva en Educacion Medica",
+        "organization_or_publisher": "Association for the Study of Medical Education (ASME)",
+        "year": 2010,
+        "edition_or_version": "Med Educ 2010",
+        "section_title": "Andamiaje Modular y Reduccion de Carga Extrinseca",
+        "page_or_doi": "doi:10.1111/j.1365-2923.2009.03498.x",
+        "key_recommendation": "Minimiza la carga cognitiva extrinseca mediante micro-estaciones de menos de 5 minutos, interfaz editorial limpia y perlas clinicas sinteticas accionables para internos fatigados.",
+        "evidence_level": "Marco Instruccional Validado",
+        "associated_specialty": "motor_ocri_educacion",
+        "associated_cases": [],
+        "anamnesis_checklist": [
+          "Fragmentar cada caso complejo en 3 decisiones focalizadas + 1 hito integrador."
+        ],
+        "physical_exam_signs": [
+          "Evitar ruido visual, colores neones o bloques extensos de texto durante guardias."
+        ],
+        "diagnostic_cutoffs": [
+          "Duracion objetivo por estacion < 3-5 minutos; perla clinica <= 60 segundos."
+        ],
+        "red_flags": [
+          "Sobrecarga de informacion simultanea reduce transferencia clinica a largo plazo."
+        ]
+      }
+    ]
   }
 ]

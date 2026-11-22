@@ -10,18 +10,18 @@ interface ClinicalParticle {
 }
 
 const PARTICLES: ClinicalParticle[] = [
-  { xRatio: 0.08, yRatio: 0.14, size: 5, speed: 0.12, kind: 'cross', alpha: 0.18 },
-  { xRatio: 0.22, yRatio: 0.38, size: 2.5, speed: 0.08, kind: 'dot', alpha: 0.22 },
-  { xRatio: 0.36, yRatio: 0.18, size: 7, speed: 0.16, kind: 'ring', alpha: 0.13 },
-  { xRatio: 0.51, yRatio: 0.52, size: 4.5, speed: 0.1, kind: 'cross', alpha: 0.15 },
-  { xRatio: 0.67, yRatio: 0.22, size: 2.5, speed: 0.14, kind: 'dot', alpha: 0.2 },
-  { xRatio: 0.82, yRatio: 0.44, size: 6, speed: 0.09, kind: 'cross', alpha: 0.16 },
-  { xRatio: 0.91, yRatio: 0.16, size: 8, speed: 0.18, kind: 'ring', alpha: 0.12 },
-  { xRatio: 0.14, yRatio: 0.72, size: 6, speed: 0.15, kind: 'ring', alpha: 0.12 },
-  { xRatio: 0.31, yRatio: 0.84, size: 4.5, speed: 0.11, kind: 'cross', alpha: 0.16 },
-  { xRatio: 0.59, yRatio: 0.78, size: 2.5, speed: 0.13, kind: 'dot', alpha: 0.2 },
-  { xRatio: 0.76, yRatio: 0.68, size: 5, speed: 0.15, kind: 'cross', alpha: 0.14 },
-  { xRatio: 0.89, yRatio: 0.86, size: 3, speed: 0.09, kind: 'dot', alpha: 0.18 },
+  { xRatio: 0.06, yRatio: 0.14, size: 7, speed: 0.18, kind: 'cross', alpha: 0.34 },
+  { xRatio: 0.20, yRatio: 0.38, size: 3.5, speed: 0.12, kind: 'dot', alpha: 0.36 },
+  { xRatio: 0.35, yRatio: 0.18, size: 10, speed: 0.22, kind: 'ring', alpha: 0.28 },
+  { xRatio: 0.51, yRatio: 0.52, size: 6.5, speed: 0.14, kind: 'cross', alpha: 0.30 },
+  { xRatio: 0.67, yRatio: 0.22, size: 3.5, speed: 0.20, kind: 'dot', alpha: 0.34 },
+  { xRatio: 0.83, yRatio: 0.44, size: 8, speed: 0.15, kind: 'cross', alpha: 0.32 },
+  { xRatio: 0.92, yRatio: 0.16, size: 11, speed: 0.24, kind: 'ring', alpha: 0.26 },
+  { xRatio: 0.12, yRatio: 0.72, size: 9, speed: 0.20, kind: 'ring', alpha: 0.26 },
+  { xRatio: 0.31, yRatio: 0.84, size: 6.5, speed: 0.16, kind: 'cross', alpha: 0.30 },
+  { xRatio: 0.59, yRatio: 0.78, size: 3.5, speed: 0.18, kind: 'dot', alpha: 0.34 },
+  { xRatio: 0.76, yRatio: 0.68, size: 7, speed: 0.21, kind: 'cross', alpha: 0.29 },
+  { xRatio: 0.90, yRatio: 0.86, size: 4, speed: 0.13, kind: 'dot', alpha: 0.32 },
 ];
 
 /**
@@ -69,7 +69,7 @@ export const ScrollParticlesBackdrop: React.FC<{ className?: string }> = ({ clas
         ctx.save();
         ctx.strokeStyle = `rgba(14, 111, 101, ${p.alpha})`;
         ctx.fillStyle = `rgba(13, 31, 38, ${p.alpha})`;
-        ctx.lineWidth = 1;
+        ctx.lineWidth = 1.25;
 
         if (p.kind === 'dot') {
           ctx.beginPath();

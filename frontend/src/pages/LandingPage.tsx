@@ -112,25 +112,25 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-start">
             {/* Left Column: High-Contrast Editorial Anchor */}
             <div className="lg:col-span-6 space-y-7">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 animate-fade-in-up">
                 <span className="h-px w-8 bg-[#0E6F65]" aria-hidden="true" />
                 <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#0E6F65]">
                   Motor Clinico OCRI-HLR · Evidencia Indexada
                 </p>
               </div>
 
-              <h1 className="font-serif text-4xl sm:text-5xl lg:text-[3.4rem] font-bold tracking-tight leading-[1.08] text-[#0D1F26]">
+              <h1 className="font-serif text-4xl sm:text-5xl lg:text-[3.4rem] font-bold tracking-tight leading-[1.08] text-[#0D1F26] animate-fade-in-up stagger-1">
                 Razonamiento clinico progresivo, calibrado al ritmo de tu guardia.
               </h1>
 
-              <p className="text-base text-[#3D525A] leading-relaxed max-w-[60ch]">
+              <p className="text-base text-[#3D525A] leading-relaxed max-w-[60ch] animate-fade-in-up stagger-2">
                 OdyssMedic diagnostica la causa cognitiva de cada fallo clinico y organiza tu
                 preparacion en unidades secuenciales con vida media de memoria personalizada
                 (Half-Life Regression) y casos arbitrados reales.
               </p>
 
               {/* Actions */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-1">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-1 animate-fade-in-up stagger-3">
                 <button
                   type="button"
                   onClick={onStartRoute}
@@ -151,7 +151,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               </div>
 
               {/* Editorial Telemetry Strip (Unboxed 1px Hairlines) */}
-              <div className="pt-8 border-t border-[#DEDBD2] grid grid-cols-3 gap-6">
+              <div className="pt-8 border-t border-[#DEDBD2] grid grid-cols-3 gap-6 animate-fade-in-up stagger-4">
                 <div>
                   <span className="telemetry-mono text-xl sm:text-2xl font-semibold text-[#0D1F26] block">
                     57
@@ -180,7 +180,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </div>
 
             {/* Right Column: Non-Interactive Editorial Specimen of the Progressive Path */}
-            <div className="lg:col-span-6 bg-[#F3F1EC]/75 border border-[#DEDBD2] p-6 sm:p-8 space-y-6">
+            <div className="lg:col-span-6 bg-[#F3F1EC]/75 border border-[#DEDBD2] p-6 sm:p-8 space-y-6 animate-fade-in-up stagger-2">
               <div className="flex items-baseline justify-between gap-4 border-b border-[#DEDBD2] pb-4">
                 <div>
                   <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-[#64767E]">
@@ -221,7 +221,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                       {node.status === 'completed' ? (
                         <Check className="w-3.5 h-3.5" />
                       ) : node.status === 'active' ? (
-                        <Activity className="w-3.5 h-3.5" />
+                        <Activity className="w-3.5 h-3.5 animate-soft-pulse" />
                       ) : (
                         <Lock className="w-3 h-3" />
                       )}
@@ -459,7 +459,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               className="self-start md:self-auto inline-flex items-center gap-2 text-sm font-medium text-[#0E6F65] hover:text-[#0A564E] underline underline-offset-4 transition-colors"
             >
               <BookOpen className="w-4 h-4" />
-              <span>Explorar 27 guias en Biblioteca abierta</span>
+              <span>Explorar 34 fuentes (27 guias + 7 modelos OCRI)</span>
             </button>
           </div>
 
