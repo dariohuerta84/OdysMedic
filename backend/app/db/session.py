@@ -1,10 +1,12 @@
 from pathlib import Path
 from sqlite3 import Connection as SQLite3Connection
+import os
 import threading
 from typing import Generator, Optional
 from sqlalchemy import create_engine, event, inspect, text
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker, Session
+from sqlalchemy.pool import NullPool
 from app.config import settings
 
 connect_args = {}
@@ -13,6 +15,11 @@ if settings.database_url.startswith("sqlite"):
     connect_args["check_same_thread"] = False
 else:
     engine_kwargs["pool_pre_ping"] = True
+    if os.getenv("VERCEL") or os.getenv("VERCEL_ENV"):
+        # Neon pooled endpoints (-pooler.) manage connection pooling server-side via PgBouncer.
+        engine_kwargs["poolclass"] = NullPool
+    else:
+        engine_kwargs["pool_recycle"] = 300
 
 engine = create_engine(
     settings.database_url,

@@ -1,6 +1,7 @@
 import json
 import logging
 from typing import Dict, Any, List
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.config import settings
@@ -102,6 +103,10 @@ def seed_initial_data(db: Session) -> Dict[str, Any]:
                 summary["mastery_profiles_seeded"] += 1
 
         db.commit()
+    except IntegrityError:
+        # Another serverless worker seeded the same canonical rows concurrently on cold start.
+        db.rollback()
+        logger.info("Concurrent initial seed detected; skipping duplicate rows.")
     except Exception:
         db.rollback()
         raise
